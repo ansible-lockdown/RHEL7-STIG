@@ -1,0 +1,4 @@
+- hosts: localhost
+  remote_user: root
+  roles:
+    - ansible-role-rhel7-stig
