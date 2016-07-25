@@ -24,31 +24,42 @@
       - sshd
 
 - name: "HIGH | RHEL-07-021910 | PATCH | The telnet-server package must not be installed."
-  command: "true"
+  yum:
+      name: telnet-server
+      state: absent
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-021910
+      - telnet
 
 - name: "HIGH | RHEL-07-020000 | PATCH | The rsh-server package including rexecd and rlogind must not be installed."
-  command: "true"
+  yum:
+      name: rsh-server
+      state: absent
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-020000
+      - rsh
 
 - name: "HIGH | RHEL-07-020010 | PATCH | The ypserv package must not be installed."
-  command: "true"
+  yum:
+     name: ypserv
+     state: absent
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-020010
+      - ypserv
 
 - name: "HIGH | RHEL-07-020220 | PATCH | The x86 Ctrl-Alt-Delete key sequence must be disabled."
-  command: "true"
+  copy:
+     content: 'exec /usr/bin/logger -p security.info "Ctrl-Alt-Delete pressed"'
+     dest: /etc/init/control-alt-delete.override
   tags:
       - cat1
       - high
