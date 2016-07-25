@@ -1,2 +1,10 @@
----
-# handlers file for rhel7-stig
+- name: restart ssh
+  service:
+    name: sshd
+    state: restarted
+
+- name: reboot system
+  shell: sleep 3; reboot
+  async: 0
+  poll: 0
+  ignore_errors: yes

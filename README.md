@@ -7,16 +7,16 @@ RHEL 7 DISA STIG
 Requirements
 ------------
 
-RHEL 7. Other versions are not support.
+RHEL 7. Other versions are not supported.
 
 Role Variables
 --------------
 
 | Name              | Default Value       | Description          |
 |-------------------|---------------------|----------------------|
-| `rhel7stig_cat1` | True | Correct CAT I findings |
-| `rhel7stig_cat2` | False | Correct CAT II findings |
-| `rhel7stig_cat3` | False | Correct CAT III findings |
+| `rhel7stig_cat1_patch` | True | Correct CAT I findings |
+| `rhel7stig_cat2_patch` | False | Correct CAT II findings |
+| `rhel7stig_cat3_patch` | False | Correct CAT III findings |
 
 Dependencies
 ------------
