@@ -124,12 +124,17 @@
       - ypserv
 
 - name: "HIGH | RHEL-07-020150 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
-  command: "true"
+  lineinfile:
+      dest: /etc/yum.conf
+      regexp: gpgcheck=
+      line: gpgcheck=1
+      insertafter: '\[main\]'
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-020150
+      - yum
 
 - name: "HIGH | RHEL-07-020151 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   command: "true"
