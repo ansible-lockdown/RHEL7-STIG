@@ -1,0 +1,40 @@
+- name: "HIGH | RHEL-07-010010 | AUDIT | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
+  shell: 'rpm -Va | grep ''^.M'''
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_010010_audit
+  tags:
+      - cat1
+      - high
+      - audit
+      - RHEL-07-010010
+      - always
+      - rpm
+
+- name: "HIGH | RHEL-07-010020 | AUDIT | The cryptographic hash of system files and commands must match vendor values."
+  shell: 'rpm -Va | grep ''^..5'''
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_010020_audit
+  tags:
+      - cat1
+      - high
+      - audit
+      - RHEL-07-010020
+      - always
+
+- name: "HIGH | RHEL-07-020310 | AUDIT | The root account must be the only account having unrestricted access to the system."
+  shell: 'awk -F: ''$3 == 0 {print $1}'' /etc/passwd'
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_020310_audit
+  tags:
+      - cat1
+      - high
+      - audit
+      - RHEL-07-020310
+      - always
+

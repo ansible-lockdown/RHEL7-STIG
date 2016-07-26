@@ -20,6 +20,12 @@
       - prelim_tasks
       - always
 
+- name: Run CAT I audits
+  include: audit-cat1.yml
+  tags:
+      - cat1
+      - audit
+
 - name: Include CAT I patches
   include: fix-cat1.yml
   when: rhel7stig_cat1_patch

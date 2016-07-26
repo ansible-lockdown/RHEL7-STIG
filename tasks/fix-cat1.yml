@@ -1,5 +1,7 @@
 - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
-  command: "true"
+  shell: 'rpm --setperms $(rpm -qf {{ item.split('' '')[-1] }}); rpm --setugids $(rpm -qf {{ item.split('' '')[-1] }})'
+  with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
+  when: rhel_07_010010_audit.stdout_lines | length > 0
   tags:
       - cat1
       - high

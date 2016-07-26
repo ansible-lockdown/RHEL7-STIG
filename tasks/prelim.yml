@@ -1,1 +1,3 @@
-- command: "true"
+- name: PRELIM | Prelim task placeholder
+  command: "true"
+  changed_when: no
