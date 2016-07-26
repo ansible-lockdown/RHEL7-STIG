@@ -49,7 +49,7 @@
       regexp: (?i)automaticloginenable
       line: AutomaticLoginEnable=false
       insertafter: '\[daemon\]'
-  ignore_errors: yes
+  when: rhel7stig_gui
   tags:
       - cat1
       - high
@@ -57,7 +57,12 @@
       - RHEL-07-010430
 
 - name: "HIGH | RHEL-07-010431 | PATCH | The operating system must not allow guest logon to the system."
-  command: "true"
+  lineinfile:
+      dest: /etc/gdm/custom.conf
+      regexp: (?i)timedloginenable
+      line: TimedLoginEnable=false
+      insertafter: '\[daemon\]'
+  when: rhel7stig_gui
   tags:
       - cat1
       - high

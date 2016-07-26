@@ -1,3 +1,6 @@
 rhel7stig_cat1_patch: yes
 rhel7stig_cat2_patch: no
 rhel7stig_cat3_patch: no
+
+# Whether or not to run tasks related to auditing/patching the desktop environment
+rhel7stig_gui: no
