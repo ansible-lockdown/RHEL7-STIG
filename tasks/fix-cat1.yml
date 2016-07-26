@@ -1,3 +1,19 @@
+- name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-010010
+
+- name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-010020
+
 - name: "HIGH | RHEL-07-010260 | PATCH | The system must not have accounts configured with blank or null passwords."
   replace:
       dest: /etc/pam.d/system-auth
@@ -36,6 +52,38 @@
       - patch
       - RHEL-07-010430
 
+- name: "HIGH | RHEL-07-010431 | PATCH | The operating system must not allow guest logon to the system."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-010431
+
+- name: "HIGH | RHEL-07-010440 | PATCH | The operating system must not allow empty passwords for SSH logon to the system."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-010440
+
+- name: "HIGH | RHEL-07-010460 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-010460
+
+- name: "HIGH | RHEL-07-010470 | PATCH | Systems using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-010470
+
 - name: "HIGH | RHEL-07-020000 | PATCH | The rsh-server package including rexecd and rlogind must not be installed."
   yum:
       name: rsh-server
@@ -58,6 +106,57 @@
       - RHEL-07-020010
       - ypserv
 
+- name: "HIGH | RHEL-07-020150 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-020150
+
+- name: "HIGH | RHEL-07-020151 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-020151
+
+- name: "HIGH | RHEL-07-020152 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of packages without verification of the repository metadata."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-020152
+
+- name: "HIGH | RHEL-07-020170 | PATCH | Operating systems handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-020170
+
+- name: "HIGH | RHEL-07-020210 | PATCH | The operating system must enable SELinux."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-020210
+
+- name: "HIGH | RHEL-07-020211 | PATCH | The operating system must enable the SELinux targeted policy."
+  command: "true"
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-020211
+
+# The fix in the STIG for this is incorrect. Symlinking this unit file to /dev/null obtains the required result
+# which is to disable this function and log when the keystroke is issued.
+# https://access.redhat.com/solutions/1123873
 - name: "HIGH | RHEL-07-020220 | PATCH | The x86 Ctrl-Alt-Delete key sequence must be disabled."
   file:
       src: /dev/null
@@ -69,13 +168,8 @@
       - patch
       - RHEL-07-020220
 
-- name: "HIGH | RHEL-07-020240 | PATCH | The operating system must be a supported release."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-020240
+# RHEL-07-020240 | PATCH | The operating system must be a supported release."
+# Not automated since current end of life for RHEL 7 is 2024-06-30
 
 - name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system."
   command: "true"
@@ -85,80 +179,29 @@
       - patch
       - RHEL-07-020310
 
-- name: "HIGH | RHEL-07-020730 | PATCH | Run control scripts must not execute world-writable programs or scripts."
+- name: "HIGH | RHEL-07-021280 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
   command: "true"
   tags:
       - cat1
       - high
       - patch
-      - RHEL-07-020730
-
-- name: "HIGH | RHEL-07-021770 | PATCH | The system boot loader must require authentication."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-021770
-
-- name: "HIGH | RHEL-07-021840 | PATCH | The system must not have extraneous accounts with special privileges, such as shutdown, halt, and reboot."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-021840
+      - RHEL-07-021280
 
 - name: "HIGH | RHEL-07-021910 | PATCH | The telnet-server package must not be installed."
-  yum:
-      name: telnet-server
-      state: absent
+  command: "true"
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-021910
-      - telnet
 
-- name: "HIGH | RHEL-07-020930 | PATCH | All shell files must have mode 0755 or less permissive."
+- name: "HIGH | RHEL-07-030010 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
   command: "true"
   tags:
       - cat1
       - high
       - patch
-      - RHEL-07-020930
-
-- name: "HIGH | RHEL-07-021350 | PATCH | Privileged accounts on the system must not utilize a web browser on the system, with the exception to access webpages used of administration of applications on the system."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-021350
-
-- name: "HIGH | RHEL-07-021360 | PATCH | Files executed through a mail aliases file must be owned by root."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-021360
-
-- name: "HIGH | RHEL-07-021370 | PATCH | Files executed through a mail aliases file must reside within a directory owned and writable only by root."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-021370
-
-- name: "HIGH | RHEL-07-021420 | PATCH | The SMTP server must be the latest version available from operating system vendor."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-021420
+      - RHEL-07-030010
 
 - name: "HIGH | RHEL-07-030810 | PATCH | The system must use a DoD-approved virus scan program."
   command: "true"
@@ -168,7 +211,7 @@
       - patch
       - RHEL-07-030810
 
-- name: "HIGH | RHEL-07-040330 | PATCH | There must be no .rhosts, .shosts, rhosts.equiv, or shosts.equiv files on the system."
+- name: "HIGH | RHEL-07-040330 | PATCH | There must be no .shosts files on the system."
   command: "true"
   tags:
       - cat1
@@ -176,15 +219,15 @@
       - patch
       - RHEL-07-040330
 
-- name: "HIGH | RHEL-07-040340 | PATCH | PAM must not support rsh server authentication."
+- name: "HIGH | RHEL-07-040331 | PATCH | There must be no shosts.equiv files on the system."
   command: "true"
   tags:
       - cat1
       - high
       - patch
-      - RHEL-07-040340
+      - RHEL-07-040331
 
-- name: "HIGH | RHEL-07-040490 | PATCH | A ftp server package must not be installed."
+- name: "HIGH | RHEL-07-040490 | PATCH | A File Transfer Protocol (FTP) server package must not be installed unless needed."
   command: "true"
   tags:
       - cat1
@@ -192,7 +235,7 @@
       - patch
       - RHEL-07-040490
 
-- name: "HIGH | RHEL-07-040500 | PATCH | The TFTP server package must not be installed if not required for operational support."
+- name: "HIGH | RHEL-07-040500 | PATCH | The Trivial File Transfer Protocol (TFTP) server package must not be installed if not required for operational support."
   command: "true"
   tags:
       - cat1
@@ -207,22 +250,6 @@
       - high
       - patch
       - RHEL-07-040540
-
-- name: "HIGH | RHEL-07-040550 | PATCH | X Windows displays must not be exported to the world."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-040550
-
-- name: "HIGH | RHEL-07-040570 | PATCH | The UUCP package must not be installed."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-040570
 
 - name: "HIGH | RHEL-07-040580 | PATCH | SNMP community strings must be changed from the default."
   command: "true"
@@ -240,18 +267,3 @@
       - patch
       - RHEL-07-040590
 
-- name: "HIGH | RHEL-07-040770 | PATCH | The samba service must not use the smbpasswd authentication method."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-040770
-
-- name: "HIGH | RHEL-07-040800 | PATCH | Samba must be configured to use encrypted passwords."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-040800
