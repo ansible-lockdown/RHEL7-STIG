@@ -126,7 +126,7 @@
 - name: "HIGH | RHEL-07-020150 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   lineinfile:
       dest: /etc/yum.conf
-      regexp: gpgcheck=
+      regexp: gpgcheck
       line: gpgcheck=1
       insertafter: '\[main\]'
   tags:
@@ -137,7 +137,11 @@
       - yum
 
 - name: "HIGH | RHEL-07-020151 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
-  command: "true"
+  lineinfile:
+      dest: /etc/yum.conf
+      regexp: localpkg_gpgcheck
+      line: localpkg_gpgcheck=1
+      insertafter: '\[main\]'
   tags:
       - cat1
       - high
@@ -151,6 +155,8 @@
       - high
       - patch
       - RHEL-07-020152
+
+
 
 - name: "HIGH | RHEL-07-020170 | PATCH | Operating systems handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest."
   command: "true"
