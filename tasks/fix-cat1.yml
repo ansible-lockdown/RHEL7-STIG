@@ -57,9 +57,10 @@
       - ypserv
 
 - name: "HIGH | RHEL-07-020220 | PATCH | The x86 Ctrl-Alt-Delete key sequence must be disabled."
-  copy:
-     content: 'exec /usr/bin/logger -p security.info "Ctrl-Alt-Delete pressed"'
-     dest: /etc/init/control-alt-delete.override
+  file:
+      src: /dev/null
+      dest: /etc/systemd/system/ctrl-alt-del.target
+      state: link
   tags:
       - cat1
       - high
