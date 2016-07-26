@@ -147,16 +147,20 @@
       - high
       - patch
       - RHEL-07-020151
+      - yum
 
 - name: "HIGH | RHEL-07-020152 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of packages without verification of the repository metadata."
-  command: "true"
+  lineinfile:
+      dest: /etc/yum.conf
+      regexp: repo_gpgcheck
+      line: repo_gpgcheck=1
+      insertafter: '\[main\]'
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-020152
-
-
+      - yum
 
 - name: "HIGH | RHEL-07-020170 | PATCH | Operating systems handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest."
   command: "true"
