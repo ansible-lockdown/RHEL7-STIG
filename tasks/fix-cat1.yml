@@ -55,6 +55,7 @@
       - high
       - patch
       - RHEL-07-010430
+      - gui
 
 - name: "HIGH | RHEL-07-010431 | PATCH | The operating system must not allow guest logon to the system."
   lineinfile:
@@ -68,14 +69,21 @@
       - high
       - patch
       - RHEL-07-010431
+      - gui
 
 - name: "HIGH | RHEL-07-010440 | PATCH | The operating system must not allow empty passwords for SSH logon to the system."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: (?i)permitemptypassword
+      line: PermitEmptyPasswords no
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-010440
+      - ssh
 
 - name: "HIGH | RHEL-07-010460 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
   command: "true"
