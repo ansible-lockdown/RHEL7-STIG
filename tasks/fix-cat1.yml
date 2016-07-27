@@ -307,12 +307,18 @@
       - tftp
 
 - name: "HIGH | RHEL-07-040540 | PATCH | Remote X connections for interactive users must be encrypted."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: (?i)^#?x11forwarding
+      line: X11Forwarding yes
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-040540
+      - ssh
 
 - name: "HIGH | RHEL-07-040580 | PATCH | SNMP community strings must be changed from the default."
   command: "true"
