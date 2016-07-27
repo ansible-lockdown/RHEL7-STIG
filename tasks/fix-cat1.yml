@@ -201,7 +201,9 @@
 # Audited but not automated.
 
 - name: "HIGH | RHEL-07-021280 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
-  command: "true"
+  yum:
+      name: dracut-fips
+      state: present
   tags:
       - cat1
       - high
