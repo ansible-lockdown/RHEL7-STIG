@@ -4,3 +4,13 @@ rhel7stig_cat3_patch: no
 
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: no
+
+# RHEL-07-030810 Requires a DOD-approved AV program. ClamAV and McAfee (nails)
+# are the currently approved applications. This variable is used in two separate
+# tasks that will install the package and start and enable the service.
+rhel7stig_av_package:
+  package:
+    - clamav
+    - clamav-scanner
+    - clamav-server
+  service: clamav-daemon

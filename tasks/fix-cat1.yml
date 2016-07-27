@@ -234,12 +234,27 @@
       - auditd
 
 - name: "HIGH | RHEL-07-030810 | PATCH | The system must use a DoD-approved virus scan program."
-  command: "true"
+  yum:
+      name: "{{ rhel7stig_av_package.package }}"
+      state: present
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-030810
+      - antivirus
+
+- name: "HIGH | RHEL-07-030810 | PATCH | The system must use a DoD-approved virus scan program."
+  service:
+      name: "{{ rhel7stig_av_package.service }}"
+      state: started
+      enabled: yes
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-030810
+      - antivirus
 
 - name: "HIGH | RHEL-07-040330 | PATCH | There must be no .shosts files on the system."
   command: "true"
