@@ -50,3 +50,30 @@
       - RHEL-07-020310
       - always
 
+- name: "HIGH | RHEL-07-040330 | AUDIT | There must be no .shosts files on the system."
+  find:
+      paths: /
+      recurse: yes
+      hidden: yes
+      patterns: '*.shosts'
+  register: rhel_07_040330_audit
+  tags:
+      - cat1
+      - high
+      - audit
+      - RHEL-07-040330
+      - always
+
+- name: "HIGH | RHEL-07-040331 | AUDIT | There must be no shosts.equiv files on the system."
+  find:
+      paths: /
+      recurse: yes
+      hidden: yes
+      patterns: shosts.equiv
+  register: rhel_07_040331_audit
+  tags:
+      - cat1
+      - high
+      - audit
+      - RHEL-07-040331
+      - always

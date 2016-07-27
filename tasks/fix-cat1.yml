@@ -257,20 +257,28 @@
       - antivirus
 
 - name: "HIGH | RHEL-07-040330 | PATCH | There must be no .shosts files on the system."
-  command: "true"
+  file:
+      path: "{{ item.path }}"
+      state: absent
+  with_items: "{{ rhel_07_040330_audit.files }}"
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-040330
+      - shosts
 
 - name: "HIGH | RHEL-07-040331 | PATCH | There must be no shosts.equiv files on the system."
-  command: "true"
+  file:
+      path: "{{ item.path }}"
+      state: absent
+  with_items: "{{ rhel_07_040331_audit.files }}"
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-040331
+      - shosts
 
 - name: "HIGH | RHEL-07-040490 | PATCH | A File Transfer Protocol (FTP) server package must not be installed unless needed."
   command: "true"
