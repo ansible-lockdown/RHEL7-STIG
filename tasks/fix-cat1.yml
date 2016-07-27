@@ -163,7 +163,7 @@
       - yum
 
 # HIGH | RHEL-07-020170 | PATCH | Operating systems handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.
-# Not automated but it is audited.
+# Audited but not automated.
 
 - name: |
 
@@ -197,13 +197,8 @@
 # RHEL-07-020240 | PATCH | The operating system must be a supported release."
 # Not automated since current end of life for RHEL 7 is 2024-06-30
 
-- name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-020310
+# RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system
+# Audited but not automated.
 
 - name: "HIGH | RHEL-07-021280 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
   command: "true"

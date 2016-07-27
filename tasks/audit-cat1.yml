@@ -38,7 +38,7 @@
       - RHEL-07-020170
 
 - name: "HIGH | RHEL-07-020310 | AUDIT | The root account must be the only account having unrestricted access to the system."
-  shell: 'awk -F: ''$3 == 0 {print $1}'' /etc/passwd'
+  shell: 'awk -F: ''$3 == 0 && $1 !~ /root/ {print $1}'' /etc/passwd'
   failed_when: no
   changed_when: no
   ignore_errors: yes
