@@ -219,14 +219,19 @@
       - high
       - patch
       - RHEL-07-021910
+      - telnet
 
 - name: "HIGH | RHEL-07-030010 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
-  command: "true"
+  service:
+      name: auditd
+      state: started
+      enabled: yes
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-030010
+      - auditd
 
 - name: "HIGH | RHEL-07-030810 | PATCH | The system must use a DoD-approved virus scan program."
   command: "true"
