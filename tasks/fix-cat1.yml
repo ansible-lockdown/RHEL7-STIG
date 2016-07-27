@@ -336,10 +336,16 @@
       - snmp
 
 - name: "HIGH | RHEL-07-040590 | PATCH | The SSH daemon must be configured to only use the SSHv2 protocol."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: (?i)^#?protocol
+      line: Protocol 2
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-040590
+      - ssh
 
