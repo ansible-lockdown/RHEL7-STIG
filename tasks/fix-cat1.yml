@@ -281,12 +281,16 @@
       - shosts
 
 - name: "HIGH | RHEL-07-040490 | PATCH | A File Transfer Protocol (FTP) server package must not be installed unless needed."
-  command: "true"
+  yum:
+      name: lftpd
+      state: absent
+  when: not rhel7stig_lftpd_required
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-040490
+      - ftp
 
 - name: "HIGH | RHEL-07-040500 | PATCH | The Trivial File Transfer Protocol (TFTP) server package must not be installed if not required for operational support."
   command: "true"
