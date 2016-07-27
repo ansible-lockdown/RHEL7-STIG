@@ -77,3 +77,20 @@
       - audit
       - RHEL-07-040331
       - always
+
+- name: "HIGH | RHEL-07-040580 | AUDIT | SNMP community strings must be changed from the default."
+  command: grep {{ item }} /etc/snmp/snmpd.conf
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  with_items:
+      - public
+      - private
+  register: rhel_07_040580_audit
+  tags:
+      - cat1
+      - high
+      - audit
+      - RHEL-07-040580
+      - always
+      - snmp

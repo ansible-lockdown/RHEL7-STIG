@@ -20,3 +20,7 @@ rhel7stig_lftpd_required: no
 
 # RHEL-07-040500 If not required, remove tftp
 rhel7stig_tftp_required: no
+
+# RHEL-07-040580 Set the SNMP community string to this from the default of
+# public or private
+rhel7stig_snmp_community: Endgam3Ladyb0g

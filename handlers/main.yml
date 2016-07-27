@@ -8,3 +8,8 @@
   async: 0
   poll: 0
   ignore_errors: yes
+
+- name: restart snmpd
+  service:
+      name: snmpd
+      state: restarted

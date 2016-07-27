@@ -321,12 +321,19 @@
       - ssh
 
 - name: "HIGH | RHEL-07-040580 | PATCH | SNMP community strings must be changed from the default."
-  command: "true"
+  replace:
+      dest: /etc/snmp/snmpd.conf
+      regexp: (^com2sec.*default\s+)(public|private)
+      replace: \1{{ rhel7stig_snmp_community }}
+  when: item.stdout_lines | length > 0
+  with_items: "{{ rhel_07_040580_audit.results }}"
+  notify: restart snmpd
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-040580
+      - snmp
 
 - name: "HIGH | RHEL-07-040590 | PATCH | The SSH daemon must be configured to only use the SSHv2 protocol."
   command: "true"
