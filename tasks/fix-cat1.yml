@@ -211,7 +211,9 @@
       - RHEL-07-021280
 
 - name: "HIGH | RHEL-07-021910 | PATCH | The telnet-server package must not be installed."
-  command: "true"
+  yum:
+      name: telnet-server
+      state: absent
   tags:
       - cat1
       - high
