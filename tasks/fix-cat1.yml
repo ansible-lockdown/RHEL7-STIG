@@ -293,12 +293,18 @@
       - ftp
 
 - name: "HIGH | RHEL-07-040500 | PATCH | The Trivial File Transfer Protocol (TFTP) server package must not be installed if not required for operational support."
-  command: "true"
+  yum:
+      name:
+          - tftp
+          - tftp-server
+      state: absent
+  when: not rhel7stig_lftpd_required
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-040500
+      - tftp
 
 - name: "HIGH | RHEL-07-040540 | PATCH | Remote X connections for interactive users must be encrypted."
   command: "true"
