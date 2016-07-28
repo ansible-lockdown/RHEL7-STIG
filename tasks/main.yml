@@ -29,14 +29,14 @@
 
 - name: Include CAT II patches
   include: fix-cat2.yml
-  when: rhel7stig_cat1_patch
+  when: rhel7stig_cat2_patch
   tags:
-      - cat1
+      - cat2
       - patch
 
 - name: Include CAT III patches
   include: fix-cat3.yml
-  when: rhel7stig_cat1_patch
+  when: rhel7stig_cat3_patch
   tags:
-      - cat1
+      - cat3
       - patch
