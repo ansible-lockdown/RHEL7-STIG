@@ -1,74 +1,26 @@
-- name: "LOW | RHEL-07-010000 | PATCH | The operating system must provide automated mechanisms for supporting account management functions."
+- name: "LOW | RHEL-07-010490 | PATCH | Unnecessary default system accounts must be removed."
   command: "true"
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-010000
+      - RHEL-07-010490
 
-- name: "LOW | RHEL-07-040010 | PATCH | The operating system must limit the number of concurrent sessions to ten for all accounts and/or account types."
+- name: "LOW | RHEL-07-020200 | PATCH | The operating system must remove all software components after updated versions have been installed."
   command: "true"
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-040010
+      - RHEL-07-020200
 
-- name: "LOW | RHEL-07-010160 | PATCH | When passwords are changed the number of repeating characters of the same character class must not be more than two characters."
-  command: "true"
-  tags:
-      - cat3
-      - low
-      - patch
-      - RHEL-07-010160
-
-- name: "LOW | RHEL-07-010320 | PATCH | The operating system must be configured such that emergency administrator accounts are never automatically removed or disabled."
-  command: "true"
-  tags:
-      - cat3
-      - low
-      - patch
-      - RHEL-07-010320
-
-- name: "LOW | RHEL-07-020300 | PATCH | All GIDs referenced in the /etc/passwd file must be defined in the /etc/group file."
+- name: "LOW | RHEL-07-020300 | PATCH | All Group Identifiers (GIDs) referenced in the /etc/passwd file must be defined in the /etc/group file."
   command: "true"
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-020300
-
-- name: "LOW | RHEL-07-040300 | PATCH | The system must display the date and time of the last successful account logon upon a SSH (or other remote access method) logon."
-  command: "true"
-  tags:
-      - cat3
-      - low
-      - patch
-      - RHEL-07-040300
-
-- name: "LOW | RHEL-07-020430 | PATCH | Manual page files must have mode 0644 or less permissive."
-  command: "true"
-  tags:
-      - cat3
-      - low
-      - patch
-      - RHEL-07-020430
-
-- name: "LOW | RHEL-07-040320 | PATCH | For systems using DNS resolution, at least two name servers must be configured."
-  command: "true"
-  tags:
-      - cat3
-      - low
-      - patch
-      - RHEL-07-040320
-
-- name: "LOW | RHEL-07-040370 | PATCH | The system must not process IPv4 Internet Control Message Protocol (ICMP) timestamp requests."
-  command: "true"
-  tags:
-      - cat3
-      - low
-      - patch
-      - RHEL-07-040370
 
 - name: "LOW | RHEL-07-021240 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
   command: "true"
@@ -86,7 +38,7 @@
       - patch
       - RHEL-07-021250
 
-- name: "LOW | RHEL-07-021260 | PATCH | The system must use a separate file system for the system audit data path."
+- name: "LOW | RHEL-07-021260 | PATCH | The system must use /var/log/audit for the system audit data path."
   command: "true"
   tags:
       - cat3
@@ -102,21 +54,13 @@
       - patch
       - RHEL-07-021270
 
-- name: "LOW | RHEL-07-030760 | PATCH | xinetd logging/tracing must be enabled via rsyslog."
+- name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
   command: "true"
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-030760
-
-- name: "LOW | RHEL-07-021520 | PATCH | The Network File System (NFS) export configuration file must have mode 0644 or less permissive."
-  command: "true"
-  tags:
-      - cat3
-      - low
-      - patch
-      - RHEL-07-021520
+      - RHEL-07-021600
 
 - name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes."
   command: "true"
@@ -126,11 +70,27 @@
       - patch
       - RHEL-07-021610
 
-- name: "LOW | RHEL-07-021810 | PATCH | The system package management tool must not automatically obtain updates."
+- name: "LOW | RHEL-07-040010 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
   command: "true"
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-021810
+      - RHEL-07-040010
+
+- name: "LOW | RHEL-07-040300 | PATCH | The system must display the date and time of the last successful account logon upon logon."
+  command: "true"
+  tags:
+      - cat3
+      - low
+      - patch
+      - RHEL-07-040300
+
+- name: "LOW | RHEL-07-040320 | PATCH | For systems using DNS resolution, at least two name servers must be configured."
+  command: "true"
+  tags:
+      - cat3
+      - low
+      - patch
+      - RHEL-07-040320
 

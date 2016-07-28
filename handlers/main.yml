@@ -8,3 +8,11 @@
   async: 0
   poll: 0
   ignore_errors: yes
+
+- name: restart snmpd
+  service:
+      name: snmpd
+      state: restarted
+
+- name: make grub2 config
+  command: grub2-mkconfig --output=/etc/grub2.cfg
