@@ -26,6 +26,7 @@ Role Variables
 | `rhel7stig_lftpd_required` | `no` | If set to `no`, remove `lftpd`. |
 | `rhel7stig_tftp_required` | `no` | If set to `no`, remove `tftp` client and server packages. |
 | `rhel7stig_snmp_community` | `Endgam3Ladyb0g` | SNMP community string that will replace `public` and `private` in `snmpd.conf`. |
+| `rhel7stig_bootloader_password` | `Boot1tUp!` | GRUB2 bootloader password. This should be stored in an Anisble Vault. |
 
 Dependencies
 ------------
