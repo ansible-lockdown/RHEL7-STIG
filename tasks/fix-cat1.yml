@@ -253,6 +253,7 @@
       name: "{{ rhel7stig_av_package.service }}"
       state: started
       enabled: yes
+  ignore_errors: yes
   tags:
       - cat1
       - high
