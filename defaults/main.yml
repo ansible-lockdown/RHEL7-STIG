@@ -24,3 +24,13 @@ rhel7stig_tftp_required: no
 # RHEL-07-040580 Set the SNMP community string to this from the default of
 # public or private
 rhel7stig_snmp_community: Endgam3Ladyb0g
+
+# RHEL-07-010460 and RHEL-07-010470
+# Password protect the boot loader
+rhel7stig_boot_password_config:
+      - regexp: ^set superusers
+        line: 'set superusers="root"'
+
+      - regexp: ^password_pbkdf2 root
+        line: password_pbkdf2 root grub.pbkdf2.sha512.10000.08E9AFA99767E88B3ED4608E9E0DAE3303187FD802A6721698D8257E2A297BA36AFC9EE223EDE8B8821BB2D40CFDB864A69CF9D96417D91A0342C8037AB76E0D.9C516379751A41633AC7CB31A9FDE84632138AFE097C0F2320445B9D4752286BE473B283A4700A199C489B55EA197E5B70545D5ADFD43C6EAF8235453B5EA694
+

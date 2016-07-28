@@ -25,6 +25,32 @@
       - RHEL-07-010020
       - always
 
+- name: "HIGH | RHEL-07-010460 | AUDIT | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+  command: grep -i ^password_pbkdf2 /boot/grub2/grub.cfg
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_010460_audit
+  tags:
+      - cat1
+      - high
+      - audit
+      - RHEL-07-010460
+      - always
+
+- name: "HIGH | RHEL-07-010470 | AUDIT | Systems using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+  command: grep -i ^password_pbkdf2 /boot/efi/EFI/redhat/grub.cfg
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_010470_audit
+  tags:
+      - cat1
+      - high
+      - audit
+      - RHEL-07-010470
+      - always
+
 - name: "HIGH | RHEL-07-020170 | PATCH | Operating systems handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest."
   shell: blkid | grep -vi crypto_LUKS
   failed_when: no

@@ -85,21 +85,25 @@
       - RHEL-07-010440
       - ssh
 
-- name: "HIGH | RHEL-07-010460 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-  command: "true"
+- name: |
+
+      "HIGH | RHEL-07-010460 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+      "HIGH | RHEL-07-010470 | PATCH | Systems using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+  lineinfile:
+      dest: /etc/grub.d/40_custom
+      insertafter: EOF
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+  with_items: "{{ rhel7stig_boot_password_config }}"
+  notify: make grub2 config
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-010460
-
-- name: "HIGH | RHEL-07-010470 | PATCH | Systems using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-  command: "true"
-  tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-010470
+      - grub
+      - bootloader
 
 - name: "HIGH | RHEL-07-020000 | PATCH | The rsh-server package including rexecd and rlogind must not be installed."
   yum:

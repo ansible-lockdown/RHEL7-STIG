@@ -9,7 +9,7 @@
 
 - name: Check ansible version
   fail:
-     msg: You must use ansible 2.1 or greater
+      msg: You must use ansible 2.1 or greater
   when: not ansible_version.full | version_compare('2.1', '>=')
   tags:
       - always
