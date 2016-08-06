@@ -11,6 +11,10 @@ rhel7stig_cat3_audit: "{{ rhel7stig_cat3_patch }}"
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: no
 
+# RHEL-07-040730
+# If system is not router, run tasks that disable router functions.
+rhel7stig_system_is_router: no
+
 # RHEL-07-030810
 # Install and enable a DOD-approved AV program. ClamAV and McAfee (nails)
 # are the currently approved applications. This variable is used in two separate
