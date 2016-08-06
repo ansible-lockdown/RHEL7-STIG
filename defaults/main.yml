@@ -20,11 +20,11 @@ rhel7stig_system_is_router: no
 # are the currently approved applications. This variable is used in two separate
 # tasks that will install the package and start and enable the service.
 rhel7stig_av_package:
-  package:
-    - clamav
-    - clamav-scanner
-    - clamav-server
-  service: clamav-daemon
+    package:
+        - clamav
+        - clamav-scanner
+        - clamav-server
+    service: clamav-daemon
 
 # RHEL-07-040490
 # If not required, remove lftpd.
@@ -42,9 +42,9 @@ rhel7stig_snmp_community: Endgam3Ladyb0g
 # Password protect the boot loader
 rhel7stig_bootloader_password: 'Boot1tUp!'
 rhel7stig_boot_password_config:
-      - regexp: ^set superusers
-        line: 'set superusers="root"'
+    - regexp: ^set superusers
+      line: 'set superusers="root"'
 
-      - regexp: ^password_pbkdf2 root
-        line: password_pbkdf2 root {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
+    - regexp: ^password_pbkdf2 root
+      line: password_pbkdf2 root {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
