@@ -1,0 +1,79 @@
+- name: "MEDIUM | RHEL-07-040180 | AUDIT | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+  command: grep -i useldapauth /etc/sysconfig/authconfig
+  register: rhel_07_040180_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-040180
+      - ldap
+
+- name: "MEDIUM | RHEL-07-040210 | AUDIT | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+  stat:
+      path: /etc/ntp.conf
+  register: rhel_07_040210_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-040210
+      - ntpd
+
+- name: "MEDIUM | RHEL-07-040230 | AUDIT | The operating system, if using PKI-based authentication, must implement a local cache of revocation data to certificate validation in case of the inability to access revocation information via the network."
+  stat:
+      path: /var/lib/pki-kra/conf/server.xml
+  register: rhel_07_040230_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-040230
+      - always
+      - pki
+
+- name: "MEDIUM | RHEL-07-040650 | AUDIT | The SSH private host key files must have mode 0600 or less permissive."
+  find:
+      paths: /
+      recurse: yes
+      file_type: file
+      patterns: '*ssh_host*key'
+      hidden: true
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_040650_audit
+  tags:
+      - cat2
+      - high
+      - audit
+      - RHEL-07-040650
+      - always
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040640 | AUDIT | The SSH public host key files must have mode 0644 or less permissive."
+  find:
+      paths: /
+      recurse: yes
+      file_type: file
+      patterns: '*.pub'
+      hidden: true
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_040640_audit
+  tags:
+      - cat2
+      - high
+      - audit
+      - RHEL-07-040640
+      - always
+      - ssh

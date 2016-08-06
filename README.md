@@ -18,9 +18,12 @@ Role Variables
 
 | Name              | Default Value       | Description          |
 |-------------------|---------------------|----------------------|
-| `rhel7stig_cat1_patch` | `yes` | Correct CAT I findings |
-| `rhel7stig_cat2_patch` | `no` | Correct CAT II findings |
-| `rhel7stig_cat3_patch` | `no` | Correct CAT III findings |
+| `rhel7stig_cat1_audit` | `yes` | Audit for CAT I findings      |
+| `rhel7stig_cat2_audit` | `no`  | Audit for CAT II findings     |
+| `rhel7stig_cat3_audit` | `no`  | Audit for CAT III findings    |
+| `rhel7stig_cat1_patch` | `yes` | Correct CAT I findings        |
+| `rhel7stig_cat2_patch` | `no`  | Correct CAT II findings       |
+| `rhel7stig_cat3_patch` | `no`  | Correct CAT III findings      |
 | `rhel7stig_gui` | `no` | Whether or not to run tasks related to auditing/patching the desktop environment |
 | `rhel7stig_av_package` | `no` | Anti-virus package(s) to install and service to start and enable. |
 | `rhel7stig_lftpd_required` | `no` | If set to `no`, remove `lftpd`. |

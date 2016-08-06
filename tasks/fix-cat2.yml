@@ -277,6 +277,7 @@
       - medium
       - patch
       - RHEL-07-010402
+      - ssh
 
 - name: "MEDIUM | RHEL-07-010420 | PATCH | The delay between logon prompts following a failed console logon attempt must be at least four seconds."
   command: "true"
@@ -293,6 +294,7 @@
       - medium
       - patch
       - RHEL-07-010441
+      - ssh
 
 - name: "MEDIUM | RHEL-07-010442 | PATCH | The operating system must not allow a non-certificate trusted host SSH logon to the system."
   command: "true"
@@ -301,6 +303,7 @@
       - medium
       - patch
       - RHEL-07-010442
+      - ssh
 
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multi-factor authentication."
   command: "true"
@@ -1207,12 +1210,16 @@
       - RHEL-07-040110
 
 - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the end of the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
-  command: "true"
+  lineinfile:
+      dest: /etc/profile
+      regexp: ^#?TMOUT
+      line: TMOUT=600
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040160
+      - profile
 
 - name: "MEDIUM | RHEL-07-040170 | PATCH | The Standard Mandatory DoD Notice and Consent Banner must be displayed immediately prior to, or as part of, remote access logon prompts."
   command: "true"
@@ -1224,6 +1231,7 @@
 
 - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
   command: "true"
+  when: "'yes' in rhel_07_040180_audit.stdout"
   tags:
       - cat2
       - medium
@@ -1247,36 +1255,72 @@
       - RHEL-07-040182
 
 - name: "MEDIUM | RHEL-07-040190 | PATCH | All network connections associated with SSH traffic must terminate at the end of the session or after 10 minutes of inactivity, except to fulfill documented and validated mission requirements."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: ^#?ClientAliveInterval
+      line: ClientAliveInterval 600
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040190
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040191 | PATCH | All network connections associated with SSH traffic must terminate after a period of inactivity."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: ^#?ClientAliveCountMax
+      line: ClientAliveCountMax 0
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040191
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040210 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-  command: "true"
+  lineinfile:
+      dest: /etc/ntp.conf
+      regexp: ^#?maxpoll
+      line: maxpoll 10
+  notify: restart ntpd
+  when: rhel_07_040210_audit.stat.exists
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040210
+      - ntp
+      - ntpd
 
 - name: "MEDIUM | RHEL-07-040230 | PATCH | The operating system, if using PKI-based authentication, must implement a local cache of revocation data to certificate validation in case of the inability to access revocation information via the network."
-  command: "true"
+  lineinfile:
+      dest: /var/lib/pki-kra/conf/server.xml
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+  when: rhel_07_040230_audit.stat.exists
+  with_items:
+      -   regexp: '^#?auths.revocationChecking.bufferSize'
+          line: 'auths.revocationChecking.bufferSize=50'
+
+      -   regexp: '^#?auths.revocationChecking.enabled'
+          line: 'auths.revocationChecking.enabled=true'
+
+      -   regexp: '^#?enableOCSP'
+          line: 'enableOCSP="true"'
+
+      -   regexp: '^#?ocspCacheSize'
+          line: 'ocspCacheSize="50"'
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040230
+      - pki
 
 - name: "MEDIUM | RHEL-07-040250 | PATCH | The operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
   command: "true"
@@ -1285,105 +1329,191 @@
       - medium
       - patch
       - RHEL-07-040250
+      - firewalld
 
 - name: "MEDIUM | RHEL-07-040260 | PATCH | All networked systems must have SSH installed."
-  command: "true"
+  yum:
+      name:
+          - openssh-clients
+          - openssh-server
+      state: latest
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040260
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040261 | PATCH | All networked systems must use SSH for confidentiality and integrity of transmitted and received information as well as information during preparation for transmission."
-  command: "true"
+  service:
+      name: sshd
+      state: started
+      enabled: yes
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040261
+      - ssh
 
-- name: "MEDIUM | RHEL-07-040290 | PATCH | The operating system must enable an application firewall, if available."
-  command: "true"
+- name: "MEDIUM | RHEL-07-040290 | PATCH | The system must use a local firewall."
+  yum:
+      name: firewalld
+      state: latest
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040290
+      - firewalld
 
-- name: "MEDIUM | RHEL-07-040301 | PATCH | The system must display the date and time of the last successful account logon upon an SSH logon."
-  command: "true"
+- name: "MEDIUM | RHEL-07-040290 | PATCH | The system must use a local firewall."
+  service:
+      name: firewalld
+      state: started
+      enabled: yes
   tags:
       - cat2
       - medium
       - patch
-      - RHEL-07-040301
+      - RHEL-07-040290
+      - firewalld
 
-- name: "MEDIUM | RHEL-07-040310 | PATCH | The system must not permit direct logons to the root account using remote access via SSH."
-  command: "true"
+- name: "MEDIUM | RHEL-07-040920 | PATCH | The system must not permit direct logons to the root account using remote access via SSH."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: ^#?PermitRootLogin
+      line: PermitRootLogin no
+      insertafter: '(?i)^#?authentication'
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040310
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040334 | PATCH | The SSH daemon must not allow authentication using rhosts authentication."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: ^#?IgnoreRhosts
+      line: IgnoreRhosts yes
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040334
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040332 | PATCH | The SSH daemon must not allow authentication using known hosts authentication."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: ^#?IgnoreUserKnownHosts
+      line: IgnoreUserKnownHosts yes
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040332
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040333 | PATCH | The SSH daemon must not allow authentication using RSA rhosts authentication."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: ^#?RhostsRSAAuthentication
+      line: RhostsRSAAuthentication yes
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040333
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040350 | PATCH | The system must not forward Internet Protocol version 4 (IPv4) source-routed packets."
-  command: "true"
+  sysctl:
+      name: net.ipv4.conf.all.accept_source_route
+      state: present
+      value: 1
+      reload: yes
+      ignoreerrors: yes
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040350
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040351 | PATCH | The system must not forward Internet Protocol version 4 (IPv4) source-routed packets by default."
-  command: "true"
+  sysctl:
+      name: net.ipv4.conf.default.accept_source_route
+      state: present
+      value: 1
+      reload: yes
+      ignoreerrors: yes
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040351
+      - ipv4
 
 - name: "MEDIUM | RHEL-07-040380 | PATCH | The system must not respond to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) echoes sent to a broadcast address."
-  command: "true"
+  sysctl:
+      name: net.ipv4.icmp_echo_ignore_broadcasts
+      state: present
+      value: 1
+      sysctl_set: yes
+      reload: yes
+      ignoreerrors: yes
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040380
+      - ipv4
 
 - name: "MEDIUM | RHEL-07-040410 | PATCH | The system must ignore to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages."
-  command: "true"
+  sysctl:
+      name: net.ipv4.conf.default.send_redirects
+      state: present
+      value: 0
+      reload: yes
+      ignoreerrors: yes
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040410
+      - ipv4
+
+- name: "MEDIUM | RHEL-07-040410 | PATCH | The system must ignore to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages."
+  sysctl:
+      name: net.ipv4.conf.default.accept_redirects
+      state: present
+      value: 0
+      reload: yes
+      ignoreerrors: yes
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-040410
+      - ipv4
 
 - name: "MEDIUM | RHEL-07-040420 | PATCH | The system must not allow interfaces to perform Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects by default."
-  command: "true"
+  sysctl:
+      name: net.ipv4.conf.default.send_redirects
+      state: present
+      value: 0
+      reload: yes
+      ignoreerrors: yes
   tags:
       - cat2
       - medium
@@ -1391,12 +1521,18 @@
       - RHEL-07-040420
 
 - name: "MEDIUM | RHEL-07-040421 | PATCH | The system must not send Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects."
-  command: "true"
+  sysctl:
+      name: net.ipv4.conf.all.send_redirects
+      state: present
+      value: 0
+      reload: yes
+      ignoreerrors: yes
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040421
+      - ipv4
 
 - name: "MEDIUM | RHEL-07-040470 | PATCH | Network interfaces must not be in promiscuous mode."
   command: "true"
@@ -1423,12 +1559,18 @@
       - RHEL-07-040520
 
 - name: "MEDIUM | RHEL-07-040560 | PATCH | An X Windows display manager must not be installed unless approved."
-  command: "true"
+  yum:
+      name:
+          - "@X Windows System"
+          - xorg-x11-server-common
+      state: absent
+  when: not rhel7stig_x11
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040560
+      - x11
 
 - name: "MEDIUM | RHEL-07-040620 | PATCH | The SSH daemon must be configured to only use Message Authentication Codes (MACs) employing FIPS 140-2 approved cryptographic hash algorithms."
   command: "true"
@@ -1439,68 +1581,115 @@
       - RHEL-07-040620
 
 - name: "MEDIUM | RHEL-07-040640 | PATCH | The SSH public host key files must have mode 0644 or less permissive."
-  command: "true"
+  file:
+      dest: "{{ item.path }}"
+      mode: 0644
+      state: file
+  with_items: "{{ rhel_07_040640_audit.files }}"
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040640
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040650 | PATCH | The SSH private host key files must have mode 0600 or less permissive."
-  command: "true"
+  file:
+      dest: "{{ item.path }}"
+      mode: 0600
+      state: file
+  with_items: "{{ rhel_07_040650_audit.files }}"
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040650
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040660 | PATCH | The SSH daemon must not permit Generic Security Service Application Program Interface (GSSAPI) authentication unless needed."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: (?i)^#?gssapiauthentication
+      line: GSSAPIAuthentication no
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040660
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040670 | PATCH | The SSH daemon must not permit Kerberos authentication unless needed."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: (?i)^#?kerberosauthentication
+      line: KerberosAuthentication no
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040670
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040680 | PATCH | The SSH daemon must perform strict mode checking of home directory configuration files."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: (?i)^#?strictmodes
+      line: StrictModes yes
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040680
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040690 | PATCH | The SSH daemon must use privilege separation."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: (?i)^#?useprivilegeseparation
+      line: UsePrivilegeSeparation yes
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040690
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040700 | PATCH | The SSH daemon must not allow compression or must only allow compression after successful authentication."
-  command: "true"
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: (?i)^#?compression
+      line: Compression no
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040700
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040730 | PATCH | The system must not be performing packet forwarding unless the system is a router."
-  command: "true"
+  sysctl:
+      name: net.ipv4.ip_forward
+      state: present
+      value: 0
+      reload: yes
+      ignoreerrors: yes
+  when: not rhel7stig_system_is_router
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040730
+      - ipv4
 
 - name: "MEDIUM | RHEL-07-040740 | PATCH | The Network File System (NFS) must be configured to use AUTH_GSS."
   command: "true"
@@ -1511,12 +1700,27 @@
       - RHEL-07-040740
 
 - name: "MEDIUM | RHEL-07-040810 | PATCH | The system must use a local firewall."
-  command: "true"
+  yum:
+      name: firewalld
+      state: latest
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040810
+      - firewalld
+
+- name: "MEDIUM | RHEL-07-040810 | PATCH | The system must use a local firewall."
+  service:
+      name: firewalld
+      state: started
+      enabled: yes
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-040810
+      - firewalld
 
 - name: "MEDIUM | RHEL-07-040820 | PATCH | The system's access control program must be configured to grant or deny system access to specific hosts and services."
   command: "true"
@@ -1535,10 +1739,15 @@
       - RHEL-07-040830
 
 - name: "MEDIUM | RHEL-07-040860 | PATCH | The system must not forward IPv6 source-routed packets."
-  command: "true"
+  sysctl:
+      name: net.ipv6.conf.all.accept_source_route
+      state: present
+      value: 0
+      reload: yes
+      ignoreerrors: yes
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040860
-
+      - ipv6
