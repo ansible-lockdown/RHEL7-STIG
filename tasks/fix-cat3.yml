@@ -63,7 +63,7 @@
       "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs). | AIDE INSTALL" 
       "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes. | AIDE INSTALL"
   yum: name=aide state=installed
-  when: rhel7stig_installaide
+  when: rhel7stig_install_aide
   tags:
       - cat3
       - low

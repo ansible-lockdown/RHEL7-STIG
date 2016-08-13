@@ -1,6 +1,152 @@
-- name: "Place holder for Cat III Audits"
-  command: "true"
+---
+- name: "LOW | RHEL-07-010490 | PATCH | Unnecessary default system accounts must be removed."
+  shell: grep  {{ item }} /etc/passwd | wc -l
+  register: rhel_07_010490_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  with_items:
+    - games
+    - ftp
+  tags:
+    - cat3
+    - low
+    - audit
+    - RHEL-07-010490
+
+- fail: msg="Unecessary default account present."
+  when: item.stdout == "1"
+  with_items: "{{ rhel_07_010490_audit.results }}"
+
+- name: "LOW | RHEL-07-020200 | PATCH | The operating system must remove all software components after updated versions have been installed."
+  shell: grep -i clean_requirements_on_remove /etc/yum.conf | grep 1 | wc -l
+  failed_when: rhel_07_020200_audit.stdout == "0"
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_020200_audit
   tags:
       - cat3
       - low
       - audit
+      - RHEL-07-020200
+
+- name: "LOW | RHEL-07-020300 | PATCH | All Group Identifiers (GIDs) referenced in the /etc/passwd file must be defined in the /etc/group file."
+  shell: pwck -r | grep "no group" | wc -l
+  failed_when: rhel_07_020300_audit.stdout != "0"
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_020300_audit
+  tags:
+      - cat3
+      - low
+      - audit
+      - RHEL-07-020300
+
+- name: "LOW | RHEL-07-021240 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
+  shell: "{{ rhel7stig_home_dir_check }}"
+  failed_when: rhel_07_021240_audit.stdout != "0"
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_021240_audit
+  tags: 
+      - cat3
+      - low
+      - audit
+      - RHEL-07-021240
+
+- name: "LOW | RHEL-07-021250 | PATCH | The system must use a separate file system for /var."
+  shell: grep /var /etc/fstab | wc -l
+  failed_when: rhel_07_021250_audit.stdout == "0"
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_021250_audit
+  tags:
+      - cat3
+      - low
+      - audit
+      - RHEL-07-021250
+
+- name: "LOW | RHEL-07-021260 | PATCH | The system must use /var/log/audit for the system audit data path."
+  shell: grep /var/log/audit /etc/fstab | wc -l
+  failed_when: rhel_07_021260_audit.stdout == "0"
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_021260_audit
+  tags:
+      - cat3
+      - low
+      - audit
+      - RHEL-07-021260
+
+- name: "LOW | RHEL-07-021270 | PATCH | The system must use a separate file system for /tmp (or equivalent)."
+  shell: grep /var/tmp /etc/fstab | wc -l
+  failed_when: rhel_07_021270_audit.stdout == "0"
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_021270_audit
+  tags:
+      - cat3
+      - low
+      - audit
+      - RHEL-07-021270
+
+- name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs). | AIDE INSTALL" 
+  shell: rpm -qa | grep aide | wc -l
+  failed_when: rhel_07_021600_audit.stdout == "0"
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_021600_audit
+  when: rhel7stig_install_aide
+  tags:
+      - cat3
+      - low
+      - audit
+      - RHEL-07-021600
+
+- name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes. | AIDE CONF"
+  command: echo "Manual Check"
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_021610_audit
+  tags:
+      - cat3
+      - low
+      - audit
+      - RHEL-07-021610
+
+- name: "LOW | RHEL-07-040010 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
+  shell: grep -e "^\*.*hard.*maxlogins" /etc/security/limits.conf | awk '{print $4}'
+  failed_when: rhel_07_040010_audit.stdout|int > 10
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_040010_audit
+  tags:
+      - cat3
+      - low
+      - audit
+      - RHEL-07-040010
+
+- name: "LOW | RHEL-07-040300 | PATCH | The system must display the date and time of the last successful account logon upon logon."
+  shell: grep pam_lastlog /etc/pam.d/postlogin | grep '#' | wc -l
+  failed_when: rhel_07_040300_audit.stdout|int != 0
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_040300_audit
+  tags:
+      - cat3
+      - low
+      - audit
+      - RHEL-07-040300
+
+- name: "LOW | RHEL-07-040320 | PATCH | For systems using DNS resolution, at least two name servers must be configured. Check"
+  shell: grep nameserver /etc/resolv.conf | grep nameserver | wc -l
+  failed_when: rhel_07_040320_audit.stdout|int < 2
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_040320_audit
+  tags:
+      - cat3
+      - low
+      - audit
+      - RHEL-07-040320

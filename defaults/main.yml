@@ -58,3 +58,5 @@ rhel7stig_interfaces:
 rhel7stig_num_max_logins: 10
 
 rhel7stig_install_aide: True
+
+rhel7stig_home_dir_check: 'grep $(cut -d: -f 1,3,6,7 /etc/passwd | egrep ":[1-4][0-9]{3}" | tr "\/" "\t" | awk "{print $2}" | sort -u) /etc/fstab  | wc -l'
