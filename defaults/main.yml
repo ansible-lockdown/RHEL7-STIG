@@ -48,3 +48,13 @@ rhel7stig_boot_password_config:
     - regexp: ^password_pbkdf2 root
       line: password_pbkdf2 root {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
+rhel7stig_dns_servers:
+  - 8.8.8.8
+  - 8.8.4.4
+
+rhel7stig_interfaces:
+  - br0
+
+rhel7stig_num_max_logins: 10
+
+rhel7stig_install_aide: True
