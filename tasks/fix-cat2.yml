@@ -466,7 +466,7 @@
       - RHEL-07-020700
 
 - name: "MEDIUM | RHEL-07-020840 | PATCH | All local initialization files for interactive users must be owned by the home directory user or root."
-  command: "true"
+  rhel7_020840: check=False
   tags:
       - cat2
       - medium
@@ -474,7 +474,7 @@
       - RHEL-07-020840
 
 - name: "MEDIUM | RHEL-07-020850 | PATCH | Local initialization files for local interactive users must be group-owned by the users primary group or root."
-  command: "true"
+  rhel7_020850: check=False
   tags:
       - cat2
       - medium
