@@ -48,15 +48,27 @@ rhel7stig_boot_password_config:
     - regexp: ^password_pbkdf2 root
       line: password_pbkdf2 root {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
+# RHEL-07-040320 - For systems using DNS resolution, 
+# at least two name servers must be configured.
 rhel7stig_dns_servers:
   - 8.8.8.8
   - 8.8.4.4
 
-rhel7stig_interfaces:
-  - br0
-
+# RHEL-07-040010 - The operating system
+# must limit the number of concurrent 
+# sessions to 10 for all accounts and/or
+# account types.
 rhel7stig_num_max_logins: 10
 
+# RHEL-07-021610 - The file integrity 
+# tool must be configured to verify 
+# extended attributes.
+# If true Aide and a default Aide config
+# will be installed
+# Please Check aide.conf.j2
+# and defaults.aide.j2
 rhel7stig_install_aide: True
 
+# RHEL-07-021240 - A separate file system must be used 
+# for user home directories (such as /home or an equivalent).
 rhel7stig_home_dir_check: 'grep $(cut -d: -f 1,3,6,7 /etc/passwd | egrep ":[1-4][0-9]{3}" | tr "\/" "\t" | awk "{print $2}" | sort -u) /etc/fstab  | wc -l'

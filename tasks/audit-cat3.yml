@@ -14,10 +14,6 @@
     - audit
     - RHEL-07-010490
 
-- fail: msg="Unecessary default account present."
-  when: item.stdout == "1"
-  with_items: "{{ rhel_07_010490_audit.results }}"
-
 - name: "LOW | RHEL-07-020200 | PATCH | The operating system must remove all software components after updated versions have been installed."
   shell: grep -i clean_requirements_on_remove /etc/yum.conf | grep 1 | wc -l
   failed_when: rhel_07_020200_audit.stdout == "0"
