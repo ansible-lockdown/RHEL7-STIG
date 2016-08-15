@@ -26,7 +26,7 @@
       - patch
       - RHEL-07-020300
 
-- name: "LOW | RHEL-07-021240 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
+- name: "LOW | RHEL-07-021240 | AUDIT | A separate file system must be used for user home directories (such as /home or an equivalent)."
   command: "true"
   tags:
       - cat3
@@ -34,7 +34,7 @@
       - patch
       - RHEL-07-021240
 
-- name: "LOW | RHEL-07-021250 | PATCH | The system must use a separate file system for /var."
+- name: "LOW | RHEL-07-021250 | AUDIT | The system must use a separate file system for /var."
   command: "true"
   tags:
       - cat3
@@ -42,7 +42,7 @@
       - patch
       - RHEL-07-021250
 
-- name: "LOW | RHEL-07-021260 | PATCH | The system must use /var/log/audit for the system audit data path."
+- name: "LOW | RHEL-07-021260 | AUDIT | The system must use /var/log/audit for the system audit data path."
   command: "true"
   tags:
       - cat3
@@ -50,7 +50,7 @@
       - patch
       - RHEL-07-021260
 
-- name: "LOW | RHEL-07-021270 | PATCH | The system must use a separate file system for /tmp (or equivalent)."
+- name: "LOW | RHEL-07-021270 | AUDIT | The system must use a separate file system for /tmp (or equivalent)."
   command: "true"
   tags:
       - cat3
