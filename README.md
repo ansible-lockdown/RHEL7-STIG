@@ -43,7 +43,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: rhel7-stig, when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == 7"}
+         - { role: rhel7-stig, when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"}
 
 License
 -------
