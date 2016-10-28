@@ -238,7 +238,10 @@
       - RHEL-07-010240
 
 - name: "MEDIUM | RHEL-07-010250 | PATCH | Passwords must be a minimum of 15 characters in length."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?minlen
+      line: minlen = 15
   tags:
       - cat2
       - medium
