@@ -227,7 +227,10 @@
       - RHEL-07-010230
 
 - name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be prohibited from reuse for a minimum of five generations."
-  command: "true"
+  lineinfile:
+      dest: /etc/pam.d/system-auth
+      regexp: password\s*sufficient\s*pam_unix.so
+      line: password    sufficient    pam_unix.so sha512 shadow try_first_pass use_authtok remember=5
   tags:
       - cat2
       - medium
