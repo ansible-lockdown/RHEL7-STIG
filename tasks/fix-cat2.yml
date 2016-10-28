@@ -141,7 +141,10 @@
       - RHEL-07-010140
 
 - name: "MEDIUM | RHEL-07-010150 | PATCH | When passwords are changed the number of repeating consecutive characters must not be more than four characters."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?maxrepeat
+      line: maxrepeat = 2
   tags:
       - cat2
       - medium
