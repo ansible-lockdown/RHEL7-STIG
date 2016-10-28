@@ -1,3 +1,15 @@
+- name: "MEDIUM | RHEL-07-010210 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
+  command: "awk -F: '$4 < 1 {print $1}' /etc/shadow"
+  register: rhel_07_010210_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-020210
+
 - name: "MEDIUM | RHEL-07-040180 | AUDIT | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
   command: grep -i useldapauth /etc/sysconfig/authconfig
   register: rhel_07_040180_audit

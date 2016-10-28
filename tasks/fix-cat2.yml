@@ -198,7 +198,8 @@
       - RHEL-07-010200
 
 - name: "MEDIUM | RHEL-07-010210 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-  command: "true"
+  command: chage -m 1 {{ item }}
+  with_items: "{{ rhel_07_040180_audit.stdout_lines }}"
   tags:
       - cat2
       - medium
