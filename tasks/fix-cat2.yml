@@ -119,7 +119,10 @@
       - RHEL-07-010120
 
 - name: "MEDIUM | RHEL-07-010130 | PATCH | When passwords are changed a minimum of eight of the total number of characters must be changed."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?difok
+      line: difok = 8
   tags:
       - cat2
       - medium
