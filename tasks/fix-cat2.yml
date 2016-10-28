@@ -190,7 +190,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: (?i)^#?PASS_MIN_DAYS
-      lien: PASS_MIN_DAYS 1
+      line: PASS_MIN_DAYS 1
   tags:
       - cat2
       - medium
@@ -210,7 +210,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: (?i)^#?PASS_MAX_DAYS
-      lien: PASS_MAX_DAYS 60
+      line: PASS_MAX_DAYS 60
   tags:
       - cat2
       - medium
