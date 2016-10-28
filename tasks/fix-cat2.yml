@@ -187,7 +187,10 @@
       - RHEL-07-010190
 
 - name: "MEDIUM | RHEL-07-010200 | PATCH | Passwords for new users must be restricted to a 24 hours/1 day minimum lifetime."
-  command: "true"
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: (?i)^#?PASS_MIN_DAYS
+      lien: PASS_MIN_DAYS 1
   tags:
       - cat2
       - medium
