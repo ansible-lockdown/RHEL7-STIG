@@ -15,7 +15,11 @@
       - RHEL-07-010031
 
 - name: "MEDIUM | RHEL-07-010040 | PATCH | The operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon."
-  command: "true"
+  template:
+      src: issue
+      dest: /etc/issue
+      owner: root
+      mode: 0644
   tags:
       - cat2
       - medium
