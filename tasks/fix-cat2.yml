@@ -130,7 +130,10 @@
       - RHEL-07-010130
 
 - name: "MEDIUM | RHEL-07-010140 | PATCH | When passwords are changed a minimum of four character classes must be changed."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?minclass
+      line: minclass = 4
   tags:
       - cat2
       - medium
