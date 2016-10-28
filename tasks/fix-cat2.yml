@@ -86,7 +86,10 @@
       - RHEL-07-010090
 
 - name: "MEDIUM | RHEL-07-010100 | PATCH | When passwords are changed or new passwords are established, the new password must contain at least one lower-case character."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?lcredit
+      line: lcredit = -1
   tags:
       - cat2
       - medium
