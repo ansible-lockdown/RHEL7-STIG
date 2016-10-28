@@ -207,7 +207,10 @@
       - RHEL-07-010210
 
 - name: "MEDIUM | RHEL-07-010220 | PATCH | Passwords for new users must be restricted to a 60-day maximum lifetime."
-  command: "true"
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: (?i)^#?PASS_MAX_DAYS
+      lien: PASS_MAX_DAYS 60
   tags:
       - cat2
       - medium
