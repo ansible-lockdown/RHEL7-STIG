@@ -35,7 +35,7 @@
       regexp: ^#?PermitEmptyPasswords
       line: PermitEmptyPasswords no
       validate: sshd -tf %s
-  notify: restart sshd
+  notify: restart ssh
   tags:
       - cat1
       - high
