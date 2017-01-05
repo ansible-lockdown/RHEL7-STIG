@@ -16,6 +16,7 @@
 
 - name: Run CAT I audits
   include: audit-cat1.yml
+  static: no
   when: rhel7stig_cat1_audit
   tags:
       - cat1
@@ -23,6 +24,7 @@
 
 - name: Run CAT II audits
   include: audit-cat2.yml
+  static: no
   when: rhel7stig_cat2_audit
   tags:
       - cat2
@@ -30,6 +32,7 @@
 
 - name: Run CAT III audits
   include: audit-cat3.yml
+  static: no
   when: rhel7stig_cat3_audit
   tags:
       - cat2
@@ -37,6 +40,7 @@
 
 - name: Include CAT I patches
   include: fix-cat1.yml
+  static: no
   when: rhel7stig_cat1_patch
   tags:
       - cat1
@@ -44,6 +48,7 @@
 
 - name: Include CAT II patches
   include: fix-cat2.yml
+  static: no
   when: rhel7stig_cat2_patch
   tags:
       - cat2
@@ -51,6 +56,7 @@
 
 - name: Include CAT III patches
   include: fix-cat3.yml
+  static: no
   when: rhel7stig_cat3_patch
   tags:
       - cat3
