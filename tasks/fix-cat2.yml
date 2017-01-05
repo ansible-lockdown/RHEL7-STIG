@@ -15,7 +15,11 @@
       - RHEL-07-010031
 
 - name: "MEDIUM | RHEL-07-010040 | PATCH | The operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon."
-  command: "true"
+  copy:
+      src: issue
+      dest: /etc/issue
+      owner: root
+      mode: 0644
   tags:
       - cat2
       - medium
@@ -71,7 +75,10 @@
       - RHEL-07-010073
 
 - name: "MEDIUM | RHEL-07-010090 | PATCH | When passwords are changed or new passwords are established, the new password must contain at least one upper-case character."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?ucredit
+      line: ucredit = -1
   tags:
       - cat2
       - medium
@@ -79,7 +86,10 @@
       - RHEL-07-010090
 
 - name: "MEDIUM | RHEL-07-010100 | PATCH | When passwords are changed or new passwords are established, the new password must contain at least one lower-case character."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?lcredit
+      line: lcredit = -1
   tags:
       - cat2
       - medium
@@ -87,7 +97,10 @@
       - RHEL-07-010100
 
 - name: "MEDIUM | RHEL-07-010110 | PATCH | When passwords are changed or new passwords are assigned, the new password must contain at least one numeric character."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?dcredit
+      line: dcredit = -1
   tags:
       - cat2
       - medium
@@ -95,7 +108,10 @@
       - RHEL-07-010110
 
 - name: "MEDIUM | RHEL-07-010120 | PATCH | When passwords are changed or new passwords are assigned, the new password must contain at least one special character."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?ocredit
+      line: ocredit = -1
   tags:
       - cat2
       - medium
@@ -103,7 +119,10 @@
       - RHEL-07-010120
 
 - name: "MEDIUM | RHEL-07-010130 | PATCH | When passwords are changed a minimum of eight of the total number of characters must be changed."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?difok
+      line: difok = 8
   tags:
       - cat2
       - medium
@@ -111,7 +130,10 @@
       - RHEL-07-010130
 
 - name: "MEDIUM | RHEL-07-010140 | PATCH | When passwords are changed a minimum of four character classes must be changed."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?minclass
+      line: minclass = 4
   tags:
       - cat2
       - medium
@@ -119,7 +141,10 @@
       - RHEL-07-010140
 
 - name: "MEDIUM | RHEL-07-010150 | PATCH | When passwords are changed the number of repeating consecutive characters must not be more than four characters."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?maxrepeat
+      line: maxrepeat = 2
   tags:
       - cat2
       - medium
@@ -127,7 +152,10 @@
       - RHEL-07-010150
 
 - name: "MEDIUM | RHEL-07-010160 | PATCH | When passwords are changed the number of repeating characters of the same character class must not be more than four characters."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?maxclassrepeat
+      line: maxclassrepeat = 4
   tags:
       - cat2
       - medium
@@ -159,7 +187,10 @@
       - RHEL-07-010190
 
 - name: "MEDIUM | RHEL-07-010200 | PATCH | Passwords for new users must be restricted to a 24 hours/1 day minimum lifetime."
-  command: "true"
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: (?i)^#?PASS_MIN_DAYS
+      line: PASS_MIN_DAYS 1
   tags:
       - cat2
       - medium
@@ -167,7 +198,8 @@
       - RHEL-07-010200
 
 - name: "MEDIUM | RHEL-07-010210 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-  command: "true"
+  command: chage -m 1 {{ item }}
+  with_items: "{{ rhel_07_010210_audit.stdout_lines }}"
   tags:
       - cat2
       - medium
@@ -175,7 +207,10 @@
       - RHEL-07-010210
 
 - name: "MEDIUM | RHEL-07-010220 | PATCH | Passwords for new users must be restricted to a 60-day maximum lifetime."
-  command: "true"
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: (?i)^#?PASS_MAX_DAYS
+      line: PASS_MAX_DAYS 60
   tags:
       - cat2
       - medium
@@ -183,7 +218,8 @@
       - RHEL-07-010220
 
 - name: "MEDIUM | RHEL-07-010230 | PATCH | Existing passwords must be restricted to a 60-day maximum lifetime."
-  command: "true"
+  command: chage -M 60 {{ item }}
+  with_items: "{{ rhel_07_010230_audit.stdout_lines }}"
   tags:
       - cat2
       - medium
@@ -191,7 +227,10 @@
       - RHEL-07-010230
 
 - name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be prohibited from reuse for a minimum of five generations."
-  command: "true"
+  lineinfile:
+      dest: /etc/pam.d/system-auth
+      regexp: password\s*sufficient\s*pam_unix.so
+      line: password    sufficient    pam_unix.so sha512 shadow try_first_pass use_authtok remember=5
   tags:
       - cat2
       - medium
@@ -199,7 +238,10 @@
       - RHEL-07-010240
 
 - name: "MEDIUM | RHEL-07-010250 | PATCH | Passwords must be a minimum of 15 characters in length."
-  command: "true"
+  lineinfile:
+      dest: /etc/security/pwquality.conf
+      regexp: ^#?\s?minlen
+      line: minlen = 15
   tags:
       - cat2
       - medium
