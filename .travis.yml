@@ -5,7 +5,7 @@ env:
   - distro=rhel7
     init=/usr/lib/systemd/systemd
     run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    ansible_opts="-e /etc/ansible/roles/${distro}stig/tests/extra_vars.yml -t 'RHEL-07-021910' --skip-tags 'RHEL-07-020152'"
+    ansible_opts="-e /etc/ansible/roles/${distro}stig/tests/extra_vars.yml --skip-tags 'RHEL-07-020152'"
 
 before_install:
   # Pull container.
@@ -13,8 +13,6 @@ before_install:
 
 script:
   - container_id=$(mktemp)
-
-  - echo $ansible_opts
 
   # Run container in detached state.
   - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/${distro}stig:ro ${run_opts} samdoran/${distro}-ansible:latest "${init}" > "${container_id}"'
