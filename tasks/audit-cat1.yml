@@ -103,6 +103,8 @@
       - RHEL-07-040331
       - always
 
+- debug: var={{ rhel_07_040331_audit }}
+
 - name: "HIGH | RHEL-07-040580 | AUDIT | SNMP community strings must be changed from the default."
   command: grep {{ item }} /etc/snmp/snmpd.conf
   failed_when: no

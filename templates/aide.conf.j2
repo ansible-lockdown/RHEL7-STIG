@@ -1,0 +1,31 @@
+@@define DBDIR /var/lib/aide
+@@define LOGDIR /var/log/aide
+database=file:@@{DBDIR}/aide.db.gz
+database_out=file:@@{DBDIR}/aide.db.new.gz
+gzip_dbout=yes
+verbose=5
+report_url=file:@@{LOGDIR}/aide.report
+
+R = p+i+l+n+u+g+s+m+c+sha512
+
+L = p+i+l+n+u+g+acl+xattrs
+
+> = p+i+l+n+u+g+S+acl+xattrs
+
+ALLXTRAHASHES = sha1+rmd160+sha256+sha512+tiger
+
+EVERYTHING = R+ALLXTRAHASHES
+
+NORMAL = R
+
+DIR = p+i+n+u+g+acl+xattrs
+
+PERMS = p+i+u+g+acl
+
+LOG = >
+
+LSPP = R
+
+DATAONLY =  p+n+u+g+s+acl+selinux+xattrs+md5+sha256+rmd160+tiger
+
+@@include /etc/aide.conf.d/default.aide

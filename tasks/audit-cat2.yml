@@ -70,7 +70,7 @@
       recurse: yes
       file_type: file
       patterns: '*ssh_host*key'
-      hidden: true
+      hidden: True
   failed_when: no
   changed_when: no
   ignore_errors: yes
@@ -89,7 +89,7 @@
       recurse: yes
       file_type: file
       patterns: '*.pub'
-      hidden: true
+      hidden: True
   failed_when: no
   changed_when: no
   ignore_errors: yes
@@ -101,3 +101,88 @@
       - RHEL-07-040640
       - always
       - ssh
+
+- name: "MEDIUM | RHEL-07-020840 | PATCH | All local initialization files for interactive users must be owned by the home directory user or root."
+  init_files: check=True user=True
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_020840_audit
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-020840
+
+- name: "MEDIUM | RHEL-07-020850 | PATCH | Local initialization files for local interactive users must be group-owned by the users primary group or root."
+  init_files: check=True group=True
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_020850_audit
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-020850
+
+- name: "MEDIUM | RHEL-07-020860 | PATCH | All local initialization files must have mode 0740 or less permissive."
+  init_files: check=True permissions=True
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_020860_audit
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-020860
+
+- name: "MEDIUM | RHEL-07-020870 | PATCH | All local interactive user initialization files executable search paths must contain only absolute paths."
+  init_files: check=True paths=True
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_020870_audit
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-020870
+
+- name: "MEDIUM | RHEL-07-020880 | PATCH | Local initialization files must not execute world-writable programs."
+  command: "true"
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_020880_audit
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-020880
+
+- name: "MEDIUM | RHEL-07-020940 | PATCH | All system device files must be correctly labeled to prevent unauthorized modification."
+  command: "true"
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_020940_audit
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-020940
+
+- name: "MEDIUM | RHEL-07-021010 | PATCH | Files systems that contain user home directories must be mounted to prevent files with the setuid and setgid bit set from being executed."
+  command: "true"
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_021010_audit
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-021010
+

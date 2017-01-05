@@ -1,13 +1,17 @@
+---
 - name: "LOW | RHEL-07-010490 | PATCH | Unnecessary default system accounts must be removed."
-  command: "true"
+  user: name={{ item }} state=absent
+  with_items:
+    - games
+    - ftp
   tags:
-      - cat3
-      - low
-      - patch
-      - RHEL-07-010490
+    - cat3
+    - low
+    - patch
+    - RHEL-07-010490
 
 - name: "LOW | RHEL-07-020200 | PATCH | The operating system must remove all software components after updated versions have been installed."
-  command: "true"
+  lineinfile: dest=/etc/yum.conf regexp=^clean_requirements_on_remove line=clean_requirements_on_remove=1
   tags:
       - cat3
       - low
@@ -22,7 +26,7 @@
       - patch
       - RHEL-07-020300
 
-- name: "LOW | RHEL-07-021240 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
+- name: "LOW | RHEL-07-021240 | AUDIT | A separate file system must be used for user home directories (such as /home or an equivalent)."
   command: "true"
   tags:
       - cat3
@@ -30,7 +34,7 @@
       - patch
       - RHEL-07-021240
 
-- name: "LOW | RHEL-07-021250 | PATCH | The system must use a separate file system for /var."
+- name: "LOW | RHEL-07-021250 | AUDIT | The system must use a separate file system for /var."
   command: "true"
   tags:
       - cat3
@@ -38,7 +42,7 @@
       - patch
       - RHEL-07-021250
 
-- name: "LOW | RHEL-07-021260 | PATCH | The system must use /var/log/audit for the system audit data path."
+- name: "LOW | RHEL-07-021260 | AUDIT | The system must use /var/log/audit for the system audit data path."
   command: "true"
   tags:
       - cat3
@@ -46,7 +50,7 @@
       - patch
       - RHEL-07-021260
 
-- name: "LOW | RHEL-07-021270 | PATCH | The system must use a separate file system for /tmp (or equivalent)."
+- name: "LOW | RHEL-07-021270 | AUDIT | The system must use a separate file system for /tmp (or equivalent)."
   command: "true"
   tags:
       - cat3
@@ -54,16 +58,45 @@
       - patch
       - RHEL-07-021270
 
-- name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
-  command: "true"
+- name: |
+
+      "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs). | AIDE INSTALL" 
+      "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes. | AIDE INSTALL"
+  yum: name=aide state=installed
+  when: rhel7stig_install_aide
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-021600
 
-- name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes."
-  command: "true"
+- name:  |
+
+      "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs). | AIDE CONF" 
+      "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes. | AIDE CONF"
+  template: dest=/etc/aide.conf src=aide.conf.j2
+  tags:
+      - cat3
+      - low
+      - patch
+      - RHEL-07-021610
+
+- name:  |
+
+      "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs). | AIDE DEFAULT CONF DIR"
+      "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes. | AIDE DEFAULT CONF DIR"
+  file: dest=/etc/aide.conf.d state=directory
+  tags:
+      - cat3
+      - low
+      - patch
+      - RHEL-07-021610
+
+- name:  |
+
+      "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs). | AIDE DEFAULT CONF"
+      "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes. | AIDE DEFAULT CONF"
+  template: dest=/etc/aide.conf.d/default.aide src=default.aide.j2
   tags:
       - cat3
       - low
@@ -71,7 +104,7 @@
       - RHEL-07-021610
 
 - name: "LOW | RHEL-07-040010 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
-  command: "true"
+  lineinfile: dest='/etc/security/limits.conf' regexp="^\* hard maxlogins" line="* hard maxlogins {{ rhel7stig_num_max_logins }}"
   tags:
       - cat3
       - low
@@ -79,18 +112,27 @@
       - RHEL-07-040010
 
 - name: "LOW | RHEL-07-040300 | PATCH | The system must display the date and time of the last successful account logon upon logon."
-  command: "true"
+  lineinfile: dest=/etc/pam.d/postlogin regexp="^session required pam_lastlog.so" line="session required pam_lastlog.so showfailed"
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-040300
 
-- name: "LOW | RHEL-07-040320 | PATCH | For systems using DNS resolution, at least two name servers must be configured."
-  command: "true"
+- name: "LOW | RHEL-07-040320 | PATCH | For systems using DNS resolution, at least two name servers must be configured. Check"
+  shell: grep hosts /etc/nsswitch.conf | grep dns | grep -v '^#' | wc -l
+  register: nsswitch_check
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-040320
 
+- name: "LOW | RHEL-07-040320 | PATCH | For systems using DNS resolution, at least two name servers must be configured. Update if only 1 server"
+  lineinfile: dest=/etc/resolv.conf regexp="^nameserver {{ item }}" line="nameserver {{ item }}"
+  with_items: "{{ rhel7stig_dns_servers }}"
+  tags:
+      - cat3
+      - low
+      - patch
+      - RHEL-07-040320
