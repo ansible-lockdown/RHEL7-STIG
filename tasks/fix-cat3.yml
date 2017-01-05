@@ -1,5 +1,6 @@
 - name: "LOW | RHEL-07-010490 | PATCH | Unnecessary default system accounts must be removed."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -8,6 +9,7 @@
 
 - name: "LOW | RHEL-07-020200 | PATCH | The operating system must remove all software components after updated versions have been installed."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -16,6 +18,7 @@
 
 - name: "LOW | RHEL-07-020300 | PATCH | All Group Identifiers (GIDs) referenced in the /etc/passwd file must be defined in the /etc/group file."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -24,6 +27,7 @@
 
 - name: "LOW | RHEL-07-021240 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -32,6 +36,7 @@
 
 - name: "LOW | RHEL-07-021250 | PATCH | The system must use a separate file system for /var."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -40,6 +45,7 @@
 
 - name: "LOW | RHEL-07-021260 | PATCH | The system must use /var/log/audit for the system audit data path."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -48,6 +54,7 @@
 
 - name: "LOW | RHEL-07-021270 | PATCH | The system must use a separate file system for /tmp (or equivalent)."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -56,6 +63,7 @@
 
 - name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -64,6 +72,7 @@
 
 - name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -72,6 +81,7 @@
 
 - name: "LOW | RHEL-07-040010 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -80,6 +90,7 @@
 
 - name: "LOW | RHEL-07-040300 | PATCH | The system must display the date and time of the last successful account logon upon logon."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low
@@ -88,6 +99,7 @@
 
 - name: "LOW | RHEL-07-040320 | PATCH | For systems using DNS resolution, at least two name servers must be configured."
   command: "true"
+  changed_when: no
   tags:
       - cat3
       - low

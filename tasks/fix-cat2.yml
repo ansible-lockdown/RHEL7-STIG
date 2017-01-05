@@ -1,5 +1,6 @@
 - name: "MEDIUM | RHEL-07-010030 | PATCH | The operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -8,6 +9,7 @@
 
 - name: "MEDIUM | RHEL-07-010031 | PATCH | The operating system must display the approved Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -28,6 +30,7 @@
 
 - name: "MEDIUM | RHEL-07-010060 | PATCH | The operating system must enable a user session lock until that user re-establishes access using established identification and authentication procedures."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -36,6 +39,7 @@
 
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -44,6 +48,7 @@
 
 - name: "MEDIUM | RHEL-07-010074 | PATCH | The operating system must initiate a session lock for graphical user interfaces when the screensaver is activated."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -52,6 +57,7 @@
 
 - name: "MEDIUM | RHEL-07-010071 | PATCH | The operating system must initiate a session lock after a 15-minute period of inactivity for all connection types."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -60,6 +66,7 @@
 
 - name: "MEDIUM | RHEL-07-010072 | PATCH | The operating system must have the screen package installed."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -68,6 +75,7 @@
 
 - name: "MEDIUM | RHEL-07-010073 | PATCH | The operating system must initiate a session lock for the screensaver after a period of inactivity for graphical user interfaces."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -164,6 +172,7 @@
 
 - name: "MEDIUM | RHEL-07-010170 | PATCH | The PAM system service must be configured to store only encrypted representations of passwords."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -172,6 +181,7 @@
 
 - name: "MEDIUM | RHEL-07-010180 | PATCH | The shadow file must be configured to store only encrypted representations of passwords."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -180,6 +190,7 @@
 
 - name: "MEDIUM | RHEL-07-010190 | PATCH | User and group account administration utilities must be configured to store only encrypted representations of passwords."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -250,6 +261,7 @@
 
 - name: "MEDIUM | RHEL-07-010280 | PATCH | The operating system must disable account identifiers (individuals, groups, roles, and devices) if the password expires."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -258,6 +270,7 @@
 
 - name: "MEDIUM | RHEL-07-010371 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -266,6 +279,7 @@
 
 - name: "MEDIUM | RHEL-07-010372 | PATCH | Accounts subject to three unsuccessful login attempts within 15 minutes must be locked for the maximum configurable period."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -274,6 +288,7 @@
 
 - name: "MEDIUM | RHEL-07-010373 | PATCH | If three unsuccessful root logon attempts within 15 minutes occur the associated account must be locked."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -282,6 +297,7 @@
 
 - name: "MEDIUM | RHEL-07-010380 | PATCH | Users must provide a password for privilege escalation."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -290,6 +306,7 @@
 
 - name: "MEDIUM | RHEL-07-010381 | PATCH | Users must re-authenticate for privilege escalation."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -298,6 +315,7 @@
 
 - name: "MEDIUM | RHEL-07-010400 | PATCH | The operating system must prohibit the use of cached nss authenticators after one day."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -306,6 +324,7 @@
 
 - name: "MEDIUM | RHEL-07-010401 | PATCH | The operating system must prohibit the use of cached PAM authenticators after one day."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -314,6 +333,7 @@
 
 - name: "MEDIUM | RHEL-07-010402 | PATCH | The operating system must prohibit the use of cached SSH authenticators after one day."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -323,6 +343,7 @@
 
 - name: "MEDIUM | RHEL-07-010420 | PATCH | The delay between logon prompts following a failed console logon attempt must be at least four seconds."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -331,6 +352,7 @@
 
 - name: "MEDIUM | RHEL-07-010441 | PATCH | The operating system must not allow users to override SSH environment variables."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -340,6 +362,7 @@
 
 - name: "MEDIUM | RHEL-07-010442 | PATCH | The operating system must not allow a non-certificate trusted host SSH logon to the system."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -349,6 +372,7 @@
 
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multi-factor authentication."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -357,6 +381,7 @@
 
 - name: "MEDIUM | RHEL-07-020090 | PATCH | The operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -365,6 +390,7 @@
 
 - name: "MEDIUM | RHEL-07-020130 | PATCH | A file integrity tool must verify the baseline operating system configuration at least weekly."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -373,6 +399,7 @@
 
 - name: "MEDIUM | RHEL-07-020140 | PATCH | Designated personnel must be notified if baseline configurations are changed in an unauthorized manner."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -381,6 +408,7 @@
 
 - name: "MEDIUM | RHEL-07-020160 | PATCH | USB mass storage must be disabled."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -389,6 +417,7 @@
 
 - name: "MEDIUM | RHEL-07-020161 | PATCH | File system automounter must be disabled unless required."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -397,6 +426,7 @@
 
 - name: "MEDIUM | RHEL-07-020230 | PATCH | The operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -405,6 +435,7 @@
 
 - name: "MEDIUM | RHEL-07-020250 | PATCH | System security patches and updates must be installed and up to date."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -413,6 +444,7 @@
 
 - name: "MEDIUM | RHEL-07-020290 | PATCH | The system must not have unnecessary accounts."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -421,6 +453,7 @@
 
 - name: "MEDIUM | RHEL-07-020360 | PATCH | All files and directories must have a valid owner."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -429,6 +462,7 @@
 
 - name: "MEDIUM | RHEL-07-020370 | PATCH | All files and directories must have a valid group owner."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -437,6 +471,7 @@
 
 - name: "MEDIUM | RHEL-07-020620 | PATCH | All local interactive users must have a home directory assigned in the /etc/passwd file."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -445,6 +480,7 @@
 
 - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user accounts, upon creation, must be assigned a home directory."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -453,6 +489,7 @@
 
 - name: "MEDIUM | RHEL-07-020640 | PATCH | All local interactive user home directories defined in the /etc/passwd file must exist."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -461,6 +498,7 @@
 
 - name: "MEDIUM | RHEL-07-020650 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -469,6 +507,7 @@
 
 - name: "MEDIUM | RHEL-07-020660 | PATCH | All local interactive user home directories must be owned by their respective users."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -477,6 +516,7 @@
 
 - name: "MEDIUM | RHEL-07-020670 | PATCH | All local interactive user home directories must be group-owned by the home directory owners primary group."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -485,6 +525,7 @@
 
 - name: "MEDIUM | RHEL-07-020680 | PATCH | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -493,6 +534,7 @@
 
 - name: "MEDIUM | RHEL-07-020690 | PATCH | All files and directories contained in local interactive user home directories must be group-owned by a group of which the home directory owner is a member."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -501,6 +543,7 @@
 
 - name: "MEDIUM | RHEL-07-020700 | PATCH | All files and directories contained in local interactive user home directories must have mode 0750 or less permissive."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -509,6 +552,7 @@
 
 - name: "MEDIUM | RHEL-07-020840 | PATCH | All local initialization files for interactive users must be owned by the home directory user or root."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -517,6 +561,7 @@
 
 - name: "MEDIUM | RHEL-07-020850 | PATCH | Local initialization files for local interactive users must be group-owned by the users primary group or root."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -525,6 +570,7 @@
 
 - name: "MEDIUM | RHEL-07-020860 | PATCH | All local initialization files must have mode 0740 or less permissive."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -533,6 +579,7 @@
 
 - name: "MEDIUM | RHEL-07-020870 | PATCH | All local interactive user initialization files executable search paths must contain only absolute paths."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -541,6 +588,7 @@
 
 - name: "MEDIUM | RHEL-07-020880 | PATCH | Local initialization files must not execute world-writable programs."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -549,6 +597,7 @@
 
 - name: "MEDIUM | RHEL-07-020940 | PATCH | All system device files must be correctly labeled to prevent unauthorized modification."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -557,6 +606,7 @@
 
 - name: "MEDIUM | RHEL-07-021010 | PATCH | Files systems that contain user home directories must be mounted to prevent files with the setuid and setgid bit set from being executed."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -565,6 +615,7 @@
 
 - name: "MEDIUM | RHEL-07-021011 | PATCH | Files systems that are used with removable media must be mounted to prevent files with the setuid and setgid bit set from being executed."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -573,6 +624,7 @@
 
 - name: "MEDIUM | RHEL-07-021012 | PATCH | Files systems that are being imported via Network File System (NFS) must be mounted to prevent files with the setuid and setgid bit set from being executed."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -581,6 +633,7 @@
 
 - name: "MEDIUM | RHEL-07-021050 | PATCH | All world-writable directories must be group-owned by root, sys, bin, or an application group."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -589,6 +642,7 @@
 
 - name: "MEDIUM | RHEL-07-021060 | PATCH | The umask must be set to 077 for all local interactive user accounts."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -597,6 +651,7 @@
 
 - name: "MEDIUM | RHEL-07-021160 | PATCH | Cron logging must be implemented."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -605,6 +660,7 @@
 
 - name: "MEDIUM | RHEL-07-021190 | PATCH | If the cron.allow file exists it must be owned by root."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -613,6 +669,7 @@
 
 - name: "MEDIUM | RHEL-07-021200 | PATCH | If the cron.allow file exists it must be group-owned by root."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -621,6 +678,7 @@
 
 - name: "MEDIUM | RHEL-07-021230 | PATCH | Kernel core dumps must be disabled unless needed."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -629,6 +687,7 @@
 
 - name: "MEDIUM | RHEL-07-021620 | PATCH | The file integrity tool must use FIPS 140-2 approved cryptographic hashes for validating file contents and directories."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -637,6 +696,7 @@
 
 - name: "MEDIUM | RHEL-07-021760 | PATCH | The system must not allow removable media to be used as the boot loader unless approved."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -645,6 +705,7 @@
 
 - name: "MEDIUM | RHEL-07-030090 | PATCH | The operating system must shut down upon audit processing failure, unless availability is an overriding concern. If availability is a concern, the system must alert the designated staff (System Administrator [SA] and Information System Security Officer [ISSO] at a minimum) in the event of an audit processing failure."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -653,6 +714,7 @@
 
 - name: "MEDIUM | RHEL-07-030310 | PATCH | All privileged function executions must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -661,6 +723,7 @@
 
 - name: "MEDIUM | RHEL-07-030330 | PATCH | The operating system must off-load audit records onto a different system or media from the system being audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -669,6 +732,7 @@
 
 - name: "MEDIUM | RHEL-07-030331 | PATCH | The operating system must encrypt the transfer of audit records off-loaded onto a different system or media from the system being audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -677,6 +741,7 @@
 
 - name: "MEDIUM | RHEL-07-030340 | PATCH | The audit system must take appropriate action when the audit storage volume is full."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -685,6 +750,7 @@
 
 - name: "MEDIUM | RHEL-07-030350 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer ISSO (at a minimum) when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -693,6 +759,7 @@
 
 - name: "MEDIUM | RHEL-07-030351 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) via email when the threshold for the repository maximum audit record storage capacity is reached."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -701,6 +768,7 @@
 
 - name: "MEDIUM | RHEL-07-030352 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) when the threshold for the repository maximum audit record storage capacity is reached."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -709,6 +777,7 @@
 
 - name: "MEDIUM | RHEL-07-030380 | PATCH | All uses of the chown command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -717,6 +786,7 @@
 
 - name: "MEDIUM | RHEL-07-030381 | PATCH | All uses of the fchown command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -725,6 +795,7 @@
 
 - name: "MEDIUM | RHEL-07-030382 | PATCH | All uses of the lchown command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -733,6 +804,7 @@
 
 - name: "MEDIUM | RHEL-07-030383 | PATCH | All uses of the fchownat command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -741,6 +813,7 @@
 
 - name: "MEDIUM | RHEL-07-030390 | PATCH | All uses of the chmod command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -749,6 +822,7 @@
 
 - name: "MEDIUM | RHEL-07-030391 | PATCH | All uses of the fchmod command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -757,6 +831,7 @@
 
 - name: "MEDIUM | RHEL-07-030392 | PATCH | All uses of the fchmodat command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -765,6 +840,7 @@
 
 - name: "MEDIUM | RHEL-07-030400 | PATCH | All uses of the setxattr command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -773,6 +849,7 @@
 
 - name: "MEDIUM | RHEL-07-030401 | PATCH | All uses of the fsetxattr command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -781,6 +858,7 @@
 
 - name: "MEDIUM | RHEL-07-030402 | PATCH | All uses of the lsetxattr command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -789,6 +867,7 @@
 
 - name: "MEDIUM | RHEL-07-030403 | PATCH | All uses of the removexattr command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -797,6 +876,7 @@
 
 - name: "MEDIUM | RHEL-07-030404 | PATCH | All uses of the fremovexattr command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -805,6 +885,7 @@
 
 - name: "MEDIUM | RHEL-07-030405 | PATCH | All uses of the lremovexattr command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -813,6 +894,7 @@
 
 - name: "MEDIUM | RHEL-07-030420 | PATCH | All uses of the creat command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -821,6 +903,7 @@
 
 - name: "MEDIUM | RHEL-07-030421 | PATCH | All uses of the open command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -829,6 +912,7 @@
 
 - name: "MEDIUM | RHEL-07-030422 | PATCH | All uses of the openat command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -837,6 +921,7 @@
 
 - name: "MEDIUM | RHEL-07-030423 | PATCH | All uses of the open_by_handle_at command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -845,6 +930,7 @@
 
 - name: "MEDIUM | RHEL-07-030424 | PATCH | All uses of the truncate command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -853,6 +939,7 @@
 
 - name: "MEDIUM | RHEL-07-030425 | PATCH | All uses of the ftruncate command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -861,6 +948,7 @@
 
 - name: "MEDIUM | RHEL-07-030441 | PATCH | All uses of the semanage command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -869,6 +957,7 @@
 
 - name: "MEDIUM | RHEL-07-030442 | PATCH | All uses of the setsebool command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -877,6 +966,7 @@
 
 - name: "MEDIUM | RHEL-07-030443 | PATCH | All uses of the chcon command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -885,6 +975,7 @@
 
 - name: "MEDIUM | RHEL-07-030444 | PATCH | All uses of the restorecon command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -893,6 +984,7 @@
 
 - name: "MEDIUM | RHEL-07-030490 | PATCH | The operating system must generate audit records for all successful/unsuccessful account access count events."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -901,6 +993,7 @@
 
 - name: "MEDIUM | RHEL-07-030491 | PATCH | The operating system must generate audit records for all unsuccessful account access events."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -909,6 +1002,7 @@
 
 - name: "MEDIUM | RHEL-07-030492 | PATCH | The operating system must generate audit records for all successful account access events."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -917,6 +1011,7 @@
 
 - name: "MEDIUM | RHEL-07-030510 | PATCH | All uses of the passwd command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -925,6 +1020,7 @@
 
 - name: "MEDIUM | RHEL-07-030511 | PATCH | All uses of the unix_chkpwd command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -933,6 +1029,7 @@
 
 - name: "MEDIUM | RHEL-07-030512 | PATCH | All uses of the gpasswd command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -941,6 +1038,7 @@
 
 - name: "MEDIUM | RHEL-07-030513 | PATCH | All uses of the chage command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -949,6 +1047,7 @@
 
 - name: "MEDIUM | RHEL-07-030514 | PATCH | All uses of the userhelper command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -957,6 +1056,7 @@
 
 - name: "MEDIUM | RHEL-07-030521 | PATCH | All uses of the su command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -965,6 +1065,7 @@
 
 - name: "MEDIUM | RHEL-07-030522 | PATCH | All uses of the sudo command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -973,6 +1074,7 @@
 
 - name: "MEDIUM | RHEL-07-030526 | PATCH | All uses of the sudoedit command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -981,6 +1083,7 @@
 
 - name: "MEDIUM | RHEL-07-030523 | PATCH | The operating system must generate audit records containing the full-text recording of modifications to sudo configuration files."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -989,6 +1092,7 @@
 
 - name: "MEDIUM | RHEL-07-030524 | PATCH | All uses of the newgrp command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -997,6 +1101,7 @@
 
 - name: "MEDIUM | RHEL-07-030525 | PATCH | All uses of the chsh command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1005,6 +1110,7 @@
 
 - name: "MEDIUM | RHEL-07-030530 | PATCH | All uses of the mount command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1013,6 +1119,7 @@
 
 - name: "MEDIUM | RHEL-07-030531 | PATCH | All uses of the umount command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1021,6 +1128,7 @@
 
 - name: "MEDIUM | RHEL-07-030540 | PATCH | All uses of the postdrop command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1029,6 +1137,7 @@
 
 - name: "MEDIUM | RHEL-07-030541 | PATCH | All uses of the postqueue command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1037,6 +1146,7 @@
 
 - name: "MEDIUM | RHEL-07-030550 | PATCH | All uses of the ssh-keysign command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1045,6 +1155,7 @@
 
 - name: "MEDIUM | RHEL-07-030560 | PATCH | All uses of the pt_chown command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1053,6 +1164,7 @@
 
 - name: "MEDIUM | RHEL-07-030561 | PATCH | All uses of the crontab command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1061,6 +1173,7 @@
 
 - name: "MEDIUM | RHEL-07-030630 | PATCH | All uses of the pam_timestamp_check command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1069,6 +1182,7 @@
 
 - name: "MEDIUM | RHEL-07-030670 | PATCH | All uses of the init_module command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1077,6 +1191,7 @@
 
 - name: "MEDIUM | RHEL-07-030671 | PATCH | All uses of the delete_module command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1085,6 +1200,7 @@
 
 - name: "MEDIUM | RHEL-07-030672 | PATCH | All uses of the insmod command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1093,6 +1209,7 @@
 
 - name: "MEDIUM | RHEL-07-030673 | PATCH | All uses of the rmmod command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1101,6 +1218,7 @@
 
 - name: "MEDIUM | RHEL-07-030674 | PATCH | All uses of the modprobe command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1109,6 +1227,7 @@
 
 - name: "MEDIUM | RHEL-07-030710 | PATCH | The operating system must generate audit records for all account creations, modifications, disabling, and termination events."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1117,6 +1236,7 @@
 
 - name: "MEDIUM | RHEL-07-030750 | PATCH | All uses of the rename command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1125,6 +1245,7 @@
 
 - name: "MEDIUM | RHEL-07-030751 | PATCH | All uses of the renameat command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1133,6 +1254,7 @@
 
 - name: "MEDIUM | RHEL-07-030752 | PATCH | All uses of the rmdir command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1141,6 +1263,7 @@
 
 - name: "MEDIUM | RHEL-07-030753 | PATCH | All uses of the unlink command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1149,6 +1272,7 @@
 
 - name: "MEDIUM | RHEL-07-030754 | PATCH | All uses of the unlinkat command must be audited."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1157,6 +1281,7 @@
 
 - name: "MEDIUM | RHEL-07-030770 | PATCH | The system must send rsyslog output to a log aggregation server."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1165,6 +1290,7 @@
 
 - name: "MEDIUM | RHEL-07-030780 | PATCH | The rsyslog daemon must not accept log messages from other servers unless the server is being used for log aggregation."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1173,6 +1299,7 @@
 
 - name: "MEDIUM | RHEL-07-030820 | PATCH | The system must update the DoD-approved virus scan program every seven days or more frequently."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1181,6 +1308,7 @@
 
 - name: "MEDIUM | RHEL-07-040020 | PATCH | The system must log informational authentication data."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1189,6 +1317,7 @@
 
 - name: "MEDIUM | RHEL-07-040030 | PATCH | The operating system, for PKI-based authentication, must validate certificates by performing RFC 5280-compliant certification path validation."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1197,6 +1326,7 @@
 
 - name: "MEDIUM | RHEL-07-040040 | PATCH | The operating system, for PKI-based authentication, must enforce authorized access to all PKI private keys stored or used by the operating system."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1205,6 +1335,7 @@
 
 - name: "MEDIUM | RHEL-07-040050 | PATCH | The operating system must map the authenticated identity to the user or group account for PKI-based authentication."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1213,6 +1344,7 @@
 
 - name: "MEDIUM | RHEL-07-040060 | PATCH | The cn_map file must have mode 0644 or less permissive."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1221,6 +1353,7 @@
 
 - name: "MEDIUM | RHEL-07-040070 | PATCH | The cn_map file must be owned by root."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1229,6 +1362,7 @@
 
 - name: "MEDIUM | RHEL-07-040080 | PATCH | The cn_map file must be group owned by root."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1237,6 +1371,7 @@
 
 - name: "MEDIUM | RHEL-07-040100 | PATCH | The host must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1245,6 +1380,7 @@
 
 - name: "MEDIUM | RHEL-07-040110 | PATCH | A FIPS 140-2 approved cryptographic algorithm must be used for SSH communications."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1265,6 +1401,7 @@
 
 - name: "MEDIUM | RHEL-07-040170 | PATCH | The Standard Mandatory DoD Notice and Consent Banner must be displayed immediately prior to, or as part of, remote access logon prompts."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1273,6 +1410,7 @@
 
 - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
   command: "true"
+  changed_when: no
   when: "'yes' in rhel_07_040180_audit.stdout"
   tags:
       - cat2
@@ -1282,6 +1420,7 @@
 
 - name: "MEDIUM | RHEL-07-040181 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1290,6 +1429,7 @@
 
 - name: "MEDIUM | RHEL-07-040182 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1366,6 +1506,7 @@
 
 - name: "MEDIUM | RHEL-07-040250 | PATCH | The operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1578,6 +1719,7 @@
 
 - name: "MEDIUM | RHEL-07-040470 | PATCH | Network interfaces must not be in promiscuous mode."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1586,6 +1728,7 @@
 
 - name: "MEDIUM | RHEL-07-040480 | PATCH | The system must be configured to prevent unrestricted mail relaying."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1594,6 +1737,7 @@
 
 - name: "MEDIUM | RHEL-07-040520 | PATCH | If the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon must be configured to operate in secure mode."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1740,6 +1884,7 @@
 
 - name: "MEDIUM | RHEL-07-040740 | PATCH | The Network File System (NFS) must be configured to use AUTH_GSS."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1771,6 +1916,7 @@
 
 - name: "MEDIUM | RHEL-07-040820 | PATCH | The system's access control program must be configured to grant or deny system access to specific hosts and services."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
@@ -1779,6 +1925,7 @@
 
 - name: "MEDIUM | RHEL-07-040830 | PATCH | The system must not have unauthorized IP tunnels configured."
   command: "true"
+  changed_when: no
   tags:
       - cat2
       - medium
