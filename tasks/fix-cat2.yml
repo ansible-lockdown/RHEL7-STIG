@@ -199,7 +199,7 @@
 
 - name: "MEDIUM | RHEL-07-010210 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
   command: chage -m 1 {{ item }}
-  with_items: "{{ rhel_07_010210_audit.stdout_lines }}"
+  with_items: "{{ rhel_07_010210_audit.stdout_lines | default([]) }}"
   tags:
       - cat2
       - medium
@@ -219,7 +219,7 @@
 
 - name: "MEDIUM | RHEL-07-010230 | PATCH | Existing passwords must be restricted to a 60-day maximum lifetime."
   command: chage -M 60 {{ item }}
-  with_items: "{{ rhel_07_010230_audit.stdout_lines }}"
+  with_items: "{{ rhel_07_010230_audit.stdout_lines | default([]) }}"
   tags:
       - cat2
       - medium
@@ -1632,7 +1632,7 @@
       dest: "{{ item.path }}"
       mode: 0644
       state: file
-  with_items: "{{ rhel_07_040640_audit.files }}"
+  with_items: "{{ rhel_07_040640_audit.files | default([]) }}"
   tags:
       - cat2
       - medium
@@ -1645,7 +1645,7 @@
       dest: "{{ item.path }}"
       mode: 0600
       state: file
-  with_items: "{{ rhel_07_040650_audit.files }}"
+  with_items: "{{ rhel_07_040650_audit.files | default([]) }}"
   tags:
       - cat2
       - medium
