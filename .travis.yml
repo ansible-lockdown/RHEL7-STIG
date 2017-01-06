@@ -5,7 +5,7 @@ env:
   - distro=rhel7
     init=/usr/lib/systemd/systemd
     run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    ansible_opts="-e @/etc/ansible/roles/${distro}stig/tests/extra_vars.yml --skip-tags 'RHEL-07-020151,RHEL-07-020152,RHEL-07-030010,selinux,antivirus'"
+    ansible_opts="--extra-vars @/etc/ansible/roles/${distro}stig/tests/extra_vars.yml --skip-tags RHEL-07-020151,RHEL-07-020152,RHEL-07-030010,selinux,antivirus"
 
 before_install:
   # Pull container.
@@ -25,7 +25,7 @@ script:
   - 'docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --autosubscribe'
 
   # Ansible syntax check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/${distro}stig/tests/travis.yml --syntax-check'
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml --syntax-check'
 
   # Test role.
   - 'docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml'
