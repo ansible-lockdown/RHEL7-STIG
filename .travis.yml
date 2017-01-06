@@ -5,7 +5,7 @@ env:
   - distro=rhel7
     init=/usr/lib/systemd/systemd
     run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    ansible_opts="-e @/etc/ansible/roles/${distro}stig/tests/extra_vars.yml --skip-tags 'RHEL-07-020152,selinux'"
+    ansible_opts="-e @/etc/ansible/roles/${distro}stig/tests/extra_vars.yml --skip-tags 'RHEL-07-020151,RHEL-07-020152,selinux,antivirus'"
 
 before_install:
   # Pull container.
