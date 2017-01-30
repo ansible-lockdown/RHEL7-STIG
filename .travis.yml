@@ -1,29 +1,46 @@
----
-language: python
-python: "2.7"
+sudo: required
+services: docker
 
-# Use the new container infrastructure
-sudo: false
+env:
+  - distro=rhel7
+    init=/usr/lib/systemd/systemd
+    run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ansible_opts="--extra-vars @/etc/ansible/roles/${distro}stig/tests/extra_vars.yml --skip-tags RHEL-07-020151,RHEL-07-020152,RHEL-07-030010,RHEL-07-010460,selinux,antivirus"
 
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
-
-install:
-  # Install ansible
-  - pip install ansible
-
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
+before_install:
+  # Pull container.
+  - 'docker pull samdoran/${distro}-ansible:latest'
 
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  - container_id=$(mktemp)
+
+  # Run container in detached state.
+  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/${distro}stig:ro ${run_opts} samdoran/${distro}-ansible:latest "${init}" > "${container_id}"'
+
+  # Install dependencies
+  #- 'docker exec "$(cat ${container_id})" ansible-galaxy install -r /etc/ansible/roles/${distro}stig/tests/requirements.yml'
+
+  # Register with Red Hat
+  # FIXME Only enable needed repos: rhel-7-server-htb-rpms, rhel-7-server-aus-rpms
+  - 'docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --autosubscribe'
+
+  # Ansible syntax check.
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml --syntax-check'
+
+  # Test role.
+  - 'docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml'
+
+  # Test role idempotence.
+  - idempotence=$(mktemp)
+  - docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml | tee -a ${idempotence}
+  - >
+    tail ${idempotence}
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # Deregister
+  - 'docker exec "$(cat ${container_id})" subscription-manager unregister'
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

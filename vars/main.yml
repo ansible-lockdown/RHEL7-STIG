@@ -1,2 +1,1 @@
----
-# vars file for rhel7-stig
+rhel7stig_min_ansible_version: 2.1

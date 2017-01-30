@@ -1,0 +1,7 @@
+rhel7stig_cat1_patch: yes
+rhel7stig_cat2_patch: yes
+rhel7stig_cat3_patch: no
+
+rhel7stig_cat1_audit: "{{ rhel7stig_cat1_patch }}"
+rhel7stig_cat2_audit: "{{ rhel7stig_cat2_patch }}"
+rhel7stig_cat3_audit: "{{ rhel7stig_cat3_patch }}"
