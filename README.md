@@ -46,7 +46,7 @@ Including an example of how to use your role (for instance, with variables passe
         - role: rhel7-stig
           when:
             - ansible_os_family == 'RedHat'
-            - ansible_distribution_major_version == '7'
+            - ansible_distribution_major_version | version_compare('7', '=')
 
 License
 -------
