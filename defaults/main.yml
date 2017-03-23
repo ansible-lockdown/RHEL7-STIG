@@ -26,6 +26,8 @@ rhel7stig_av_package:
         - clamav-server
     service: clamav-daemon
 
+rhel7stig_time_service: chronyd
+
 # RHEL-07-040490
 # If not required, remove lftpd.
 rhel7stig_lftpd_required: no

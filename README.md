@@ -26,6 +26,7 @@ Role Variables
 | `rhel7stig_cat3_patch` | `no`  | Correct CAT III findings      |
 | `rhel7stig_gui` | `no` | Whether or not to run tasks related to auditing/patching the desktop environment |
 | `rhel7stig_av_package` | `no` | Anti-virus package(s) to install and service to start and enable. |
+| `rhel7stig_time_service` | `chronyd` | Set to `ntpd` or `chronyd`. |
 | `rhel7stig_lftpd_required` | `no` | If set to `no`, remove `lftpd`. |
 | `rhel7stig_tftp_required` | `no` | If set to `no`, remove `tftp` client and server packages. |
 | `rhel7stig_snmp_community` | `Endgam3Ladyb0g` | SNMP community string that will replace `public` and `private` in `snmpd.conf`. |
@@ -38,8 +39,6 @@ None
 
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
     - hosts: servers
       roles:
