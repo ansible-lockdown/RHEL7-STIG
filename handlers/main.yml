@@ -17,7 +17,7 @@
 - name: make grub2 config
   command: grub2-mkconfig --output=/etc/grub2.cfg
 
-- name: restart ntpd
+- name: restart {{ rhel7stig_time_service }}
   service:
-      name: ntpd
+      name: "{{ rhel7stig_time_service }}"
       state: restarted
