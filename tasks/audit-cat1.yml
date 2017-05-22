@@ -1,5 +1,7 @@
 - name: "HIGH | RHEL-07-010010 | AUDIT | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
   shell: 'rpm -Va | grep ''^.M'''
+  args:
+    warn: no
   failed_when: no
   changed_when: no
   ignore_errors: yes
@@ -9,7 +11,6 @@
       - high
       - audit
       - RHEL-07-010010
-      - always
       - rpm
 
 - name: "HIGH | RHEL-07-010020 | AUDIT | The cryptographic hash of system files and commands must match vendor values."
@@ -23,7 +24,6 @@
       - high
       - audit
       - RHEL-07-010020
-      - always
 
 - name: "HIGH | RHEL-07-010460 | AUDIT | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
   command: grep -i ^password_pbkdf2 /boot/grub2/grub.cfg
@@ -36,7 +36,6 @@
       - high
       - audit
       - RHEL-07-010460
-      - always
 
 - name: "HIGH | RHEL-07-010470 | AUDIT | Systems using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   command: grep -i ^password_pbkdf2 /boot/efi/EFI/redhat/grub.cfg
@@ -74,36 +73,33 @@
       - high
       - audit
       - RHEL-07-020310
-      - always
 
-- name: "HIGH | RHEL-07-040330 | AUDIT | There must be no .shosts files on the system."
+- name: "HIGH | RHEL-07-040540 | AUDIT | There must be no .shosts files on the system."
   find:
       paths: /
       recurse: yes
       hidden: yes
       patterns: '*.shosts'
-  register: rhel_07_040330_audit
+  register: rhel_07_040540_audit
   tags:
       - cat1
       - high
       - audit
-      - RHEL-07-040330
-      - always
+      - RHEL-07-040540
 
-- name: "HIGH | RHEL-07-040331 | AUDIT | There must be no shosts.equiv files on the system."
+- name: "HIGH | RHEL-07-040550 | AUDIT | There must be no shosts.equiv files on the system."
   find:
       paths: /
       recurse: yes
       patterns: shosts.equiv
-  register: rhel_07_040331_audit
+  register: rhel_07_040550_audit
   tags:
       - cat1
       - high
       - audit
-      - RHEL-07-040331
-      - always
+      - RHEL-07-040550
 
-- name: "HIGH | RHEL-07-040580 | AUDIT | SNMP community strings must be changed from the default."
+- name: "HIGH | RHEL-07-040800 | AUDIT | SNMP community strings must be changed from the default."
   command: grep {{ item }} /etc/snmp/snmpd.conf
   failed_when: no
   changed_when: no
@@ -111,11 +107,10 @@
   with_items:
       - public
       - private
-  register: rhel_07_040580_audit
+  register: rhel_07_040800_audit
   tags:
       - cat1
       - high
       - audit
-      - RHEL-07-040580
-      - always
+      - RHEL-07-040800
       - snmp

@@ -5,7 +5,8 @@ RHEL 7 DISA STIG
 
 Configure a RHEL 7 system to be DISA STIG compliant. CAT I findings will be corrected and audited by default. CAT II and III findings can be enabled by setting the appropriate variables to `yes`.
 
-The RHEL 7 STIG is currently in draft form. This role is based on [Version 1, Revision 0.2 released on July 15, 2016](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx).
+
+This role is based on RHEL 7 DISA STIG: [Version 1, Rel 1 released on March 13, 2017](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx).
 
 
 Requirements
@@ -26,6 +27,7 @@ Role Variables
 | `rhel7stig_cat3_patch` | `no`  | Correct CAT III findings      |
 | `rhel7stig_gui` | `no` | Whether or not to run tasks related to auditing/patching the desktop environment |
 | `rhel7stig_av_package` | `no` | Anti-virus package(s) to install and service to start and enable. |
+| `rhel7stig_antivirus_required` | `no` | Weather or not an antivirus must be installed |
 | `rhel7stig_time_service` | `chronyd` | Set to `ntpd` or `chronyd`. |
 | `rhel7stig_lftpd_required` | `no` | If set to `no`, remove `lftpd`. |
 | `rhel7stig_tftp_required` | `no` | If set to `no`, remove `tftp` client and server packages. |

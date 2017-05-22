@@ -1,6 +1,6 @@
 rhel7stig_cat1_patch: yes
-rhel7stig_cat2_patch: no
-rhel7stig_cat3_patch: no
+rhel7stig_cat2_patch: yes
+rhel7stig_cat3_patch: yes
 
 # These values match patch values by defaults. To override these values,
 # set them in group_vars, host_vars, or with the -e flag via CLI
@@ -11,14 +11,19 @@ rhel7stig_cat3_audit: "{{ rhel7stig_cat3_patch }}"
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: no
 
-# RHEL-07-040730
+# RHEL-07-040740
 # If system is not router, run tasks that disable router functions.
 rhel7stig_system_is_router: no
 
-# RHEL-07-030810
+# RHEL-07-032000
 # Install and enable a DOD-approved AV program. ClamAV and McAfee (nails)
 # are the currently approved applications. This variable is used in two separate
 # tasks that will install the package and start and enable the service.
+
+# Only set this to true if you have a valid
+# antivirus solution in your repositories, else it will fail every time.
+rhel7stig_antivirus_required: no
+
 rhel7stig_av_package:
     package:
         - clamav
@@ -50,3 +55,11 @@ rhel7stig_boot_password_config:
     - regexp: ^password_pbkdf2 root
       line: password_pbkdf2 root {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
+# AIDE settings
+cent7stig_aide_cron:
+  aide_job: '/usr/sbin/aide --check'
+  aide_minute: 04
+  aide_hour: 05
+  aide_day: '*'
+  aide_month: '*'
+  aide_weekday: '*'
