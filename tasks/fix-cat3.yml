@@ -8,8 +8,11 @@
       - RHEL-07-010490
 
 - name: "LOW | RHEL-07-020200 | PATCH | The operating system must remove all software components after updated versions have been installed."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      dest: /etc/yum.conf
+      regexp: ^#?clean_requirements_on_remove
+      line: clean_requirements_on_remove=1
+      insertafter: '\[main\]'
   tags:
       - cat3
       - low
@@ -79,14 +82,18 @@
       - patch
       - RHEL-07-021610
 
-- name: "LOW | RHEL-07-040010 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
-  command: "true"
-  changed_when: no
+- name: "LOW | RHEL-07-040000 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
+  lineinfile:
+    state: present
+    dest: /etc/security/limits.conf
+    insertbefore: '^# End of file'
+    regexp: '^#?\\*.*maxlogins'
+    line: '*           hard    maxlogins     {{ rhel7stig_maxlogins }}'
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-040010
+      - RHEL-07-040000
 
 - name: "LOW | RHEL-07-040300 | PATCH | The system must display the date and time of the last successful account logon upon logon."
   command: "true"

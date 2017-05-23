@@ -140,7 +140,7 @@
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '(?i)^#?ucredit ='
+      regexp: '^#?\s*ucredit'
       line: ucredit = -1
   tags:
       - cat2
@@ -152,7 +152,7 @@
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '(?i)^#?lcredit ='
+      regexp: '^#?\s*lcredit'
       line: lcredit = -1
   tags:
       - cat2
@@ -164,7 +164,7 @@
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '(?i)^#?dcredit ='
+      regexp: '^#?\s*dcredit'
       line: dcredit = -1
   tags:
       - cat2
@@ -176,7 +176,7 @@
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '(?i)^#?ocredit ='
+      regexp: '^#?\s*ocredit'
       line: ocredit = -1
   tags:
       - cat2
@@ -188,7 +188,7 @@
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '(?i)^#?difok ='
+      regexp: '^#?\s*difok'
       line: difok = 8
   tags:
       - cat2
@@ -200,7 +200,7 @@
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '(?i)^#?minclass ='
+      regexp: '^#?\s*minclass'
       line: minclass = 4
   tags:
       - cat2
@@ -213,7 +213,7 @@
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '(?i)^#?maxrepeat ='
+      regexp: '^#?\s*maxrepeat'
       line: maxrepeat = 4
   tags:
       - cat2
@@ -225,7 +225,7 @@
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '(?i)^#?maxclassrepeat ='
+      regexp: '^#?\s*maxclassrepeat'
       line: maxclassrepeat = 4
   tags:
       - cat2
@@ -333,7 +333,7 @@
 - name: "MEDIUM | RHEL-07-010310 | PATCH | The operating system must disable account identifiers (individuals, groups, roles, and devices) if the password expires."
   lineinfile:
       dest: /etc/default/useradd
-      regexp: ^#?INACTIVE=
+      regexp: ^#?INACTIVE
       line: INACTIVE=0
   tags:
       - cat2
@@ -387,8 +387,12 @@
       - RHEL-07-010430
 
 - name: "MEDIUM | RHEL-07-010460 | PATCH | The operating system must not allow users to override SSH environment variables."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: ^#?permituserenvironment
+      line: permituserenvironment no
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
@@ -427,12 +431,12 @@
 - name: "MEDIUM | RHEL-07-020030 | PATCH | A file integrity tool must verify the baseline operating system configuration at least weekly."
   cron:
       name='Run AIDE integrity check weekly'
-      minute={{ cent7stig_aide_cron["aide_minute"] | default('05') }}
-      hour={{ cent7stig_aide_cron["aide_hour"] | default('04') }}
-      day={{ cent7stig_aide_cron["aide_day"] | default('*') }}
-      month={{ cent7stig_aide_cron["aide_month"] | default('*') }}
-      weekday={{ cent7stig_aide_cron["aide_weekday"] | default('*') }}
-      job="{{ cent7stig_aide_cron["aide_job"] }}"
+      minute={{ rhel7stig_aide_cron["aide_minute"] | default('05') }}
+      hour={{ rhel7stig_aide_cron["aide_hour"] | default('04') }}
+      day={{ rhel7stig_aide_cron["aide_day"] | default('*') }}
+      month={{ rhel7stig_aide_cron["aide_month"] | default('*') }}
+      weekday={{ rhel7stig_aide_cron["aide_weekday"] | default('*') }}
+      job="{{ rhel7stig_aide_cron["aide_job"] }}"
   tags:
       - cat2
       - medium
@@ -444,6 +448,7 @@
   yum:
       name: aide
       state: present
+  notify: init aide
   tags:
       - cat2
       - medium
@@ -452,13 +457,21 @@
       - aide
 
 - name: "MEDIUM | RHEL-07-020100 | PATCH | USB mass storage must be disabled."
-  command: "true"
-  changed_when: no
+  lineinfile:
+    state: present
+    create: yes
+    line: install usb-storage /bin/true
+    dest: /etc/modprobe.d/disable-usb.conf
+    owner: root
+    group: root
+    mode: "0644"
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020100
+      - usb_devices
+
 
 - name: "MEDIUM | RHEL-07-020110 | PATCH | File system automounter must be disabled unless required."
   command: "true"
@@ -497,8 +510,10 @@
       - RHEL-07-020270
 
 - name: "MEDIUM | RHEL-07-020320 | PATCH | All files and directories must have a valid owner."
-  command: "true"
-  changed_when: no
+  assert:
+    that: item == ''
+    msg: File is missing a User - Manual intervention is required
+  with_items: "{{ rhel_07_020320_audit.stdout_lines | default([]) }}"
   tags:
       - cat2
       - medium
@@ -506,8 +521,10 @@
       - RHEL-07-020320
 
 - name: "MEDIUM | RHEL-07-020330 | PATCH | All files and directories must have a valid group owner."
-  command: "true"
-  changed_when: no
+  assert:
+    that: item == ''
+    msg: File is missing a Group - Manual intervention is required
+  with_items: "{{ rhel_07_020330_audit.stdout_lines | default([]) }}"
   tags:
       - cat2
       - medium
@@ -1818,7 +1835,7 @@
   sysctl:
       name: net.ipv4.conf.default.accept_source_route
       state: present
-      value: 1
+      value: 0
       reload: yes
       ignoreerrors: yes
   tags:

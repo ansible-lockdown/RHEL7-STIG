@@ -228,6 +228,18 @@
       - patch
       - RHEL-07-021280
 
+- name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+  lineinfile:
+      create: yes
+      dest: /etc/sysconfig/prelink
+      regexp: ^#?PRELINKING
+      line: PRELINKING=no
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-021280
+
 - name: "HIGH | RHEL-07-021710 | PATCH | The telnet-server package must not be installed."
   yum:
       name: telnet-server
@@ -329,6 +341,7 @@
 
 - name: "HIGH | RHEL-07-040710 | PATCH | Remote X connections for interactive users must be encrypted."
   lineinfile:
+      create: yes
       dest: /etc/ssh/sshd_config
       regexp: (?i)^#?x11forwarding
       line: X11Forwarding yes

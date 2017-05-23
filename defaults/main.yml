@@ -56,10 +56,13 @@ rhel7stig_boot_password_config:
       line: password_pbkdf2 root {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
 # AIDE settings
-cent7stig_aide_cron:
+rhel7stig_aide_cron:
   aide_job: '/usr/sbin/aide --check'
-  aide_minute: 04
-  aide_hour: 05
+  aide_minute: '05'
+  aide_hour: '4'
   aide_day: '*'
   aide_month: '*'
   aide_weekday: '*'
+
+# Set maximum number of simultaneous system logins (RHEL-07-040000)
+rhel7stig_maxlogins: 10
