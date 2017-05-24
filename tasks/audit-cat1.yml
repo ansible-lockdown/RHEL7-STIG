@@ -15,6 +15,8 @@
 
 - name: "HIGH | RHEL-07-010020 | AUDIT | The cryptographic hash of system files and commands must match vendor values."
   shell: 'rpm -Va | grep ''^..5'' | grep -E ''/.?bin/'''
+  args:
+    warn: no
   failed_when: no
   changed_when: no
   ignore_errors: yes

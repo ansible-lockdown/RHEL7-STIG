@@ -1974,7 +1974,6 @@
           - "@X Windows System"
           - xorg-x11-server-common
       state: absent
-  when: not rhel7stig_gui
   tags:
       - cat2
       - medium
