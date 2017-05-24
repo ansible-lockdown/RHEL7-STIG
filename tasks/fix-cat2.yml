@@ -234,13 +234,29 @@
       - RHEL-07-010190
 
 - name: "MEDIUM | RHEL-07-010200 | PATCH | The PAM system service must be configured to store only encrypted representations of passwords."
-  command: "true"
-  changed_when: no
+  pamd:
+      name: system-auth
+      state: "{{ item.state }}"
+      type: password
+      control: sufficient
+      module_path: pam_unix.so
+      module_arguments: "{{ item.args }}"
+  with_items:
+      - state: args_present
+        args:
+          - "sha512"
+      - state: args_absent
+        args:
+          - "md5"
+          - "bigcrypt"
+          - "sha256"
+          - "blowfish"
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010200
+      - pamd
 
 - name: "MEDIUM | RHEL-07-010210 | PATCH | The shadow file must be configured to store only encrypted representations of passwords."
   lineinfile:
