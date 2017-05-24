@@ -1,9 +1,9 @@
 import crypt
 from random import SystemRandom, shuffle
-from passlib.hash import grub_pbkdf2_sha512
 import string
 try:
     import passlib.hash
+    from passlib.hash import grub_pbkdf2_sha512
     HAS_PASSLIB = True
 except:
     HAS_PASSLIB = False

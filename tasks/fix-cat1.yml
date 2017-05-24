@@ -12,13 +12,14 @@
   shell: yum reinstall -y $(rpm -qf {{ item.split(' ')[-1] }})
   with_items: "{{ rhel_07_010020_audit.stdout_lines }}"
   when: rhel_07_010020_audit.stdout_lines | length > 0
+  ignore_errors: yes
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-010020
 
-- name: "HIGH | RHEL-07-010260 | PATCH | The system must not have accounts configured with blank or null passwords."
+- name: "HIGH | RHEL-07-010290 | PATCH | The system must not have accounts configured with blank or null passwords."
   replace:
       dest: /etc/pam.d/system-auth
       regexp: 'nullok ?'
@@ -26,9 +27,9 @@
       - cat1
       - high
       - patch
-      - RHEL-07-010260
+      - RHEL-07-010290
 
-- name: "HIGH | RHEL-07-010270 | PATCH | The SSH daemon must not allow authentication using an empty password."
+- name: "HIGH | RHEL-07-010300 | PATCH | The SSH daemon must not allow authentication using an empty password."
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
@@ -40,10 +41,10 @@
       - cat1
       - high
       - patch
-      - RHEL-07-010270
+      - RHEL-07-010300
       - sshd
 
-- name: "HIGH | RHEL-07-010430 | PATCH | The operating system must not allow an unattended or automatic logon to the system."
+- name: "HIGH | RHEL-07-010440 | PATCH | The operating system must not allow an unattended or automatic logon to the system."
   lineinfile:
       dest: /etc/gdm/custom.conf
       regexp: (?i)automaticloginenable
@@ -54,8 +55,21 @@
       - cat1
       - high
       - patch
-      - RHEL-07-010430
+      - RHEL-07-010440
       - gui
+
+- name: "HIGH | RHEL-07-010450 | PATCH | The operating system must not allow an unrestricted logon to the system."
+  lineinfile:
+      dest: /etc/gdm/custom.conf
+      regexp: (?i)timedloginenable
+      line: TimedLoginEnable=false
+      insertafter: '\[daemon\]'
+  when: rhel7stig_gui
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-010450
 
 - name: "HIGH | RHEL-07-010431 | PATCH | The operating system must not allow guest logon to the system."
   lineinfile:
@@ -87,8 +101,8 @@
 
 - name: |
 
-      "HIGH | RHEL-07-010460 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-      "HIGH | RHEL-07-010470 | PATCH | Systems using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+      "HIGH | RHEL-07-010480 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+      "HIGH | RHEL-07-010490 | PATCH | Systems using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   lineinfile:
       dest: /etc/grub.d/40_custom
       insertafter: EOF
@@ -100,12 +114,12 @@
       - cat1
       - high
       - patch
-      - RHEL-07-010460
-      - RHEL-07-010470
+      - RHEL-07-010480
+      - RHEL-07-010490
       - grub
       - bootloader
 
-- name: "HIGH | RHEL-07-020000 | PATCH | The rsh-server package including rexecd and rlogind must not be installed."
+- name: "HIGH | RHEL-07-020000 | PATCH | The rsh-server package must not be installed"
   yum:
       name: rsh-server
       state: absent
@@ -127,7 +141,7 @@
       - RHEL-07-020010
       - ypserv
 
-- name: "HIGH | RHEL-07-020150 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+- name: "HIGH | RHEL-07-020050 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   lineinfile:
       dest: /etc/yum.conf
       regexp: gpgcheck
@@ -137,10 +151,10 @@
       - cat1
       - high
       - patch
-      - RHEL-07-020150
+      - RHEL-07-020050
       - yum
 
-- name: "HIGH | RHEL-07-020151 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+- name: "HIGH | RHEL-07-020060 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   lineinfile:
       dest: /etc/yum.conf
       regexp: localpkg_gpgcheck
@@ -150,10 +164,10 @@
       - cat1
       - high
       - patch
-      - RHEL-07-020151
+      - RHEL-07-020060
       - yum
 
-- name: "HIGH | RHEL-07-020152 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of packages without verification of the repository metadata."
+- name: "HIGH | RHEL-07-020070 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of packages without verification of the repository metadata."
   lineinfile:
       dest: /etc/yum.conf
       regexp: repo_gpgcheck
@@ -163,7 +177,7 @@
       - cat1
       - high
       - patch
-      - RHEL-07-020152
+      - RHEL-07-020070
       - yum
 
 # HIGH | RHEL-07-020170 | PATCH | Operating systems handling data requiring data-at-rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest.
@@ -172,7 +186,7 @@
 - name: |
 
       "HIGH | RHEL-07-020210 | PATCH | The operating system must enable SELinux."
-      "HIGH | RHEL-07-020211 | PATCH | The operating system must enable the SELinux targeted policy."
+      "HIGH | RHEL-07-020220 | PATCH | The operating system must enable the SELinux targeted policy."
   selinux:
       state: enforcing
       policy: targeted
@@ -181,13 +195,13 @@
       - high
       - patch
       - RHEL-07-020210
-      - RHEL-07-020211
+      - RHEL-07-020220
       - selinux
 
 # The fix in the STIG for this is incorrect. Symlinking this unit file to /dev/null obtains the required result
 # which is to disable this function and log when the keystroke is issued.
 # https://access.redhat.com/solutions/1123873
-- name: "HIGH | RHEL-07-020220 | PATCH | The x86 Ctrl-Alt-Delete key sequence must be disabled."
+- name: "HIGH | RHEL-07-020230 | PATCH | The x86 Ctrl-Alt-Delete key sequence must be disabled."
   file:
       src: /dev/null
       dest: /etc/systemd/system/ctrl-alt-del.target
@@ -196,15 +210,15 @@
       - cat1
       - high
       - patch
-      - RHEL-07-020220
+      - RHEL-07-020230
 
-# RHEL-07-020240 | PATCH | The operating system must be a supported release."
+# RHEL-07-020250 | PATCH | The operating system must be a supported release."
 # Not automated since current end of life for RHEL 7 is 2024-06-30
 
 # RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system
 # Audited but not automated.
 
-- name: "HIGH | RHEL-07-021280 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+- name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
   yum:
       name: dracut-fips
       state: present
@@ -214,7 +228,19 @@
       - patch
       - RHEL-07-021280
 
-- name: "HIGH | RHEL-07-021910 | PATCH | The telnet-server package must not be installed."
+- name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+  lineinfile:
+      create: yes
+      dest: /etc/sysconfig/prelink
+      regexp: ^#?PRELINKING
+      line: PRELINKING=no
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-021280
+
+- name: "HIGH | RHEL-07-021710 | PATCH | The telnet-server package must not be installed."
   yum:
       name: telnet-server
       state: absent
@@ -222,10 +248,10 @@
       - cat1
       - high
       - patch
-      - RHEL-07-021910
+      - RHEL-07-021710
       - telnet
 
-- name: "HIGH | RHEL-07-030010 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+- name: "HIGH | RHEL-07-030000 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
   service:
       name: auditd
       state: started
@@ -234,58 +260,60 @@
       - cat1
       - high
       - patch
-      - RHEL-07-030010
+      - RHEL-07-030000
       - auditd
 
-- name: "HIGH | RHEL-07-030810 | PATCH | The system must use a DoD-approved virus scan program."
+- name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
   yum:
       name: "{{ rhel7stig_av_package.package }}"
       state: present
+  when: rhel7stig_antivirus_required
   tags:
       - cat1
       - high
       - patch
-      - RHEL-07-030810
+      - RHEL-07-032000
       - antivirus
 
-- name: "HIGH | RHEL-07-030810 | PATCH | The system must use a DoD-approved virus scan program."
+- name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
   service:
       name: "{{ rhel7stig_av_package.service }}"
       state: started
       enabled: yes
   ignore_errors: yes
+  when: rhel7stig_antivirus_required
   tags:
       - cat1
       - high
       - patch
-      - RHEL-07-030810
+      - RHEL-07-032000
       - antivirus
 
-- name: "HIGH | RHEL-07-040330 | PATCH | There must be no .shosts files on the system."
+- name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
   file:
       path: "{{ item.path }}"
       state: absent
-  with_items: "{{ rhel_07_040330_audit.files }}"
+  with_items: "{{ rhel_07_040540_audit.files }}"
   tags:
       - cat1
       - high
       - patch
-      - RHEL-07-040330
+      - RHEL-07-040540
       - shosts
 
-- name: "HIGH | RHEL-07-040331 | PATCH | There must be no shosts.equiv files on the system."
+- name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
   file:
       path: "{{ item.path }}"
       state: absent
-  with_items: "{{ rhel_07_040331_audit.files }}"
+  with_items: "{{ rhel_07_040550_audit.files }}"
   tags:
       - cat1
       - high
       - patch
-      - RHEL-07-040331
+      - RHEL-07-040550
       - shosts
 
-- name: "HIGH | RHEL-07-040490 | PATCH | A File Transfer Protocol (FTP) server package must not be installed unless needed."
+- name: "HIGH | RHEL-07-040690 | PATCH | A File Transfer Protocol (FTP) server package must not be installed unless needed."
   yum:
       name: lftpd
       state: absent
@@ -294,10 +322,10 @@
       - cat1
       - high
       - patch
-      - RHEL-07-040490
+      - RHEL-07-040690
       - ftp
 
-- name: "HIGH | RHEL-07-040500 | PATCH | The Trivial File Transfer Protocol (TFTP) server package must not be installed if not required for operational support."
+- name: "HIGH | RHEL-07-040700 | PATCH | The Trivial File Transfer Protocol (TFTP) server package must not be installed if not required for operational support."
   yum:
       name:
           - tftp
@@ -308,39 +336,40 @@
       - cat1
       - high
       - patch
-      - RHEL-07-040500
+      - RHEL-07-040700
       - tftp
 
-- name: "HIGH | RHEL-07-040540 | PATCH | Remote X connections for interactive users must be encrypted."
+- name: "HIGH | RHEL-07-040710 | PATCH | Remote X connections for interactive users must be encrypted."
   lineinfile:
+      create: yes
       dest: /etc/ssh/sshd_config
       regexp: (?i)^#?x11forwarding
       line: X11Forwarding yes
       validate: sshd -t -f %s
-  notify: restart ssh
+  notify: restart sshd
   tags:
       - cat1
       - high
       - patch
-      - RHEL-07-040540
+      - RHEL-07-040710
       - ssh
 
-- name: "HIGH | RHEL-07-040580 | PATCH | SNMP community strings must be changed from the default."
+- name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings must be changed from the default."
   replace:
       dest: /etc/snmp/snmpd.conf
       regexp: (^com2sec.*default\s+)(public|private)
       replace: \1{{ rhel7stig_snmp_community }}
   when: item.stdout_lines | length > 0
-  with_items: "{{ rhel_07_040580_audit.results }}"
+  with_items: "{{ rhel_07_040800_audit.results }}"
   notify: restart snmpd
   tags:
       - cat1
       - high
       - patch
-      - RHEL-07-040580
+      - RHEL-07-040800
       - snmp
 
-- name: "HIGH | RHEL-07-040590 | PATCH | The SSH daemon must be configured to only use the SSHv2 protocol."
+- name: "HIGH | RHEL-07-040390 | PATCH | The SSH daemon must be configured to only use the SSHv2 protocol."
   lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: (?i)^#?protocol
@@ -351,6 +380,6 @@
       - cat1
       - high
       - patch
-      - RHEL-07-040590
+      - RHEL-07-040390
       - ssh
 

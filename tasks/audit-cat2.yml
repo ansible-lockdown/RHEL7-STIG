@@ -1,6 +1,6 @@
-- name: "MEDIUM | RHEL-07-010210 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
+- name: "MEDIUM | RHEL-07-010240 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
   command: "awk -F: '$4 < 1 {print $1}' /etc/shadow"
-  register: rhel_07_010210_audit
+  register: rhel_07_010240_audit
   failed_when: no
   changed_when: no
   ignore_errors: yes
@@ -8,11 +8,11 @@
       - cat2
       - medium
       - audit
-      - RHEL-07-010210
+      - RHEL-07-010240
 
-- name: "MEDIUM | RHEL-07-010230 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
+- name: "MEDIUM | RHEL-07-010260 | AUDIT | Existing passwords must be restricted to a 60-day maximum lifetime."
   command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
-  register: rhel_07_010230_audit
+  register: rhel_07_010260_audit
   failed_when: no
   changed_when: no
   ignore_errors: yes
@@ -20,7 +20,31 @@
       - cat2
       - medium
       - audit
-      - RHEL-07-010230
+      - RHEL-07-010260
+
+- name: "MEDIUM | RHEL-07-020320 | AUDIT | All files and directories must have a valid owner."
+  command: find / -xdev -fstype xfs -nouser
+  register: rhel_07_020320_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-020320
+
+- name: "MEDIUM | RHEL-07-020330 | AUDIT | All files and directories must have a valid group owner."
+  command: find / -xdev -fstype xfs -nogroup
+  register: rhel_07_020330_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-020330
 
 - name: "MEDIUM | RHEL-07-040180 | AUDIT | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
   command: grep -i useldapauth /etc/sysconfig/authconfig
@@ -35,10 +59,10 @@
       - RHEL-07-040180
       - ldap
 
-- name: "MEDIUM | RHEL-07-040210 | AUDIT | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+- name: "MEDIUM | RHEL-07-040500 | AUDIT | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
   stat:
       path: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
-  register: rhel_07_040210_audit
+  register: rhel_07_040500_audit
   failed_when: no
   changed_when: no
   ignore_errors: yes
@@ -46,7 +70,8 @@
       - cat2
       - medium
       - audit
-      - RHEL-07-040210
+      - RHEL-07-040500
+      - ntp
       - ntpd
       - chronyd
       - time
@@ -63,10 +88,9 @@
       - medium
       - audit
       - RHEL-07-040230
-      - always
       - pki
 
-- name: "MEDIUM | RHEL-07-040650 | AUDIT | The SSH private host key files must have mode 0600 or less permissive."
+- name: "MEDIUM | RHEL-07-040420 | AUDIT | The SSH private host key files must have mode 0600 or less permissive."
   find:
       paths: /
       recurse: yes
@@ -76,16 +100,15 @@
   failed_when: no
   changed_when: no
   ignore_errors: yes
-  register: rhel_07_040650_audit
+  register: rhel_07_040420_audit
   tags:
       - cat2
       - high
       - audit
-      - RHEL-07-040650
-      - always
+      - RHEL-07-040420
       - ssh
 
-- name: "MEDIUM | RHEL-07-040640 | AUDIT | The SSH public host key files must have mode 0644 or less permissive."
+- name: "MEDIUM | RHEL-07-040410 | AUDIT | The SSH public host key files must have mode 0644 or less permissive."
   find:
       paths: /
       recurse: yes
@@ -95,11 +118,22 @@
   failed_when: no
   changed_when: no
   ignore_errors: yes
-  register: rhel_07_040640_audit
+  register: rhel_07_040410_audit
   tags:
       - cat2
       - high
       - audit
-      - RHEL-07-040640
-      - always
+      - RHEL-07-040410
       - ssh
+
+- name: "MEDIUM | RHEL-07-041010 | AUDIT | Wireless network adapters must be disabled."
+  command: nmcli radio wifi
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_041010_audit
+  tags:
+      - cat2
+      - high
+      - audit
+      - RHEL-07-041010
