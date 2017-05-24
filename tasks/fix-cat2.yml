@@ -419,8 +419,12 @@
       - ssh
 
 - name: "MEDIUM | RHEL-07-010470 | PATCH | The operating system must not allow a non-certificate trusted host SSH logon to the system."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: '^#?HostbasedAuthentication'
+      line: HostbasedAuthentication no
+      validate: sshd -t -f %s
+  notify: restart ssh
   tags:
       - cat2
       - medium
