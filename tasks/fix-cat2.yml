@@ -208,7 +208,7 @@
       - patch
       - RHEL-07-010170
 
-#note there is a typo in the fix steps in teh STIG
+#note there is a typo in the fix steps in the STIG
 - name: "MEDIUM | RHEL-07-010180 | PATCH | When passwords are changed the number of repeating consecutive characters must not be more than four characters."
   lineinfile:
       create: yes
@@ -378,8 +378,10 @@
       - RHEL-07-010350
 
 - name: "MEDIUM | RHEL-07-010430 | PATCH | The delay between logon prompts following a failed console logon attempt must be at least four seconds."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: ^#?FAIL_DELAY
+      line: FAIL_DELAY 4
   tags:
       - cat2
       - medium
@@ -748,8 +750,10 @@
       - RHEL-07-021120
 
 - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
-  command: "true"
-  changed_when: no
+  service:
+    name: kdump
+    enabled: no
+    state: stopped
   tags:
       - cat2
       - medium
@@ -1527,11 +1531,12 @@
       - RHEL-07-040320
       - ssh
 
+#note there is a typo in the fix steps in the STIG
 - name: "MEDIUM | RHEL-07-040330 | PATCH | The SSH daemon must not allow authentication using RSA rhosts authentication."
   lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: ^#?RhostsRSAAuthentication
-      line: RhostsRSAAuthentication yes
+      line: RhostsRSAAuthentication no
       validate: sshd -t -f %s
   notify: restart ssh
   tags:
