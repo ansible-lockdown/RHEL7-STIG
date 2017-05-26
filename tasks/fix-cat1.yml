@@ -71,20 +71,6 @@
       - patch
       - RHEL-07-010450
 
-- name: "HIGH | RHEL-07-010431 | PATCH | The operating system must not allow guest logon to the system."
-  lineinfile:
-      dest: /etc/gdm/custom.conf
-      regexp: (?i)timedloginenable
-      line: TimedLoginEnable=false
-      insertafter: '\[daemon\]'
-  when: rhel7stig_gui
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-010431
-      - gui
-
 - name: "HIGH | RHEL-07-010440 | PATCH | The operating system must not allow empty passwords for SSH logon to the system."
   lineinfile:
       dest: /etc/ssh/sshd_config
@@ -98,6 +84,20 @@
       - patch
       - RHEL-07-010440
       - ssh
+
+- name: "HIGH | RHEL-07-010450 | PATCH | The operating system must not allow guest logon to the system."
+  lineinfile:
+      dest: /etc/gdm/custom.conf
+      regexp: (?i)timedloginenable
+      line: TimedLoginEnable=false
+      insertafter: '\[daemon\]'
+  when: rhel7stig_gui
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-010450
+      - gui
 
 - name: |
 
