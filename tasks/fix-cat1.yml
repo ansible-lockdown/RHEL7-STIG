@@ -71,33 +71,6 @@
       - patch
       - RHEL-07-010450
 
-- name: "HIGH | RHEL-07-010431 | PATCH | The operating system must not allow guest logon to the system."
-  lineinfile:
-      dest: /etc/gdm/custom.conf
-      regexp: (?i)timedloginenable
-      line: TimedLoginEnable=false
-      insertafter: '\[daemon\]'
-  when: rhel7stig_gui
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-010431
-      - gui
-
-- name: "HIGH | RHEL-07-010440 | PATCH | The operating system must not allow empty passwords for SSH logon to the system."
-  lineinfile:
-      dest: /etc/ssh/sshd_config
-      regexp: (?i)permitemptypassword
-      line: PermitEmptyPasswords no
-      validate: sshd -t -f %s
-  notify: restart ssh
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-010440
-      - ssh
 
 - name: |
 
@@ -226,7 +199,7 @@
       - cat1
       - high
       - patch
-      - RHEL-07-021280
+      - RHEL-07-021350
 
 - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
   lineinfile:
@@ -238,7 +211,7 @@
       - cat1
       - high
       - patch
-      - RHEL-07-021280
+      - RHEL-07-021350
 
 - name: "HIGH | RHEL-07-021710 | PATCH | The telnet-server package must not be installed."
   yum:
@@ -288,6 +261,20 @@
       - patch
       - RHEL-07-032000
       - antivirus
+
+- name: "HIGH | RHEL-07-040390 | PATCH | The SSH daemon must be configured to only use the SSHv2 protocol."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: (?i)^#?protocol
+      line: Protocol 2
+      validate: sshd -t -f %s
+  notify: restart ssh
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-040390
+      - ssh
 
 - name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
   file:
@@ -368,18 +355,4 @@
       - patch
       - RHEL-07-040800
       - snmp
-
-- name: "HIGH | RHEL-07-040390 | PATCH | The SSH daemon must be configured to only use the SSHv2 protocol."
-  lineinfile:
-      dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?protocol
-      line: Protocol 2
-      validate: sshd -t -f %s
-  notify: restart ssh
-  tags:
-      - cat1
-      - high
-      - patch
-      - RHEL-07-040390
-      - ssh
 
