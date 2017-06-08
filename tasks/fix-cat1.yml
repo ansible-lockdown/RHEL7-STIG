@@ -1,22 +1,40 @@
-- name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
-  shell: 'rpm --setperms $(rpm -qf {{ item.split('' '')[-1] }}); rpm --setugids $(rpm -qf {{ item.split('' '')[-1] }})'
-  with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
-  when:
-      - rhel_07_010010_audit.stdout_lines | length > 0
-      - rhel_07_010010
+- block:
+    - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
+      shell: 'rpm -Va | grep ''^.M'''
+      args:
+        warn: no
+      failed_when: no
+      changed_when: no
+      ignore_errors: yes
+      register: rhel_07_010010_audit
+
+    - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
+      shell: 'rpm --setperms $(rpm -qf {{ item.split('' '')[-1] }}); rpm --setugids $(rpm -qf {{ item.split('' '')[-1] }})'
+      with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
+      when: rhel_07_010010_audit.stdout_lines | length > 0
+  when: rhel_07_010010
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-010010
 
-- name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
-  shell: yum reinstall -y $(rpm -qf {{ item.split(' ')[-1] }})
-  with_items: "{{ rhel_07_010020_audit.stdout_lines }}"
-  when:
-      - rhel_07_010020_audit.stdout_lines | length > 0
-      - rhel_07_010020
-  ignore_errors: yes
+- block:
+    - name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
+      shell: 'rpm -Va | grep ''^..5'' | grep -E ''/.?bin/'''
+      args:
+          warn: no
+      failed_when: no
+      changed_when: no
+      ignore_errors: yes
+      register: rhel_07_010020_audit
+
+    - name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
+      shell: yum reinstall -y $(rpm -qf {{ item.split(' ')[-1] }})
+      with_items: "{{ rhel_07_010020_audit.stdout_lines }}"
+      ignore_errors: yes
+      when: rhel_07_010020_audit.stdout_lines | length > 0
+  when: rhel_07_010020
   tags:
       - cat1
       - high
@@ -203,13 +221,20 @@
 # RHEL-07-020250 | PATCH | The operating system must be a supported release."
 # Not automated since current end of life for RHEL 7 is 2024-06-30
 
-# Currently just locks user account
-- name: "RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system"
-  command: "passwd -l {{ item }}"
-  with_items: "{{ rhel_07_020310_audit.stdout_lines }}"
-  when:
-      - rhel_07_020310
-      - rhel_07_020310_audit.rc
+- block:
+    # Currently just locks user account
+    - name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system"
+      shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
+      changed_when: no
+      failed_when: no
+      ignore_errors: yes
+      register: rhel_07_020310_audit
+
+    - name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system"
+      command: "passwd -l {{ item }}"
+      with_items: "{{ rhel_07_020310_audit.stdout_lines }}"
+      when: rhel_07_020310_audit.rc
+  when: rhel_07_020310
   tags:
       - cat1
       - high
@@ -221,11 +246,6 @@
       yum:
           name: dracut-fips
           state: present
-      tags:
-          - cat1
-          - high
-          - patch
-          - RHEL-07-021350
 
     - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
       lineinfile:
@@ -233,21 +253,24 @@
           dest: /etc/sysconfig/prelink
           regexp: ^#?PRELINKING
           line: PRELINKING=no
-      tags:
-          - cat1
-          - high
-          - patch
-          - RHEL-07-021350
+
+    - name: "HIGH | RHEL-07-021350 | PATCH | Check if prelink package is installed"
+      command: rpm -q prelink
+      args:
+          warn: no
+      changed_when: no
+      failed_when: no
+      register: rhel_07_021350_prelink_installed
 
     - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
       command: prelink -ua
       when: rhel_07_021350_prelink_installed.rc == 0
-      tags:
-          - cat1
-          - high
-          - patch
-          - RHEL-07-021350
   when: rhel_07_021350
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-021350
 
 - name: "HIGH | RHEL-07-021710 | PATCH | The telnet-server package must not be installed."
   yum:
@@ -266,37 +289,25 @@
       yum:
           name: audit
           state: present
-      tags:
-          - cat1
-          - high
-          - patch
-          - RHEL-07-030000
-          - auditd
 
     - name: "HIGH | RHEL-07-030000 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
       service:
           name: auditd
           state: started
           enabled: yes
-      tags:
-          - cat1
-          - high
-          - patch
-          - RHEL-07-030000
-          - auditd
   when: rhel_07_030000
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-030000
+      - auditd
 
 - block:
     - name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
       yum:
           name: "{{ rhel7stig_av_package.package }}"
           state: present
-      tags:
-          - cat1
-          - high
-          - patch
-          - RHEL-07-032000
-          - antivirus
 
     - name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
       service:
@@ -304,15 +315,15 @@
           state: started
           enabled: yes
       ignore_errors: yes
-      tags:
-          - cat1
-          - high
-          - patch
-          - RHEL-07-032000
-          - antivirus
   when:
       - rhel7stig_antivirus_required
       - rhel_07_032000
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-032000
+      - antivirus
 
 - name: "HIGH | RHEL-07-040390 | PATCH | The SSH daemon must be configured to only use the SSHv2 protocol."
   lineinfile:
@@ -329,11 +340,20 @@
       - RHEL-07-040390
       - ssh
 
-- name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
-  file:
-      path: "{{ item.path }}"
-      state: absent
-  with_items: "{{ rhel_07_040540_audit.files }}"
+- block:
+    - name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
+      find:
+          paths: /
+          recurse: yes
+          hidden: yes
+          patterns: '*.shosts'
+      register: rhel_07_040540_audit
+
+    - name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
+      file:
+          path: "{{ item.path }}"
+          state: absent
+      with_items: "{{ rhel_07_040540_audit.files }}"
   when: rhel_07_040540
   tags:
       - cat1
@@ -342,11 +362,19 @@
       - RHEL-07-040540
       - shosts
 
-- name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
-  file:
-      path: "{{ item.path }}"
-      state: absent
-  with_items: "{{ rhel_07_040550_audit.files }}"
+- block:
+    - name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
+      find:
+          paths: /
+          recurse: yes
+          patterns: shosts.equiv
+      register: rhel_07_040550_audit
+
+    - name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
+      file:
+          path: "{{ item.path }}"
+          state: absent
+      with_items: "{{ rhel_07_040550_audit.files }}"
   when: rhel_07_040550
   tags:
       - cat1
@@ -401,20 +429,29 @@
       - RHEL-07-040710
       - ssh
 
-- name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings must be changed from the default."
-  replace:
-      dest: /etc/snmp/snmpd.conf
-      regexp: (^com2sec.*default\s+)(public|private)
-      replace: \1{{ rhel7stig_snmp_community }}
-  with_items: "{{ rhel_07_040800_audit.results }}"
-  notify: restart snmpd
-  when:
-      - item.stdout_lines | length > 0
-      - rhel_07_040800
+- block:
+    - name: "PRELIM | RHEL-07-040800 | SNMP community strings must be changed from the default."
+      command: grep {{ item }} /etc/snmp/snmpd.conf
+      failed_when: no
+      changed_when: no
+      ignore_errors: yes
+      with_items:
+          - public
+          - private
+      register: rhel_07_040800_audit
+
+    - name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings must be changed from the default."
+      replace:
+          dest: /etc/snmp/snmpd.conf
+          regexp: (^com2sec.*default\s+)(public|private)
+          replace: \1{{ rhel7stig_snmp_community }}
+      with_items: "{{ rhel_07_040800_audit.results }}"
+      notify: restart snmpd
+      when: item.stdout_lines | length > 0
+  when: rhel_07_040800
   tags:
       - cat1
       - high
       - patch
       - RHEL-07-040800
       - snmp
-
