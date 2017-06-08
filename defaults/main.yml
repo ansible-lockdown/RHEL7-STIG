@@ -300,6 +300,10 @@ rhel7stig_lftpd_required: no
 # If not required, remove tftp
 rhel7stig_tftp_required: no
 
+# Service configuration booleans set true to keep service
+rhel7stig_autofs_required: false
+rhel7stig_kdump_required: false
+
 # RHEL-07-040580
 # Set the SNMP community string to this from the default of public or private
 rhel7stig_snmp_community: Endgam3Ladyb0g
@@ -315,15 +319,11 @@ rhel7stig_boot_password_config:
       line: password_pbkdf2 root {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
 # AIDE settings
-rhel7cis_aide_cron:
-  cron_user: root
-  cron_file: /etc/crontab
-  aide_job: '/usr/sbin/aide --check'
-  aide_minute: 0
-  aide_hour: 5
-  aide_day: '*'
-  aide_month: '*'
-  aide_weekday: '*'
+rhel7stig_aide_cron:
+  user: root
+  cron_file: aide
+  job: '/usr/sbin/aide --check'
+  special_time: daily
 
 # Set maximum number of simultaneous system logins (RHEL-07-040000)
 rhel7stig_maxlogins: 10
