@@ -447,7 +447,7 @@
       regexp: ^#?permituserenvironment
       line: permituserenvironment no
       validate: sshd -t -f %s
-  notify: restart ssh
+  notify: restart sshd
   when: rhel_07_010460
   tags:
       - cat2
@@ -492,13 +492,11 @@
 
 - name: "MEDIUM | RHEL-07-020030 | PATCH | A file integrity tool must verify the baseline operating system configuration at least weekly."
   cron:
-      name='Run AIDE integrity check weekly'
-      minute={{ rhel7stig_aide_cron["aide_minute"] | default('05') }}
-      hour={{ rhel7stig_aide_cron["aide_hour"] | default('04') }}
-      day={{ rhel7stig_aide_cron["aide_day"] | default('*') }}
-      month={{ rhel7stig_aide_cron["aide_month"] | default('*') }}
-      weekday={{ rhel7stig_aide_cron["aide_weekday"] | default('*') }}
-      job="{{ rhel7stig_aide_cron["aide_job"] }}"
+      name: 'Run AIDE integrity check weekly'
+      user: "{{ rhel7stig_aide_cron.user }}"
+      cron_file: "{{ rhel7stig_aide_cron.cron_file }}"
+      job: "{{ rhel7stig_aide_cron.job }}"
+      special_time: "{{ rhel7stig_aide_cron.special_time }}"
   when: rhel_07_020030
   tags:
       - cat2
@@ -539,15 +537,32 @@
 
 
 - name: "MEDIUM | RHEL-07-020110 | PATCH | File system automounter must be disabled unless required."
-  command: "true"
+  shell: "systemctl show autofs | grep LoadState | cut -d = -f 2"
+  register: rhel_07_020110_autofs_service_status
   changed_when: no
-  when: rhel_07_020110
+  check_mode: no
+  when:
+      - rhel_07_020110
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020110
-      - notimplemented
+
+- name: "MEDIUM | RHEL-07-020110 | PATCH | File system automounter must be disabled unless required."
+  service:
+    name: autofs
+    enabled: no
+    state: stopped
+  when:
+      - rhel_07_020110
+      - rhel_07_020110_autofs_service_status == "loaded"
+      - not rhel7stig_autofs_required
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-020110
 
 - name: "MEDIUM | RHEL-07-020240 | PATCH | The operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
   command: "true"
@@ -871,11 +886,28 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
+  shell: "systemctl show kdump | grep LoadState | cut -d = -f 2"
+  register: rhel_07_021300_kdump_service_status
+  changed_when: no
+  check_mode: no
+  when:
+      - rhel_07_021300
+      - not rhel7stig_kdump_required
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-021300
+
+- name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
   service:
     name: kdump
     enabled: no
     state: stopped
-  when: rhel_07_021300
+  when:
+      - rhel_07_021300
+      - rhel_07_021300_kdump_service_status.stdout == "loaded"
+      - not rhel7stig_kdump_required
   tags:
       - cat2
       - medium
@@ -1715,7 +1747,7 @@
       regexp: (?i)^#?Ciphers
       line: Ciphers aes128-ctr,aes192-ctr,aes256-ctr
       validate: sshd -t -f %s
-  notify: restart ssh
+  notify: restart sshd
   when: rhel_07_040110
   tags:
       - cat2
@@ -1849,8 +1881,8 @@
       regexp: ^#?ClientAliveCountMax
       line: ClientAliveCountMax 0
       validate: sshd -t -f %s
-  notify: restart ssh
-  when: rhel_07_
+  notify: restart sshd
+  when: rhel_07_040340
   tags:
       - cat2
       - medium
@@ -2057,7 +2089,6 @@
   with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
   when:
       - rhel7stig_time_service == 'ntpd'
-      - rhel_07_040500_audit.stat.exists
       - rhel_07_040500
   tags:
       - cat2
@@ -2074,7 +2105,6 @@
   notify: restart {{ rhel7stig_time_service }}
   when:
       - rhel7stig_time_service == 'chronyd'
-      - rhel_07_040500_audit.stat.exists
       - rhel_07_040500
   tags:
       - cat2
@@ -2092,7 +2122,6 @@
   notify: restart {{ rhel7stig_time_service }}
   when:
       - rhel7stig_time_service == 'chronyd'
-      - rhel_07_040500_audit.stat.exists
       - rhel_07_040500
   tags:
       - cat2
@@ -2413,9 +2442,7 @@
 
 - name: "MEDIUM | RHEL-07-041010 | PATCH | Wireless network adapters must be disabled."
   command: nmcli radio wifi off
-  when:
-      - "'enabled' in rhel_07_041010_audit.stdout"
-      - rhel_07_041010
+  when: rhel_07_041010
   tags:
       - cat2
       - medium
