@@ -24,7 +24,8 @@ rhel_07_020070: true
 rhel_07_020210: true
 rhel_07_020220: true
 rhel_07_020230: true
-# rhel_07_020250: true  # Not an automated task
+# Not an automated task
+rhel_07_020250: false
 rhel_07_020310: true
 rhel_07_021350: true
 rhel_07_021710: true
@@ -64,7 +65,8 @@ rhel_07_010220: true
 rhel_07_010230: true
 rhel_07_010240: true
 rhel_07_010250: true
-rhel_07_010260: true
+# Potential for locking out users
+rhel_07_010260: false
 rhel_07_010270: true
 rhel_07_010280: true
 rhel_07_010310: true
