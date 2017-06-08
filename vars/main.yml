@@ -1,8 +1,8 @@
 rhel7stig_min_ansible_version: 2.1
 
 rhel7stig_cat1_patch: yes
-rhel7stig_cat2_patch: no
-rhel7stig_cat3_patch: no
+rhel7stig_cat2_patch: yes
+rhel7stig_cat3_patch: yes
 
 rhel7stig_time_service_configs:
     chronyd:
