@@ -2,7 +2,7 @@
   become: yes
   become_method: sudo
   roles:
-    - ../RHEL7-STIG
+    - ../../RHEL7-STIG
 
   pre_tasks:
   - name: OS
