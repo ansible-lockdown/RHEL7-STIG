@@ -25,15 +25,14 @@ script:
   # Run container in detached state.
   - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} samdoran/${distro}${version}-ansible:latest "${init}" > "${container_id}"'
 
-  # Install dependencies
-  #- 'docker exec "$(cat ${container_id})" ansible-galaxy install -r /etc/ansible/roles/${distro}stig/tests/requirements.yml'
-
   # Register with Red Hat
-  # FIXME Only enable needed repos: rhel-7-server-htb-rpms, rhel-7-server-aus-rpms
   - 'if [ ${distro} = "rhel" ]; then
         rhsm=$(mktemp);
         sudo docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --auto-attach;
      fi'
+
+  # YUM clean and update.
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm yum clean all && yum check-update && yum update -y'
 
   # Ansible syntax check.
   - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'

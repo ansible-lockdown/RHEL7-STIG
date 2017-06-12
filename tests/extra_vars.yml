@@ -10,3 +10,6 @@ rhel_07_010260: true
 #selinux
 rhel_07_020210: false
 rhel_07_020220: false
+
+# skip rpm file permissions in docker
+rhel_07_010010: false
