@@ -1,13 +1,5 @@
 - hosts: localhost
-
-  # pre_tasks:
-  #     - name: Register with RedHat subscription manager
-  #       redht_subscription:
-  #           state: present
-  #           username: "{{lookup('env', 'RHN_USERNAME')}}"
-  #           password: "{{lookup('env', 'RHN_PASSWORD')}}"
-  #           autosubscribe: yes
-  #       when: ansible_distribution != 'CentOS'
+  become: yes
 
   roles:
       - role_under_test
