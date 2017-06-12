@@ -6,3 +6,7 @@ rhel7stig_antivirus_required: no
 
 # Potential for locking out users - doesn't matter during CI
 rhel_07_010260: true
+
+#selinux
+rhel_07_020210: false
+rhel_07_020220: false
