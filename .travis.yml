@@ -23,14 +23,16 @@ script:
   - container_id=$(mktemp)
 
   # Run container in detached state.
-  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/rhel7stig:ro ${run_opts} samdoran/${distro}${version}-ansible:latest "${init}" > "${container_id}"'
+  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} samdoran/${distro}${version}-ansible:latest "${init}" > "${container_id}"'
 
   # Install dependencies
   #- 'docker exec "$(cat ${container_id})" ansible-galaxy install -r /etc/ansible/roles/${distro}stig/tests/requirements.yml'
 
   # Register with Red Hat
   # FIXME Only enable needed repos: rhel-7-server-htb-rpms, rhel-7-server-aus-rpms
-  - 'docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --autosubscribe'
+  - 'if [ ${distro} = "rhel" ]; then
+        docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --autosubscribe | travis_terminate 1;
+     fi'
 
   # Ansible syntax check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $ansible_opts /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'
@@ -48,7 +50,9 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Deregister
-  - 'docker exec "$(cat ${container_id})" subscription-manager unregister'
+  - 'if [ ${distro} = "rhel" ]; then
+        docker exec "$(cat ${container_id})" subscription-manager unregister;
+     fi'
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
