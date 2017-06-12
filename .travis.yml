@@ -35,14 +35,14 @@ script:
      fi'
 
   # Ansible syntax check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $ansible_opts /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook ${ansible_opts} /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'
 
   # Test role.
-  - 'docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/role_under_test/tests/travis.yml'
+  - 'docker exec "$(cat ${container_id})" ansible-playbook ${ansible_opts} /etc/ansible/roles/role_under_test/tests/travis.yml'
 
   # Test role idempotence.
   - idempotence=$(mktemp)
-  - docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/role_under_test/tests/travis.yml | tee -a ${idempotence}
+  - docker exec "$(cat ${container_id})" ansible-playbook ${ansible_opts} /etc/ansible/roles/role_under_test/tests/travis.yml | tee -a ${idempotence}
   - >
     tail ${idempotence}
     | grep -q 'changed=0.*failed=0'
