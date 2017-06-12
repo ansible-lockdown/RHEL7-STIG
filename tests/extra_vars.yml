@@ -1,7 +1,8 @@
 rhel7stig_cat1_patch: yes
 rhel7stig_cat2_patch: yes
-rhel7stig_cat3_patch: no
+rhel7stig_cat3_patch: yes
 
-rhel7stig_cat1_audit: "{{ rhel7stig_cat1_patch }}"
-rhel7stig_cat2_audit: "{{ rhel7stig_cat2_patch }}"
-rhel7stig_cat3_audit: "{{ rhel7stig_cat3_patch }}"
+rhel7stig_antivirus_required: no
+
+# Potential for locking out users - doesn't matter during CI
+rhel_07_010260: true

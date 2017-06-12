@@ -1,21 +1,29 @@
+---
 sudo: required
-services: docker
 
 env:
-  - distro=rhel7
-    init=/usr/lib/systemd/systemd
-    run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    ansible_opts="--extra-vars @/etc/ansible/roles/${distro}stig/tests/extra_vars.yml --skip-tags RHEL-07-020151,RHEL-07-020152,RHEL-07-030010,RHEL-07-010460,selinux,antivirus"
+  - distro: rhel
+    version: 7
+    init: /usr/lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
+    ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml"
+  - distro: centos
+    version: 7
+    init: /usr/lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
+    ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml"
+
+services: docker
 
 before_install:
   # Pull container.
-  - 'docker pull samdoran/${distro}-ansible:latest'
+  - 'docker pull samdoran/${distro}${version}-ansible:latest'
 
 script:
   - container_id=$(mktemp)
 
   # Run container in detached state.
-  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/${distro}stig:ro ${run_opts} samdoran/${distro}-ansible:latest "${init}" > "${container_id}"'
+  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/rhel7stig:ro ${run_opts} samdoran/${distro}${version}-ansible:latest "${init}" > "${container_id}"'
 
   # Install dependencies
   #- 'docker exec "$(cat ${container_id})" ansible-galaxy install -r /etc/ansible/roles/${distro}stig/tests/requirements.yml'
@@ -25,14 +33,14 @@ script:
   - 'docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --autosubscribe'
 
   # Ansible syntax check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml --syntax-check'
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $ansible_opts /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'
 
   # Test role.
-  - 'docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml'
+  - 'docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/role_under_test/tests/travis.yml'
 
   # Test role idempotence.
   - idempotence=$(mktemp)
-  - docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml | tee -a ${idempotence}
+  - docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/role_under_test/tests/travis.yml | tee -a ${idempotence}
   - >
     tail ${idempotence}
     | grep -q 'changed=0.*failed=0'
