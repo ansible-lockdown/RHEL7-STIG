@@ -19,7 +19,9 @@ before_install:
   # Pull container.
   - 'docker pull ${container}'
   - 'if [ ${distro} = "rhel" ]; then
-        docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
+        if [ ${TRAVIS_PULL_REQUEST_SLUG} == "MindPointGroup/RHEL7-STIG" ]; then
+           docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
+        fi
      else
         docker build --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
      fi'
