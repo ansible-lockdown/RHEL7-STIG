@@ -20,7 +20,7 @@ services: docker
 before_install:
   # Pull container.
   - 'docker pull ${container}'
-  - 'docker build --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests'
+  - 'docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests'
 
 script:
   - container_id=$(mktemp)
@@ -29,10 +29,10 @@ script:
   - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distro}-${version}:ansible "${init}" > "${container_id}"'
 
   # Register with Red Hat
-  - 'if [ ${distro} = "rhel" ]; then
-        rhsm=$(mktemp);
-        sudo docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --auto-attach;
-     fi'
+  # - 'if [ ${distro} = "rhel" ]; then
+  #       rhsm=$(mktemp);
+  #       sudo docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --auto-attach;
+  #    fi'
 
   # Ansible syntax check.
   - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'

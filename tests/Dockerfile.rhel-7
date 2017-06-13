@@ -1,5 +1,12 @@
 FROM registry.access.redhat.com/rhel7:latest
 
+# Build Arguments
+rhn_user
+rhn_pass
+
+# Register
+RUN subscription-manager register --username=$rhn_user --password=$rhn_pass --auto-attach
+
 # Install systemd -- See https://hub.docker.com/_/centos/
 RUN yum -y swap -- remove fakesystemd -- install systemd systemd-libs
 RUN yum -y update; yum clean all; \
@@ -12,7 +19,7 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-# Install Ansible
+# Install
 RUN yum -y install epel-release openssh-server audit authconfig
 RUN yum -y install git ansible sudo
 RUN yum clean all
