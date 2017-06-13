@@ -4,11 +4,13 @@ sudo: required
 env:
   - distro: rhel
     version: 7
+    container: "registry.access.redhat.com/rhel7"
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
     ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml"
   - distro: centos
     version: 7
+    container: "centos:7"
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
     ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml"
@@ -17,22 +19,20 @@ services: docker
 
 before_install:
   # Pull container.
-  - 'docker pull samdoran/${distro}${version}-ansible:latest'
+  - 'docker pull ${container}'
+  - 'docker build --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests'
 
 script:
   - container_id=$(mktemp)
 
   # Run container in detached state.
-  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} samdoran/${distro}${version}-ansible:latest "${init}" > "${container_id}"'
+  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distro}-${version}:ansible "${init}" > "${container_id}"'
 
   # Register with Red Hat
   - 'if [ ${distro} = "rhel" ]; then
         rhsm=$(mktemp);
         sudo docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --auto-attach;
      fi'
-
-  # YUM clean and update.
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm yum clean all && yum check-update && yum update -y'
 
   # Ansible syntax check.
   - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'
