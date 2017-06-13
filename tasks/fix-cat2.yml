@@ -2079,14 +2079,25 @@
       - RHEL-07-040470
       - ssh
 
-- name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-  lineinfile:
-      create: yes
-      dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
-      regexp: "{{ item.regexp }}"
-      line: "{{ item.line }}"
-  notify: restart {{ rhel7stig_time_service }}
-  with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
+- block:
+    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+      yum:
+          name: chrony
+          state: absent
+
+    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+      yum:
+          name: ntp
+          state: present
+
+    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+      lineinfile:
+          create: yes
+          dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
+          regexp: "{{ item.regexp }}"
+          line: "{{ item.line }}"
+      notify: restart {{ rhel7stig_time_service }}
+      with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
   when:
       - rhel7stig_time_service == 'ntpd'
       - rhel_07_040500
@@ -2098,11 +2109,22 @@
       - ntp
       - ntpd
 
-- name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-  replace:
-      dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
-      regexp: '^server \S+( \w+)?$'
-  notify: restart {{ rhel7stig_time_service }}
+- block:
+    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+      yum:
+          name: ntp
+          state: absent
+
+    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+      yum:
+          name: chrony
+          state: present
+
+    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+      replace:
+          dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
+          regexp: '^server \S+( \w+)?$'
+      notify: restart {{ rhel7stig_time_service }}
   when:
       - rhel7stig_time_service == 'chronyd'
       - rhel_07_040500
@@ -2442,6 +2464,7 @@
 
 - name: "MEDIUM | RHEL-07-041010 | PATCH | Wireless network adapters must be disabled."
   command: nmcli radio wifi off
+  changed_when: no
   when: rhel_07_041010
   tags:
       - cat2

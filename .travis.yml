@@ -7,13 +7,13 @@ env:
     container: "registry.access.redhat.com/rhel7"
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
-    ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml"
+    ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml --skip-tags=\"auditd\""
   - distro: centos
     version: 7
     container: "centos:7"
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
-    ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml"
+    ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml --skip-tags=\"auditd\""
 
 services: docker
 
@@ -28,26 +28,16 @@ script:
   # Run container in detached state.
   - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distro}-${version}:ansible "${init}" > "${container_id}"'
 
-  # Register with Red Hat
-  # - 'if [ ${distro} = "rhel" ]; then
-  #       rhsm=$(mktemp);
-  #       sudo docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --auto-attach;
-  #    fi'
-
   # Ansible syntax check.
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'
 
   # Test role.
-  - 'sudo docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml -vv'
+  - 'docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml ${ansible_opts}'
 
   # Test role idempotence.
   - idempotence=$(mktemp)
-  - sudo docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml | tee -a ${idempotence}
-  - >
-    tail ${idempotence}
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
+
+  - 'docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml ${ansible_opts} | tee -a ${idempotence} > tail ${idempotence} | grep -q "changed=0.*failed=0" && (echo "Idempotence test: pass" && exit 0) || (echo "Idempotence test: fail" && exit 1)'
 
   # Deregister
   - 'if [ ${distro} = "rhel" ]; then
