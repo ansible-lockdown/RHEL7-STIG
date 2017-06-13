@@ -1,8 +1,8 @@
 FROM registry.access.redhat.com/rhel7:latest
 
 # Build Arguments
-rhn_user
-rhn_pass
+ARG rhn_user
+ARG rhn_pass
 
 # Register
 RUN subscription-manager register --username=$rhn_user --password=$rhn_pass --auto-attach
