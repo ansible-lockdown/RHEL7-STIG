@@ -316,6 +316,7 @@
 
 - name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
   command: chage -m 1 {{ item }}
+  changed_when: no
   with_items: "{{ rhel_07_010240_audit.stdout_lines | default([]) }}"
   when: rhel_07_010240
   tags:
