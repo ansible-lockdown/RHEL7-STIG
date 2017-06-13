@@ -1,4 +1,5 @@
 - hosts: localhost
-  remote_user: root
+  become: yes
+
   roles:
-    - rhel7stig
+      - role_under_test

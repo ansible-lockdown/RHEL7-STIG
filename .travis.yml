@@ -1,46 +1,54 @@
+---
 sudo: required
-services: docker
 
 env:
-  - distro=rhel7
-    init=/usr/lib/systemd/systemd
-    run_opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    ansible_opts="--extra-vars @/etc/ansible/roles/${distro}stig/tests/extra_vars.yml --skip-tags RHEL-07-020151,RHEL-07-020152,RHEL-07-030010,RHEL-07-010460,selinux,antivirus"
+  # - distro: rhel
+  #   version: 7
+  #   container: "registry.access.redhat.com/rhel7"
+  #   init: /usr/lib/systemd/systemd
+  #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
+  - distro: centos
+    version: 7
+    container: "centos:7"
+    init: /usr/lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
+
+services: docker
 
 before_install:
   # Pull container.
-  - 'docker pull samdoran/${distro}-ansible:latest'
+  - 'docker pull ${container}'
+  - 'if [ ${distro} = "rhel" ]; then
+        docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
+     else
+        docker build --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
+     fi'
 
 script:
   - container_id=$(mktemp)
 
   # Run container in detached state.
-  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/${distro}stig:ro ${run_opts} samdoran/${distro}-ansible:latest "${init}" > "${container_id}"'
-
-  # Install dependencies
-  #- 'docker exec "$(cat ${container_id})" ansible-galaxy install -r /etc/ansible/roles/${distro}stig/tests/requirements.yml'
-
-  # Register with Red Hat
-  # FIXME Only enable needed repos: rhel-7-server-htb-rpms, rhel-7-server-aus-rpms
-  - 'docker exec "$(cat ${container_id})" subscription-manager register --username=$RHN_USERNAME --password=$RHN_PASSWORD --autosubscribe'
+  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distro}-${version}:ansible "${init}" > "${container_id}"'
 
   # Ansible syntax check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml --syntax-check'
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'
 
   # Test role.
-  - 'docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml'
+  - docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --extra-vars "@/etc/ansible/roles/role_under_test/tests/extra_vars.yml" -vv
 
   # Test role idempotence.
   - idempotence=$(mktemp)
-  - docker exec "$(cat ${container_id})" ansible-playbook $ansible_opts /etc/ansible/roles/${distro}stig/tests/travis.yml | tee -a ${idempotence}
+
+  - docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --extra-vars "@/etc/ansible/roles/role_under_test/tests/extra_vars.yml" -vv | tee -a ${idempotence}
   - >
-    tail ${idempotence}
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
+    grep -q "changed=0.*failed=0" ${idempotence}
+    && (echo "Idempotence test: pass" && exit 0)
+    || (echo "Idempotence test: fail" && exit 1)
 
   # Deregister
-  - 'docker exec "$(cat ${container_id})" subscription-manager unregister'
+  - 'if [ ${distro} = "rhel" ]; then
+        docker exec "$(cat ${container_id})" subscription-manager unregister;
+     fi'
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
