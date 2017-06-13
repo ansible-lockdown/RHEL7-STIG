@@ -2,11 +2,11 @@
 sudo: required
 
 env:
-  - distro: rhel
-    version: 7
-    container: "registry.access.redhat.com/rhel7"
-    init: /usr/lib/systemd/systemd
-    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
+  # - distro: rhel
+  #   version: 7
+  #   container: "registry.access.redhat.com/rhel7"
+  #   init: /usr/lib/systemd/systemd
+  #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
   - distro: centos
     version: 7
     container: "centos:7"
@@ -19,9 +19,7 @@ before_install:
   # Pull container.
   - 'docker pull ${container}'
   - 'if [ ${distro} = "rhel" ]; then
-        if [ ${TRAVIS_PULL_REQUEST_SLUG} == "MindPointGroup/RHEL7-STIG" ]; then
-           docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
-        fi
+        docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
      else
         docker build --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
      fi'
