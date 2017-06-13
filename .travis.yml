@@ -8,21 +8,19 @@ env:
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
     ansible_opts: "--extra-vars \"@/etc/ansible/roles/role_under_test/tests/extra_vars.yml\" --skip-tags=\"auditd\""
-    build_opts: "--build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD"
   - distro: centos
     version: 7
     container: "centos:7"
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
     ansible_opts: "--extra-vars \"@/etc/ansible/roles/role_under_test/tests/extra_vars.yml\" --skip-tags=\"auditd\""
-    build_opts: ""
 
 services: docker
 
 before_install:
   # Pull container.
   - 'docker pull ${container}'
-  - docker build ${build_opts} --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests
+  - docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests
 
 script:
   - container_id=$(mktemp)
