@@ -13,3 +13,6 @@ rhel_07_020220: false
 
 # skip rpm file permissions in docker
 rhel_07_010010: false
+
+# skip networkmanager stuff
+rhel_07_041010: false
