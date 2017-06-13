@@ -1,5 +1,9 @@
 FROM centos:7
 
+# Build Arguments
+ARG rhn_user
+ARG rhn_pass
+
 # Install systemd -- See https://hub.docker.com/_/centos/
 RUN yum -y swap -- remove fakesystemd -- install systemd systemd-libs
 RUN yum -y update; yum clean all; \
