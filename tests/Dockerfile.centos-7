@@ -13,8 +13,8 @@ rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install Ansible
-RUN yum -y install epel-release openssh-server audit authconfig
-RUN yum -y install git ansible sudo
+RUN yum -y install epel-release openssh-server audit authconfig grub2
+RUN yum -y install git ansible sudo anacron NetworkManager
 RUN yum clean all
 
 # Fix for Travis docker containers

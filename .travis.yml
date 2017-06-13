@@ -6,12 +6,14 @@ env:
     version: 7
     container: "registry.access.redhat.com/rhel7"
     init: /usr/lib/systemd/systemd
+    build_opts: "--build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD"
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
     ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml --skip-tags=\"auditd\""
   - distro: centos
     version: 7
     container: "centos:7"
     init: /usr/lib/systemd/systemd
+    build_opts: ""
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
     ansible_opts: "--extra-vars @/etc/ansible/roles/role_under_test/tests/extra_vars.yml --skip-tags=\"auditd\""
 
@@ -20,13 +22,15 @@ services: docker
 before_install:
   # Pull container.
   - 'docker pull ${container}'
-  - 'docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests'
+  - 'docker build ${build_opts} --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests'
 
 script:
   - container_id=$(mktemp)
 
   # Run container in detached state.
   - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distro}-${version}:ansible "${init}" > "${container_id}"'
+
+  - 'docker exec --tty "$(cat ${container_id})" systemctl start NetworkManager'
 
   # Ansible syntax check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check'
