@@ -27,7 +27,7 @@ rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install
-RUN yum -y install openssh-server audit authconfig grub2
+RUN yum -y install openssh-server audit authconfig
 RUN yum -y install git ansible sudo anacron
 RUN yum clean all
 

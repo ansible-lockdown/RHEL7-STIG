@@ -16,3 +16,7 @@ rhel_07_010010: false
 
 # skip networkmanager stuff
 rhel_07_041010: false
+
+# skip grub
+rhel_07_010480: false
+rhel_07_010490: false
