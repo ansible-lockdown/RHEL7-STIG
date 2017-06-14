@@ -1,12 +1,259 @@
+rhel7stig_min_ansible_version: 2.1
+
 rhel7stig_cat1_patch: yes
 rhel7stig_cat2_patch: yes
 rhel7stig_cat3_patch: yes
 
+# These variables correspond with the STIG IDs defined in the STIG and allows you to enable/disable specific rules.
+# PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
+# in order for the variables below to take effect.
+# CAT 1 rules
+rhel_07_010010: true
+rhel_07_010020: true
+rhel_07_010290: true
+rhel_07_010300: true
+rhel_07_010440: true
+rhel_07_010450: true
+rhel_07_010480: true
+rhel_07_010490: true
+rhel_07_020000: true
+rhel_07_020010: true
+rhel_07_020050: true
+rhel_07_020060: true
+# This check breaks with redhat.com repos as they do not sign repo data
+rhel_07_020070: false
+rhel_07_020210: true
+rhel_07_020220: true
+rhel_07_020230: true
+# Not an automated task
+rhel_07_020250: false
+rhel_07_020310: true
+rhel_07_021350: true
+rhel_07_021710: true
+rhel_07_030000: true
+rhel_07_032000: true
+rhel_07_040390: true
+rhel_07_040540: true
+rhel_07_040550: true
+rhel_07_040690: true
+rhel_07_040700: true
+rhel_07_040710: true
+rhel_07_040800: true
+# CAT 2 rules
+rhel_07_010030: true
+rhel_07_010040: true
+rhel_07_010050: true
+rhel_07_010060: true
+rhel_07_010070: true
+rhel_07_010080: true
+rhel_07_010081: true
+rhel_07_010082: true
+rhel_07_010090: true
+rhel_07_010100: true
+rhel_07_010110: true
+rhel_07_010119: true
+rhel_07_010120: true
+rhel_07_010130: true
+rhel_07_010140: true
+rhel_07_010150: true
+rhel_07_010160: true
+rhel_07_010170: true
+rhel_07_010180: true
+rhel_07_010190: true
+rhel_07_010200: true
+rhel_07_010210: true
+rhel_07_010220: true
+rhel_07_010230: true
+rhel_07_010240: true
+rhel_07_010250: true
+# Potential for locking out users
+rhel_07_010260: false
+rhel_07_010270: true
+rhel_07_010280: true
+rhel_07_010310: true
+rhel_07_010320: true
+rhel_07_010330: true
+rhel_07_010340: true
+rhel_07_010350: true
+rhel_07_010430: true
+rhel_07_010460: true
+rhel_07_010470: true
+rhel_07_010500: true
+rhel_07_020020: true
+rhel_07_020030: true
+rhel_07_020040: true
+rhel_07_020100: true
+rhel_07_020110: true
+rhel_07_020240: true
+rhel_07_020260: true
+rhel_07_020270: true
+rhel_07_020320: true
+rhel_07_020330: true
+rhel_07_020600: true
+rhel_07_020610: true
+rhel_07_020620: true
+rhel_07_020630: true
+rhel_07_020640: true
+rhel_07_020650: true
+rhel_07_020660: true
+rhel_07_020670: true
+rhel_07_020680: true
+rhel_07_020690: true
+rhel_07_020700: true
+rhel_07_020710: true
+rhel_07_020720: true
+rhel_07_020730: true
+rhel_07_020900: true
+rhel_07_021000: true
+rhel_07_021010: true
+rhel_07_021020: true
+rhel_07_021021: true
+rhel_07_021030: true
+rhel_07_021040: true
+rhel_07_021100: true
+rhel_07_021110: true
+rhel_07_021120: true
+rhel_07_021300: true
+rhel_07_021620: true
+rhel_07_021700: true
+rhel_07_030010: true
+rhel_07_030300: true
+rhel_07_030310: true
+rhel_07_030320: true
+rhel_07_030321: true
+rhel_07_030330: true
+rhel_07_030340: true
+rhel_07_030350: true
+rhel_07_030360: true
+rhel_07_030370: true
+rhel_07_030380: true
+rhel_07_030390: true
+rhel_07_030400: true
+rhel_07_030410: true
+rhel_07_030420: true
+rhel_07_030430: true
+rhel_07_030440: true
+rhel_07_030450: true
+rhel_07_030460: true
+rhel_07_030470: true
+rhel_07_030480: true
+rhel_07_030490: true
+rhel_07_030500: true
+rhel_07_030510: true
+rhel_07_030520: true
+rhel_07_030530: true
+rhel_07_030540: true
+rhel_07_030550: true
+rhel_07_030560: true
+rhel_07_030570: true
+rhel_07_030580: true
+rhel_07_030590: true
+rhel_07_030600: true
+rhel_07_030610: true
+rhel_07_030620: true
+rhel_07_030630: true
+rhel_07_030640: true
+rhel_07_030650: true
+rhel_07_030660: true
+rhel_07_030670: true
+rhel_07_030680: true
+rhel_07_030690: true
+rhel_07_030700: true
+rhel_07_030710: true
+rhel_07_030720: true
+rhel_07_030730: true
+rhel_07_030740: true
+rhel_07_030750: true
+rhel_07_030760: true
+rhel_07_030770: true
+rhel_07_030780: true
+rhel_07_030790: true
+rhel_07_030800: true
+rhel_07_030810: true
+rhel_07_030820: true
+rhel_07_030830: true
+rhel_07_030840: true
+rhel_07_030850: true
+rhel_07_030860: true
+rhel_07_030870: true
+rhel_07_030871: true
+rhel_07_030872: true
+rhel_07_030873: true
+rhel_07_030874: true
+rhel_07_030880: true
+rhel_07_030890: true
+rhel_07_030900: true
+rhel_07_030910: true
+rhel_07_030920: true
+rhel_07_031000: true
+rhel_07_031010: true
+rhel_07_032010: true
+rhel_07_040100: true
+rhel_07_040110: true
+rhel_07_040160: true
+rhel_07_040170: true
+rhel_07_040180: true
+rhel_07_040190: true
+rhel_07_040200: true
+rhel_07_040300: true
+rhel_07_040310: true
+rhel_07_040320: true
+rhel_07_040330: true
+rhel_07_040340: true
+rhel_07_040350: true
+rhel_07_040360: true
+rhel_07_040370: true
+rhel_07_040380: true
+rhel_07_040400: true
+rhel_07_040410: true
+rhel_07_040420: true
+rhel_07_040430: true
+rhel_07_040440: true
+rhel_07_040450: true
+rhel_07_040460: true
+rhel_07_040470: true
+rhel_07_040500: true
+rhel_07_040510: true
+rhel_07_040520: true
+rhel_07_040610: true
+rhel_07_040620: true
+rhel_07_040630: true
+rhel_07_040640: true
+rhel_07_040641: true
+rhel_07_040650: true
+rhel_07_040660: true
+rhel_07_040670: true
+rhel_07_040680: true
+rhel_07_040720: true
+rhel_07_040730: true
+rhel_07_040740: true
+rhel_07_040750: true
+rhel_07_040810: true
+rhel_07_040820: true
+rhel_07_040830: true
+rhel_07_041001: true
+rhel_07_041002: true
+rhel_07_041003: true
+rhel_07_041004: true
+rhel_07_041010: true
+# CAT 3 rules
+rhel_07_020200: true
+rhel_07_020300: true
+rhel_07_021310: true
+rhel_07_021320: true
+rhel_07_021330: true
+rhel_07_021340: true
+rhel_07_021600: true
+rhel_07_021610: true
+rhel_07_040000: true
+rhel_07_040530: true
+rhel_07_040600: true
+
 # These values match patch values by defaults. To override these values,
 # set them in group_vars, host_vars, or with the -e flag via CLI
-rhel7stig_cat1_audit: "{{ rhel7stig_cat1_patch }}"
-rhel7stig_cat2_audit: "{{ rhel7stig_cat2_patch }}"
-rhel7stig_cat3_audit: "{{ rhel7stig_cat3_patch }}"
+# rhel7stig_cat1_audit: "{{ rhel7stig_cat1_patch }}"
+# rhel7stig_cat2_audit: "{{ rhel7stig_cat2_patch }}"
+# rhel7stig_cat3_audit: "{{ rhel7stig_cat3_patch }}"
 
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: no
@@ -32,6 +279,19 @@ rhel7stig_av_package:
     service: clamav-daemon
 
 rhel7stig_time_service: chronyd
+rhel7stig_time_service_configs:
+    chronyd:
+        conf: /etc/chrony.conf
+        block: |
+          server 0.rhel.pool.ntp.org iburst maxpoll 10
+          server 1.rhel.pool.ntp.org iburst maxpoll 10
+          server 2.rhel.pool.ntp.org iburst maxpoll 10
+          server 3.rhel.pool.ntp.org iburst maxpoll 10
+    ntpd:
+        conf: /etc/ntp.conf
+        lines:
+            - regexp: ^#?maxpoll
+              line: maxpoll 10
 
 # RHEL-07-040490
 # If not required, remove lftpd.
@@ -40,6 +300,10 @@ rhel7stig_lftpd_required: no
 # RHEL-07-040500
 # If not required, remove tftp
 rhel7stig_tftp_required: no
+
+# Service configuration booleans set true to keep service
+rhel7stig_autofs_required: false
+rhel7stig_kdump_required: false
 
 # RHEL-07-040580
 # Set the SNMP community string to this from the default of public or private
@@ -57,12 +321,10 @@ rhel7stig_boot_password_config:
 
 # AIDE settings
 rhel7stig_aide_cron:
-  aide_job: '/usr/sbin/aide --check'
-  aide_minute: '05'
-  aide_hour: '4'
-  aide_day: '*'
-  aide_month: '*'
-  aide_weekday: '*'
+  user: root
+  cron_file: aide
+  job: '/usr/sbin/aide --check'
+  special_time: daily
 
 # Set maximum number of simultaneous system logins (RHEL-07-040000)
 rhel7stig_maxlogins: 10
