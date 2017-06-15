@@ -477,7 +477,7 @@
       regexp: '^#?HostbasedAuthentication'
       line: HostbasedAuthentication no
       validate: sshd -t -f %s
-  notify: restart ssh
+  notify: restart sshd
   tags:
       - cat2
       - medium
