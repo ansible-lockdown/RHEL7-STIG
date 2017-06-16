@@ -2,3 +2,5 @@
 *.retry
 Vagrantfile
 .vagrant
+
+*.retry

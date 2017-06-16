@@ -267,15 +267,30 @@
       - RHEL-07-010190
 
 - name: "MEDIUM | RHEL-07-010200 | PATCH | The PAM system service must be configured to store only encrypted representations of passwords."
-  command: "true"
-  changed_when: no
+  pamd:
+      name: system-auth
+      state: "{{ item.state }}"
+      type: password
+      control: sufficient
+      module_path: pam_unix.so
+      module_arguments: "{{ item.args }}"
+  with_items:
+      - state: args_present
+        args:
+          - "sha512"
+      - state: args_absent
+        args:
+          - "md5"
+          - "bigcrypt"
+          - "sha256"
+          - "blowfish"
   when: rhel_07_010200
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010200
-      - notimplemented
+      - pamd
 
 - name: "MEDIUM | RHEL-07-010210 | PATCH | The shadow file must be configured to store only encrypted representations of passwords."
   lineinfile:
@@ -350,10 +365,10 @@
 
 - name: "MEDIUM | RHEL-07-010270 | PATCH | Passwords must be prohibited from reuse for a minimum of five generations."
   lineinfile:
-      create: yes
       dest: /etc/pam.d/system-auth
-      regexp: password\s*sufficient\s*pam_unix.so
-      line: password    sufficient    pam_unix.so sha512 shadow try_first_pass use_authtok remember=5
+      regexp: '^(password\s+sufficient\s+pam_unix.so((?!remember=5).)+)$'
+      line: '\1 remember=5'
+      backrefs: yes
   when: rhel_07_010270
   tags:
       - cat2
@@ -458,16 +473,18 @@
       - ssh
 
 - name: "MEDIUM | RHEL-07-010470 | PATCH | The operating system must not allow a non-certificate trusted host SSH logon to the system."
-  command: "true"
-  changed_when: no
-  when: rhel_07_010470
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: '^#?HostbasedAuthentication'
+      line: HostbasedAuthentication no
+      validate: sshd -t -f %s
+  notify: restart sshd
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010470
       - ssh
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
   command: "true"

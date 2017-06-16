@@ -1,8 +1,9 @@
 - block:
-    - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
+    - name: "HIGH | RHEL-07-010010 | AUDIT | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
       shell: 'rpm -Va | grep ''^.M'''
       args:
         warn: no
+      check_mode: no
       failed_when: no
       changed_when: no
       ignore_errors: yes
@@ -20,10 +21,11 @@
       - RHEL-07-010010
 
 - block:
-    - name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
+    - name: "HIGH | RHEL-07-010020 | AUDIT | The cryptographic hash of system files and commands must match vendor values."
       shell: 'rpm -Va | grep ''^..5'' | grep -E ''/.?bin/'''
       args:
           warn: no
+      check_mode: no
       failed_when: no
       changed_when: no
       ignore_errors: yes
@@ -44,6 +46,7 @@
 - name: "HIGH | RHEL-07-010290 | PATCH | The system must not have accounts configured with blank or null passwords."
   replace:
       dest: /etc/pam.d/system-auth
+      follow: true
       regexp: 'nullok ?'
   when: rhel_07_010290
   tags:
@@ -223,8 +226,9 @@
 
 - block:
     # Currently just locks user account
-    - name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system"
+    - name: "HIGH | RHEL-07-020310 | AUDIT | The root account must be the only account having unrestricted access to the system"
       shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
+      check_mode: no
       changed_when: no
       failed_when: no
       ignore_errors: yes
@@ -341,12 +345,13 @@
       - ssh
 
 - block:
-    - name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
+    - name: "HIGH | RHEL-07-040540 | AUDIT | There must be no .shosts files on the system."
       find:
           paths: /
           recurse: yes
           hidden: yes
           patterns: '*.shosts'
+      check_mode: no
       register: rhel_07_040540_audit
 
     - name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
@@ -363,11 +368,12 @@
       - shosts
 
 - block:
-    - name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
+    - name: "HIGH | RHEL-07-040550 | AUDIT | There must be no shosts.equiv files on the system."
       find:
           paths: /
           recurse: yes
           patterns: shosts.equiv
+      check_mode: no
       register: rhel_07_040550_audit
 
     - name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
@@ -430,8 +436,9 @@
       - ssh
 
 - block:
-    - name: "PRELIM | RHEL-07-040800 | SNMP community strings must be changed from the default."
+    - name: "PRELIM | RHEL-07-040800 | AUDIT | SNMP community strings must be changed from the default."
       command: grep {{ item }} /etc/snmp/snmpd.conf
+      check_mode: no
       failed_when: no
       changed_when: no
       ignore_errors: yes
