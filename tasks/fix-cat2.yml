@@ -2179,7 +2179,7 @@
       - medium
       - patch
       - RHEL-07-040510
-      - "{{ rhel7stig_firewall_service }}"
+      - firewall
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The operating system must enable an application firewall, if available."
@@ -2192,7 +2192,7 @@
       - medium
       - patch
       - RHEL-07-040520
-      - "{{ rhel7stig_firewall_service }}"
+      - firewall
 
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The system must use a local firewall."
   service:
@@ -2205,7 +2205,7 @@
       - medium
       - patch
       - RHEL-07-040520
-      - "{{ rhel7stig_firewall_service }}"
+      - firewall
 
 - name: "MEDIUM | RHEL-07-040610 | PATCH | The system must not forward Internet Protocol version 4 (IPv4) source-routed packets."
   sysctl:
