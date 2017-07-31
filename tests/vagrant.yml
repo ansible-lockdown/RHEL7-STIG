@@ -12,6 +12,11 @@
       args:
         creates: redhat-subscription
 
+    - name: Remove EPEL
+      yum:
+        name: epel-release
+        state: absent
+
   roles:
     - role: redhat-subscription
       when: ansible_distribution == 'RedHat'
