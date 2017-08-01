@@ -5,9 +5,8 @@
 
 - name: reboot system
   shell: sleep 3; reboot
-  async: 0
+  async: 15
   poll: 0
-  ignore_errors: yes
 
 - name: restart snmpd
   service:
