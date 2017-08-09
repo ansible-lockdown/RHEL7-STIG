@@ -1,0 +1,5 @@
+rhel7stig_cat1_patch: yes
+rhel7stig_cat2_patch: yes
+rhel7stig_cat3_patch: yes
+
+rhel7stig_antivirus_required: no

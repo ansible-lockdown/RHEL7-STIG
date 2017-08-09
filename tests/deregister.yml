@@ -1,0 +1,8 @@
+- name: Deregister Red Hat subscription
+  hosts: all
+  become: yes
+
+  roles:
+    - role: redhat-subscription
+      rhsub_state: absent
+      when: ansible_distribution == 'RedHat'
