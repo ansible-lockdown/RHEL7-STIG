@@ -30,7 +30,3 @@ class FilterModule(object):
         return {
             'grub2_hash': grub2_hash
         }
-
-
-
-

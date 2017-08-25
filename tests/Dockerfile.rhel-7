@@ -4,6 +4,8 @@ FROM registry.access.redhat.com/rhel7:latest
 ARG rhn_user
 ARG rhn_pass
 
+ENV ANSIBLE_CONFIG /etc/ansible/roles/role_under_test/tests/ansible.cfg
+
 # Register
 RUN subscription-manager register --username=$rhn_user --password=$rhn_pass --auto-attach
 RUN subscription-manager repos --enable rhel-7-server-extras-rpms --enable rhel-7-server-optional-rpms
@@ -28,8 +30,9 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install
 RUN yum -y install openssh-server audit authconfig
-RUN yum -y install git ansible sudo anacron
+RUN yum -y install git ansible sudo anacron python2-pip
 RUN yum clean all
+RUN pip install passlib
 
 # Fix for Travis docker containers
 RUN mkdir /var/log/audit; chmod 700 /var/log/audit;
