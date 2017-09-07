@@ -1,0 +1,29 @@
+Vagrant.configure(2) do |config|
+
+  # CentOS 7
+  config.vm.define "rhel7stig-centos7" do |centos7|
+    centos7.vm.box = "samdoran/centos7"
+    centos7.vm.hostname = "rhel7stig-centos7"
+    config.vm.provider "virtualbox" do |vbox|
+      vbox.name = "rhel7stig-el7"
+      vbox.cpus = 2
+      vbox.memory = 512
+    end
+  end
+
+  # RHEL 7
+  config.vm.define "rhel7stig-rhel7" do |node|
+    node.vm.box = "samdoran/rhel7"
+    node.vm.provider :virtualbox do |vbox|
+      vbox.name = "rhel7stig-rhel7"
+      vbox.cpus = 2
+      vbox.memory = 512
+    end
+    node.vm.hostname = "rhel7stig-rhel7"
+  end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "vagrant.yml"
+  end
+
+end
