@@ -1,29 +1,54 @@
----
-language: python
-python: "2.7"
+sudo: required
+services: docker
 
-# Use the new container infrastructure
-sudo: false
+env:
+  # - distro: rhel
+  #   version: 7
+  #   container: "registry.access.redhat.com/rhel7"
+  #   init: /usr/lib/systemd/systemd
+  #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
 
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
+  - distro: centos
+    version: 7
+    container: "centos:7"
+    init: /usr/lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /run --tmpfs /run/lock"
 
-install:
-  # Install ansible
-  - pip install ansible
-
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
+before_install:
+  # Pull container.
+  - 'docker pull ${container}'
+  - 'if [ ${distro} = "rhel" ]; then
+        docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
+     else
+        docker build --rm=true --file=tests/Dockerfile.${distro}-${version} --tag=${distro}-${version}:ansible tests;
+     fi'
 
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  - container_id=$(date +%s)
+
+  # Run container in detached state.
+  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro --name $container_id ${run_opts} ${distro}-${version}:ansible "${init}"'
+
+  # Ansible syntax check.
+  - docker exec --tty $container_id ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --syntax-check
+
+  # Test role.
+  - docker exec --tty $container_id ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --extra-vars "@/etc/ansible/roles/role_under_test/tests/extra_vars_travis.yml" -vv
+
+  # Test role idempotence.
+  - idempotence_log=$(mktemp)
+
+  - docker exec --tty $container_id ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --extra-vars "@/etc/ansible/roles/role_under_test/tests/extra_vars_travis.yml" -vv | tee -a $idempotence_log
+  - >
+    tail $idempotence_log
+    | grep -q "changed=0.*failed=0"
+    && (echo "Idempotence test: pass" && exit 0)
+    || (echo "Idempotence test: fail" && exit 1)
+
+  # Deregister
+  - 'if [ ${distro} = "rhel" ]; then
+        docker exec $container_id subscription-manager unregister;
+     fi'
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

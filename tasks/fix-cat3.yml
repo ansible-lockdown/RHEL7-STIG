@@ -1,13 +1,10 @@
-- name: "LOW | RHEL-07-010490 | PATCH | Unnecessary default system accounts must be removed."
-  command: "true"
-  tags:
-      - cat3
-      - low
-      - patch
-      - RHEL-07-010490
-
 - name: "LOW | RHEL-07-020200 | PATCH | The operating system must remove all software components after updated versions have been installed."
-  command: "true"
+  lineinfile:
+      dest: /etc/yum.conf
+      regexp: ^#?clean_requirements_on_remove
+      line: clean_requirements_on_remove=1
+      insertafter: '\[main\]'
+  when: rhel_07_020200
   tags:
       - cat3
       - low
@@ -16,81 +13,114 @@
 
 - name: "LOW | RHEL-07-020300 | PATCH | All Group Identifiers (GIDs) referenced in the /etc/passwd file must be defined in the /etc/group file."
   command: "true"
+  changed_when: no
+  when: rhel_07_020300
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-020300
+      - notimplemented
 
-- name: "LOW | RHEL-07-021240 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
+- name: "LOW | RHEL-07-021310 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
   command: "true"
+  changed_when: no
+  when: rhel_07_021310
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-021240
+      - RHEL-07-021310
+      - notimplemented
 
-- name: "LOW | RHEL-07-021250 | PATCH | The system must use a separate file system for /var."
+- name: "LOW | RHEL-07-021320 | PATCH | The system must use a separate file system for /var."
   command: "true"
+  changed_when: no
+  when: rhel_07_021320
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-021250
+      - RHEL-07-021320
+      - notimplemented
 
-- name: "LOW | RHEL-07-021260 | PATCH | The system must use /var/log/audit for the system audit data path."
+- name: "LOW | RHEL-07-021330 | PATCH | The system must use a separate file system for the system audit data path."
   command: "true"
+  changed_when: no
+  when: rhel_07_021330
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-021260
+      - RHEL-07-021330
+      - notimplemented
 
-- name: "LOW | RHEL-07-021270 | PATCH | The system must use a separate file system for /tmp (or equivalent)."
+- name: "LOW | RHEL-07-021340 | PATCH | The system must use a separate file system for /tmp (or equivalent)."
   command: "true"
+  changed_when: no
+  when: rhel_07_021340
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-021270
+      - RHEL-07-021340
+      - notimplemented
 
 - name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
   command: "true"
+  changed_when: no
+  when: rhel_07_021600
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-021600
+      - notimplemented
 
 - name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes."
   command: "true"
+  changed_when: no
+  when: rhel_07_021610
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-021610
+      - notimplemented
 
-- name: "LOW | RHEL-07-040010 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
-  command: "true"
+- name: "LOW | RHEL-07-040000 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
+  lineinfile:
+    state: present
+    dest: /etc/security/limits.conf
+    insertbefore: '^# End of file'
+    regexp: '^#?\\*.*maxlogins'
+    line: '*           hard    maxlogins     {{ rhel7stig_maxlogins }}'
+  when: rhel_07_040000
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-040010
+      - RHEL-07-040000
 
-- name: "LOW | RHEL-07-040300 | PATCH | The system must display the date and time of the last successful account logon upon logon."
+- name: "LOW | RHEL-07-040530 | PATCH | The system must display the date and time of the last successful account logon upon logon."
   command: "true"
+  changed_when: no
+  when: rhel_07_040530
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-040300
+      - RHEL-07-040530
+      - notimplemented
 
-- name: "LOW | RHEL-07-040320 | PATCH | For systems using DNS resolution, at least two name servers must be configured."
+- name: "LOW | RHEL-07-040600 | PATCH | For systems using DNS resolution, at least two name servers must be configured."
   command: "true"
+  changed_when: no
+  when: rhel_07_040600
   tags:
       - cat3
       - low
       - patch
-      - RHEL-07-040320
+      - RHEL-07-040600
+      - notimplemented
 

@@ -1,42 +1,70 @@
 - name: Check OS version and family
-  fail:
-      msg: "This role can only be run agaist RHEL 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
-  when:
-      - ansible_os_family == 'RedHat'
-      - ansible_distribution_major_version | version_compare('7', '!=')
+  assert:
+      that: ansible_os_family == 'RedHat' and ansible_distribution_major_version | version_compare('7', '==')
+      msg: "This role can only be run against RHEL/CENTOS 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   tags:
       - always
 
 - name: Check ansible version
-  fail:
-      msg: You must use ansible 2.1 or greater
-  when: not ansible_version.full | version_compare('2.1', '>=')
+  assert:
+      that: ansible_version.full | version_compare(rhel7stig_min_ansible_version, '>=')
+      msg: You must use Ansible {{ rhel7stig_min_ansible_version }} or greater
   tags:
       - always
 
-- name: Run CAT I audits
-  include: audit-cat1.yml
+- include: prelim.yml
+  become: yes
   tags:
-      - cat1
-      - audit
+      - prelim_tasks
+      - always
+
+# - name: Run CAT I audits
+#   include: audit-cat1.yml
+#   static: no
+#   check_mode: no
+#   when: rhel7stig_cat1_audit | bool
+#   tags:
+#       - cat1
+#       - audit
+
+# - name: Run CAT II audits
+#   include: audit-cat2.yml
+#   check_mode: no
+#   static: no
+#   when: rhel7stig_cat2_audit | bool
+#   tags:
+#       - cat2
+#       - audit
+
+# - name: Run CAT III audits
+#   include: audit-cat3.yml
+#   static: no
+#   check_mode: no
+#   when: rhel7stig_cat3_audit | bool
+#   tags:
+#       - cat2
+#       - audit
 
 - name: Include CAT I patches
   include: fix-cat1.yml
-  when: rhel7stig_cat1_patch
+  static: no
+  when: rhel7stig_cat1_patch | bool
   tags:
       - cat1
       - patch
 
 - name: Include CAT II patches
   include: fix-cat2.yml
-  when: rhel7stig_cat2_patch
+  static: no
+  when: rhel7stig_cat2_patch | bool
   tags:
       - cat2
       - patch
 
 - name: Include CAT III patches
   include: fix-cat3.yml
-  when: rhel7stig_cat3_patch
+  static: no
+  when: rhel7stig_cat3_patch | bool
   tags:
       - cat3
       - patch

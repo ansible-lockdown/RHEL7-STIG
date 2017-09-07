@@ -1,0 +1,184 @@
+# - name: "PRELIM | RHEL-07-010010 | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
+#   shell: 'rpm -Va | grep ''^.M'''
+#   args:
+#     warn: no
+#   failed_when: no
+#   changed_when: no
+#   ignore_errors: yes
+#   register: rhel_07_010010_audit
+#   when: rhel_07_010010
+
+# - name: "PRELIM | RHEL-07-010020 | The cryptographic hash of system files and commands must match vendor values."
+#   shell: 'rpm -Va | grep ''^..5'' | grep -E ''/.?bin/'''
+#   args:
+#       warn: no
+#   failed_when: no
+#   changed_when: no
+#   ignore_errors: yes
+#   register: rhel_07_010020_audit
+#   when: rhel_07_010020
+
+# - name: "PRELIM | RHEL-07-020310 | The root account must be the only account having unrestricted access to the system"
+#   shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
+#   changed_when: no
+#   failed_when: no
+#   ignore_errors: yes
+#   register: rhel_07_020310_audit
+#   when: rhel_07_020310
+
+# - name: "PRELIM | RHEL-07-021350 | Check if prelink package is installed"
+#   command: rpm -q prelink
+#   args:
+#       warn: no
+#   changed_when: no
+#   failed_when: no
+#   register: rhel_07_021350_prelink_installed
+#   when: rhel_07_021350
+
+# - name: "PRELIM | RHEL-07-040540 | There must be no .shosts files on the system."
+#   find:
+#       paths: /
+#       recurse: yes
+#       hidden: yes
+#       patterns: '*.shosts'
+#   register: rhel_07_040540_audit
+#   when: rhel_07_040540
+#   tags:
+#       - cat1
+#       - high
+#       - audit
+#       - RHEL-07-040540
+
+# - name: "PRELIM | RHEL-07-040550 | There must be no shosts.equiv files on the system."
+#   find:
+#       paths: /
+#       recurse: yes
+#       patterns: shosts.equiv
+#   register: rhel_07_040550_audit
+#   when: rhel_07_040550
+#   tags:
+#       - cat1
+#       - high
+#       - audit
+#       - RHEL-07-040550
+
+# - name: "PRELIM | RHEL-07-040800 | SNMP community strings must be changed from the default."
+#   command: grep {{ item }} /etc/snmp/snmpd.conf
+#   failed_when: no
+#   changed_when: no
+#   ignore_errors: yes
+#   with_items:
+#       - public
+#       - private
+#   register: rhel_07_040800_audit
+#   when: rhel_07_040800
+#   tags:
+#       - cat1
+#       - high
+#       - audit
+#       - RHEL-07-040800
+#       - snmp
+
+- name: "PRELIM | RHEL-07-010240 | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
+  command: "awk -F: '$4 < 1 {print $1}' /etc/shadow"
+  register: rhel_07_010240_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  when: rhel_07_010240
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-010240
+
+- name: "PRELIM | RHEL-07-010260 | Existing passwords must be restricted to a 60-day maximum lifetime."
+  command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
+  register: rhel_07_010260_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  when: rhel_07_010260
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-010260
+
+- name: "PRELIM | RHEL-07-020320 | All files and directories must have a valid owner."
+  command: find / -xdev -fstype xfs -nouser
+  register: rhel_07_020320_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  when: rhel_07_020320
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-020320
+
+- name: "PRELIM | RHEL-07-020330 | All files and directories must have a valid group owner."
+  command: find / -xdev -fstype xfs -nogroup
+  register: rhel_07_020330_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  when: rhel_07_020330
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-020330
+
+- name: "PRELIM | RHEL-07-040180 | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+  command: grep -i useldapauth /etc/sysconfig/authconfig
+  register: rhel_07_040180_audit
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  when: rhel_07_040180
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-040180
+      - ldap
+
+- name: "PRELIM | RHEL-07-040410 | The SSH public host key files must have mode 0644 or less permissive."
+  find:
+      paths: /
+      recurse: yes
+      file_type: file
+      patterns: '*.pub'
+      hidden: true
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_040410_audit
+  when: rhel_07_040410
+  tags:
+      - cat2
+      - high
+      - audit
+      - RHEL-07-040410
+      - ssh
+
+- name: "PRELIM | RHEL-07-040420 | The SSH private host key files must have mode 0600 or less permissive."
+  find:
+      paths: /
+      recurse: yes
+      file_type: file
+      patterns: '*ssh_host*key'
+      hidden: true
+  failed_when: no
+  changed_when: no
+  ignore_errors: yes
+  register: rhel_07_040420_audit
+  when: rhel_07_040420
+  tags:
+      - cat2
+      - high
+      - audit
+      - RHEL-07-040420
+      - ssh

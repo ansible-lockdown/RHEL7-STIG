@@ -1,1 +1,4 @@
 *.pyc
+*.retry
+.vagrant
+tests/*redhat-subscription

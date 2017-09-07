@@ -1,13 +1,12 @@
-- name: restart ssh
+- name: restart sshd
   service:
     name: sshd
     state: restarted
 
 - name: reboot system
   shell: sleep 3; reboot
-  async: 0
+  async: 15
   poll: 0
-  ignore_errors: yes
 
 - name: restart snmpd
   service:
@@ -16,3 +15,15 @@
 
 - name: make grub2 config
   command: grub2-mkconfig --output=/etc/grub2.cfg
+
+- name: "restart {{ rhel7stig_time_service }}"
+  service:
+      name: "{{ rhel7stig_time_service }}"
+      state: restarted
+
+- name: init aide
+  command: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
+  async: 45
+  poll: 0
+  tags:
+    - aide

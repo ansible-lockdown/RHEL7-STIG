@@ -1,4 +1,14 @@
-- hosts: localhost
-  remote_user: root
+- hosts: all
+  become: yes
+  become_method: sudo
+
+  pre_tasks:
+  - name: OS
+    debug:
+      var: "{{item}}"
+    with_items:
+      - ansible_os_family
+      - ansible_distribution_major_version
+
   roles:
-    - ansible-role-rhel7-stig
+    - ../../RHEL7-STIG
