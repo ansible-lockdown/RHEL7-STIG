@@ -1,7 +1,7 @@
-[![Galaxy](https://img.shields.io/badge/galaxy-MindPointGroup.RHEL7--STIG-blue.svg?style=flat)](https://galaxy.ansible.com/MindPointGroup/RHEL7-STIG)
-[![Build Status](https://travis-ci.org/MindPointGroup/RHEL7-STIG.svg?branch=devel)](https://travis-ci.org/MindPointGroup/RHEL7-STIG)
 RHEL 7 DISA STIG
 ================
+[![Galaxy](https://img.shields.io/badge/galaxy-MindPointGroup.RHEL7--STIG-blue.svg?style=flat)](https://galaxy.ansible.com/MindPointGroup/RHEL7-STIG)
+[![Build Status](https://travis-ci.org/MindPointGroup/RHEL7-STIG.svg?branch=devel)](https://travis-ci.org/MindPointGroup/RHEL7-STIG)
 
 **This role is still under active development.**
 
