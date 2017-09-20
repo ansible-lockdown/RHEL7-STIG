@@ -69,7 +69,7 @@
       - high
       - patch
       - RHEL-07-010300
-      - sshd
+      - ssh
 
 - name: "HIGH | RHEL-07-010440 | PATCH | The operating system must not allow an unattended or automatic logon to the system."
   lineinfile:
