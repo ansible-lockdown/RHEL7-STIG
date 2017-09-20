@@ -1995,6 +1995,7 @@
       - medium
       - patch
       - RHEL-07-040400
+      - ssh
 
 - name: "MEDIUM | RHEL-07-040410 | PATCH | The SSH public host key files must have mode 0644 or less permissive."
   file:
