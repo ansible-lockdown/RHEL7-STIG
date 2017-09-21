@@ -18,9 +18,10 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 RUN yum -y install epel-release openssh-server audit authconfig
 RUN yum -y install git ansible sudo anacron python2-pip
 RUN yum clean all
-RUN pip install passlib
+RUN pip install -U passlib
 
 # Fix for Travis docker containers
+RUN ssh-keygen -f /etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
 RUN mkdir /var/log/audit; chmod 700 /var/log/audit;
 
 # Disable requiretty
