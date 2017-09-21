@@ -61,7 +61,7 @@
       dest: /etc/ssh/sshd_config
       regexp: ^#?PermitEmptyPasswords
       line: PermitEmptyPasswords no
-      validate: sshd -tf %s
+      validate: /usr/sbin/sshd -tf %s
   notify: restart sshd
   when: rhel_07_010300
   tags:
@@ -334,7 +334,7 @@
       dest: /etc/ssh/sshd_config
       regexp: (?i)^#?protocol
       line: Protocol 2
-      validate: sshd -t -f %s
+      validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   when: rhel_07_040390
   tags:
@@ -425,7 +425,7 @@
       dest: /etc/ssh/sshd_config
       regexp: (?i)^#?x11forwarding
       line: X11Forwarding yes
-      validate: sshd -t -f %s
+      validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   when: rhel_07_040710
   tags:
