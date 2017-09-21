@@ -21,6 +21,7 @@ RUN yum clean all
 RUN pip install passlib
 
 # Fix for Travis docker containers
+RUN ssh-keygen -f /etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
 RUN mkdir /var/log/audit; chmod 700 /var/log/audit;
 
 # Disable requiretty
