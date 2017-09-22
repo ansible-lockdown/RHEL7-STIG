@@ -8,7 +8,7 @@ RHEL 7 DISA STIG
 Configure a RHEL 7 system to be DISA STIG compliant. CAT I findings will be corrected and audited by default. CAT II and III findings can be enabled by setting the appropriate variables to `yes`.
 
 
-This role is based on RHEL 7 DISA STIG: [Version 1, Rel 1 released on March 13, 2017](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx).
+This role is based on RHEL 7 DISA STIG: [Version 1, Rel 2 released on July 28, 2017](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx).
 
 
 Requirements
