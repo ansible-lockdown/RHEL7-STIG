@@ -543,8 +543,8 @@
   lineinfile:
     state: present
     create: yes
-    line: install usb-storage /bin/true
-    dest: /etc/modprobe.d/disable-usb.conf
+    line: '^blacklist usb-storage$'
+    dest: /etc/modprobe.d/blacklist.conf
     owner: root
     group: root
     mode: "0644"
