@@ -1869,7 +1869,6 @@
       - RHEL-07-040320
       - ssh
 
-#note there is a typo in the fix steps in the STIG
 - name: "MEDIUM | RHEL-07-040330 | PATCH | The SSH daemon must not allow authentication using RSA rhosts authentication."
   lineinfile:
       dest: /etc/ssh/sshd_config
