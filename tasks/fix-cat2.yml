@@ -1791,17 +1791,26 @@
       - RHEL-07-040170
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-  command: "true"
-  changed_when: no
-  when:
-      - "'yes' in rhel_07_040180_audit.stdout"
-      - rhel_07_040180
+- block:
+    - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+      command: grep -i useldapauth /etc/sysconfig/authconfig
+      register: rhel_07_040180_audit
+      failed_when: no
+      changed_when: no
+      ignore_errors: yes
+      check_mode: no
+
+    - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+      command: "true"
+      changed_when: no
+      when: "'yes' in rhel_07_040180_audit.stdout"
+  when: rhel_07_040180
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040180
+      - ldap
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-040190 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."

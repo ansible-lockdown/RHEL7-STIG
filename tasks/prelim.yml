@@ -131,19 +131,19 @@
       - audit
       - RHEL-07-020330
 
-- name: "PRELIM | RHEL-07-040180 | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-  command: grep -i useldapauth /etc/sysconfig/authconfig
-  register: rhel_07_040180_audit
-  failed_when: no
-  changed_when: no
-  ignore_errors: yes
-  when: rhel_07_040180
-  tags:
-      - cat2
-      - medium
-      - audit
-      - RHEL-07-040180
-      - ldap
+# - name: "PRELIM | RHEL-07-040180 | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+#   command: grep -i useldapauth /etc/sysconfig/authconfig
+#   register: rhel_07_040180_audit
+#   failed_when: no
+#   changed_when: no
+#   ignore_errors: yes
+#   when: rhel_07_040180
+#   tags:
+#       - cat2
+#       - medium
+#       - audit
+#       - RHEL-07-040180
+#       - ldap
 
 - name: "PRELIM | RHEL-07-040410 | The SSH public host key files must have mode 0644 or less permissive."
   find:
