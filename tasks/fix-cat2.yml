@@ -480,7 +480,7 @@
       dest: /etc/ssh/sshd_config
       regexp: '^#?HostbasedAuthentication'
       line: HostbasedAuthentication no
-      validate: sshd -t -f %s
+      validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   tags:
       - cat2
