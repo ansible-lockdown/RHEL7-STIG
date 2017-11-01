@@ -1,0 +1,7 @@
+[baseline_hosts]
+centos7 ansible_port=2200  ansible_ssh_private_key_file=.vagrant/machines/centos7-stig/virtualbox/private_key
+rhel7 ansible_port=2201 ansible_ssh_private_key_file=.vagrant/machines/rhel7-stig/virtualbox/private_key
+
+[baseline_hosts:vars]
+ansible_host=127.0.0.1
+ansible_user=vagrant
