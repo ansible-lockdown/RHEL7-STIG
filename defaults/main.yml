@@ -365,3 +365,9 @@ rhel7stig_logon_banner: |
 # Password complexity settings
 rhel7stig_password_complexity:
   maxrepeat: 3
+
+# RHEL-07-040160
+# Session timeout setting file (TMOUT setting can be set in multiple files)
+rhel7stig_shell_session_timeout:
+  file: /etc/profile
+  timeout: 600
