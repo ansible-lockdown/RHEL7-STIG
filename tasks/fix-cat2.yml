@@ -578,6 +578,22 @@
       - RHEL-07-020100
       - usb_devices
 
+- name: "MEDIUM | RHEL-07-020101 | PATCH | The Datagram Congestion Control Protocol (DCCP) kernel module must be disabled unless required."
+  lineinfile:
+    state: present
+    create: yes
+    line: '^install dccp /bin/true$'
+    dest: /etc/modprobe.d/nodccp
+    owner: root
+    group: root
+    mode: "0644"
+  when: rhel_07_020101
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-020101
+      - dccp
 
 - name: "MEDIUM | RHEL-07-020110 | PATCH | File system automounter must be disabled unless required."
   shell: "systemctl show autofs | grep LoadState | cut -d = -f 2"
