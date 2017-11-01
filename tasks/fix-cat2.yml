@@ -500,6 +500,17 @@
       - RHEL-07-010470
       - ssh
 
+- name: "MEDIUM | RHEL-07-010481 | PATCH | The operating system must require authentication upon booting into single-user and maintenance modes."
+  command: "true"
+  changed_when: no
+  when: rhel_07_010481
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-010481
+      - notimplemented
+
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
   command: "true"
   changed_when: no

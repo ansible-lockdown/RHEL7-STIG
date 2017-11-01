@@ -79,6 +79,7 @@ rhel_07_010350: true
 rhel_07_010430: true
 rhel_07_010460: true
 rhel_07_010470: true
+rhel_07_010481: true
 rhel_07_010500: true
 rhel_07_020020: true
 rhel_07_020030: true
@@ -358,3 +359,7 @@ rhel7stig_logon_banner: |
     * ASSISTANTS.   SUCH   COMMUNICATIONS  AND  WORK   PRODUCT  ARE  PRIVATE  AND *
     * CONFIDENTIAL. SEE USER AGREEMENT FOR DETAILS.                               *
     *******************************************************************************
+
+# Password complexity settings
+rhel7stig_password_complexity:
+  maxrepeat: 3
