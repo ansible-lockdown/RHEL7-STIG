@@ -8,13 +8,14 @@ RHEL 7 DISA STIG
 Configure a RHEL 7 system to be DISA STIG compliant. CAT I findings will be corrected and audited by default. CAT II and III findings can be enabled by setting the appropriate variables to `yes`.
 
 
-This role is based on RHEL 7 DISA STIG: [Version 1, Rel 2 released on July 28, 2017](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx).
+This role is based on RHEL 7 DISA STIG: [Version 1, Rel 3 released on October 27, 2017](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx).
 
 
 Requirements
 ------------
 
-RHEL 7. Other versions are not supported.
+RHEL 7 or CentOS 7 - Other versions are not supported.
+
 `passlib` >= 1.7 on the control node
 
 Role Variables
@@ -22,22 +23,31 @@ Role Variables
 
 | Name              | Default Value       | Description          |
 |-------------------|---------------------|----------------------|
-| `rhel7stig_cat1_audit` | `yes` | Audit for CAT I findings      |
-| `rhel7stig_cat2_audit` | `no`  | Audit for CAT II findings     |
-| `rhel7stig_cat3_audit` | `no`  | Audit for CAT III findings    |
 | `rhel7stig_cat1_patch` | `yes` | Correct CAT I findings        |
-| `rhel7stig_cat2_patch` | `no`  | Correct CAT II findings       |
-| `rhel7stig_cat3_patch` | `no`  | Correct CAT III findings      |
+| `rhel7stig_cat2_patch` | `yes`  | Correct CAT II findings       |
+| `rhel7stig_cat3_patch` | `yes`  | Correct CAT III findings      |
+| `rhel_07_######` | [see defaults/main.yml](./defaults/main.yml)  | Individual variables to enable/disable each STIG ID. |
 | `rhel7stig_gui` | `no` | Whether or not to run tasks related to auditing/patching the desktop environment |
-| `rhel7stig_av_package` | `no` | Anti-virus package(s) to install and service to start and enable. |
-| `rhel7stig_antivirus_required` | `no` | Weather or not an antivirus must be installed |
+| `rhel7stig_system_is_router` | `no` | Run tasks that disable router functions. |
+| `rhel7stig_antivirus_required` | `no` | Run tasks related to Anit-Virus package installation. |
+| `rhel7stig_av_package` | [see defaults/main.yml](./defaults/main.yml) | Anti-virus package(s) to install and service to start and enable. |
 | `rhel7stig_time_service` | `chronyd` | Set to `ntpd` or `chronyd`. |
+| `rhel7stig_time_service_configs` | [see defaults/main.yml](./defaults/main.yml) | Time service packages and service configs. |
 | `rhel7stig_firewall_service` | `firewalld` | Set to `firewalld` or `iptables`. |
 | `rhel7stig_lftpd_required` | `no` | If set to `no`, remove `lftpd`. |
 | `rhel7stig_tftp_required` | `no` | If set to `no`, remove `tftp` client and server packages. |
+| `rhel7stig_autofs_required` | `no` | If set to `no`, disable `autofs` service. |
+| `rhel7stig_kdump_required` | `no` | If set to `no`, disable `kdump` service. |
 | `rhel7stig_snmp_community` | `Endgam3Ladyb0g` | SNMP community string that will replace `public` and `private` in `snmpd.conf`. |
 | `rhel7stig_bootloader_password` | `Boot1tUp!` | GRUB2 bootloader password. This should be stored in an Ansible Vault. |
-| `rhel7stig_logon_banner` | `[see defaults/main.yml]` | Logon banner displayed when logging in to the system. Defaults to nicely formatted standard logon banner. |
+| `rhel7stig_boot_superuser` | `root` | Used to set the boot superuser in the GRUB2 config. |
+| `rhel7stig_boot_password_config` | [see defaults/main.yml](./defaults/main.yml) | GRUB2 bootloader password configuration. |
+| `rhel7stig_aide_cron` | [see defaults/main.yml](./defaults/main.yml) | AIDE Cron settings |
+| `rhel7stig_maxlogins` | `10` | Set maximum number of simultaneous system logins (RHEL-07-040000) |
+| `rhel7stig_logon_banner` | [see defaults/main.yml](./defaults/main.yml) | Logon banner displayed when logging in to the system. Defaults to nicely formatted standard logon banner. |
+| `rhel7stig_password_complexity` | `see below for specific settings` | Dictionary of password complexity settings |
+| `rhel7stig_password_complexity.maxrepeat` | `3` | Maximum number of allowed same consecutive characters in a new password. |
+| `rhel7stig_shell_session_timeout` | `file: /etc/profile` `timeout: 600` | Dictionary of session timeout setting and file (TMOUT setting can be set in multiple files) |
 
 Dependencies
 ------------
