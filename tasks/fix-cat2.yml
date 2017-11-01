@@ -1873,6 +1873,22 @@
       - RHEL-07-040200
       - notimplemented
 
+- name: "MEDIUM | RHEL-07-040201 | PATCH | The operating system must implement virtual address space randomization."
+  sysctl:
+      name: kernel.randomize_va_space
+      value: 2
+      state: present
+      reload: yes
+      sysctl_set: yes
+      ignoreerrors: yes
+  when: rhel_07_040201
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-040201
+      - sysctl
+
 - name: "MEDIUM | RHEL-07-040300 | PATCH | All networked systems must have SSH installed."
   yum:
       name:
