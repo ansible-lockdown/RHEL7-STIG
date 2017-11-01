@@ -70,6 +70,17 @@
       - RHEL-07-010060
       - notimplemented
 
+- name: "MEDIUM | RHEL-07-010061 | PATCH | The operating system must uniquely identify and must authenticate users using multifactor authentication via a graphical user logon."
+  command: "true"
+  changed_when: no
+  when: rhel_07_010061
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-010061
+      - notimplemented
+
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   command: "true"
   changed_when: no
