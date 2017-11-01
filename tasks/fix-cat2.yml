@@ -1926,17 +1926,10 @@
 
 - name: "MEDIUM | RHEL-07-040360 | PATCH | The system must display the date and time of the last successful account logon upon an SSH logon."
   lineinfile:
-      dest: "{{ item.dest }}"
-      regexp: "{{ item.regexp}}"
-      line: "{{ item.line }}"
-      insertbefore: BOF
-  with_items:
-      -   dest: '/etc/ssh/sshd_config'
-          regexp: '^#?PrintLastLog'
-          line: 'PrintLastLog yes'
-      -   dest: '/etc/pam.d/sshd'
-          regexp: '^#?session required pam_lastlog.so'
-          line: 'session required pam_lastlog.so showfailed'
+      dest: /etc/ssh/sshd_config
+      regexp: ^#?PrintLastLog
+      line: PrintLastLog yes
+      validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   when: rhel_07_040360
   tags:
