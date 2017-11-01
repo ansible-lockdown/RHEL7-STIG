@@ -253,13 +253,12 @@
       - patch
       - RHEL-07-010170
 
-#note there is a typo in the fix steps in the STIG
-- name: "MEDIUM | RHEL-07-010180 | PATCH | When passwords are changed the number of repeating consecutive characters must not be more than four characters."
+- name: "MEDIUM | RHEL-07-010180 | PATCH | When passwords are changed the number of repeating consecutive characters must not be more than three characters."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxrepeat'
-      line: maxrepeat = 4
+      line: "maxrepeat = {{rhel7stig_password_complexity.maxrepeat|default('3')}}"
   when: rhel_07_010180
   tags:
       - cat2
