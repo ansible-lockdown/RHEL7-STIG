@@ -906,29 +906,22 @@
       - RHEL-07-021120
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
-  shell: "systemctl show kdump | grep LoadState | cut -d = -f 2"
-  register: rhel_07_021300_kdump_service_status
-  changed_when: no
-  check_mode: no
-  when:
-      - rhel_07_021300
-      - not rhel7stig_kdump_required
-  tags:
-      - cat2
-      - medium
-      - patch
-      - RHEL-07-021300
+- block:
+    - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
+      shell: "systemctl show kdump | grep LoadState | cut -d = -f 2"
+      register: rhel_07_021300_kdump_service_status
+      changed_when: no
+      check_mode: no
 
-- name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
-  service:
-    name: kdump
-    enabled: no
-    state: stopped
-  when:
-      - rhel_07_021300
-      - rhel_07_021300_kdump_service_status.stdout == "loaded"
-      - not rhel7stig_kdump_required
+    - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
+      service:
+        name: kdump
+        enabled: no
+        state: stopped
+      when:
+        - rhel_07_021300_kdump_service_status.stdout == "loaded"
+        - not rhel7stig_kdump_required
+  when: rhel_07_021300
   tags:
       - cat2
       - medium
