@@ -180,78 +180,84 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ucredit'
-      line: ucredit = -1
+      line: "ucredit = {{rhel7stig_password_complexity.ucredit|default('-1')}}"
   when: rhel_07_010120
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010120
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010130 | PATCH | When passwords are changed or new passwords are established, the new password must contain at least one lower-case character."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*lcredit'
-      line: lcredit = -1
+      line: "lcredit = {{rhel7stig_password_complexity.lcredit|default('-1')}}"
   when: rhel_07_010130
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010130
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010140 | PATCH | When passwords are changed or new passwords are assigned, the new password must contain at least one numeric character."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*dcredit'
-      line: dcredit = -1
+      line: "dcredit = {{rhel7stig_password_complexity.dcredit|default('-1')}}"
   when: rhel_07_010140
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010140
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010150 | PATCH | When passwords are changed or new passwords are assigned, the new password must contain at least one special character."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ocredit'
-      line: ocredit = -1
+      line: "ocredit = {{rhel7stig_password_complexity.ocredit|default('-1')}}"
   when: rhel_07_010150
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010150
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010160 | PATCH | When passwords are changed a minimum of eight of the total number of characters must be changed."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*difok'
-      line: difok = 8
+      line: "difok = {{rhel7stig_password_complexity.difok|default('8')}}"
   when: rhel_07_010160
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010160
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010170 | PATCH | When passwords are changed a minimum of four character classes must be changed."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minclass'
-      line: minclass = 4
+      line: "minclass = {{rhel7stig_password_complexity.minclass|default('4')}}"
   when: rhel_07_010170
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010170
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010180 | PATCH | When passwords are changed the number of repeating consecutive characters must not be more than three characters."
   lineinfile:
@@ -265,19 +271,21 @@
       - medium
       - patch
       - RHEL-07-010180
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010190 | PATCH | When passwords are changed the number of repeating characters of the same character class must not be more than four characters."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxclassrepeat'
-      line: maxclassrepeat = 4
+      line: "maxclassrepeat = {{rhel7stig_password_complexity.maxclassrepeat|default('4')}}"
   when: rhel_07_010190
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010190
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010200 | PATCH | The PAM system service must be configured to store only encrypted representations of passwords."
   pamd:
@@ -393,14 +401,15 @@
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '^#?minlen'
-      line: minlen = 15
+      regexp: '^#?\s*minlen'
+      line: "minlen = {{rhel7stig_password_complexity.minlen|default('15')}}"
   when: rhel_07_010280
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010280
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010310 | PATCH | The operating system must disable account identifiers (individuals, groups, roles, and devices) if the password expires."
   lineinfile:
