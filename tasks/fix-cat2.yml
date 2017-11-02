@@ -70,6 +70,17 @@
       - RHEL-07-010060
       - notimplemented
 
+- name: "MEDIUM | RHEL-07-010061 | PATCH | The operating system must uniquely identify and must authenticate users using multifactor authentication via a graphical user logon."
+  command: "true"
+  changed_when: no
+  when: rhel_07_010061
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-010061
+      - notimplemented
+
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   command: "true"
   changed_when: no
@@ -242,13 +253,12 @@
       - patch
       - RHEL-07-010170
 
-#note there is a typo in the fix steps in the STIG
-- name: "MEDIUM | RHEL-07-010180 | PATCH | When passwords are changed the number of repeating consecutive characters must not be more than four characters."
+- name: "MEDIUM | RHEL-07-010180 | PATCH | When passwords are changed the number of repeating consecutive characters must not be more than three characters."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxrepeat'
-      line: maxrepeat = 4
+      line: "maxrepeat = {{rhel7stig_password_complexity.maxrepeat|default('3')}}"
   when: rhel_07_010180
   tags:
       - cat2
@@ -489,6 +499,17 @@
       - RHEL-07-010470
       - ssh
 
+- name: "MEDIUM | RHEL-07-010481 | PATCH | The operating system must require authentication upon booting into single-user and maintenance modes."
+  command: "true"
+  changed_when: no
+  when: rhel_07_010481
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-010481
+      - notimplemented
+
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
   command: "true"
   changed_when: no
@@ -556,6 +577,22 @@
       - RHEL-07-020100
       - usb_devices
 
+- name: "MEDIUM | RHEL-07-020101 | PATCH | The Datagram Congestion Control Protocol (DCCP) kernel module must be disabled unless required."
+  lineinfile:
+    state: present
+    create: yes
+    line: '^install dccp /bin/true$'
+    dest: /etc/modprobe.d/nodccp
+    owner: root
+    group: root
+    mode: "0644"
+  when: rhel_07_020101
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-020101
+      - dccp
 
 - name: "MEDIUM | RHEL-07-020110 | PATCH | File system automounter must be disabled unless required."
   shell: "systemctl show autofs | grep LoadState | cut -d = -f 2"
@@ -1759,12 +1796,27 @@
       - RHEL-07-040110
       - ssh
 
-- name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
-  lineinfile:
-      create: yes
-      dest: /etc/profile
-      regexp: ^#?TMOUT
-      line: TMOUT=600
+- block:
+    - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
+      lineinfile:
+        create: yes
+        dest: "{{ rhel7stig_shell_session_timeout.file }}"
+        regexp: ^#?TMOUT
+        line: "TMOUT={{rhel7stig_shell_session_timeout.timeout}}"
+
+    - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
+      lineinfile:
+        create: yes
+        dest: "{{ rhel7stig_shell_session_timeout.file }}"
+        regexp: ^#?readonly TMOUT$
+        line: readonly TMOUT
+
+    - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
+      lineinfile:
+        create: yes
+        dest: "{{ rhel7stig_shell_session_timeout.file }}"
+        regexp: ^#?export TMOUT$
+        line: export TMOUT
   when: rhel_07_040160
   tags:
       - cat2
@@ -1827,6 +1879,22 @@
       - patch
       - RHEL-07-040200
       - notimplemented
+
+- name: "MEDIUM | RHEL-07-040201 | PATCH | The operating system must implement virtual address space randomization."
+  sysctl:
+      name: kernel.randomize_va_space
+      value: 2
+      state: present
+      reload: yes
+      sysctl_set: yes
+      ignoreerrors: yes
+  when: rhel_07_040201
+  tags:
+      - cat2
+      - medium
+      - patch
+      - RHEL-07-040201
+      - sysctl
 
 - name: "MEDIUM | RHEL-07-040300 | PATCH | All networked systems must have SSH installed."
   yum:

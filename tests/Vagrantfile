@@ -1,29 +1,32 @@
-Vagrant.configure(2) do |config|
+Vagrant.configure("2") do |config|
 
   # CentOS 7
-  config.vm.define "rhel7stig-centos7" do |centos7|
+  config.vm.define "centos7-stig" do |centos7|
     centos7.vm.box = "samdoran/centos7"
-    centos7.vm.hostname = "rhel7stig-centos7"
+    centos7.vm.hostname = "centos7-stig"
+    centos7.vm.network "forwarded_port", guest: 22, host: 2200, id: 'ssh'
     config.vm.provider "virtualbox" do |vbox|
-      vbox.name = "rhel7stig-el7"
+      vbox.name = "centos7-stig"
       vbox.cpus = 2
       vbox.memory = 512
     end
   end
 
   # RHEL 7
-  config.vm.define "rhel7stig-rhel7" do |node|
-    node.vm.box = "samdoran/rhel7"
-    node.vm.provider :virtualbox do |vbox|
-      vbox.name = "rhel7stig-rhel7"
+  config.vm.define "rhel7-stig" do |rhel7|
+    rhel7.vm.box = "samdoran/rhel7"
+    rhel7.vm.hostname = "rhel7-stig"
+    rhel7.vm.network "forwarded_port", guest: 22, host: 2201, id: 'ssh'
+    config.vm.provider "virtualbox" do |vbox|
+      vbox.name = "rhel7-stig"
       vbox.cpus = 2
       vbox.memory = 512
     end
-    node.vm.hostname = "rhel7stig-rhel7"
   end
 
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "vagrant.yml"
+  config.vm.provision "apply_stig", type: "ansible" do |play|
+    play.playbook = "vagrant_provision.yml"
+    play.extra_vars = "extra_vars_vagrant.yml"
   end
 
 end

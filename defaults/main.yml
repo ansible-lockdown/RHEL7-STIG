@@ -44,6 +44,7 @@ rhel_07_010030: true
 rhel_07_010040: true
 rhel_07_010050: true
 rhel_07_010060: true
+rhel_07_010061: true
 rhel_07_010070: true
 rhel_07_010080: true
 rhel_07_010081: true
@@ -78,11 +79,13 @@ rhel_07_010350: true
 rhel_07_010430: true
 rhel_07_010460: true
 rhel_07_010470: true
+rhel_07_010481: true
 rhel_07_010500: true
 rhel_07_020020: true
 rhel_07_020030: true
 rhel_07_020040: true
 rhel_07_020100: true
+rhel_07_020101: true
 rhel_07_020110: true
 rhel_07_020240: true
 rhel_07_020260: true
@@ -195,6 +198,7 @@ rhel_07_040170: true
 rhel_07_040180: true
 rhel_07_040190: true
 rhel_07_040200: true
+rhel_07_040201: true
 rhel_07_040300: true
 rhel_07_040310: true
 rhel_07_040320: true
@@ -357,3 +361,13 @@ rhel7stig_logon_banner: |
     * ASSISTANTS.   SUCH   COMMUNICATIONS  AND  WORK   PRODUCT  ARE  PRIVATE  AND *
     * CONFIDENTIAL. SEE USER AGREEMENT FOR DETAILS.                               *
     *******************************************************************************
+
+# Password complexity settings
+rhel7stig_password_complexity:
+  maxrepeat: 3
+
+# RHEL-07-040160
+# Session timeout setting file (TMOUT setting can be set in multiple files)
+rhel7stig_shell_session_timeout:
+  file: /etc/profile
+  timeout: 600
