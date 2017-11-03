@@ -182,3 +182,13 @@
       - audit
       - RHEL-07-040420
       - ssh
+
+- name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Install AIDE"
+  yum:
+      name: aide
+      state: present
+  notify: init aide
+  when: rhel_07_020030 or rhel_07_020040 or rhel_07_021620 or rhel_07_021610 or rhel_07_021600
+  tags:
+      - patch
+      - aide

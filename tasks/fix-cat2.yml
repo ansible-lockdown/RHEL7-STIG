@@ -541,31 +541,21 @@
       - RHEL-07-020020
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-020030 | PATCH | A file integrity tool must verify the baseline operating system configuration at least weekly."
+- name: |
+        "MEDIUM | RHEL-07-020030 | PATCH | A file integrity tool must verify the baseline operating system configuration at least weekly."
+        "MEDIUM | RHEL-07-020040 | PATCH | Designated personnel must be notified if baseline configurations are changed in an unauthorized manner."
   cron:
-      name: 'Run AIDE integrity check weekly'
+      name: 'Run AIDE integrity check {{ rhel7stig_aide_cron.special_time }}'
       user: "{{ rhel7stig_aide_cron.user }}"
       cron_file: "{{ rhel7stig_aide_cron.cron_file }}"
-      job: "{{ rhel7stig_aide_cron.job }}"
+      job: "{{ rhel7stig_aide_cron.job + ((rhel7stig_aide_cron.notify_by_mail) | ternary(rhel7stig_aide_cron.notify_cmd,'')) }}"
       special_time: "{{ rhel7stig_aide_cron.special_time }}"
-  when: rhel_07_020030
+  when: rhel_07_020030 or rhel_07_020040
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020030
-      - aide
-
-- name: "MEDIUM | RHEL-07-020040 | PATCH | Designated personnel must be notified if baseline configurations are changed in an unauthorized manner."
-  yum:
-      name: aide
-      state: present
-  notify: init aide
-  when: rhel_07_020040
-  tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020040
       - aide
 
