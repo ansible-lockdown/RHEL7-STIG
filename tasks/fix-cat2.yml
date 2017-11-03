@@ -1845,27 +1845,16 @@
       - RHEL-07-040110
       - ssh
 
-- block:
-    - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
-      lineinfile:
-        create: yes
-        dest: "{{ rhel7stig_shell_session_timeout.file }}"
-        regexp: ^#?TMOUT
-        line: "TMOUT={{rhel7stig_shell_session_timeout.timeout}}"
-
-    - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
-      lineinfile:
-        create: yes
-        dest: "{{ rhel7stig_shell_session_timeout.file }}"
-        regexp: ^#?readonly TMOUT$
-        line: readonly TMOUT
-
-    - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
-      lineinfile:
-        create: yes
-        dest: "{{ rhel7stig_shell_session_timeout.file }}"
-        regexp: ^#?export TMOUT$
-        line: export TMOUT
+- name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
+  blockinfile:
+      create: yes
+      dest: "{{ rhel7stig_shell_session_timeout.file }}"
+      marker: "# {mark} ANSIBLE MANAGED"
+      block: |
+        # Set session timeout - STIG ID RHEL-07-040160
+        TMOUT={{rhel7stig_shell_session_timeout.timeout}}
+        readonly TMOUT
+        export TMOUT
   when: rhel_07_040160
   tags:
       - cat2
