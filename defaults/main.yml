@@ -379,3 +379,17 @@ rhel7stig_password_complexity:
 rhel7stig_shell_session_timeout:
   file: /etc/profile
   timeout: 600
+
+# RHEL-07-020260
+# Configure regular automatic package updates using yum-cron
+# update_cmd options:
+# default                            = yum upgrade
+# security                           = yum --security upgrade
+# security-severity:Critical         = yum --sec-severity=Critical upgrade
+# minimal                            = yum --bugfix upgrade-minimal
+# minimal-security                   = yum --security upgrade-minimal
+# minimal-security-severity:Critical =  --sec-severity=Critical upgrade-minimal
+rhel7stig_auto_package_updates:
+  enabled: yes
+  update_cmd: "minimal-security"
+  frequency: daily

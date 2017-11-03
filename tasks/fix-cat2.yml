@@ -643,15 +643,55 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date."
-  command: "true"
-  changed_when: no
+  block: 
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Install yum-cron"
+      yum:
+          name: yum-cron
+          state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
+          enablerepo: "{{ (ansible_distribution == 'RedHat') | ternary('rhel-7-server-optional-rpms','') }}"
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify yum-cron config file exists"
+      stat:
+          path: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+      check_mode: no
+      register: yum_cron_config_file
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Enable/disable automatic updates in the appropriate yum-cron.conf file."
+      lineinfile:
+          dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+          regexp: "^apply_updates"
+          line: "apply_updates = {{ (rhel7stig_auto_package_updates.enabled) | ternary('yes','no')}}"
+          state: present
+      when: yum_cron_config_file.stat.exists
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Set update command to configured setting."
+      lineinfile:
+          dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+          regexp: "^update_cmd"
+          line: "update_cmd = {{rhel7stig_auto_package_updates.update_cmd|default('minimal-security')}}"
+          state: present
+      when: yum_cron_config_file.stat.exists
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify the yum-cron service exists"
+      shell: "systemctl show yum-cron | grep LoadState | cut -d = -f 2"
+      register: rhel_07_020260_yumcron_service_status
+      changed_when: no
+      check_mode: no
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Set the yum-cron service state"
+      service:
+        name: yum-cron
+        enabled: "{{ rhel7stig_auto_package_updates.enabled }}"
+        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('started','stopped')}}"
+      when: rhel_07_020260_yumcron_service_status.stdout == "loaded"
+
   when: rhel_07_020260
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020260
-      - notimplemented
+      - packaging
 
 - name: "MEDIUM | RHEL-07-020270 | PATCH | The system must not have unnecessary accounts."
   command: "true"
