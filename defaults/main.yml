@@ -400,3 +400,12 @@ rhel7stig_auto_package_updates:
   enabled: yes
   update_cmd: "minimal-security"
   frequency: daily
+
+# RHEL-07-010320
+# RHEL-07-010330
+# pam_faillock settings - accounts must be locked for max time period after 3 unsuccessful attempts within 15 minutes.
+rhel7stig_pam_faillock:
+  attempts: 3
+  interval: 900
+  unlock_time: 604800
+  fail_for_root: yes
