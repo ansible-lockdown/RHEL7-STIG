@@ -443,7 +443,7 @@
       with_items:
           - "system-auth"
           - "password-auth"
-    
+
     - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
       pamd:
           name: "{{ item }}"
