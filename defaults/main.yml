@@ -409,3 +409,7 @@ rhel7stig_pam_faillock:
   interval: 900
   unlock_time: 604800
   fail_for_root: yes
+
+# RHEL-07-040670
+# Network interface promiscuous mode setting will be disabled unless set to true
+rhel7stig_net_promisc_mode_required: no

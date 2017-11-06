@@ -2433,16 +2433,27 @@
       - RHEL-07-040660
       - ipv4
 
-- name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040670
+- block:
+    - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
+      shell: "ip link | grep -i promisc | cut -d ':' -f 2"
+      check_mode: no
+      failed_when: no
+      changed_when: rhel_07_040670_promisc_check.stdout != ''
+      ignore_errors: yes
+      register: rhel_07_040670_promisc_check
+
+    - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
+      shell: "ip link set dev {{ item }} promisc off"
+      with_items: "{{ rhel_07_040670_promisc_check.stdout_lines }}"
+
+  when:
+      - rhel_07_040670
+      - not rhel7stig_net_promisc_mode_required
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040670
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-040680 | PATCH | The system must be configured to prevent unrestricted mail relaying."
   command: "true"
