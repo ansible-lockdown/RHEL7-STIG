@@ -2547,16 +2547,21 @@
       - RHEL-07-040830
       - ipv6
 
-- name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
-  yum:
-     name:
-       - esc
-       - pam_pkcs11
-       - authconfig-gtk
-     state: present
-  when:
-      - rhel7stig_gui
-      - rhel_07_041001
+- block:
+    - name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
+      yum:
+          name:
+              - esc
+              - authconfig-gtk
+          state: present
+      when: rhel7stig_gui
+
+    - name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
+      yum:
+          name: pam_pkcs11
+          state: present
+
+  when: rhel_07_041001
   tags:
       - cat2
       - medium
