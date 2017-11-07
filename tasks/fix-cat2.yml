@@ -301,13 +301,14 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?ENCRYPT_METHOD
-      line: ENCRYPT_METHOD SHA512
+      line: "ENCRYPT_METHOD {{rhel7stig_login_defaults.encrypt_method|default('SHA512')}}"
   when: rhel_07_010210
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010210
+      - login
 
 - name: "MEDIUM | RHEL-07-010220 | PATCH | User and group account administration utilities must be configured to store only encrypted representations of passwords."
   lineinfile:
@@ -326,13 +327,14 @@
       create: yes
       dest: /etc/login.defs
       regexp: ^#?PASS_MIN_DAYS
-      line: PASS_MIN_DAYS 1
+      line: "PASS_MIN_DAYS {{rhel7stig_login_defaults.pass_min_days|default('1')}}"
   when: rhel_07_010230
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010230
+      - login
 
 - name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
   command: chage -m 1 {{ item }}
@@ -350,13 +352,14 @@
       create: yes
       dest: /etc/login.defs
       regexp: ^#?PASS_MAX_DAYS
-      line: PASS_MAX_DAYS 60
+      line: "PASS_MAX_DAYS {{rhel7stig_login_defaults.pass_max_days|default('60')}}"
   when: rhel_07_010250
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010250
+      - login
 
 - name: "MEDIUM | RHEL-07-010260 | PATCH | Existing passwords must be restricted to a 60-day maximum lifetime."
   command: chage -M 60 {{ item }}
@@ -367,6 +370,7 @@
       - medium
       - patch
       - RHEL-07-010260
+      - password
 
 - name: "MEDIUM | RHEL-07-010270 | PATCH | Passwords must be prohibited from reuse for a minimum of five generations."
   pamd:
@@ -492,13 +496,14 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?FAIL_DELAY
-      line: FAIL_DELAY 4
+      line: "FAIL_DELAY {{rhel7stig_login_defaults.fail_delay_secs|default('4')}}"
   when: rhel_07_010430
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010430
+      - login
 
 - name: "MEDIUM | RHEL-07-010460 | PATCH | The operating system must not allow users to override SSH environment variables."
   lineinfile:
@@ -643,15 +648,18 @@
       - RHEL-07-020110
 
 - name: "MEDIUM | RHEL-07-020240 | PATCH | The operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: ^#?UMASK
+      line: "UMASK {{rhel7stig_login_defaults.umask|default('077')}}"
   when: rhel_07_020240
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020240
-      - notimplemented
+      - login
+      - umask
 
 - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date."
   block: 
@@ -751,15 +759,18 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-020610 | PATCH | All local interactive user accounts, upon creation, must be assigned a home directory."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: ^#?CREATE_HOME
+      line: "CREATE_HOME {{rhel7stig_login_defaults.create_home|default('yes')}}"
   when: rhel_07_020610
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020610
-      - notimplemented
+      - login
+      - home
 
 - name: "MEDIUM | RHEL-07-020620 | PATCH | All local interactive user home directories defined in the /etc/passwd file must exist."
   command: "true"

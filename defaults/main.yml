@@ -413,3 +413,18 @@ rhel7stig_pam_faillock:
 # RHEL-07-040670
 # Network interface promiscuous mode setting will be disabled unless set to true
 rhel7stig_net_promisc_mode_required: no
+
+# /etc/login.defs settings
+# RHEL-07-010210
+# RHEL-07-010230
+# RHEL-07-010250
+# RHEL-07-010430
+# RHEL-07-020240
+# RHEL-07-020610
+rhel7stig_login_defaults:
+  encrypt_method: SHA512
+  pass_min_days: 1
+  pass_max_days: 60
+  fail_delay_secs: 4
+  umask: 077
+  create_home: 'yes'
