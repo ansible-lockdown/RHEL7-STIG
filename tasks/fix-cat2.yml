@@ -508,7 +508,7 @@
 - name: "MEDIUM | RHEL-07-010460 | PATCH | The operating system must not allow users to override SSH environment variables."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: ^#?PermitUserEnvironment
+      regexp: "(?i)^#?PermitUserEnvironment"
       line: PermitUserEnvironment no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -523,7 +523,7 @@
 - name: "MEDIUM | RHEL-07-010470 | PATCH | The operating system must not allow a non-certificate trusted host SSH logon to the system."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: '^#?HostbasedAuthentication'
+      regexp: "(?i)^#?HostbasedAuthentication"
       line: HostbasedAuthentication no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -1855,7 +1855,7 @@
 - name: "MEDIUM | RHEL-07-040110 | PATCH | A FIPS 140-2 approved cryptographic algorithm must be used for SSH communications."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?Ciphers
+      regexp: "(?i)^#?Ciphers"
       line: Ciphers aes128-ctr,aes192-ctr,aes256-ctr
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -1888,7 +1888,7 @@
 - name: "MEDIUM | RHEL-07-040170 | PATCH | The Standard Mandatory DoD Notice and Consent Banner must be displayed immediately prior to, or as part of, remote access logon prompts."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: '^#?Banner'
+      regexp: "(?i)^#?Banner"
       line: Banner /etc/issue
       validate: /usr/sbin/sshd -tf %s
   notify: restart sshd
@@ -1992,7 +1992,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: ^#?ClientAliveInterval
+      regexp: "(?i)^#?ClientAliveInterval"
       line: ClientAliveInterval 600
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2007,7 +2007,7 @@
 - name: "MEDIUM | RHEL-07-040330 | PATCH | The SSH daemon must not allow authentication using RSA rhosts authentication."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: ^#?RhostsRSAAuthentication
+      regexp: "(?i)^#?RhostsRSAAuthentication"
       line: RhostsRSAAuthentication no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2023,7 +2023,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: ^#?ClientAliveCountMax
+      regexp: "(?i)^#?ClientAliveCountMax"
       line: ClientAliveCountMax 0
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2038,7 +2038,7 @@
 - name: "MEDIUM | RHEL-07-040350 | PATCH | The SSH daemon must not allow authentication using rhosts authentication."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: ^#?IgnoreRhosts
+      regexp: "(?i)^#?IgnoreRhosts"
       line: IgnoreRhosts yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2053,7 +2053,7 @@
 - name: "MEDIUM | RHEL-07-040360 | PATCH | The system must display the date and time of the last successful account logon upon an SSH logon."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: ^#?PrintLastLog
+      regexp: "(?i)^#?PrintLastLog"
       line: PrintLastLog yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2069,7 +2069,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: ^#?PermitRootLogin
+      regexp: "(?i)^#?PermitRootLogin"
       line: PermitRootLogin no
       insertafter: '(?i)^#?authentication'
       validate: /usr/sbin/sshd -t -f %s
@@ -2086,7 +2086,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: ^#?IgnoreUserKnownHosts
+      regexp: "(?i)^#?IgnoreUserKnownHosts"
       line: IgnoreUserKnownHosts yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2102,7 +2102,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?MACs
+      regexp: "(?i)^#?MACs"
       line: MACs hmac-sha2-256,hmac-sha2-512
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2145,7 +2145,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?gssapiauthentication
+      regexp: "(?i)^#?GSSAPIAuthentication"
       line: GSSAPIAuthentication no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2160,7 +2160,7 @@
 - name: "MEDIUM | RHEL-07-040440 | PATCH | The SSH daemon must not permit Kerberos authentication unless needed."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?kerberosauthentication
+      regexp: "(?i)^#?KerberosAuthentication"
       line: KerberosAuthentication no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2175,7 +2175,7 @@
 - name: "MEDIUM | RHEL-07-040450 | PATCH | The SSH daemon must perform strict mode checking of home directory configuration files."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?strictmodes
+      regexp: "(?i)^#?StrictModes"
       line: StrictModes yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2190,7 +2190,7 @@
 - name: "MEDIUM | RHEL-07-040460 | PATCH | The SSH daemon must use privilege separation."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?useprivilegeseparation
+      regexp: "(?i)^#?UsePrivilegeSeparation"
       line: UsePrivilegeSeparation yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2205,7 +2205,7 @@
 - name: "MEDIUM | RHEL-07-040470 | PATCH | The SSH daemon must not allow compression or must only allow compression after successful authentication."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?compression
+      regexp: "(?i)^#?Compression"
       line: Compression no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
