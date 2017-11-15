@@ -1,7 +1,9 @@
 - name: "MEDIUM | RHEL-07-010030 | PATCH | The operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
   command: "true"
   changed_when: no
-  when: rhel_07_010030
+  when:
+      - rhel7stig_gui
+      - rhel_07_010030
   tags:
       - cat2
       - medium
@@ -46,7 +48,9 @@
 - name: "MEDIUM | RHEL-07-010060 | PATCH | The operating system must enable a user session lock until that user re-establishes access using established identification and authentication procedures."
   command: "true"
   changed_when: no
-  when: rhel_07_010060
+  when:
+      - rhel7stig_gui
+      - rhel_07_010060
   tags:
       - cat2
       - medium
@@ -57,7 +61,9 @@
 - name: "MEDIUM | RHEL-07-010061 | PATCH | The operating system must uniquely identify and must authenticate users using multifactor authentication via a graphical user logon."
   command: "true"
   changed_when: no
-  when: rhel_07_010061
+  when:
+      - rhel7stig_gui
+      - rhel_07_010061
   tags:
       - cat2
       - medium
@@ -68,7 +74,9 @@
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   command: "true"
   changed_when: no
-  when: rhel_07_010070
+  when:
+      - rhel7stig_gui
+      - rhel_07_010070
   tags:
       - cat2
       - medium
@@ -79,7 +87,9 @@
 - name: "MEDIUM | RHEL-07-010080 | PATCH | The operating system must set the idle delay setting for all connection types."
   command: "true"
   changed_when: no
-  when: rhel_07_010080
+  when:
+      - rhel7stig_gui
+      - rhel_07_010080
   tags:
       - cat2
       - medium
@@ -90,7 +100,9 @@
 - name: "MEDIUM | RHEL-07-010081 | PATCH | The operating system must set the lock delay setting for all connection types."
   command: "true"
   changed_when: no
-  when: rhel_07_010081
+  when:
+      - rhel7stig_gui
+      - rhel_07_010081
   tags:
       - cat2
       - medium
@@ -101,7 +113,9 @@
 - name: "MEDIUM | RHEL-07-010082 | PATCH | The operating system must set the session idle delay setting for all connection types."
   command: "true"
   changed_when: no
-  when: rhel_07_010082
+  when:
+      - rhel7stig_gui
+      - rhel_07_010082
   tags:
       - cat2
       - medium
