@@ -535,15 +535,23 @@
       - ssh
 
 - name: "MEDIUM | RHEL-07-010481 | PATCH | The operating system must require authentication upon booting into single-user and maintenance modes."
-  command: "true"
-  changed_when: no
+  block:
+      - name: "MEDIUM | RHEL-07-010481 | PATCH | Check if the packaged rescue.service file was edited directly"
+        shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*/usr/sbin/sulogin'"
+        changed_when: no
+        failed_when: no
+        register: systemd_rescue_unit_check
+
+      - name: "MEDIUM | RHEL-07-010481 | PATCH | Force reinstall systemd package to replace edited /usr/lib/systemd/system/rescue.service"
+        shell: yum -y reinstall systemd
+        when: systemd_rescue_unit_check.rc == 1
   when: rhel_07_010481
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010481
-      - notimplemented
+      - rescue
 
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
   command: "true"
