@@ -12,15 +12,24 @@
       - RHEL-07-020200
 
 - name: "LOW | RHEL-07-020300 | PATCH | All Group Identifiers (GIDs) referenced in the /etc/passwd file must be defined in the /etc/group file."
-  command: "true"
-  changed_when: no
+  block:
+      - name: "LOW | RHEL-07-020300 | PATCH | Check /etc/passwd entries"
+        shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
+        changed_when: no
+        failed_when: no
+        register: passwd_gid_check
+
+      - name: "LOW | RHEL-07-020300 | PATCH | Print warning about users with invalid GIDs missing GID entries in /etc/group"
+        debug:
+            msg: "WARNING: The following users have non-existent GIDs: {{ passwd_gid_check.stdout_lines | join (', ')}}"
+        when: passwd_gid_check.stdout_lines
   when: rhel_07_020300
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-020300
-      - notimplemented
+      - passwd
 
 - name: "LOW | RHEL-07-021310 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
   command: "true"
