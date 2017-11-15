@@ -487,12 +487,15 @@
 - name: "MEDIUM | RHEL-07-010340 | PATCH | Users must provide a password for privilege escalation."
   command: "true"
   changed_when: no
-  when: rhel_07_010340
+  when:
+      - rhel7stig_using_password_auth
+      - rhel_07_010340
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010340
+      - sudoers
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-010350 | PATCH | Users must re-authenticate for privilege escalation."
@@ -504,6 +507,7 @@
       - medium
       - patch
       - RHEL-07-010350
+      - sudoers
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-010430 | PATCH | The delay between logon prompts following a failed console logon attempt must be at least four seconds."
@@ -2623,15 +2627,26 @@
       - multifactor
 
 - name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
-  command: "true"
-  changed_when: no
-  when: rhel_07_041002
+  block:
+      - name: "MEDIUM | RHEL-07-041002 | PATCH | Check if pam service is configured in sssd file"
+        shell: 'grep -E "^\s*services\s*=.*pam" /etc/sssd/sssd.conf'
+        changed_when: no
+        failed_when: no
+        register: sssd_services_check
+
+      - name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
+        debug:
+            msg: "WARNING: SSSD is in use and /etc/sssd/sssd.conf is not configured to use the PAM service (services = nss, pam)"
+        when: sssd_services_check.rc == 1
+  when:
+      - rhel7stig_auth_settings.use_sssd
+      - rhel_07_041002
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-041002
-      - notimplemented
+      - sssd
 
 - name: "MEDIUM | RHEL-07-041003 | PATCH | The operating system must implement certificate status checking for PKI authentication."
   command: "true"

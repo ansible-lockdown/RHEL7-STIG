@@ -428,3 +428,15 @@ rhel7stig_login_defaults:
   fail_delay_secs: 4
   umask: 077
   create_home: 'yes'
+
+# RHEL-07-040180
+# Whether the system should be using LDAP for authentication
+rhel7stig_auth_settings:
+    use_ldap: no
+    use_sssd: no
+
+# RHEL-07-010340
+# Setting to enable or disable fixes that depend on password-based authentication
+# i.e. if users authenticate with a means other than passwords (pubkey)
+# and will not know or use passwords then this should be 'no'
+rhel7stig_using_password_auth: yes
