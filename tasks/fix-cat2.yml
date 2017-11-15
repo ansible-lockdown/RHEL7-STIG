@@ -1020,16 +1020,30 @@
       - RHEL-07-021100
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-021110 | PATCH | If the cron.allow file exists it must be owned by root."
-  command: "true"
-  changed_when: no
+- name: |
+        MEDIUM | RHEL-07-021110 | PATCH | If the cron.allow file exists it must be owned by root.
+        MEDIUM | RHEL-07-021120 | PATCH | If the cron.allow file exists it must be group-owned by root.
+  block:
+      - name: "MEDIUM | RHEL-07-021110, RHEL-07-021120 | PATCH | Check if cron.allow file exists"
+        stat:
+            path: /etc/cron.allow
+        register: cron_allow_file_check
+
+      - name: "MEDIUM | RHEL-07-021110, RHEL-07-021120 | PATCH | Set cron.allow file owner and group-owner to root"
+        file:
+            dest: /etc/cron.allow
+            state: file
+            owner: root
+            group: root
+            mode: 0600
+        when: cron_allow_file_check.stat.exists
   when: rhel_07_021110
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-021110
-      - notimplemented
+      - cron
 
 - name: "MEDIUM | RHEL-07-021120 | PATCH | If the cron.allow file exists it must be group-owned by root."
   command: "true"
