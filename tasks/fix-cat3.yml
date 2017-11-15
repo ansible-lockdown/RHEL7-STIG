@@ -36,7 +36,7 @@
       msg: "WARNING: /home is not mounted on a separate partition"
   when:
     - rhel_07_021310
-    - ansible_mounts | selectattr('mount', 'equalto', '/home') | list | length == 0
+    - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length == 0
   tags:
       - cat3
       - low
@@ -50,7 +50,7 @@
       msg: "WARNING: /var is not mounted on a separate partition"
   when:
     - rhel_07_021320
-    - ansible_mounts | selectattr('mount', 'equalto', '/var') | list | length == 0
+    - ansible_mounts | selectattr('mount', 'match', '^/var$') | list | length == 0
   tags:
       - cat3
       - low
@@ -64,7 +64,7 @@
       msg: "WARNING: /var/log/audit is not mounted on a separate partition"
   when:
     - rhel_07_021330
-    - ansible_mounts | selectattr('mount', 'equalto', '/var/log/audit') | list | length == 0
+    - ansible_mounts | selectattr('mount', 'match', '^/var/log/audit$') | list | length == 0
   tags:
       - cat3
       - low
