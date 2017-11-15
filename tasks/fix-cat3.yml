@@ -32,37 +32,46 @@
       - passwd
 
 - name: "LOW | RHEL-07-021310 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021310
+  debug:
+      msg: "WARNING: /home is not mounted on a separate partition"
+  when:
+    - rhel_07_021310
+    - ansible_mounts | selectattr('mount', 'equalto', '/home') | list | length == 0
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-021310
-      - notimplemented
+      - mount
+      - home
 
 - name: "LOW | RHEL-07-021320 | PATCH | The system must use a separate file system for /var."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021320
+  debug:
+      msg: "WARNING: /var is not mounted on a separate partition"
+  when:
+    - rhel_07_021320
+    - ansible_mounts | selectattr('mount', 'equalto', '/var') | list | length == 0
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-021320
-      - notimplemented
+      - mount
+      - var
 
 - name: "LOW | RHEL-07-021330 | PATCH | The system must use a separate file system for the system audit data path."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021330
+  debug:
+      msg: "WARNING: /var/log/audit is not mounted on a separate partition"
+  when:
+    - rhel_07_021330
+    - ansible_mounts | selectattr('mount', 'equalto', '/var/log/audit') | list | length == 0
   tags:
       - cat3
       - low
       - patch
       - RHEL-07-021330
-      - notimplemented
+      - mount
+      - auditd
 
 - name: "LOW | RHEL-07-021340 | PATCH | The system must use a separate file system for /tmp (or equivalent)."
   systemd:
@@ -77,6 +86,7 @@
       - low
       - patch
       - RHEL-07-021340
+      - mount
       - tmp
 
 - name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
