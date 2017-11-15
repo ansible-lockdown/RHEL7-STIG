@@ -534,6 +534,12 @@
       - RHEL-07-010470
       - ssh
 
+# TODO: A user can still override the authentication requirement for single user mode in a couple ways that the STIG misses.
+# This fix block does not check for those methods. i.e.
+# User can override the rescue.service unit by placing a copy at /etc/systemd/system/rescue.service
+# User can override some settings of the rescue.service unit by placing the overridden lines in /etc/systemd/system/rescue.service.d/override.conf
+# Additionally the user can provide the -e or --force options to /usr/sbin/sulogin which will provide a root shell without password if the
+# password file is inaccessbile or the root password is non-existent, LOCKED, or damaged.
 - name: "MEDIUM | RHEL-07-010481 | PATCH | The operating system must require authentication upon booting into single-user and maintenance modes."
   block:
       - name: "MEDIUM | RHEL-07-010481 | PATCH | Check if the packaged rescue.service file was edited directly"
