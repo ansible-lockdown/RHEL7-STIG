@@ -24,7 +24,7 @@ def grub2_hash(password, salt=None, iterations=10000):
     if PASSLIB_VERSION < 1.7:
         raise errors.AnsibleFilterError('grub2_hash >= 1.7 is required and %s is installed' % passlib.__version__)
 
-    encrypted = passlib.hash.grub_pbkdf2_sha512.hash(password, salt=salt, rounds=iterations)
+    encrypted = passlib.hash.grub_pbkdf2_sha512.hash(password, salt=salt.encode(), rounds=iterations)
     return encrypted
 
 
