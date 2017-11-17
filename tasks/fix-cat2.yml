@@ -1,7 +1,9 @@
 - name: "MEDIUM | RHEL-07-010030 | PATCH | The operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
   command: "true"
   changed_when: no
-  when: rhel_07_010030
+  when:
+      - rhel7stig_gui
+      - rhel_07_010030
   tags:
       - cat2
       - medium
@@ -43,26 +45,12 @@
       - ssh
       - dod_logon_banner
 
-- name: "MEDIUM | RHEL-07-010050 | PATCH | The operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon."
-  lineinfile:
-      dest: /etc/ssh/sshd_config
-      regexp: '^#?Banner'
-      line: Banner /etc/issue
-      validate: /usr/sbin/sshd -tf %s
-  notify: restart sshd
-  when: rhel_07_010050
-  tags:
-      - cat2
-      - medium
-      - patch
-      - RHEL-07-010050
-      - ssh
-      - dod_logon_banner
-
 - name: "MEDIUM | RHEL-07-010060 | PATCH | The operating system must enable a user session lock until that user re-establishes access using established identification and authentication procedures."
   command: "true"
   changed_when: no
-  when: rhel_07_010060
+  when:
+      - rhel7stig_gui
+      - rhel_07_010060
   tags:
       - cat2
       - medium
@@ -73,7 +61,9 @@
 - name: "MEDIUM | RHEL-07-010061 | PATCH | The operating system must uniquely identify and must authenticate users using multifactor authentication via a graphical user logon."
   command: "true"
   changed_when: no
-  when: rhel_07_010061
+  when:
+      - rhel7stig_gui
+      - rhel_07_010061
   tags:
       - cat2
       - medium
@@ -84,7 +74,9 @@
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   command: "true"
   changed_when: no
-  when: rhel_07_010070
+  when:
+      - rhel7stig_gui
+      - rhel_07_010070
   tags:
       - cat2
       - medium
@@ -95,7 +87,9 @@
 - name: "MEDIUM | RHEL-07-010080 | PATCH | The operating system must set the idle delay setting for all connection types."
   command: "true"
   changed_when: no
-  when: rhel_07_010080
+  when:
+      - rhel7stig_gui
+      - rhel_07_010080
   tags:
       - cat2
       - medium
@@ -106,7 +100,9 @@
 - name: "MEDIUM | RHEL-07-010081 | PATCH | The operating system must set the lock delay setting for all connection types."
   command: "true"
   changed_when: no
-  when: rhel_07_010081
+  when:
+      - rhel7stig_gui
+      - rhel_07_010081
   tags:
       - cat2
       - medium
@@ -117,7 +113,9 @@
 - name: "MEDIUM | RHEL-07-010082 | PATCH | The operating system must set the session idle delay setting for all connection types."
   command: "true"
   changed_when: no
-  when: rhel_07_010082
+  when:
+      - rhel7stig_gui
+      - rhel_07_010082
   tags:
       - cat2
       - medium
@@ -180,78 +178,84 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ucredit'
-      line: ucredit = -1
+      line: "ucredit = {{rhel7stig_password_complexity.ucredit|default('-1')}}"
   when: rhel_07_010120
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010120
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010130 | PATCH | When passwords are changed or new passwords are established, the new password must contain at least one lower-case character."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*lcredit'
-      line: lcredit = -1
+      line: "lcredit = {{rhel7stig_password_complexity.lcredit|default('-1')}}"
   when: rhel_07_010130
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010130
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010140 | PATCH | When passwords are changed or new passwords are assigned, the new password must contain at least one numeric character."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*dcredit'
-      line: dcredit = -1
+      line: "dcredit = {{rhel7stig_password_complexity.dcredit|default('-1')}}"
   when: rhel_07_010140
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010140
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010150 | PATCH | When passwords are changed or new passwords are assigned, the new password must contain at least one special character."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ocredit'
-      line: ocredit = -1
+      line: "ocredit = {{rhel7stig_password_complexity.ocredit|default('-1')}}"
   when: rhel_07_010150
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010150
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010160 | PATCH | When passwords are changed a minimum of eight of the total number of characters must be changed."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*difok'
-      line: difok = 8
+      line: "difok = {{rhel7stig_password_complexity.difok|default('8')}}"
   when: rhel_07_010160
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010160
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010170 | PATCH | When passwords are changed a minimum of four character classes must be changed."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minclass'
-      line: minclass = 4
+      line: "minclass = {{rhel7stig_password_complexity.minclass|default('4')}}"
   when: rhel_07_010170
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010170
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010180 | PATCH | When passwords are changed the number of repeating consecutive characters must not be more than three characters."
   lineinfile:
@@ -265,19 +269,21 @@
       - medium
       - patch
       - RHEL-07-010180
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010190 | PATCH | When passwords are changed the number of repeating characters of the same character class must not be more than four characters."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxclassrepeat'
-      line: maxclassrepeat = 4
+      line: "maxclassrepeat = {{rhel7stig_password_complexity.maxclassrepeat|default('4')}}"
   when: rhel_07_010190
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010190
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010200 | PATCH | The PAM system service must be configured to store only encrypted representations of passwords."
   pamd:
@@ -309,13 +315,14 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?ENCRYPT_METHOD
-      line: ENCRYPT_METHOD SHA512
+      line: "ENCRYPT_METHOD {{rhel7stig_login_defaults.encrypt_method|default('SHA512')}}"
   when: rhel_07_010210
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010210
+      - login
 
 - name: "MEDIUM | RHEL-07-010220 | PATCH | User and group account administration utilities must be configured to store only encrypted representations of passwords."
   lineinfile:
@@ -334,13 +341,14 @@
       create: yes
       dest: /etc/login.defs
       regexp: ^#?PASS_MIN_DAYS
-      line: PASS_MIN_DAYS 1
+      line: "PASS_MIN_DAYS {{rhel7stig_login_defaults.pass_min_days|default('1')}}"
   when: rhel_07_010230
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010230
+      - login
 
 - name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
   command: chage -m 1 {{ item }}
@@ -358,13 +366,14 @@
       create: yes
       dest: /etc/login.defs
       regexp: ^#?PASS_MAX_DAYS
-      line: PASS_MAX_DAYS 60
+      line: "PASS_MAX_DAYS {{rhel7stig_login_defaults.pass_max_days|default('60')}}"
   when: rhel_07_010250
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010250
+      - login
 
 - name: "MEDIUM | RHEL-07-010260 | PATCH | Existing passwords must be restricted to a 60-day maximum lifetime."
   command: chage -M 60 {{ item }}
@@ -375,32 +384,37 @@
       - medium
       - patch
       - RHEL-07-010260
+      - password
 
 - name: "MEDIUM | RHEL-07-010270 | PATCH | Passwords must be prohibited from reuse for a minimum of five generations."
-  lineinfile:
-      dest: /etc/pam.d/system-auth
-      regexp: '^(password\s+sufficient\s+pam_unix.so((?!remember=5).)+)$'
-      line: '\1 remember=5'
-      backrefs: yes
+  pamd:
+      name: system-auth
+      state: args_present
+      type: password
+      control: sufficient
+      module_path: pam_unix.so
+      module_arguments: "remember=5"
   when: rhel_07_010270
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010270
+      - pamd
 
 - name: "MEDIUM | RHEL-07-010280 | PATCH | Passwords must be a minimum of 15 characters in length."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
-      regexp: '^#?minlen'
-      line: minlen = 15
+      regexp: '^#?\s*minlen'
+      line: "minlen = {{rhel7stig_password_complexity.minlen|default('15')}}"
   when: rhel_07_010280
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010280
+      - pwquality
 
 - name: "MEDIUM | RHEL-07-010310 | PATCH | The operating system must disable account identifiers (individuals, groups, roles, and devices) if the password expires."
   lineinfile:
@@ -414,37 +428,74 @@
       - patch
       - RHEL-07-010310
 
-- name: "MEDIUM | RHEL-07-010320 | PATCH | Accounts subject to three unsuccessful login attempts within 15 minutes must be locked for the maximum configurable period."
-  command: "true"
-  changed_when: no
-  when: rhel_07_010320
+- block:
+    - name: |
+            "MEDIUM | RHEL-07-010320 | PATCH | Accounts subject to three unsuccessful login attempts within 15 minutes must be locked for the maximum configurable period."
+            "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+      pamd:
+          name: "{{ item }}"
+          state: before
+          type: auth
+          control: sufficient
+          module_path: pam_unix.so
+          new_type: auth
+          new_control: required
+          new_module_path: pam_faillock.so
+          module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+      with_items:
+          - "system-auth"
+          - "password-auth"
+
+    - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+      pamd:
+          name: "{{ item }}"
+          state: after
+          type: auth
+          control: sufficient
+          module_path: pam_unix.so
+          new_type: auth
+          new_control: "[default=die]"
+          new_module_path: pam_faillock.so
+          module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+      with_items:
+          - "system-auth"
+          - "password-auth"
+
+    - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+      pamd:
+          name: "{{ item }}"
+          state: before
+          type: account
+          control: required
+          module_path: pam_unix.so
+          new_type: account
+          new_control: required
+          new_module_path: pam_faillock.so
+      with_items:
+          - "system-auth"
+          - "password-auth"
+
+  when: rhel_07_010320 or rhel_07_010330
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010320
-      - notimplemented
-
-- name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
-  command: "true"
-  changed_when: no
-  when: rhel_07_010330
-  tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010330
-      - notimplemented
+      - pamd
 
 - name: "MEDIUM | RHEL-07-010340 | PATCH | Users must provide a password for privilege escalation."
   command: "true"
   changed_when: no
-  when: rhel_07_010340
+  when:
+      - rhel7stig_using_password_auth
+      - rhel_07_010340
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010340
+      - sudoers
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-010350 | PATCH | Users must re-authenticate for privilege escalation."
@@ -456,25 +507,27 @@
       - medium
       - patch
       - RHEL-07-010350
+      - sudoers
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-010430 | PATCH | The delay between logon prompts following a failed console logon attempt must be at least four seconds."
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?FAIL_DELAY
-      line: FAIL_DELAY 4
+      line: "FAIL_DELAY {{rhel7stig_login_defaults.fail_delay_secs|default('4')}}"
   when: rhel_07_010430
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010430
+      - login
 
 - name: "MEDIUM | RHEL-07-010460 | PATCH | The operating system must not allow users to override SSH environment variables."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: ^#?permituserenvironment
-      line: permituserenvironment no
+      regexp: "(?i)^#?PermitUserEnvironment"
+      line: PermitUserEnvironment no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   when: rhel_07_010460
@@ -488,7 +541,7 @@
 - name: "MEDIUM | RHEL-07-010470 | PATCH | The operating system must not allow a non-certificate trusted host SSH logon to the system."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: '^#?HostbasedAuthentication'
+      regexp: "(?i)^#?HostbasedAuthentication"
       line: HostbasedAuthentication no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -499,16 +552,30 @@
       - RHEL-07-010470
       - ssh
 
+# TODO: A user can still override the authentication requirement for single user mode in a couple ways that the STIG misses.
+# This fix block does not check for those methods. i.e.
+# User can override the rescue.service unit by placing a copy at /etc/systemd/system/rescue.service
+# User can override some settings of the rescue.service unit by placing the overridden lines in /etc/systemd/system/rescue.service.d/override.conf
+# Additionally the user can provide the -e or --force options to /usr/sbin/sulogin which will provide a root shell without password if the
+# password file is inaccessbile or the root password is non-existent, LOCKED, or damaged.
 - name: "MEDIUM | RHEL-07-010481 | PATCH | The operating system must require authentication upon booting into single-user and maintenance modes."
-  command: "true"
-  changed_when: no
+  block:
+      - name: "MEDIUM | RHEL-07-010481 | PATCH | Check if the packaged rescue.service file was edited directly"
+        shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*/usr/sbin/sulogin'"
+        changed_when: no
+        failed_when: no
+        register: systemd_rescue_unit_check
+
+      - name: "MEDIUM | RHEL-07-010481 | PATCH | Force reinstall systemd package to replace edited /usr/lib/systemd/system/rescue.service"
+        shell: yum -y reinstall systemd
+        when: systemd_rescue_unit_check.rc == 1
   when: rhel_07_010481
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-010481
-      - notimplemented
+      - rescue
 
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
   command: "true"
@@ -532,31 +599,21 @@
       - RHEL-07-020020
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-020030 | PATCH | A file integrity tool must verify the baseline operating system configuration at least weekly."
+- name: |
+        "MEDIUM | RHEL-07-020030 | PATCH | A file integrity tool must verify the baseline operating system configuration at least weekly."
+        "MEDIUM | RHEL-07-020040 | PATCH | Designated personnel must be notified if baseline configurations are changed in an unauthorized manner."
   cron:
-      name: 'Run AIDE integrity check weekly'
+      name: 'Run AIDE integrity check {{ rhel7stig_aide_cron.special_time }}'
       user: "{{ rhel7stig_aide_cron.user }}"
       cron_file: "{{ rhel7stig_aide_cron.cron_file }}"
-      job: "{{ rhel7stig_aide_cron.job }}"
+      job: "{{ rhel7stig_aide_cron.job + ((rhel7stig_aide_cron.notify_by_mail) | ternary(rhel7stig_aide_cron.notify_cmd,'')) }}"
       special_time: "{{ rhel7stig_aide_cron.special_time }}"
-  when: rhel_07_020030
+  when: rhel_07_020030 or rhel_07_020040
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020030
-      - aide
-
-- name: "MEDIUM | RHEL-07-020040 | PATCH | Designated personnel must be notified if baseline configurations are changed in an unauthorized manner."
-  yum:
-      name: aide
-      state: present
-  notify: init aide
-  when: rhel_07_020040
-  tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020040
       - aide
 
@@ -623,26 +680,69 @@
       - RHEL-07-020110
 
 - name: "MEDIUM | RHEL-07-020240 | PATCH | The operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: ^#?UMASK
+      line: "UMASK {{rhel7stig_login_defaults.umask|default('077')}}"
   when: rhel_07_020240
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020240
-      - notimplemented
+      - login
+      - umask
 
 - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date."
-  command: "true"
-  changed_when: no
+  block: 
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Install yum-cron"
+      yum:
+          name: yum-cron
+          state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
+          enablerepo: "{{ (ansible_distribution == 'RedHat') | ternary('rhel-7-server-optional-rpms','') }}"
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify yum-cron config file exists"
+      stat:
+          path: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+      check_mode: no
+      register: yum_cron_config_file
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Enable/disable automatic updates in the appropriate yum-cron.conf file."
+      lineinfile:
+          dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+          regexp: "^apply_updates"
+          line: "apply_updates = {{ (rhel7stig_auto_package_updates.enabled) | ternary('yes','no')}}"
+          state: present
+      when: yum_cron_config_file.stat.exists
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Set update command to configured setting."
+      lineinfile:
+          dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+          regexp: "^update_cmd"
+          line: "update_cmd = {{rhel7stig_auto_package_updates.update_cmd|default('minimal-security')}}"
+          state: present
+      when: yum_cron_config_file.stat.exists
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify the yum-cron service exists"
+      shell: "systemctl show yum-cron | grep LoadState | cut -d = -f 2"
+      register: rhel_07_020260_yumcron_service_status
+      changed_when: no
+      check_mode: no
+
+    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Set the yum-cron service state"
+      service:
+        name: yum-cron
+        enabled: "{{ rhel7stig_auto_package_updates.enabled }}"
+        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('started','stopped')}}"
+      when: rhel_07_020260_yumcron_service_status.stdout == "loaded"
+
   when: rhel_07_020260
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020260
-      - notimplemented
+      - packaging
 
 - name: "MEDIUM | RHEL-07-020270 | PATCH | The system must not have unnecessary accounts."
   command: "true"
@@ -691,15 +791,18 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-020610 | PATCH | All local interactive user accounts, upon creation, must be assigned a home directory."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: ^#?CREATE_HOME
+      line: "CREATE_HOME {{rhel7stig_login_defaults.create_home|default('yes')}}"
   when: rhel_07_020610
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020610
-      - notimplemented
+      - login
+      - home
 
 - name: "MEDIUM | RHEL-07-020620 | PATCH | All local interactive user home directories defined in the /etc/passwd file must exist."
   command: "true"
@@ -921,16 +1024,30 @@
       - RHEL-07-021100
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-021110 | PATCH | If the cron.allow file exists it must be owned by root."
-  command: "true"
-  changed_when: no
+- name: |
+        MEDIUM | RHEL-07-021110 | PATCH | If the cron.allow file exists it must be owned by root.
+        MEDIUM | RHEL-07-021120 | PATCH | If the cron.allow file exists it must be group-owned by root.
+  block:
+      - name: "MEDIUM | RHEL-07-021110, RHEL-07-021120 | PATCH | Check if cron.allow file exists"
+        stat:
+            path: /etc/cron.allow
+        register: cron_allow_file_check
+
+      - name: "MEDIUM | RHEL-07-021110, RHEL-07-021120 | PATCH | Set cron.allow file owner and group-owner to root"
+        file:
+            dest: /etc/cron.allow
+            state: file
+            owner: root
+            group: root
+            mode: 0600
+        when: cron_allow_file_check.stat.exists
   when: rhel_07_021110
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-021110
-      - notimplemented
+      - cron
 
 - name: "MEDIUM | RHEL-07-021120 | PATCH | If the cron.allow file exists it must be group-owned by root."
   command: "true"
@@ -1784,7 +1901,7 @@
 - name: "MEDIUM | RHEL-07-040110 | PATCH | A FIPS 140-2 approved cryptographic algorithm must be used for SSH communications."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?Ciphers
+      regexp: "(?i)^#?Ciphers"
       line: Ciphers aes128-ctr,aes192-ctr,aes256-ctr
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -1796,27 +1913,16 @@
       - RHEL-07-040110
       - ssh
 
-- block:
-    - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
-      lineinfile:
-        create: yes
-        dest: "{{ rhel7stig_shell_session_timeout.file }}"
-        regexp: ^#?TMOUT
-        line: "TMOUT={{rhel7stig_shell_session_timeout.timeout}}"
-
-    - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
-      lineinfile:
-        create: yes
-        dest: "{{ rhel7stig_shell_session_timeout.file }}"
-        regexp: ^#?readonly TMOUT$
-        line: readonly TMOUT
-
-    - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
-      lineinfile:
-        create: yes
-        dest: "{{ rhel7stig_shell_session_timeout.file }}"
-        regexp: ^#?export TMOUT$
-        line: export TMOUT
+- name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
+  blockinfile:
+      create: yes
+      dest: "{{ rhel7stig_shell_session_timeout.file }}"
+      marker: "# {mark} ANSIBLE MANAGED"
+      block: |
+        # Set session timeout - STIG ID RHEL-07-040160
+        TMOUT={{rhel7stig_shell_session_timeout.timeout}}
+        readonly TMOUT
+        export TMOUT
   when: rhel_07_040160
   tags:
       - cat2
@@ -1826,15 +1932,20 @@
       - profile
 
 - name: "MEDIUM | RHEL-07-040170 | PATCH | The Standard Mandatory DoD Notice and Consent Banner must be displayed immediately prior to, or as part of, remote access logon prompts."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?Banner"
+      line: Banner /etc/issue
+      validate: /usr/sbin/sshd -tf %s
+  notify: restart sshd
   when: rhel_07_040170
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040170
-      - notimplemented
+      - ssh
+      - dod_logon_banner
 
 - block:
     - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
@@ -1927,7 +2038,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: ^#?ClientAliveInterval
+      regexp: "(?i)^#?ClientAliveInterval"
       line: ClientAliveInterval 600
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -1942,7 +2053,7 @@
 - name: "MEDIUM | RHEL-07-040330 | PATCH | The SSH daemon must not allow authentication using RSA rhosts authentication."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: ^#?RhostsRSAAuthentication
+      regexp: "(?i)^#?RhostsRSAAuthentication"
       line: RhostsRSAAuthentication no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -1958,7 +2069,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: ^#?ClientAliveCountMax
+      regexp: "(?i)^#?ClientAliveCountMax"
       line: ClientAliveCountMax 0
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -1973,7 +2084,7 @@
 - name: "MEDIUM | RHEL-07-040350 | PATCH | The SSH daemon must not allow authentication using rhosts authentication."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: ^#?IgnoreRhosts
+      regexp: "(?i)^#?IgnoreRhosts"
       line: IgnoreRhosts yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -1988,7 +2099,7 @@
 - name: "MEDIUM | RHEL-07-040360 | PATCH | The system must display the date and time of the last successful account logon upon an SSH logon."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: ^#?PrintLastLog
+      regexp: "(?i)^#?PrintLastLog"
       line: PrintLastLog yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2004,7 +2115,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: ^#?PermitRootLogin
+      regexp: "(?i)^#?PermitRootLogin"
       line: PermitRootLogin no
       insertafter: '(?i)^#?authentication'
       validate: /usr/sbin/sshd -t -f %s
@@ -2021,7 +2132,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: ^#?IgnoreUserKnownHosts
+      regexp: "(?i)^#?IgnoreUserKnownHosts"
       line: IgnoreUserKnownHosts yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2037,7 +2148,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?MACs
+      regexp: "(?i)^#?MACs"
       line: MACs hmac-sha2-256,hmac-sha2-512
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2080,7 +2191,7 @@
   lineinfile:
       create: yes
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?gssapiauthentication
+      regexp: "(?i)^#?GSSAPIAuthentication"
       line: GSSAPIAuthentication no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2095,7 +2206,7 @@
 - name: "MEDIUM | RHEL-07-040440 | PATCH | The SSH daemon must not permit Kerberos authentication unless needed."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?kerberosauthentication
+      regexp: "(?i)^#?KerberosAuthentication"
       line: KerberosAuthentication no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2110,7 +2221,7 @@
 - name: "MEDIUM | RHEL-07-040450 | PATCH | The SSH daemon must perform strict mode checking of home directory configuration files."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?strictmodes
+      regexp: "(?i)^#?StrictModes"
       line: StrictModes yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2125,7 +2236,7 @@
 - name: "MEDIUM | RHEL-07-040460 | PATCH | The SSH daemon must use privilege separation."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?useprivilegeseparation
+      regexp: "(?i)^#?UsePrivilegeSeparation"
       line: UsePrivilegeSeparation yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2140,7 +2251,7 @@
 - name: "MEDIUM | RHEL-07-040470 | PATCH | The SSH daemon must not allow compression or must only allow compression after successful authentication."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: (?i)^#?compression
+      regexp: "(?i)^#?Compression"
       line: Compression no
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
@@ -2368,16 +2479,27 @@
       - RHEL-07-040660
       - ipv4
 
-- name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040670
+- block:
+    - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
+      shell: "ip link | grep -i promisc | cut -d ':' -f 2"
+      check_mode: no
+      failed_when: no
+      changed_when: rhel_07_040670_promisc_check.stdout != ''
+      ignore_errors: yes
+      register: rhel_07_040670_promisc_check
+
+    - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
+      shell: "ip link set dev {{ item }} promisc off"
+      with_items: "{{ rhel_07_040670_promisc_check.stdout_lines }}"
+
+  when:
+      - rhel_07_040670
+      - not rhel7stig_net_promisc_mode_required
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040670
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-040680 | PATCH | The system must be configured to prevent unrestricted mail relaying."
   command: "true"
@@ -2482,16 +2604,21 @@
       - RHEL-07-040830
       - ipv6
 
-- name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
-  yum:
-     name:
-       - esc
-       - pam_pkcs11
-       - authconfig-gtk
-     state: present
-  when:
-      - rhel7stig_gui
-      - rhel_07_041001
+- block:
+    - name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
+      yum:
+          name:
+              - esc
+              - authconfig-gtk
+          state: present
+      when: rhel7stig_gui
+
+    - name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
+      yum:
+          name: pam_pkcs11
+          state: present
+
+  when: rhel_07_041001
   tags:
       - cat2
       - medium
@@ -2500,15 +2627,26 @@
       - multifactor
 
 - name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
-  command: "true"
-  changed_when: no
-  when: rhel_07_041002
+  block:
+      - name: "MEDIUM | RHEL-07-041002 | PATCH | Check if pam service is configured in sssd file"
+        shell: 'grep -E "^\s*services\s*=.*pam" /etc/sssd/sssd.conf'
+        changed_when: no
+        failed_when: no
+        register: sssd_services_check
+
+      - name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
+        debug:
+            msg: "WARNING: SSSD is in use and /etc/sssd/sssd.conf is not configured to use the PAM service (services = nss, pam)"
+        when: sssd_services_check.rc == 1
+  when:
+      - rhel7stig_auth_settings.use_sssd
+      - rhel_07_041002
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-041002
-      - notimplemented
+      - sssd
 
 - name: "MEDIUM | RHEL-07-041003 | PATCH | The operating system must implement certificate status checking for PKI authentication."
   command: "true"

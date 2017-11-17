@@ -83,7 +83,8 @@ rhel_07_010481: true
 rhel_07_010500: true
 rhel_07_020020: true
 rhel_07_020030: true
-rhel_07_020040: true
+# Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
+rhel_07_020040: false
 rhel_07_020100: true
 rhel_07_020101: true
 rhel_07_020110: true
@@ -332,6 +333,12 @@ rhel7stig_aide_cron:
   cron_file: aide
   job: '/usr/sbin/aide --check'
   special_time: daily
+  # Disable the notification check rule to disable mailing notifications
+  notify_by_mail: "{{rhel_07_020040}}"
+  notify_cmd: ' | /bin/mail -s "$HOSTNAME - Daily aide integrity check run" root'
+
+rhel7stig_aide_conf:
+  file: /etc/aide.conf
 
 # Set maximum number of simultaneous system logins (RHEL-07-040000)
 rhel7stig_maxlogins: 10
@@ -364,10 +371,72 @@ rhel7stig_logon_banner: |
 
 # Password complexity settings
 rhel7stig_password_complexity:
+  ucredit: -1
+  lcredit: -1
+  dcredit: -1
+  ocredit: -1
+  difok: 8
+  minclass: 4
   maxrepeat: 3
+  maxclassrepeat: 4
+  minlen: 15
 
 # RHEL-07-040160
 # Session timeout setting file (TMOUT setting can be set in multiple files)
 rhel7stig_shell_session_timeout:
   file: /etc/profile
   timeout: 600
+
+# RHEL-07-020260
+# Configure regular automatic package updates using yum-cron
+# update_cmd options:
+# default                            = yum upgrade
+# security                           = yum --security upgrade
+# security-severity:Critical         = yum --sec-severity=Critical upgrade
+# minimal                            = yum --bugfix upgrade-minimal
+# minimal-security                   = yum --security upgrade-minimal
+# minimal-security-severity:Critical =  --sec-severity=Critical upgrade-minimal
+rhel7stig_auto_package_updates:
+  enabled: yes
+  update_cmd: "minimal-security"
+  frequency: daily
+
+# RHEL-07-010320
+# RHEL-07-010330
+# pam_faillock settings - accounts must be locked for max time period after 3 unsuccessful attempts within 15 minutes.
+rhel7stig_pam_faillock:
+  attempts: 3
+  interval: 900
+  unlock_time: 604800
+  fail_for_root: yes
+
+# RHEL-07-040670
+# Network interface promiscuous mode setting will be disabled unless set to true
+rhel7stig_net_promisc_mode_required: no
+
+# /etc/login.defs settings
+# RHEL-07-010210
+# RHEL-07-010230
+# RHEL-07-010250
+# RHEL-07-010430
+# RHEL-07-020240
+# RHEL-07-020610
+rhel7stig_login_defaults:
+  encrypt_method: SHA512
+  pass_min_days: 1
+  pass_max_days: 60
+  fail_delay_secs: 4
+  umask: 077
+  create_home: 'yes'
+
+# RHEL-07-040180
+# Whether the system should be using LDAP for authentication
+rhel7stig_auth_settings:
+    use_ldap: no
+    use_sssd: no
+
+# RHEL-07-010340
+# Setting to enable or disable fixes that depend on password-based authentication
+# i.e. if users authenticate with a means other than passwords (pubkey)
+# and will not know or use passwords then this should be 'no'
+rhel7stig_using_password_auth: yes
