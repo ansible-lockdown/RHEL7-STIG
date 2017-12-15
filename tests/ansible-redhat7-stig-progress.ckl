@@ -25350,7 +25350,7 @@ session     required      pam_lastlog.so showfailed</ATTRIBUTE_DATA>
                     <VULN_ATTRIBUTE>CCI_REF</VULN_ATTRIBUTE>
                     <ATTRIBUTE_DATA>CCI-000366</ATTRIBUTE_DATA>
                 </STIG_DATA>
-                <STATUS>Not_Reviewed</STATUS>
+                <STATUS>NotAFinding</STATUS>
                 <FINDING_DETAILS></FINDING_DETAILS>
                 <COMMENTS></COMMENTS>
                 <SEVERITY_OVERRIDE></SEVERITY_OVERRIDE>
