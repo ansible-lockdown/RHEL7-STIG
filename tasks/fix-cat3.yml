@@ -126,7 +126,14 @@
       - RHEL-07-040000
 
 - name: "LOW | RHEL-07-040530 | PATCH | The system must display the date and time of the last successful account logon upon logon."
-  command: "true"
+  blockinfile:
+    state: present
+    path: /etc/pam.d/postlogin-ac
+    insertafter: '^# User changes will be destroyed'
+    block: |
+        ### RHEL-07-040530 ###
+        session required pam_lastlog.so showfailed
+
   changed_when: no
   when: rhel_07_040530
   tags:
