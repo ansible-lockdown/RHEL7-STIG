@@ -128,7 +128,7 @@
 - name: "LOW | RHEL-07-040530 | PATCH | The system must display the date and time of the last successful account logon upon logon."
   blockinfile:
     state: present
-    path: /etc/pam.d/postlogin-ac
+    path: /etc/pam.d/postlogin
     insertafter: '^# User changes will be destroyed'
     block: |
         ### RHEL-07-040530 ###
