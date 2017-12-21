@@ -426,7 +426,7 @@ rhel7stig_login_defaults:
   pass_min_days: 1
   pass_max_days: 60
   fail_delay_secs: 4
-  umask: 077
+  umask: '077'
   create_home: 'yes'
 
 # RHEL-07-040180
