@@ -42,7 +42,7 @@
 #   check_mode: no
 #   when: rhel7stig_cat3_audit | bool
 #   tags:
-#       - cat2
+#       - cat3
 #       - audit
 
 - name: Include CAT I patches
