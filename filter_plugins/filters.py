@@ -2,7 +2,7 @@ try:
     import passlib.hash
     HAS_PASSLIB = True
     PASSLIB_VERSION = float(passlib.__version__[:3])
-except Exception as e:
+except ImportError as e:
     HAS_PASSLIB = False
 
 from ansible import errors
