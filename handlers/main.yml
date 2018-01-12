@@ -35,6 +35,9 @@
   when:
       - rhel7stig_skip_for_travis == false
 
+- name: rebuild initramfs
+  command: dracut -f
+
 - name: update running audit failure mode
   command: auditctl -f {{ rhel7stig_auditd_failure_flag }}
   failed_when: no
