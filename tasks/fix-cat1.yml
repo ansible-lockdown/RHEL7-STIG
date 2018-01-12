@@ -271,6 +271,25 @@
     - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
       command: prelink -ua
       when: rhel_07_021350_prelink_installed.rc == 0
+
+    - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
+      replace:
+          path: /etc/default/grub
+          regexp: ^(\s*GRUB_CMDLINE_LINUX=")(((?!(?<=[" ])fips=1(?=[" ]).*).)*)(")$
+          replace: \1\2 fips=1\4
+      notify: make grub2 config
+
+    - name: "HIGH | RHEL-07-021350 | AUDIT | Verify fips=1 is in /etc/default/grub"
+      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ])fips=1(?=[" ]).*"$' /etc/default/grub
+      check_mode: no
+      register: rhel_07_021350_audit
+      changed_when:
+          - ansible_check_mode
+          - rhel_07_021350_audit | failed
+      failed_when:
+          - rhel_07_021350_audit | failed
+          - not ansible_check_mode or
+            rhel_07_021350_audit.rc > 1
   when: rhel_07_021350
   tags:
       - cat1
