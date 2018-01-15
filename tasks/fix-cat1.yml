@@ -259,7 +259,7 @@
           regexp: ^#?PRELINKING
           line: PRELINKING=no
 
-    - name: "HIGH | RHEL-07-021350 | PATCH | Check if prelink package is installed"
+    - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
       command: rpm -q prelink
       args:
           warn: no
@@ -268,7 +268,7 @@
       check_mode: no
       register: rhel_07_021350_prelink_installed
 
-    - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+    - name: "HIGH | RHEL-07-021350 | PATCH | Existing prelinking, if any, should be undone on all system files"
       command: prelink -ua
       when: rhel_07_021350_prelink_installed.rc == 0
 
