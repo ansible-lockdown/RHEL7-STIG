@@ -113,6 +113,21 @@
       - audit
       - RHEL-07-010260
 
+- name: "PRELIM | RHEL-07-010480 RHEL-07-010490 RHEL-07-021350 RHEL-07-021700 | Check whether machine is UEFI-based"
+  stat:
+      path: /sys/firmware/efi
+  register: rhel_07_sys_firmware_efi
+  when:
+      - rhel_07_010480 or
+        rhel_07_010490 or
+        rhel_07_021350 or
+        rhel_07_021700
+  tags:
+      - RHEL-07-010480
+      - RHEL-07-010490
+      - RHEL-07-021350
+      - RHEL-07-021700
+
 - name: "PRELIM | RHEL-07-020320 RHEL-07-020330 RHEL-07-021310 RHEL-07-021320 RHEL-07-021330 RHEL-07-021350 RHEL-07-030330 | Gather mount information"
   setup:
       gather_subset: hardware,!all{{ ansible_version.full | version_compare('2.4', '>=') | ternary(',!min', '') }}
