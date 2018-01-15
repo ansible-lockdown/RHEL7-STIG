@@ -459,3 +459,13 @@ rhel7stig_ipsec_required: no
 # i.e. if users authenticate with a means other than passwords (pubkey)
 # and will not know or use passwords then this should be 'no'
 rhel7stig_using_password_auth: yes
+
+rhel7stig_availability_override: false
+# auditd_failure_flag
+# 2    Tells your system to perform an immediate shutdown without
+#      flushing any pending data to disk when the limits of your
+#      audit system are exceeded. Because this shutdown is not a clean shutdown.
+#      restrict the use of -f 2 to only the most security conscious environments
+# 1    System continues to run, issues a warning and audit stops.
+#      Use this for any other setup to avoid loss of data or data corruption.
+rhel7stig_auditd_failure_flag: "{{ rhel7stig_availability_override | ternary(1, 2) }}"
