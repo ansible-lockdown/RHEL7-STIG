@@ -14,7 +14,7 @@
       state: restarted
 
 - name: make grub2 config
-  command: grub2-mkconfig --output=/etc/grub2.cfg
+  command: grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
 
 - name: "restart {{ rhel7stig_time_service }}"
   service:
