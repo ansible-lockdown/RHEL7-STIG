@@ -1168,15 +1168,18 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-030330 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer ISSO (at a minimum) when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity."
-  command: "true"
-  changed_when: no
+  lineinfile:
+      path: /etc/audit/auditd.conf
+      regexp: ^space_left\s*=\s*
+      line: space_left = {{ ( ansible_mounts | json_query(query) / 1024 / 1024 ) | int + 1 }}
+  vars:
+      query: "[?mount=='{{ rhel7stig_audit_part }}'].size_total | [0]"
   when: rhel_07_030330
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-030330
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-030340 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) via email when the threshold for the repository maximum audit record storage capacity is reached."
   command: "true"
