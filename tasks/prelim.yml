@@ -203,6 +203,20 @@
   tags:
       - RHEL-07-030330
 
+- name: "PRELIM | RHEL-07-030300 RHEL-07-030310 RHEL-07-030320 RHEL-07-030321 | Install audit remote plugin."
+  yum:
+      name: audispd-plugins
+  when:
+      - rhel_07_030300 or
+        rhel_07_030310 or
+        rhel_07_030320 or
+        rhel_07_030321
+  tags:
+      - RHEL-07-030300
+      - RHEL-07-030310
+      - RHEL-07-030320
+      - RHEL-07-030321
+
 # - name: "PRELIM | RHEL-07-040180 | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
 #   command: grep -i useldapauth /etc/sysconfig/authconfig
 #   register: rhel_07_040180_audit
