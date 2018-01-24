@@ -570,6 +570,7 @@
         shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*/usr/sbin/sulogin'"
         changed_when: no
         failed_when: no
+        check_mode: no
         register: systemd_rescue_unit_check
 
       - name: "MEDIUM | RHEL-07-010481 | PATCH | Force reinstall systemd package to replace edited /usr/lib/systemd/system/rescue.service"
@@ -2295,6 +2296,7 @@
         shell: 'grep -E "^\s*services\s*=.*pam" /etc/sssd/sssd.conf'
         changed_when: no
         failed_when: no
+        check_mode: no
         register: sssd_services_check
 
       - name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
