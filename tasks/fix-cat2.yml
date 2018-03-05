@@ -1267,10 +1267,8 @@
     - {id: "030810", command: "/sbin/pam_timestamp_check", key: "privileged-pam", create: "{{ rhel_07_030810 }}"}
 
 - name: "Restart auditd"
-  service:
-    name: auditd
-    state: restarted
-    use: service
+  command: /usr/sbin/service auditd restart
+  changed_when: no
 
 - name: "MEDIUM | RHEL-07-030600 | PATCH | The operating system must generate audit records for all successful/unsuccessful account access count events."
   command: "true"
