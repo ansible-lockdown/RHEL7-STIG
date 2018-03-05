@@ -1206,8 +1206,8 @@
 - name: "MEDIUM | Auditing system calls"
   include_tasks: audit_system_call.yml id="{{ item.id }}" call="{{ item.call }}" key="{{ item.key }}"
   with_items:
-    - {id: "030370", call: "chown", key: "perm_mod"}
-    - {id: "030380", call: "fchown", key: "perm_mod"}
+    - {id: "030370", call: "chown", key: "perm_mod", create: "{{ rhel_07_030370 }}"}
+    - {id: "030380", call: "fchown", key: "perm_mod", create: "{{ rhel_07_030380 }}"}
 
 # - name: "MEDIUM | RHEL-07-030370 | PATCH | All uses of the chown command must be audited."
 #   command: "true"
