@@ -1,0 +1,13 @@
+---
+# tasks/audit_command.yml
+
+- name: "MEDIUM | RHEL-07-{{ item.id }} | PATCH | All uses of the {{ item.command | basename }} command must be audited."
+  lineinfile:
+    path: "/etc/audit/rules.d/rhel7stig_commands.rules"
+    create: yes
+    owner: root
+    group: root
+    mode: 0600
+    line: "-a always,exit -F {{ item.command }} -F auid>=1000 -F auid!=4294967295 -k {{ item.key }}"
+    state: present
+  when: item.create
