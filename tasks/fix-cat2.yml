@@ -1204,7 +1204,7 @@
       - notimplemented
 
 - name: "MEDIUM | Auditing system calls"
-  include_task: audit_system_call.yml id="{{ item.id }}" call="{{ item.call }}" key="{{ item.key }}"
+  include_tasks: audit_system_call.yml id="{{ item.id }}" call="{{ item.call }}" key="{{ item.key }}"
   with_items:
     - {id: "030370", call: "chown", key: "perm_mod"}
     - {id: "030380", call: "fchown", key: "perm_mod"}
