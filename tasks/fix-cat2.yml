@@ -1281,7 +1281,7 @@
     - {id: "030871", path: "/etc/group", description: "account creations, modifications, disabling, and termination events that affect /etc/group", key: "identity", create: "{{ rhel_07_030871 }}"}
     - {id: "030872", path: "/etc/gshadow", description: "account creations, modifications, disabling, and termination events that affect /etc/gshadow", key: "identity", create: "{{ rhel_07_030872 }}"}
     - {id: "030873", path: "/etc/shadow", description: "account creations, modifications, disabling, and termination events that affect /etc/shadow", key: "identity", create: "{{ rhel_07_030873 }}"}
-    - {id: "030874", path: "/etc/security/opasswd", description: "account creations, modifications, disabling, and termination events that affect /etc/opasswd", key: "identity", create: "{{ rhel_07_030874 }}"}
+    - {id: "030874", path: "/etc/security/opasswd", description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd", key: "identity", create: "{{ rhel_07_030874 }}"}
 
 - name: "Restart auditd"
   command: /usr/sbin/service auditd restart
