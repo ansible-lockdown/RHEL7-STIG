@@ -8,5 +8,5 @@
     owner: root
     group: root
     mode: 0600
-    line: "-w {{ item.path }} -p wa  -k {{ item.key }}"
+    line: "-w {{ item.path }} -p wa -k {{ item.key }}"
     state: "{{ item.create | ternary('present', 'absent') }}"

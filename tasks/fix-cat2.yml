@@ -1219,52 +1219,48 @@
     - {id: "030470", call: "removexattr", key: "perm_mod", create: "{{ rhel_07_030470 }}"}
     - {id: "030480", call: "fremovexattr", key: "perm_mod", create: "{{ rhel_07_030480 }}"}
     - {id: "030490", call: "lremovexattr", key: "perm_mod", create: "{{ rhel_07_030490 }}"}
-    - {id: "030500", call: "creat", extrafields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030500 }}"}
-    - {id: "030500", call: "creat", extrafields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030500 }}"}
-    - {id: "030510", call: "open", extrafields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030510 }}"}
-    - {id: "030510", call: "open", extrafields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030510 }}"}
-    - {id: "030520", call: "openat", extrafields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030520 }}"}
-    - {id: "030520", call: "openat", extrafields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030520 }}"}
-    - {id: "030530", call: "open_by_handle_at", extrafields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030530 }}"}
-    - {id: "030530", call: "open_by_handle_at", extrafields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030530 }}"}
-    - {id: "030540", call: "truncate", extrafields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030540 }}"}
-    - {id: "030540", call: "truncate", extrafields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030540 }}"}
-    - {id: "030550", call: "ftruncate", extrafields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030550 }}"}
-    - {id: "030550", call: "ftruncate", extrafields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030550 }}"}
+    - {id: "030500", call: "creat", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030500 }}"}
+    - {id: "030500", call: "creat", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030500 }}"}
+    - {id: "030510", call: "open", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030510 }}"}
+    - {id: "030510", call: "open", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030510 }}"}
+    - {id: "030520", call: "openat", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030520 }}"}
+    - {id: "030520", call: "openat", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030520 }}"}
+    - {id: "030530", call: "open_by_handle_at", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030530 }}"}
+    - {id: "030530", call: "open_by_handle_at", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030530 }}"}
+    - {id: "030540", call: "truncate", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030540 }}"}
+    - {id: "030540", call: "truncate", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030540 }}"}
+    - {id: "030550", call: "ftruncate", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030550 }}"}
+    - {id: "030550", call: "ftruncate", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030550 }}"}
+    - {id: "030560", path: "/usr/sbin/semanage", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030560 }}"}
+    - {id: "030570", path: "/usr/sbin/setsebool", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030570 }}"}
+    - {id: "030580", path: "/usr/bin/chcon", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030580 }}"}
+    - {id: "030590", path: "/usr/sbin/setfiles", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030590 }}"}
+    - {id: "030630", path: "/usr/bin/passwd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030630 }}"}
+    - {id: "030640", path: "/usr/bin/unix_chkpwd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030640 }}"}
+    - {id: "030650", path: "/usr/bin/gpasswd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030650 }}"}
+    - {id: "030660", path: "/usr/bin/chage", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030660 }}"}
+    - {id: "030670", path: "/usr/sbin/userhelper", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030670 }}"}
+    - {id: "030680", path: "/usr/bin/su", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030680 }}"}
+    - {id: "030690", path: "/usr/bin/sudo", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030690 }}"}
+    - {id: "030710", path: "/usr/bin/newgrp", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030710 }}"}
+    - {id: "030720", path: "/usr/bin/chsh", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030720 }}"}
+    - {id: "030730", path: "/bin/sudoedit", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030730 }}"}
     - {id: "030740", call: "mount", key: "privileged-mount", create: "{{ rhel_07_030740 }}"}
-    - {id: "030820", call: "init_module", key: "module-change", create: "{{ rhel_07_030820 }}"}
-    - {id: "030830", call: "delete_module", key: "module-change", create: "{{ rhel_07_030830 }}"}
+    - {id: "030740", path: "/bin/mount", key: "privileged-mount", create: "{{ rhel_07_030740 }}"}
+    - {id: "030740", path: "/usr/bin/mount", key: "privileged-mount", create: "{{ rhel_07_030740 }}"}
+    - {id: "030750", path: "/bin/umount", extra_fields: "-F perm=x", key: "privileged-mount", create: "{{ rhel_07_030750 }}"}
+    - {id: "030760", path: "/usr/sbin/postdrop", extra_fields: "-F perm=x", key: "privileged-postfix", create: "{{ rhel_07_030760 }}"}
+    - {id: "030770", path: "/usr/sbin/postqueue", extra_fields: "-F perm=x", key: "privileged-postfix", create: "{{ rhel_07_030770 }}"}
+    - {id: "030780", path: "/usr/libexec/openssh/ssh-keysign", extra_fields: "-F perm=x", key: "privileged-ssh", create: "{{ rhel_07_030780 }}"}
+    - {id: "030800", path: "/usr/bin/crontab", extra_fields: "-F perm=x", key: "privileged-cron", create: "{{ rhel_07_030800 }}"}
+    - {id: "030810", path: "/sbin/pam_timestamp_check", extra_fields: "-F perm=x", key: "privileged-pam", create: "{{ rhel_07_030810 }}"}
+    - {id: "030820", call: "init_module", include_all_auids: yes, key: "module-change", create: "{{ rhel_07_030820 }}"}
+    - {id: "030830", call: "delete_module", include_all_auids: yes, key: "module-change", create: "{{ rhel_07_030830 }}"}
     - {id: "030880", call: "rename", key: "delete", create: "{{ rhel_07_030880 }}"}
     - {id: "030890", call: "renameat", key: "delete", create: "{{ rhel_07_030890 }}"}
     - {id: "030900", call: "rmdir", key: "delete", create: "{{ rhel_07_030900 }}"}
     - {id: "030910", call: "unlink", key: "delete", create: "{{ rhel_07_030910 }}"}
     - {id: "030920", call: "unlinkat", key: "delete", create: "{{ rhel_07_030920 }}"}
-
-- name: "MEDIUM | Auditing commands"
-  include_tasks: audit_command.yml
-  with_items:
-    - {id: "030560", command: "/usr/sbin/semanage", key: "privileged-priv_change", create: "{{ rhel_07_030560 }}"}
-    - {id: "030570", command: "/usr/sbin/setsebool", key: "privileged-priv_change", create: "{{ rhel_07_030570 }}"}
-    - {id: "030580", command: "/usr/bin/chcon", key: "privileged-priv_change", create: "{{ rhel_07_030580 }}"}
-    - {id: "030590", command: "/usr/sbin/setfiles", key: "privileged-priv_change", create: "{{ rhel_07_030590 }}"}
-    - {id: "030630", command: "/usr/bin/passwd", key: "privileged-passwd", create: "{{ rhel_07_030630 }}"}
-    - {id: "030640", command: "/usr/bin/unix_chkpwd", key: "privileged-passwd", create: "{{ rhel_07_030640 }}"}
-    - {id: "030650", command: "/usr/bin/gpasswd", key: "privileged-passwd", create: "{{ rhel_07_030650 }}"}
-    - {id: "030660", command: "/usr/bin/chage", key: "privileged-passwd", create: "{{ rhel_07_030660 }}"}
-    - {id: "030670", command: "/usr/sbin/userhelper", key: "privileged-passwd", create: "{{ rhel_07_030670 }}"}
-    - {id: "030680", command: "/usr/bin/su", key: "privileged-priv_change", create: "{{ rhel_07_030680 }}"}
-    - {id: "030690", command: "/usr/bin/sudo", key: "privileged-priv_change", create: "{{ rhel_07_030690 }}"}
-    - {id: "030710", command: "/usr/bin/newgrp", key: "privileged-priv_change", create: "{{ rhel_07_030710 }}"}
-    - {id: "030720", command: "/usr/bin/chsh", key: "privileged-priv_change", create: "{{ rhel_07_030720 }}"}
-    - {id: "030730", command: "/bin/sudoedit", key: "privileged-priv_change", create: "{{ rhel_07_030730 }}"}
-    - {id: "030740", command: "/bin/mount", key: "privileged-mount", create: "{{ rhel_07_030740 }}"}
-    - {id: "030740", command: "/usr/bin/mount", key: "privileged-mount", create: "{{ rhel_07_030740 }}"}
-    - {id: "030750", command: "/bin/umount", key: "privileged-mount", create: "{{ rhel_07_030750 }}"}
-    - {id: "030760", command: "/usr/sbin/postdrop", key: "privileged-postfix", create: "{{ rhel_07_030760 }}"}
-    - {id: "030770", command: "/usr/sbin/postqueue", key: "privileged-postfix", create: "{{ rhel_07_030770 }}"}
-    - {id: "030780", command: "/usr/libexec/openssh/ssh-keysign", key: "privileged-ssh", create: "{{ rhel_07_030780 }}"}
-    - {id: "030800", command: "/usr/bin/crontab", key: "privileged-cron", create: "{{ rhel_07_030800 }}"}
-    - {id: "030810", command: "/sbin/pam_timestamp_check", key: "privileged-pam", create: "{{ rhel_07_030810 }}"}
 
 - name: "MEDIUM | Auditing files"
   include_tasks: audit_file.yml
@@ -1278,7 +1274,7 @@
     - {id: "030871", path: "/etc/group", description: "account creations, modifications, disabling, and termination events that affect /etc/group", key: "identity", create: "{{ rhel_07_030871 }}"}
     - {id: "030872", path: "/etc/gshadow", description: "account creations, modifications, disabling, and termination events that affect /etc/gshadow", key: "identity", create: "{{ rhel_07_030872 }}"}
     - {id: "030873", path: "/etc/shadow", description: "account creations, modifications, disabling, and termination events that affect /etc/shadow", key: "identity", create: "{{ rhel_07_030873 }}"}
-    - {id: "030874", path: "/etc/opasswd", description: "account creations, modifications, disabling, and termination events that affect /etc/opasswd", key: "identity", create: "{{ rhel_07_030874 }}"}
+    - {id: "030874", path: "/etc/security/opasswd", description: "account creations, modifications, disabling, and termination events that affect /etc/opasswd", key: "identity", create: "{{ rhel_07_030874 }}"}
 
 - name: "Restart auditd"
   command: /usr/sbin/service auditd restart
