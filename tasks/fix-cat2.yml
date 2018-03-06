@@ -1204,7 +1204,7 @@
       - notimplemented
 
 - name: "MEDIUM | Auditing system calls"
-  include_tasks: audit_system_call.yml id="{{ item.id }}" call="{{ item.call }}" key="{{ item.key }}"
+  include_tasks: audit_system_call.yml
   with_items:
     - {id: "030370", call: "chown", key: "perm_mod", create: "{{ rhel_07_030370 }}"}
     - {id: "030380", call: "fchown", key: "perm_mod", create: "{{ rhel_07_030380 }}"}
@@ -1241,7 +1241,7 @@
     - {id: "030920", call: "unlinkat", key: "delete", create: "{{ rhel_07_030920 }}"}
 
 - name: "MEDIUM | Auditing commands"
-  include_tasks: audit_command.yml id="{{ item.id }}" command="{{ item.command }}" key="{{ item.key }}"
+  include_tasks: audit_command.yml
   with_items:
     - {id: "030560", command: "/usr/sbin/semanage", key: "privileged-priv_change", create: "{{ rhel_07_030560 }}"}
     - {id: "030570", command: "/usr/sbin/setsebool", key: "privileged-priv_change", create: "{{ rhel_07_030570 }}"}
@@ -1267,7 +1267,7 @@
     - {id: "030810", command: "/sbin/pam_timestamp_check", key: "privileged-pam", create: "{{ rhel_07_030810 }}"}
 
 - name: "MEDIUM | Auditing files"
-  include_tasks: audit_file.yml id="{{ item.id }}" path="{{ item.path }}" description="{{ item.description }}" key="{{ item.key }}"
+  include_tasks: audit_file.yml
   with_items:
     - {id: "030600", path: "/var/log/tallylog", description: "successful/unsuccessful account access count events", key: "logins", create: "{{ rhel_07_030600 }}"}
     - {id: "030610", path: "/var/log/faillock", description: "unsuccessful account access events", key: "logins", create: "{{ rhel_07_030610 }}"}
