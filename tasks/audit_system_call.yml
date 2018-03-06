@@ -1,7 +1,7 @@
 ---
 # tasks/audit_system_call.yml
 
-- name: "MEDIUM | RHEL-07-{{ item.id }} | {{ item.state | ternary('PATCH', 'REVERT') }} | All uses of the {{ item.call }} command must be audited."
+- name: "MEDIUM | RHEL-07-{{ item.id }} | {{ item.create | ternary('PATCH', 'REVERT') }} | All uses of the {{ item.call }} command must be audited."
   lineinfile:
     path: "/etc/audit/rules.d/rhel7stig_system_calls.rules"
     create: yes
@@ -9,4 +9,4 @@
     group: root
     mode: 0600
     line: "-a always,exit -F arch=b64 -S {{ item.call }} {{ item.extrafields | default('') }} -F auid>=1000 -F auid!=4294967295 -k {{ item.key }}"
-    state: "{{ item.state | ternary('present', 'absent') }}"
+    state: "{{ item.create | ternary('present', 'absent') }}"
