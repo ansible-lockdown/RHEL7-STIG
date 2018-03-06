@@ -1267,7 +1267,7 @@
     - {id: "030810", command: "/sbin/pam_timestamp_check", key: "privileged-pam", create: "{{ rhel_07_030810 }}"}
 
 - name: "MEDIUM | Auditing files"
-  include_tasks: audit_file.yml id="{{ item.id }}" path="{{ item.command }}" description="{{ item.description }}" key="{{ item.key }}"
+  include_tasks: audit_file.yml id="{{ item.id }}" path="{{ item.path }}" description="{{ item.description }}" key="{{ item.key }}"
   with_items:
     - {id: "030600", path="/var/log/tallylog", description="successful/unsuccessful account access count events", key="logins", create: "{{ rhel_07_030600 }}"}
     - {id: "030610", path="/var/log/faillock", description="unsuccessful account access events", key="logins", create: "{{ rhel_07_030610 }}"}
