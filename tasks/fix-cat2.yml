@@ -1262,6 +1262,13 @@
     - {id: "030910", call: "unlink", key: "delete", create: "{{ rhel_07_030910 }}"}
     - {id: "030920", call: "unlinkat", key: "delete", create: "{{ rhel_07_030920 }}"}
 
+- name: "MEDIUM | Auditing commands"
+  include_tasks: audit_command.yml
+  with_items:
+    - {id: "030840", path: "/sbin/insmod", key: "module_change", create: "{{ rhel_07_030840 }}"}
+    - {id: "030850", path: "/sbin/rmmod", key: "module_change", create: "{{ rhel_07_030850 }}"}
+    - {id: "030860", path: "/sbin/modprobe", key: "module_change", create: "{{ rhel_07_030860 }}"}
+
 - name: "MEDIUM | Auditing files"
   include_tasks: audit_file.yml
   with_items:
