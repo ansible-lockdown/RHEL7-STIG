@@ -8,5 +8,5 @@
     owner: root
     group: root
     mode: 0600
-    line: "-a always,exit -F arch=b64 -S {{ item.call }} {{ item.extrafields | default('') }} -F auid>=1000 -F auid!=4294967295 -k {{ item.key }}"
+    line: "-a always,exit -F arch=b64 -S {{ item.call }} {{ item.extrafields | default('') }} -k {{ item.key }}"
     state: "{{ item.create | ternary('present', 'absent') }}"

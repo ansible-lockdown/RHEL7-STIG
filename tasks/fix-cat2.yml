@@ -1270,10 +1270,10 @@
   include_tasks: audit_file.yml
   with_items:
     - {id: "030600", path: "/var/log/tallylog", description: "successful/unsuccessful account access count events", key: "logins", create: "{{ rhel_07_030600 }}"}
-    - {id: "030610", path: "/var/log/faillock", description: "unsuccessful account access events", key: "logins", create: "{{ rhel_07_030610 }}"}
+    - {id: "030610", path: "/var/run/faillock", description: "unsuccessful account access events", key: "logins", create: "{{ rhel_07_030610 }}"}
     - {id: "030620", path: "/var/log/lastlog", description: "successful account access events", key: "logins", create: "{{ rhel_07_030620 }}"}
     - {id: "030700", path: "/etc/sudoers", description: "modifications to sudoers", key: "privileged-actions", create: "{{ rhel_07_030700 }}"}
-    - {id: "030700", path: "/etc/sudoers.d", description: "modifications to sudoers", key: "privileged-actions", create: "{{ rhel_07_030700 }}"}
+    - {id: "030700", path: "/etc/sudoers.d/", description: "modifications to sudoers", key: "privileged-actions", create: "{{ rhel_07_030700 }}"}
     - {id: "030870", path: "/etc/passwd", description: "account creations, modifications, disabling, and termination events that affect /etc/passwd", key: "identity", create: "{{ rhel_07_030870 }}"}
     - {id: "030871", path: "/etc/group", description: "account creations, modifications, disabling, and termination events that affect /etc/group", key: "identity", create: "{{ rhel_07_030871 }}"}
     - {id: "030872", path: "/etc/gshadow", description: "account creations, modifications, disabling, and termination events that affect /etc/gshadow", key: "identity", create: "{{ rhel_07_030872 }}"}
