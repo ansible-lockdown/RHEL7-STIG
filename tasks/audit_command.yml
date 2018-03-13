@@ -10,3 +10,4 @@
     mode: 0600
     line: "-w {{ item.path }} -p x -F auid!=4294967295 -k {{ item.key }}"
     state: "{{ item.create | ternary('present', 'absent') }}"
+  notify: restart auditd

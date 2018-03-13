@@ -10,3 +10,4 @@
     mode: 0600
     line: "-a always,exit -F arch=b64 {% if item.call is defined %}-S {{ item.call }}{% elif item.path is defined %}-F path={{item.path}}{% endif %} {{ item.extra_fields | default('') }} {%if item.include_all_auids is defined %}{% else %}-F auid>=1000 -F auid!=4294967295{% endif %} -k {{ item.key }}"
     state: "{{ item.create | ternary('present', 'absent') }}"
+  notify: restart auditd

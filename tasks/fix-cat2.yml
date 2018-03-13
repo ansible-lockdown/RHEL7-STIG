@@ -1285,10 +1285,6 @@
     - {id: "030873", path: "/etc/shadow", description: "account creations, modifications, disabling, and termination events that affect /etc/shadow", key: "identity", create: "{{ rhel_07_030873 }}"}
     - {id: "030874", path: "/etc/security/opasswd", description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd", key: "identity", create: "{{ rhel_07_030874 }}"}
 
-- name: "Restart auditd"
-  command: /usr/sbin/service auditd restart
-  changed_when: no
-
 - name: "MEDIUM | RHEL-07-031000 | PATCH | The system must send rsyslog output to a log aggregation server."
   command: "true"
   changed_when: no
