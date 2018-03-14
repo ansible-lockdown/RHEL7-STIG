@@ -619,10 +619,10 @@
 
 - name: "MEDIUM | RHEL-07-020100 | PATCH | USB mass storage must be disabled."
   lineinfile:
-    state: present
-    create: yes
-    line: '^blacklist usb-storage$'
     dest: /etc/modprobe.d/blacklist.conf
+    regexp: "^(#)?blacklist usb-storage(\\s|$)"
+    line: 'blacklist usb-storage'
+    create: yes
     owner: root
     group: root
     mode: "0644"
@@ -636,10 +636,10 @@
 
 - name: "MEDIUM | RHEL-07-020101 | PATCH | The Datagram Congestion Control Protocol (DCCP) kernel module must be disabled unless required."
   lineinfile:
-    state: present
+    dest: /etc/modprobe.d/nodccp.conf
+    regexp: "^(#)?install dccp /bin/true(\\s|$)"
+    line: 'install dccp /bin/true'
     create: yes
-    line: '^install dccp /bin/true$'
-    dest: /etc/modprobe.d/nodccp
     owner: root
     group: root
     mode: "0644"
