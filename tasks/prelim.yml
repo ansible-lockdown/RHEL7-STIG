@@ -106,12 +106,14 @@
       - RHEL-07-010260
 
 - name: "PRELIM | RHEL-07-020320 | All files and directories must have a valid owner."
-  command: find / -xdev -fstype xfs -nouser
+  command: find "{{ item.mount }}" -xdev -nouser
   register: rhel_07_020320_audit
   failed_when: no
   changed_when: no
   ignore_errors: yes
-  when: rhel_07_020320
+  when: rhel_07_020320 and item['device'].startswith('/dev')
+  with_items:
+    - "{{ ansible_mounts }}"
   tags:
       - cat2
       - medium
@@ -119,12 +121,14 @@
       - RHEL-07-020320
 
 - name: "PRELIM | RHEL-07-020330 | All files and directories must have a valid group owner."
-  command: find / -xdev -fstype xfs -nogroup
+  command: find "{{ item.mount }}" -xdev -nogroup
   register: rhel_07_020330_audit
   failed_when: no
   changed_when: no
   ignore_errors: yes
-  when: rhel_07_020330
+  when: rhel_07_020330 and item['device'].startswith('/dev')
+  with_items:
+    - "{{ ansible_mounts }}"
   tags:
       - cat2
       - medium
