@@ -2,6 +2,8 @@ rhel7stig_cat1_patch: yes
 rhel7stig_cat2_patch: yes
 rhel7stig_cat3_patch: yes
 
+rhel7stig_skip_for_travis: true
+
 rhel7stig_antivirus_required: no
 
 # Potential for locking out users - doesn't matter during CI

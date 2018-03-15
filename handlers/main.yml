@@ -27,3 +27,10 @@
   poll: 0
   tags:
     - aide
+
+- name: restart auditd
+  command: service auditd restart
+  args:
+     warn: no
+  when:
+      - rhel7stig_skip_for_travis == false

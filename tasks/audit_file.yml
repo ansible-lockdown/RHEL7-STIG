@@ -1,0 +1,13 @@
+---
+# tasks/audit_file.yml
+
+- name: "MEDIUM | RHEL-07-{{ item.id }} | {{ item.create | ternary('PATCH', 'REVERT') }} | The operating system must generate audit records for all {{ item.description }}."
+  lineinfile:
+    path: "/etc/audit/rules.d/rhel7stig_files.rules"
+    create: yes
+    owner: root
+    group: root
+    mode: 0600
+    line: "-w {{ item.path }} -p wa -k {{ item.key }}"
+    state: "{{ item.create | ternary('present', 'absent') }}"
+  notify: restart auditd
