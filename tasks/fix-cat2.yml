@@ -757,10 +757,13 @@
 
 - name: "MEDIUM | RHEL-07-020320 | PATCH | All files and directories must have a valid owner."
   assert:
-    that: item == ''
-    msg: File is missing a User - Manual intervention is required
-  with_items: "{{ rhel_07_020320_audit.stdout_lines | default([]) }}"
-  when: rhel_07_020320
+    that: "{{ item.stdout_lines | length }} == 0"
+    msg: "Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+  when:
+    - rhel_07_020320
+    - item.stdout_lines is defined
+    - item.stdout_lines | length > 0
+  with_items: "{{ rhel_07_020320_audit.results }}"
   tags:
       - cat2
       - medium
@@ -769,10 +772,13 @@
 
 - name: "MEDIUM | RHEL-07-020330 | PATCH | All files and directories must have a valid group owner."
   assert:
-    that: item == ''
-    msg: File is missing a Group - Manual intervention is required
-  with_items: "{{ rhel_07_020330_audit.stdout_lines | default([]) }}"
-  when: rhel_07_020330
+    that: "{{ item.stdout_lines | length }} == 0"
+    msg: "Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+  when: 
+    - rhel_07_020330
+    - item.stdout_lines is defined
+    - item.stdout_lines | length > 0
+  with_items: "{{ rhel_07_020330_audit.results }}"
   tags:
       - cat2
       - medium
