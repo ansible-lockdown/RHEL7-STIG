@@ -111,7 +111,7 @@
   failed_when: no
   changed_when: no
   ignore_errors: yes
-  when: rhel_07_020320 and item['device'].startswith('/dev')
+  when: rhel_07_020320 and item['device'].startswith('/dev') and not 'bind' in item['options']
   with_items:
     - "{{ ansible_mounts }}"
   tags:
@@ -126,7 +126,7 @@
   failed_when: no
   changed_when: no
   ignore_errors: yes
-  when: rhel_07_020330 and item['device'].startswith('/dev')
+  when: rhel_07_020320 and item['device'].startswith('/dev') and not 'bind' in item['options']
   with_items:
     - "{{ ansible_mounts }}"
   tags:
