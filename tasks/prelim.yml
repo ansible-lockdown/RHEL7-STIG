@@ -151,10 +151,10 @@
 
 - name: "PRELIM | RHEL-07-040410 | The SSH public host key files must have mode 0644 or less permissive."
   find:
-      paths: /
+      paths: /etc/ssh
       recurse: yes
       file_type: file
-      patterns: '*.pub'
+      patterns: 'ssh_host*_key.pub'
       hidden: true
   failed_when: no
   changed_when: no
@@ -170,10 +170,10 @@
 
 - name: "PRELIM | RHEL-07-040420 | The SSH private host key files must have mode 0600 or less permissive."
   find:
-      paths: /
+      paths: /etc/ssh
       recurse: yes
       file_type: file
-      patterns: '*ssh_host*key'
+      patterns: 'ssh_host*_key'
       hidden: true
   failed_when: no
   changed_when: no
