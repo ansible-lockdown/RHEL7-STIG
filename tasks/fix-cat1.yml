@@ -279,6 +279,23 @@
           replace: \1\2 fips=1\4
       notify: make grub2 config
 
+    - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
+      replace:
+          path: /etc/default/grub
+          regexp: "{{ rhel7stig_regexp_quoted_params }}"
+          replace: "{{ rhel7stig_replace_quoted_params }}"
+      with_items:
+          - "{{ ansible_mounts | json_query(query) }}"
+      vars:
+          query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
+          key: GRUB_CMDLINE_LINUX
+          param: boot
+          value: UUID={{ item.uuid }}
+          insert: yes
+      when: rhel7stig_boot_part != '/'
+      notify: make grub2 config
+      register: result
+
     - name: "HIGH | RHEL-07-021350 | AUDIT | Verify fips=1 is in /etc/default/grub"
       command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ])fips=1(?=[" ]).*"$' /etc/default/grub
       check_mode: no
