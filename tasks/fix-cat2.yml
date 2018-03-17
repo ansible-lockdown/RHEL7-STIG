@@ -1242,7 +1242,7 @@
     - {id: "030580", path: "/usr/bin/chcon", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030580 }}"}
     - {id: "030590", path: "/usr/sbin/setfiles", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030590 }}"}
     - {id: "030630", path: "/usr/bin/passwd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030630 }}"}
-    - {id: "030640", path: "/usr/bin/unix_chkpwd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030640 }}"}
+    - {id: "030640", path: "/usr/sbin/unix_chkpwd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030640 }}"}
     - {id: "030650", path: "/usr/bin/gpasswd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030650 }}"}
     - {id: "030660", path: "/usr/bin/chage", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030660 }}"}
     - {id: "030670", path: "/usr/sbin/userhelper", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030670 }}"}
