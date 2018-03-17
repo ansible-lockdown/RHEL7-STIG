@@ -8,7 +8,7 @@
     owner: root
     group: root
     mode: 0600
-    line: "-a always,exit -F arch={{ arch }} {% if item.call is defined %}-S {{ item.call }}{% elif item.path is defined %}-F path={{item.path}}{% endif %} {{ item.extra_fields | default('') }} {%if item.include_all_auids is defined %}{% else %}-F auid>=1000 -F auid!=4294967295{% endif %} -k {{ item.key }}"
+    line: "-a always,exit {% if item.call is defined %}-F arch={{ arch }} -S {{ item.call }}{% elif item.path is defined %}-F path={{item.path}}{% endif %} {{ item.extra_fields | default('') }} {%if item.include_all_auids is defined %}{% else %}-F auid>=1000 -F auid!=4294967295{% endif %} -k {{ item.key }}"
     state: "{{ item.create | ternary('present', 'absent') }}"
   with_items:
     - b64
