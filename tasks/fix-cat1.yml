@@ -275,8 +275,13 @@
     - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
       replace:
           path: /etc/default/grub
-          regexp: ^(\s*GRUB_CMDLINE_LINUX=")(((?!(?<=[" ])fips=1(?=[" ]).*).)*)(")$
-          replace: \1\2 fips=1\4
+          regexp: "{{ rhel7stig_regexp_quoted_params }}"
+          replace: "{{ rhel7stig_replace_quoted_params }}"
+      vars:
+          key: GRUB_CMDLINE_LINUX
+          param: fips
+          value: 1
+          append: yes # this is the default
       notify: make grub2 config
 
     - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
