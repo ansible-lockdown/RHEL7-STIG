@@ -1226,16 +1226,16 @@
     - {id: "030480", call: "fremovexattr", key: "perm_mod", create: "{{ rhel_07_030480 }}"}
     - {id: "030490", call: "lremovexattr", key: "perm_mod", create: "{{ rhel_07_030490 }}"}
     - {id: "030500", call: "creat", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030500 }}"}
-    - {id: "030500", call: "creat", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030500 }}"}
+    - {id: "030500", call: "creat", extra_fields: "-F exit=-EACCES", key: "access", create: "{{ rhel_07_030500 }}"}
     - {id: "030510", call: "open", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030510 }}"}
-    - {id: "030510", call: "open", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030510 }}"}
+    - {id: "030510", call: "open", extra_fields: "-F exit=-EACCES", key: "access", create: "{{ rhel_07_030510 }}"}
     - {id: "030520", call: "openat", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030520 }}"}
-    - {id: "030520", call: "openat", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030520 }}"}
+    - {id: "030520", call: "openat", extra_fields: "-F exit=-EACCES", key: "access", create: "{{ rhel_07_030520 }}"}
     - {id: "030530", call: "open_by_handle_at", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030530 }}"}
-    - {id: "030530", call: "open_by_handle_at", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030530 }}"}
-    - {id: "030540", call: "truncate", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030540 }}"}
+    - {id: "030530", call: "open_by_handle_at", extra_fields: "-F exit=-EACCES", key: "access", create: "{{ rhel_07_030530 }}"}
+    - {id: "030540", call: "truncate", extra_fields: "-F exit=-EACCES", key: "access", create: "{{ rhel_07_030540 }}"}
     - {id: "030540", call: "truncate", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030540 }}"}
-    - {id: "030550", call: "ftruncate", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030550 }}"}
+    - {id: "030550", call: "ftruncate", extra_fields: "-F exit=-EACCES", key: "access", create: "{{ rhel_07_030550 }}"}
     - {id: "030550", call: "ftruncate", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030550 }}"}
     - {id: "030560", path: "/usr/sbin/semanage", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030560 }}"}
     - {id: "030570", path: "/usr/sbin/setsebool", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030570 }}"}
