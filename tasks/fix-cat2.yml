@@ -1247,6 +1247,8 @@
     - {id: "030900", call: "rmdir", key: "delete"}
     - {id: "030910", call: "unlink", key: "delete"}
     - {id: "030920", call: "unlinkat", key: "delete"}
+  tags:
+    - audit-rules
 
 - name: "MEDIUM | Auditing commands"
   include_tasks: audit_command.yml
@@ -1276,6 +1278,8 @@
     - {id: "030840", path: "/sbin/insmod", trivial: yes, key: "module-change"}
     - {id: "030850", path: "/sbin/rmmod", trivial: yes, key: "module-change"}
     - {id: "030860", path: "/sbin/modprobe", trivial: yes, key: "module-change"}
+  tags:
+    - audit-rules
 
 - name: "MEDIUM | Auditing files"
   include_tasks: audit_file.yml
@@ -1290,6 +1294,8 @@
     - {id: "030872", path: "/etc/gshadow", description: "account creations, modifications, disabling, and termination events that affect /etc/gshadow", key: "identity"}
     - {id: "030873", path: "/etc/shadow", description: "account creations, modifications, disabling, and termination events that affect /etc/shadow", key: "identity"}
     - {id: "030874", path: "/etc/security/opasswd", description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd", key: "identity"}
+  tags:
+    - audit-rules
 
 - name: "MEDIUM | RHEL-07-031000 | PATCH | The system must send rsyslog output to a log aggregation server."
   command: "true"
