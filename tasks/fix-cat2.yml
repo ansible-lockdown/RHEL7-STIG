@@ -1273,9 +1273,9 @@
     - {id: "030780", path: "/usr/libexec/openssh/ssh-keysign", key: "privileged-ssh", create: "{{ rhel_07_030780 }}"}
     - {id: "030800", path: "/usr/bin/crontab", key: "privileged-cron", create: "{{ rhel_07_030800 }}"}
     - {id: "030810", path: "/sbin/pam_timestamp_check", key: "privileged-pam", create: "{{ rhel_07_030810 }}"}
-    - {id: "030840", path: "/sbin/insmod", trivial: yes, key: "module_change", create: "{{ rhel_07_030840 }}"}
-    - {id: "030850", path: "/sbin/rmmod", trivial: yes, key: "module_change", create: "{{ rhel_07_030850 }}"}
-    - {id: "030860", path: "/sbin/modprobe", trivial: yes, key: "module_change", create: "{{ rhel_07_030860 }}"}
+    - {id: "030840", path: "/sbin/insmod", trivial: yes, key: "module-change", create: "{{ rhel_07_030840 }}"}
+    - {id: "030850", path: "/sbin/rmmod", trivial: yes, key: "module-change", create: "{{ rhel_07_030850 }}"}
+    - {id: "030860", path: "/sbin/modprobe", trivial: yes, key: "module-change", create: "{{ rhel_07_030860 }}"}
 
 - name: "MEDIUM | Auditing files"
   include_tasks: audit_file.yml
