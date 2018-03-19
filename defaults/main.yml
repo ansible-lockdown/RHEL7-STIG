@@ -469,3 +469,5 @@ rhel7stig_availability_override: false
 # 1    System continues to run, issues a warning and audit stops.
 #      Use this for any other setup to avoid loss of data or data corruption.
 rhel7stig_auditd_failure_flag: "{{ rhel7stig_availability_override | ternary(1, 2) }}"
+
+rhel7stig_audit_part: "{{ rhel_07_audit_part.stdout }}"
