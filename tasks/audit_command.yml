@@ -3,15 +3,15 @@
 
 - name: "MEDIUM | RHEL-07-{{ item.id }} | {{ audit_present | ternary('PATCH', 'REVERT') }} | All uses of the {{ item.path | basename }} command must be audited."
   lineinfile:
-    path: "/etc/audit/rules.d/rhel7stig_commands.rules"
-    create: yes
-    owner: root
-    group: root
-    mode: 0600
-    line: "{{ item.trivial | default(false) | ternary(trivial_audit, normal_audit) }}"
-    state: "{{ audit_present | ternary('present', 'absent') }}"
+      path: "/etc/audit/rules.d/rhel7stig_commands.rules"
+      create: yes
+      owner: root
+      group: root
+      mode: 0600
+      line: "{{ item.trivial | default(false) | ternary(trivial_audit, normal_audit) }}"
+      state: "{{ audit_present | ternary('present', 'absent') }}"
   vars:
-    trivial_audit: "-w {{ item.path }} -p x -F auid!=4294967295 -k {{ item.key }}"
-    normal_audit: "-a always,exit -F path={{ item.path }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k {{ item.key }}"
-    audit_present: "{{ item.create | default(vars['rhel_07_' + item.id]) }}"
+      trivial_audit: "-w {{ item.path }} -p x -F auid!=4294967295 -k {{ item.key }}"
+      normal_audit: "-a always,exit -F path={{ item.path }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k {{ item.key }}"
+      audit_present: "{{ item.create | default(vars['rhel_07_' + item.id]) }}"
   notify: restart auditd
