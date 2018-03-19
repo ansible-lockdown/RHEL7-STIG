@@ -1334,6 +1334,9 @@
         call: "unlinkat"
         key: "delete"
   tags:
+      - cat2
+      - medium
+      - patch
       - audit-rules
 
 - name: "MEDIUM | Auditing commands"
@@ -1418,6 +1421,9 @@
         trivial: yes
         key: "module-change"
   tags:
+      - cat2
+      - medium
+      - patch
       - audit-rules
 
 - name: "MEDIUM | Auditing files"
@@ -1464,6 +1470,9 @@
         description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd"
         key: "identity"
   tags:
+      - cat2
+      - medium
+      - patch
       - audit-rules
 
 - name: "MEDIUM | RHEL-07-031000 | PATCH | The system must send rsyslog output to a log aggregation server."
