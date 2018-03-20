@@ -126,16 +126,6 @@
       - RHEL-07-040410
       - ssh
 
-- name: "MEDIUM | RHEL-07-040680 | AUDIT | The system must be configured to prevent unrestricted mail relaying."
-  command: "postconf -n smtpd_client_restrictions"
-  changed_when: no
-  register: rhel_07_040680_audit
-  tags:
-      - cat2
-      - medium
-      - audit
-      - RHEL-07-040680
-
 - name: "MEDIUM | RHEL-07-041010 | AUDIT | Wireless network adapters must be disabled."
   command: nmcli radio wifi
   failed_when: no
