@@ -139,7 +139,7 @@
   shell: "egrep ':[0-9]{4}' /etc/passwd | cut -d: -f1,4,6"
   changed_when: no
   failed_when: no
-  check_mode: yes
+  check_mode: no
   register: rhel7stig_passwd_homedir_audit
   when: 
     - rhel_07_020620 or
