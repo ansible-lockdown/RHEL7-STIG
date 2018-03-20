@@ -1055,17 +1055,6 @@
       - RHEL-07-021110
       - cron
 
-- name: "MEDIUM | RHEL-07-021120 | PATCH | If the cron.allow file exists it must be group-owned by root."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021120
-  tags:
-      - cat2
-      - medium
-      - patch
-      - RHEL-07-021120
-      - notimplemented
-
 - block:
     - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
       shell: "systemctl show kdump | grep LoadState | cut -d = -f 2"
