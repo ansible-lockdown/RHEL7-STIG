@@ -814,7 +814,7 @@
   file:
     path: "{{ item.split(':')[2] }}"
     state: directory
-  with_items: "{{ rhel7stig_passwd_homedir_check.stdout_lines }}"
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020620
   tags:
       - cat2
@@ -827,7 +827,7 @@
     path: "{{ item.split(':')[2] }}"
     mode: "{{ rhel7stig_homedir_mode }}"
     state: directory
-  with_items: "{{ rhel7stig_passwd_homedir_check.stdout_lines }}"
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020630
   tags:
       - cat2
