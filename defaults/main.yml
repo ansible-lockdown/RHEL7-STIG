@@ -442,6 +442,9 @@ rhel7stig_auth_settings:
     use_ldap: no
     use_sssd: no
 
+# RHEL-07-040820
+rhel7stig_ipsec_required: no
+
 # RHEL-07-010340
 # Setting to enable or disable fixes that depend on password-based authentication
 # i.e. if users authenticate with a means other than passwords (pubkey)
