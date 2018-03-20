@@ -408,9 +408,8 @@
       name:
           - tftp
           - tftp-server
-      state: absent
+      state: "{{rhel7stig_tftp_required | ternary('present', 'absent') }}"
   when:
-      - not rhel7stig_tftp_required
       - rhel_07_040700
   tags:
       - cat1
