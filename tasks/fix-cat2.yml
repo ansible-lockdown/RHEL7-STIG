@@ -1940,6 +1940,16 @@
       - patch
       - RHEL-07-040670
 
+- name: "MEDIUM | RHEL-07-040680 | AUDIT | The system must be configured to prevent unrestricted mail relaying."
+  command: "postconf -n smtpd_client_restrictions"
+  changed_when: no
+  register: rhel_07_040680_audit
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-040680
+
 - name: "MEDIUM | RHEL-07-040680 | PATCH | The system must be configured to prevent unrestricted mail relaying."
   command: "postconf -e 'smtpd_client_restrictions=permit_mynetworks, reject'"
   when:
