@@ -1952,9 +1952,15 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-040720 | PATCH | If the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon must be configured to operate in secure mode."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040720
+  lineinfile:
+    path: /etc/xinetd.d/tftp
+    regexp: "(?i)^.*server_args.*="
+    line: "\tserver_args\t\t= -s /var/lib/tftpboot"
+    insertafter: "\tserver\t\t\t="
+    state: present
+  when:
+        - rhel7stig_tftp_required
+        - rhel_07_040720
   tags:
       - cat2
       - medium
