@@ -1,0 +1,6 @@
+---
+
+- name: "Creating home directory for {{ item.split(':')[0] }}"
+  file:
+    path: "{{ item.split(':')[2] }}"
+    state: directory

@@ -135,6 +135,13 @@
       - audit
       - RHEL-07-020330
 
+- name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-021640 RHEL-07-021650 | Check /etc/passwd entries for local user home directories"
+  shell: "egrep ':[0-9]{4}' /etc/passwd | cut -d: -f1,4,6"
+  changed_when: no
+  failed_when: no
+  register: rhel7stig_passwd_homedir_check
+  when: rhel_07_020620 or rhel_07_020630 or rhel_07_020640 or rhel_07_020650
+
 # - name: "PRELIM | RHEL-07-040180 | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
 #   command: grep -i useldapauth /etc/sysconfig/authconfig
 #   register: rhel_07_040180_audit

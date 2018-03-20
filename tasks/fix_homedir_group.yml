@@ -1,0 +1,7 @@
+---
+
+- name: "Fixing group of home directory for {{ item.split(':')[0] }}"
+  file:
+    group: "{{ item.split(':')[1] }}"
+    path: "{{ item.split(':')[2] }}"
+    state: directory

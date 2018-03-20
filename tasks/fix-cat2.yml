@@ -811,8 +811,8 @@
       - home
 
 - name: "MEDIUM | RHEL-07-020620 | PATCH | All local interactive user home directories defined in the /etc/passwd file must exist."
-  command: "true"
-  changed_when: no
+  include_tasks: create_homedir.yml
+  with_items: "{{ rhel7stig_passwd_homedir_check.stdout_lines }}"
   when: rhel_07_020620
   tags:
       - cat2
@@ -822,8 +822,8 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
-  command: "true"
-  changed_when: no
+  include_tasks: fix_homedir_mode.yml
+  with_items: "{{ rhel7stig_passwd_homedir_check.stdout_lines }}"
   when: rhel_07_020630
   tags:
       - cat2
@@ -833,8 +833,8 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-020640 | PATCH | All local interactive user home directories must be owned by their respective users."
-  command: "true"
-  changed_when: no
+  include_tasks: fix_homedir_owner.yml
+  with_items: "{{ rhel7stig_passwd_homedir_check.stdout_lines }}"
   when: rhel_07_020640
   tags:
       - cat2
@@ -844,8 +844,8 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-020650 | PATCH | All local interactive user home directories must be group-owned by the home directory owners primary group."
-  command: "true"
-  changed_when: no
+  include_tasks: fix_homedir_group.yml
+  with_items: "{{ rhel7stig_passwd_homedir_check.stdout_lines }}"
   when: rhel_07_020650
   tags:
       - cat2
