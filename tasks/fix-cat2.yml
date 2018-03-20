@@ -2140,6 +2140,7 @@
 - block:
     - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
       command: rpm -q postfix
+      failed_when: no
       register: rhel_07_040680_rpm_audit
 
     - name: "MEDIUM | RHEL-07-040680 | AUDIT | The system must be configured to prevent unrestricted mail relaying."
