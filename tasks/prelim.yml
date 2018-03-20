@@ -92,6 +92,20 @@
       - audit
       - RHEL-07-010240
 
+- name: "PRELIM | Check /etc/sudoers and /etc/sudoers.d/* entries for NOPASSWD."
+  shell: "grep '^[^#].*NOPASSWD' /etc/sudoers /etc/sudoers.d/*"
+  changed_when: no
+  failed_when: no
+  register: rhel_07_010340_audit
+  when: rhel_07_010340
+
+- name: "PRELIM | Check /etc/sudoers and /etc/sudoers.d/* entries for !authenticate."
+  shell: "grep '^[^#].*!authenticate' /etc/sudoers /etc/sudoers.d/*"
+  changed_when: no
+  failed_when: no
+  register: rhel_07_010350_audit
+  when: rhel_07_010350
+
 - name: "PRELIM | RHEL-07-010260 | Existing passwords must be restricted to a 60-day maximum lifetime."
   command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
   register: rhel_07_010260_audit
