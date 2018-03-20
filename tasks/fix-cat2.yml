@@ -840,7 +840,7 @@
     path: "{{ item.split(':')[2] }}"
     owner: "{{ item.split(':')[0] }}"
     state: directory
-  with_items: "{{ rhel7stig_passwd_homedir_check.stdout_lines }}"
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020640
   tags:
       - cat2
@@ -853,7 +853,7 @@
     path: "{{ item.split(':')[2] }}"
     group: "{{ item.split(':')[1] }}"
     state: directory
-  with_items: "{{ rhel7stig_passwd_homedir_check.stdout_lines }}"
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020650
   tags:
       - cat2
