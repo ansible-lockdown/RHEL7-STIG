@@ -2017,16 +2017,17 @@
       - RHEL-07-040810
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-040820 | PATCH | The system must not have unauthorized IP tunnels configured."
-  command: "true"
-  changed_when: no
+- name: "MEDIUM | RHEL-07-040820 | PATCH | The system must not have unauthorized IP tunnels configured{{ rhel7stig_ipsec_required | ternary(' (exception should have been documented with ISSO)','') }}."
+  yum:
+    name:
+      - libreswan
+    state: "{{rhel7stig_ipsec_required | ternary('present', 'absent') }}"
   when: rhel_07_040820
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040820
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-040830 | PATCH | The system must not forward IPv6 source-routed packets."
   sysctl:
