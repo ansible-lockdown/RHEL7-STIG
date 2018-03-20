@@ -1,7 +1,0 @@
----
-
-- name: "Fixing mode of home directory for {{ item.split(':')[0] }}"
-  file:
-    path: "{{ item.split(':')[2] }}"
-    mode: "{{ rhel7stig_homedir_mode }}"
-    state: directory

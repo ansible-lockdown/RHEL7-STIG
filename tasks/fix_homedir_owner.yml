@@ -1,7 +1,0 @@
----
-
-- name: "Fixing owner of home directory for {{ item.split(':')[0] }}"
-  file:
-    owner: "{{ item.split(':')[0] }}"
-    path: "{{ item.split(':')[2] }}"
-    state: directory
