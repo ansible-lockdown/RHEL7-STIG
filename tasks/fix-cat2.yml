@@ -1304,16 +1304,24 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-031010 | PATCH | The rsyslog daemon must not accept log messages from other servers unless the server is being used for log aggregation."
-  command: "true"
-  changed_when: no
-  when: rhel_07_031010
+  replace:
+    path: /etc/rsyslog/rsyslog.conf
+    regexp: '({{ item }})'
+    replace: '#\1'
+  with_items:
+    - '^(\$ModLoad imtcp)'
+    - '^(\$ModLoad imudp)'
+    - '^(\$UDPServerRun)'
+    - '^(\$InputTCPServerRun)'
+  when:
+    - rhel_07_031010
+    - not rhel7stig_log_aggregator
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-031010
       - rsyslog
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-032010 | PATCH | The system must update the DoD-approved virus scan program every seven days or more frequently."
   command: "true"
