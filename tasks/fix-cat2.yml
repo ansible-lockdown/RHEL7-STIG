@@ -1315,7 +1315,7 @@
     - '^(\$InputTCPServerRun)'
   when:
     - rhel_07_031010
-    - not rhel7stig_log_aggregator
+    - not rhel7stig_system_is_log_aggregator
   register: result
   failed_when:
     - result | failed

@@ -305,7 +305,7 @@ rhel7stig_time_service_configs:
 rhel7stig_firewall_service: firewalld
 
 # RHEL-07-031010
-rhel7stig_log_aggregator: false
+rhel7stig_system_is_log_aggregator: false
 
 # RHEL-07-040490
 # If not required, remove lftpd.
