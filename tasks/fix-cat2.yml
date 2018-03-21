@@ -1308,6 +1308,7 @@
     path: /etc/rsyslog/rsyslog.conf
     regexp: '({{ item }})'
     replace: '#\1'
+    register: result
   with_items:
     - '^(\$ModLoad imtcp)'
     - '^(\$ModLoad imudp)'
@@ -1316,6 +1317,9 @@
   when:
     - rhel_07_031010
     - not rhel7stig_log_aggregator
+  failed_when:
+    - result | failed
+    - result.rc != 257
   tags:
       - cat2
       - medium
