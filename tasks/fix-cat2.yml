@@ -1318,7 +1318,6 @@
     - rhel_07_031010
     - not rhel7stig_log_aggregator
   failed_when:
-    - result | failed
     - result.rc != 257
   tags:
       - cat2
