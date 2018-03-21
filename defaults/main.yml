@@ -445,6 +445,9 @@ rhel7stig_auditd_mail_acct: root
 # RHEL-07-020630
 rhel7stig_homedir_mode: 0750
 
+# RHEL-07-031000
+# rhel7stig_log_aggregation_server: logagg.example.com
+
 # RHEL-07-040180
 # Whether the system should be using LDAP for authentication
 rhel7stig_auth_settings:
