@@ -1500,16 +1500,31 @@
       - audit-rules
 
 - name: "MEDIUM | RHEL-07-031000 | PATCH | The system must send rsyslog output to a log aggregation server."
-  command: "true"
-  changed_when: no
-  when: rhel_07_031000
+  blockinfile:
+    path: /etc/rsyslog.conf
+    state: present
+    block: |
+      $ActionQueueFileName rhel-07-031000 # unique name prefix for spool files
+      $ActionQueueMaxDiskSpace 1g   # 1gb space limit (use as much as possible)
+      $ActionQueueSaveOnShutdown on # save messages to disk on shutdown
+      $ActionQueueType LinkedList   # run asynchronously
+      $ActionResumeRetryCount -1    # infinite retries if host is down
+      # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
+      *.* @@{{ rhel7stig_log_aggregation_server }}
+    insertafter: EOF
+  register: result
+  failed_when:
+    - result | failed
+    - result.rc != 257
+  when: 
+    - rhel_07_031000
+    - rhel7stig_log_aggregation_server is defined
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-031000
       - rsyslog
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-031010 | PATCH | The rsyslog daemon must not accept log messages from other servers unless the server is being used for log aggregation."
   replace:
