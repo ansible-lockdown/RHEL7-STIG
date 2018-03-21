@@ -1034,15 +1034,22 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-021100 | PATCH | Cron logging must be implemented."
-  command: "true"
-  changed_when: no
+  lineinfile:
+    path: /etc/rsyslog.conf
+    state: present
+    regexp: 'cron.\*'
+    line: 'cron.* /var/log/cron.log'
+    insertafter: '#### RULES ####'
+  register: result
+  failed_when:
+    - result | failed
+    - result.rc != 257
   when: rhel_07_021100
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-021100
-      - notimplemented
 
 - name: |
         MEDIUM | RHEL-07-021110 | PATCH | If the cron.allow file exists it must be owned by root.
