@@ -1305,10 +1305,9 @@
 
 - name: "MEDIUM | RHEL-07-031010 | PATCH | The rsyslog daemon must not accept log messages from other servers unless the server is being used for log aggregation."
   replace:
-    path: /etc/rsyslog/rsyslog.conf
+    path: /etc/rsyslog.conf
     regexp: '({{ item }})'
     replace: '#\1'
-    register: result
   with_items:
     - '^(\$ModLoad imtcp)'
     - '^(\$ModLoad imudp)'
@@ -1317,7 +1316,9 @@
   when:
     - rhel_07_031010
     - not rhel7stig_log_aggregator
+  register: result
   failed_when:
+    - result | failed
     - result.rc != 257
   tags:
       - cat2
