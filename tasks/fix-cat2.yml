@@ -1215,6 +1215,10 @@
   failed_when:
     - rhel7stig_auditd_action_mail_acct_result | failed
     - rhel7stig_auditd_action_mail_acct_result.rc != 257
+  register: rhel7stig_auditd_space_left_action_result
+  failed_when:
+    - rhel7stig_auditd_space_left_action_result | failed
+    - rhel7stig_auditd_space_left_action_result.rc != 257
   when: rhel_07_030350
   tags:
       - cat2
