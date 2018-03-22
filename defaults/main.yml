@@ -433,6 +433,9 @@ rhel7stig_login_defaults:
   umask: '077'
   create_home: 'yes'
 
+# RHEL-07-030350
+rhel7stig_auditd_mail_acct: root
+
 # RHEL-07-020630
 rhel7stig_homedir_mode: 0750
 

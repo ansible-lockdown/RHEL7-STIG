@@ -1191,26 +1191,36 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-030340 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) via email when the threshold for the repository maximum audit record storage capacity is reached."
-  command: "true"
-  changed_when: no
+  replace:
+    path: /etc/audit/auditd.conf
+    regexp: "space_left_action =.*"
+    replace: "space_left_action = email"
+  register: rhel7stig_auditd_space_left_action_result
+  failed_when:
+    - rhel7stig_auditd_space_left_action_result | failed
+    - rhel7stig_auditd_space_left_action_result.rc != 257
   when: rhel_07_030340
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-030340
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-030350 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) when the threshold for the repository maximum audit record storage capacity is reached."
-  command: "true"
-  changed_when: no
+  replace:
+    path: /etc/audit/auditd.conf
+    regexp: "action_mail_acct =.*"
+    replace: "action_mail_acct = {{ rhel7stig_auditd_mail_acct }}"
+  register: rhel7stig_auditd_space_left_action_result
+  failed_when:
+    - rhel7stig_auditd_space_left_action_result | failed
+    - rhel7stig_auditd_space_left_action_result.rc != 257
   when: rhel_07_030350
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-030350
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-030360 | PATCH | All privileged function executions must be audited."
   command: "true"
