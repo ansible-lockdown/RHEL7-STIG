@@ -301,10 +301,18 @@
       notify: make grub2 config
       register: result
 
-    - name: "HIGH | RHEL-07-021350 | AUDIT | Verify fips=1 is in /etc/default/grub"
-      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ])fips=1(?=[" ]).*"$' /etc/default/grub
+    - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
+      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
       check_mode: no
+      with_items:
+          - fips=1
+          - boot=UUID={{ ansible_mounts | json_query(query) }}
+      vars:
+          query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
       register: rhel_07_021350_audit
+      when:
+          - rhel7stig_boot_part != '/' or
+            'boot=' not in item
       changed_when:
           - ansible_check_mode
           - rhel_07_021350_audit | failed
