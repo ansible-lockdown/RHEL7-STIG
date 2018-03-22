@@ -433,6 +433,9 @@ rhel7stig_login_defaults:
   umask: '077'
   create_home: 'yes'
 
+# RHEL-07-030330: set this to 25% of the free space in /var/log/audit (measured in megabytes)
+rhel7stig_auditd_space_left: 225
+
 # RHEL-07-040180
 # Whether the system should be using LDAP for authentication
 rhel7stig_auth_settings:
