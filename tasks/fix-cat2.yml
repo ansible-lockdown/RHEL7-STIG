@@ -1122,15 +1122,27 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-030300 | PATCH | The operating system must off-load audit records onto a different system or media from the system being audited."
-  command: "true"
-  changed_when: no
+  block:
+    - name: "Install audispd-plugins"
+      yum:
+        name: audispd-plugins
+        state: present
+        
+    - name: "Set audisp-remote server"
+      replace:
+        path: /etc/audisp/audisp-remote.conf
+        regexp: "remote_server =.*"
+        replace: "remote_server = {{ rhel7stig_audisp_aggregation_server }}"
+      register: audisp_remote_result
+      failed_when:
+        - audisp_remote_result | failed
+        - audisp_remote_result.rc != 257
   when: rhel_07_030300
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-030300
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-030310 | PATCH | The operating system must encrypt the transfer of audit records off-loaded onto a different system or media from the system being audited."
   command: "true"

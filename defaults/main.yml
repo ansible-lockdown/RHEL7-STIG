@@ -304,6 +304,9 @@ rhel7stig_time_service_configs:
 
 rhel7stig_firewall_service: firewalld
 
+# RHEL-070-030300
+rhel7stig_audisp_aggregation_server: logagg.site.mil
+
 # RHEL-07-040490
 # If not required, remove lftpd.
 rhel7stig_lftpd_required: no
