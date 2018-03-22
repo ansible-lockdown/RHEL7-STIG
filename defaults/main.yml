@@ -417,6 +417,10 @@ rhel7stig_pam_faillock:
   unlock_time: 604800
   fail_for_root: yes
 
+# RHEL-07-030320 and RHEL-07-030321
+rhel7stig_audisp_disk_full_action: syslog
+rhel7stig_audisp_network_failure_action: syslog
+
 # RHEL-07-040670
 # Network interface promiscuous mode setting will be disabled unless set to true
 rhel7stig_net_promisc_mode_required: no

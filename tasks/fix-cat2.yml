@@ -1176,26 +1176,42 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-030320 | PATCH | The audit system must take appropriate action when the audit storage volume is full."
-  command: "true"
-  changed_when: no
+  block:
+    - name: "Install audispd-plugins"
+      yum:
+        name: audispd-plugins
+        state: present
+
+    - name: "Set disk_full_action"
+      lineinfile:
+        path: /etc/audisp/audisp-remote.conf
+        regexp: "disk_full_action =.*"
+        line: "disk_full_action = {{ rhel7stig_audisp_disk_full_action }}"
   when: rhel_07_030320
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-030320
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-030321 | PATCH | The audit system must take appropriate action when there is an error sending audit records to a remote system."
-  command: "true"
-  changed_when: no
+  block:
+    - name: "Install audispd-plugins"
+      yum:
+        name: audispd-plugins
+        state: present
+        
+    - name: "Set network_failure_action"
+      lineinfile:
+        path: /etc/audisp/audisp-remote.conf
+        regexp: "network_failure_action =.*"
+        line: "network_failure_action = {{ rhel7stig_audisp_network_failure_action }}"
   when: rhel_07_030321
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-030321
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-030330 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer ISSO (at a minimum) when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity."
   lineinfile:
