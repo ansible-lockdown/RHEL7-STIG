@@ -434,7 +434,7 @@ rhel7stig_login_defaults:
   create_home: 'yes'
 
 # RHEL-07-030350
-rhel7stig_auditd_mail_acct: sa-isso-list@site.mil
+rhel7stig_auditd_mail_acct: root
 
 # RHEL-07-040180
 # Whether the system should be using LDAP for authentication
