@@ -410,8 +410,8 @@
           - tftp-server
       state: absent
   when:
-      - rhel_07_040700
       - not rhel7stig_tftp_required
+      - rhel_07_040700
   tags:
       - cat1
       - high
