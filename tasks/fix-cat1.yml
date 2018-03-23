@@ -272,6 +272,32 @@
       command: prelink -ua
       when: rhel_07_021350_prelink_installed.rc == 0
 
+    - name: "HIGH | RHEL-07-021350 | AUDIT | Check for GRUB_CMDLINE_LINUX in /etc/default/grub"
+      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*"$' /etc/default/grub
+      check_mode: no
+      failed_when: no
+      changed_when: rhel_07_021350_default_grub_missing_audit.rc > 0
+      register: rhel_07_021350_default_grub_missing_audit
+
+    - name: "HIGH | RHEL-07-021350 | AUIDT | parse sane GRUB_CMDLINE_LINUX from /proc/cmdline"
+      command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
+      check_mode: no
+      changed_when: no
+      failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
+      when: rhel_07_021350_default_grub_missing_audit | changed
+      register: rhel_07_021350_grub_cmdline_linux_audit
+
+    - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
+      template:
+          src: etc_default_grub.j2
+          dest: /etc/default/grub
+          owner: root
+          group: root
+          mode: 0644
+      vars:
+          grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
+      when: rhel_07_021350_default_grub_missing_audit | changed
+
     - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
       replace:
           path: /etc/default/grub
@@ -282,6 +308,9 @@
           param: fips
           value: 1
           append: yes # this is the default
+      when:
+          - not ansible_check_mode or
+            not rhel_07_021350_default_grub_missing_audit | changed
       notify: make grub2 config
 
     - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
@@ -297,7 +326,10 @@
           param: boot
           value: UUID={{ item.uuid }}
           insert: yes
-      when: rhel7stig_boot_part != '/'
+      when:
+          - rhel7stig_boot_part != '/'
+          - not ansible_check_mode or
+            not rhel_07_021350_default_grub_missing_audit | changed
       notify: make grub2 config
       register: result
 
@@ -311,6 +343,8 @@
           query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
       register: rhel_07_021350_audit
       when:
+          - not ansible_check_mode or
+            not rhel_07_021350_default_grub_missing_audit | changed
           - rhel7stig_boot_part != '/' or
             'boot=' not in item
       changed_when:
