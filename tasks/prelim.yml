@@ -93,7 +93,7 @@
       - RHEL-07-010240
 
 - name: "PRELIM | Find all sudoers files."
-  command: "find /etc/sudoers /etc/sudoers.d/ -type f"
+  command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
   changed_when: no
   failed_when: no
   register: rhel7stig_sudoers_files
