@@ -89,18 +89,26 @@
       - mount
       - tmp
 
-- block:
-    - name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
+- name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
+  block:
+    - name: "Replace CONTENT with CONTENT_EX"
       replace:
-        name: "Change CONTENT to CONTENT_EX"
         path: /etc/aide.conf
         regexp: '^(.*) (CONTENT)$'
         replace: '\1 CONTENT_EX'
-    - replace:
-        name: "Change NORMAL to DATAONLY"
+      register: result
+      failed_when:
+        - result | failed
+        - result.rc != 257
+    - name: "Replace NORMAL with DATAONLY"
+      replace:
         path: /etc/aide.conf
         regexp: '^(.*) (NORMAL)$'
         replace: '\1 DATAONLY'
+      register: result
+      failed_when:
+        - result | failed
+        - result.rc != 257
   when: rhel_07_021600
   tags:
     - cat3
@@ -108,29 +116,44 @@
     - patch
     - RHEL-07-021600
 
-- block:
-    - name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes."
+- name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes."
+  block:
+    - name: "Addd xattrs to LOG"
       replace:
-        name: "Add xattrs to LOG"
         path: /etc/aide.conf
         regexp: '^LOG = p\+u\+g\+n\+acl\+selinux\+ftype$'
         replace: 'LOG = p+u+g+n+acl+selinux+ftype+xattrs'
+      register: result
+      failed_when:
+        - result | failed
+        - result.rc != 257
     - name: "Fix LOG comment"
       replace:
         path: /etc/aide.conf
         regexp: '^# Logfiles only check access w/o xattrs.$'
         replace: '# Logfiles check access and xattrs.'
-        register: result
-    - name: "Change CONTENT to CONTENT_EX"
+      register: result
+      failed_when:
+        - result | failed
+        - result.rc != 257
+    - name: "Replace CONTENT with CONTENT_EX"
       replace:
         path: /etc/aide.conf
         regexp: '^(.*) (CONTENT)$'
         replace: '\1 CONTENT_EX'
-    - name: "Change NORMAL to DATAONLY"
+      register: result
+      failed_when:
+        - result | failed
+        - result.rc != 257
+    - name: "Replace NORMAL with DATAONLY"
       replace:
         path: /etc/aide.conf
         regexp: '^(.*) (NORMAL)$'
         replace: '\1 DATAONLY'
+      register: result
+      failed_when:
+        - result | failed
+        - result.rc != 257
   when: rhel_07_021610
   tags:
     - cat3
