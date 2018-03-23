@@ -1129,15 +1129,13 @@
         state: present
         
     - name: "Set audisp-remote server"
-      replace:
+      lineinfile:
         path: /etc/audisp/audisp-remote.conf
         regexp: "remote_server =.*"
-        replace: "remote_server = {{ rhel7stig_audisp_aggregation_server }}"
-      register: audisp_remote_result
-      failed_when:
-        - audisp_remote_result | failed
-        - audisp_remote_result.rc != 257
-  when: rhel_07_030300
+        line: "remote_server = {{ rhel7stig_audisp_aggregation_server }}"
+  when:
+    - rhel_07_030300
+    - rhel7stig_audisp_aggregation_server is defined
   tags:
       - cat2
       - medium
