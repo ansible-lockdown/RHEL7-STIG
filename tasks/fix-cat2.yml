@@ -1170,10 +1170,6 @@
     path: /etc/audit/auditd.conf
     regexp: "space_left =.*"
     line: "space_left = {{ rhel7stig_auditd_space_left }}"
-  register: rhel7stig_auditd_space_left_result
-  failed_when:
-    - rhel7stig_auditd_space_left_result | failed
-    - rhel7stig_auditd_space_left_result.rc != 257
   when: rhel_07_030330
   tags:
       - cat2
