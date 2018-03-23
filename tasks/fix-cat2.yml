@@ -489,6 +489,7 @@
     path: "{{ item }}"
     regexp: '^([^#].*)NOPASSWD(.*)'
     replace: '\1PASSWD\2'
+    validate: '/usr/bin/visudo -cf %s'
   with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when:
       - rhel7stig_using_password_auth
@@ -501,10 +502,11 @@
       - sudoers
 
 - name: "MEDIUM | RHEL-07-010350 | PATCH | Users must re-authenticate for privilege escalation."
-      replace:
-        path: "{{ item }}"
-        regexp: '^([^#].*)!authenticate(.*)'
-        replace: '\1authenticate\2'
+  replace:
+    path: "{{ item }}"
+    regexp: '^([^#].*)!authenticate(.*)'
+    replace: '\1authenticate\2'
+    validate: '/usr/bin/visudo -cf %s'
   with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when: rhel_07_010350
   tags:
