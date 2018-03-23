@@ -485,10 +485,11 @@
       - pamd
 
 - name: "MEDIUM | RHEL-07-010340 | PATCH | Users must provide a password for privilege escalation."
-  debug:
-    msg: "NOPASSWD entry for sudo: {{ item }}"
-  with_items: "{{ rhel_07_010340_audit.stdout_lines }}"
-  changed_when: no
+  replace:
+    path: "{{ item }}"
+    regexp: '^([^#].*)NOPASSWD(.*)'
+    replace: '\1PASSWD\2'
+  with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when:
       - rhel7stig_using_password_auth
       - rhel_07_010340
@@ -500,10 +501,11 @@
       - sudoers
 
 - name: "MEDIUM | RHEL-07-010350 | PATCH | Users must re-authenticate for privilege escalation."
-  debug:
-    msg: "!authenticate entry for sudo: {{ item }}"
-  with_items: "{{ rhel_07_010350_audit.stdout_lines }}"
-  changed_when: no
+      replace:
+        path: "{{ item }}"
+        regexp: '^([^#].*)!authenticate(.*)'
+        replace: '\1authenticate\2'
+  with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when: rhel_07_010350
   tags:
       - cat2
