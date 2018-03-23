@@ -327,7 +327,7 @@
           value: UUID={{ item.uuid }}
           insert: yes
       when:
-          - rhel7stig_boot_part != '/'
+          - rhel7stig_boot_part not in ['/', '']
           - not ansible_check_mode or
             not rhel_07_021350_default_grub_missing_audit | changed
       notify: make grub2 config
@@ -345,7 +345,7 @@
       when:
           - not ansible_check_mode or
             not rhel_07_021350_default_grub_missing_audit | changed
-          - rhel7stig_boot_part != '/' or
+          - rhel7stig_boot_part not in ['/', ''] or
             'boot=' not in item
       changed_when:
           - ansible_check_mode
