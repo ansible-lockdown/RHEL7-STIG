@@ -90,26 +90,52 @@
       - tmp
 
 - name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021600
-  tags:
+  - block:
+      - name: "Change CONTENT to CONTENT_EX"
+        replace:
+          path: aide.conf
+          regexp: '^(.*) (CONTENT)$'
+          replace: '\1 CONTENT_EX'
+      - name: "Change NORMAL to DATAONLY"
+          replace:
+            path: aide.conf
+            regexp: '^(.*) (NORMAL)$'
+            replace: '\1 DATAONLY'
+    when: rhel_07_021600
+    tags:
       - cat3
       - low
       - patch
       - RHEL-07-021600
-      - notimplemented
 
 - name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021610
-  tags:
+  - block:
+      - name: "Add xattrs to LOG"
+        replace:
+          path: aide.conf
+          regexp: '^LOG = p\+u\+g\+n\+acl\+selinux\+ftype$'
+          replace: 'LOG = p+u+g+n+acl+selinux+ftype+xattrs'
+      - name: "Fix LOG comment"
+        replace:
+          path: aide.conf
+          regexp: '^# Logfiles only check access w/o xattrs.$'
+          replace: '# Logfiles check access and xattrs.'
+      - name: "Change CONTENT to CONTENT_EX"
+        replace:
+          path: aide.conf
+          regexp: '^(.*) (CONTENT)$'
+          replace: '\1 CONTENT_EX'
+      - name: "Change NORMAL to DATAONLY"
+        replace:
+          path: aide.conf
+          regexp: '^(.*) (NORMAL)$'
+          replace: '\1 DATAONLY'
+    when: rhel_07_021610
+    tags:
       - cat3
       - low
       - patch
       - RHEL-07-021610
-      - notimplemented
 
 - name: "LOW | RHEL-07-040000 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
   lineinfile:
