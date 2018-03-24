@@ -1099,9 +1099,10 @@
       failed_when:
         - rhel_07_021620_sha256_512_result | failed
         - rhel_07_021620_sha256_512_result.rc != 257
+
     - name: "Replace sha256 entries with sha512"
       replace:
-        path: aide.conf
+        path: /etc/aide.conf
         regexp: '([A-Z]+ = .*)(sha256)(.*)'
         replace: '\1sha512\3'
       register: rhel_07_021620_sha256_result
