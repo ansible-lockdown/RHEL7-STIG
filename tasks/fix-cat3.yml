@@ -95,21 +95,21 @@
       stat:
         path: "/etc/aide.conf"
       check_mode: no
-      register: aide_conf.stat
+      register: aide_conf_stat
 
     - name: "Replace CONTENT with CONTENT_EX"
       replace:
         path: /etc/aide.conf
         regexp: '^(.*) (CONTENT)$'
         replace: '\1 CONTENT_EX'
-      when: aide_conf.stat.exists
+      when: aide_conf_stat.exists
 
     - name: "Replace NORMAL with DATAONLY"
       replace:
         path: /etc/aide.conf
         regexp: '^(.*) (NORMAL)$'
         replace: '\1 DATAONLY'
-      when: aide_conf.stat.exists
+      when: aide_conf_stat.exists
   when: rhel_07_021600
   tags:
     - cat3
@@ -123,14 +123,14 @@
       stat:
         path: "/etc/aide.conf"
       check_mode: no
-      register: aide_conf.stat
+      register: aide_conf_stat
 
     - name: "Addd xattrs to LOG"
       replace:
         path: /etc/aide.conf
         regexp: '^LOG = p\+u\+g\+n\+acl\+selinux\+ftype$'
         replace: 'LOG = p+u+g+n+acl+selinux+ftype+xattrs'
-      when: aide_conf.stat.exists
+      when: aide_conf_stat.exists
 
     - name: "Fix LOG comment"
       replace:
@@ -144,14 +144,14 @@
         path: /etc/aide.conf
         regexp: '^(.*) (CONTENT)$'
         replace: '\1 CONTENT_EX'
-      when: aide_conf.stat.exists
+      when: aide_conf_stat.exists
 
     - name: "Replace NORMAL with DATAONLY"
       replace:
         path: /etc/aide.conf
         regexp: '^(.*) (NORMAL)$'
         replace: '\1 DATAONLY'
-      when: aide_conf.stat.exists
+      when: aide_conf_stat.exists
   when: rhel_07_021610
   tags:
     - cat3
