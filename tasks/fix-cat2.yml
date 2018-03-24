@@ -1055,7 +1055,7 @@
       - medium
       - patch
       - RHEL-07-021110
-      - RHEL-07-021110
+      - RHEL-07-021120
       - cron
 
 - block:
