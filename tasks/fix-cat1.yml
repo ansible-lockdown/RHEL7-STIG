@@ -264,6 +264,7 @@
           warn: no
       changed_when: no
       failed_when: no
+      check_mode: no
       register: rhel_07_021350_prelink_installed
 
     - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."

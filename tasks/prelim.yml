@@ -92,6 +92,14 @@
       - audit
       - RHEL-07-010240
 
+- name: "PRELIM | Find all sudoers files."
+  command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
+  changed_when: no
+  failed_when: no
+  register: rhel7stig_sudoers_files
+  when: 
+    - rhel_07_010340 or rhel_07_010350
+
 - name: "PRELIM | RHEL-07-010260 | Existing passwords must be restricted to a 60-day maximum lifetime."
   command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
   register: rhel_07_010260_audit
@@ -134,6 +142,26 @@
       - medium
       - audit
       - RHEL-07-020330
+
+- name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-021640 RHEL-07-021650 | Check /etc/passwd entries for local user home directories"
+  shell: "egrep ':[0-9]{4}' /etc/passwd | cut -d: -f1,4,6"
+  changed_when: no
+  failed_when: no
+  check_mode: no
+  register: rhel7stig_passwd_homedir_audit
+  when: 
+    - rhel_07_020620 or
+      rhel_07_020630 or
+      rhel_07_020640 or
+      rhel_07_020650
+  tags:
+      - cat2
+      - medium
+      - audit
+      - RHEL-07-020620
+      - RHEL-07-020630
+      - RHEL-07-020640
+      - RHEL-07-020650
 
 # - name: "PRELIM | RHEL-07-040180 | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
 #   command: grep -i useldapauth /etc/sysconfig/authconfig

@@ -485,8 +485,12 @@
       - pamd
 
 - name: "MEDIUM | RHEL-07-010340 | PATCH | Users must provide a password for privilege escalation."
-  command: "true"
-  changed_when: no
+  replace:
+    path: "{{ item }}"
+    regexp: '^([^#].*)NOPASSWD(.*)'
+    replace: '\1PASSWD\2'
+    validate: '/usr/bin/visudo -cf %s'
+  with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when:
       - rhel7stig_using_password_auth
       - rhel_07_010340
@@ -496,11 +500,14 @@
       - patch
       - RHEL-07-010340
       - sudoers
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-010350 | PATCH | Users must re-authenticate for privilege escalation."
-  command: "true"
-  changed_when: no
+  replace:
+    path: "{{ item }}"
+    regexp: '^([^#].*)!authenticate(.*)'
+    replace: '\1authenticate\2'
+    validate: '/usr/bin/visudo -cf %s'
+  with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when: rhel_07_010350
   tags:
       - cat2
@@ -508,7 +515,6 @@
       - patch
       - RHEL-07-010350
       - sudoers
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-010430 | PATCH | The delay between logon prompts following a failed console logon attempt must be at least four seconds."
   lineinfile:
@@ -564,6 +570,7 @@
         shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*/usr/sbin/sulogin'"
         changed_when: no
         failed_when: no
+        check_mode: no
         register: systemd_rescue_unit_check
 
       - name: "MEDIUM | RHEL-07-010481 | PATCH | Force reinstall systemd package to replace edited /usr/lib/systemd/system/rescue.service"
@@ -811,48 +818,55 @@
       - home
 
 - name: "MEDIUM | RHEL-07-020620 | PATCH | All local interactive user home directories defined in the /etc/passwd file must exist."
-  command: "true"
-  changed_when: no
+  file:
+    path: "{{ item.split(':')[2] }}"
+    state: directory
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020620
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020620
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
-  command: "true"
-  changed_when: no
+  file:
+    path: "{{ item.split(':')[2] }}"
+    mode: "{{ rhel7stig_homedir_mode }}"
+    state: directory
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020630
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020630
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-020640 | PATCH | All local interactive user home directories must be owned by their respective users."
-  command: "true"
-  changed_when: no
+  file:
+    path: "{{ item.split(':')[2] }}"
+    owner: "{{ item.split(':')[0] }}"
+    state: directory
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020640
   tags:
       - cat2
       - medium
       - patch
-      - RHEL-07-020660
-      - notimplemented
+      - RHEL-07-020640
 
 - name: "MEDIUM | RHEL-07-020650 | PATCH | All local interactive user home directories must be group-owned by the home directory owners primary group."
-  command: "true"
-  changed_when: no
+  file:
+    path: "{{ item.split(':')[2] }}"
+    group: "{{ item.split(':')[1] }}"
+    state: directory
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020650
   tags:
       - cat2
       - medium
       - patch
-      - RHEL-07-020670
-      - notimplemented
+      - RHEL-07-020650
 
 - name: "MEDIUM | RHEL-07-020660 | PATCH | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
   command: "true"
@@ -1213,84 +1227,268 @@
 - name: "MEDIUM | Auditing system calls"
   include_tasks: audit_system_call.yml
   with_items:
-    - {id: "030370", call: "chown", key: "perm_mod", create: "{{ rhel_07_030370 }}"}
-    - {id: "030380", call: "fchown", key: "perm_mod", create: "{{ rhel_07_030380 }}"}
-    - {id: "030390", call: "lchown", key: "perm_mod", create: "{{ rhel_07_030390 }}"}
-    - {id: "030400", call: "fchownat", key: "perm_mod", create: "{{ rhel_07_030400 }}"}
-    - {id: "030410", call: "chmod", key: "perm_mod", create: "{{ rhel_07_030410 }}"}
-    - {id: "030420", call: "fchmod", key: "perm_mod", create: "{{ rhel_07_030420 }}"}
-    - {id: "030430", call: "fchmodat", key: "perm_mod", create: "{{ rhel_07_030430 }}"}
-    - {id: "030440", call: "setxattr", key: "perm_mod", create: "{{ rhel_07_030440 }}"}
-    - {id: "030450", call: "fsetxattr", key: "perm_mod", create: "{{ rhel_07_030450 }}"}
-    - {id: "030460", call: "lsetxattr", key: "perm_mod", create: "{{ rhel_07_030460 }}"}
-    - {id: "030470", call: "removexattr", key: "perm_mod", create: "{{ rhel_07_030470 }}"}
-    - {id: "030480", call: "fremovexattr", key: "perm_mod", create: "{{ rhel_07_030480 }}"}
-    - {id: "030490", call: "lremovexattr", key: "perm_mod", create: "{{ rhel_07_030490 }}"}
-    - {id: "030500", call: "creat", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030500 }}"}
-    - {id: "030500", call: "creat", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030500 }}"}
-    - {id: "030510", call: "open", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030510 }}"}
-    - {id: "030510", call: "open", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030510 }}"}
-    - {id: "030520", call: "openat", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030520 }}"}
-    - {id: "030520", call: "openat", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030520 }}"}
-    - {id: "030530", call: "open_by_handle_at", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030530 }}"}
-    - {id: "030530", call: "open_by_handle_at", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030530 }}"}
-    - {id: "030540", call: "truncate", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030540 }}"}
-    - {id: "030540", call: "truncate", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030540 }}"}
-    - {id: "030550", call: "ftruncate", extra_fields: "-F exit=-EACCESS", key: "access", create: "{{ rhel_07_030550 }}"}
-    - {id: "030550", call: "ftruncate", extra_fields: "-F exit=-EPERM", key: "access", create: "{{ rhel_07_030550 }}"}
-    - {id: "030560", path: "/usr/sbin/semanage", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030560 }}"}
-    - {id: "030570", path: "/usr/sbin/setsebool", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030570 }}"}
-    - {id: "030580", path: "/usr/bin/chcon", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030580 }}"}
-    - {id: "030590", path: "/usr/sbin/setfiles", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030590 }}"}
-    - {id: "030630", path: "/usr/bin/passwd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030630 }}"}
-    - {id: "030640", path: "/usr/bin/unix_chkpwd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030640 }}"}
-    - {id: "030650", path: "/usr/bin/gpasswd", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030650 }}"}
-    - {id: "030660", path: "/usr/bin/chage", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030660 }}"}
-    - {id: "030670", path: "/usr/sbin/userhelper", extra_fields: "-F perm=x", key: "privileged-passwd", create: "{{ rhel_07_030670 }}"}
-    - {id: "030680", path: "/usr/bin/su", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030680 }}"}
-    - {id: "030690", path: "/usr/bin/sudo", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030690 }}"}
-    - {id: "030710", path: "/usr/bin/newgrp", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030710 }}"}
-    - {id: "030720", path: "/usr/bin/chsh", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030720 }}"}
-    - {id: "030730", path: "/bin/sudoedit", extra_fields: "-F perm=x", key: "privileged-priv_change", create: "{{ rhel_07_030730 }}"}
-    - {id: "030740", call: "mount", key: "privileged-mount", create: "{{ rhel_07_030740 }}"}
-    - {id: "030740", path: "/bin/mount", key: "privileged-mount", create: "{{ rhel_07_030740 }}"}
-    - {id: "030740", path: "/usr/bin/mount", key: "privileged-mount", create: "{{ rhel_07_030740 }}"}
-    - {id: "030750", path: "/bin/umount", extra_fields: "-F perm=x", key: "privileged-mount", create: "{{ rhel_07_030750 }}"}
-    - {id: "030760", path: "/usr/sbin/postdrop", extra_fields: "-F perm=x", key: "privileged-postfix", create: "{{ rhel_07_030760 }}"}
-    - {id: "030770", path: "/usr/sbin/postqueue", extra_fields: "-F perm=x", key: "privileged-postfix", create: "{{ rhel_07_030770 }}"}
-    - {id: "030780", path: "/usr/libexec/openssh/ssh-keysign", extra_fields: "-F perm=x", key: "privileged-ssh", create: "{{ rhel_07_030780 }}"}
-    - {id: "030800", path: "/usr/bin/crontab", extra_fields: "-F perm=x", key: "privileged-cron", create: "{{ rhel_07_030800 }}"}
-    - {id: "030810", path: "/sbin/pam_timestamp_check", extra_fields: "-F perm=x", key: "privileged-pam", create: "{{ rhel_07_030810 }}"}
-    - {id: "030819", call: "create_module", include_all_auids: yes, key: "module-change", create: "{{ rhel_07_030819 }}"}
-    - {id: "030820", call: "init_module", include_all_auids: yes, key: "module-change", create: "{{ rhel_07_030820 }}"}
-    - {id: "030821", call: "finit_module", include_all_auids: yes, key: "module-change", create: "{{ rhel_07_030821 }}"}
-    - {id: "030830", call: "delete_module", include_all_auids: yes, key: "module-change", create: "{{ rhel_07_030830 }}"}
-    - {id: "030880", call: "rename", key: "delete", create: "{{ rhel_07_030880 }}"}
-    - {id: "030890", call: "renameat", key: "delete", create: "{{ rhel_07_030890 }}"}
-    - {id: "030900", call: "rmdir", key: "delete", create: "{{ rhel_07_030900 }}"}
-    - {id: "030910", call: "unlink", key: "delete", create: "{{ rhel_07_030910 }}"}
-    - {id: "030920", call: "unlinkat", key: "delete", create: "{{ rhel_07_030920 }}"}
+      - id: "030370"
+        call: "chown"
+        key: "perm_mod"
+      - id: "030380"
+        call: "fchown"
+        key: "perm_mod"
+      - id: "030390"
+        call: "lchown"
+        key: "perm_mod"
+      - id: "030400"
+        call: "fchownat"
+        key: "perm_mod"
+      - id: "030410"
+        call: "chmod"
+        key: "perm_mod"
+      - id: "030420"
+        call: "fchmod"
+        key: "perm_mod"
+      - id: "030430"
+        call: "fchmodat"
+        key: "perm_mod"
+      - id: "030440"
+        call: "setxattr"
+        key: "perm_mod"
+      - id: "030450"
+        call: "fsetxattr"
+        key: "perm_mod"
+      - id: "030460"
+        call: "lsetxattr"
+        key: "perm_mod"
+      - id: "030470"
+        call: "removexattr"
+        key: "perm_mod"
+      - id: "030480"
+        call: "fremovexattr"
+        key: "perm_mod"
+      - id: "030490"
+        call: "lremovexattr"
+        key: "perm_mod"
+      - id: "030500"
+        call: "creat"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030500"
+        call: "creat"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030510"
+        call: "open"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030510"
+        call: "open"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030520"
+        call: "openat"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030520"
+        call: "openat"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030530"
+        call: "open_by_handle_at"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030530"
+        call: "open_by_handle_at"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030540"
+        call: "truncate"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030540"
+        call: "truncate"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030550"
+        call: "ftruncate"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030550"
+        call: "ftruncate"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030740"
+        call: "mount"
+        key: "privileged-mount"
+      - id: "030819"
+        call: "create_module"
+        include_all_auids: yes
+        key: "module-change"
+      - id: "030820"
+        call: "init_module"
+        include_all_auids: yes
+        key: "module-change"
+      - id: "030821"
+        call: "finit_module"
+        include_all_auids: yes
+        key: "module-change"
+      - id: "030830"
+        call: "delete_module"
+        include_all_auids: yes
+        key: "module-change"
+      - id: "030880"
+        call: "rename"
+        key: "delete"
+      - id: "030890"
+        call: "renameat"
+        key: "delete"
+      - id: "030900"
+        call: "rmdir"
+        key: "delete"
+      - id: "030910"
+        call: "unlink"
+        key: "delete"
+      - id: "030920"
+        call: "unlinkat"
+        key: "delete"
+  tags:
+      - cat2
+      - medium
+      - patch
+      - audit-rules
 
 - name: "MEDIUM | Auditing commands"
   include_tasks: audit_command.yml
   with_items:
-    - {id: "030840", path: "/sbin/insmod", key: "module_change", create: "{{ rhel_07_030840 }}"}
-    - {id: "030850", path: "/sbin/rmmod", key: "module_change", create: "{{ rhel_07_030850 }}"}
-    - {id: "030860", path: "/sbin/modprobe", key: "module_change", create: "{{ rhel_07_030860 }}"}
+      - id: "030560"
+        path: "/usr/sbin/semanage"
+        key: "privileged-priv_change"
+      - id: "030570"
+        path: "/usr/sbin/setsebool"
+        key: "privileged-priv_change"
+      - id: "030580"
+        path: "/usr/bin/chcon"
+        key: "privileged-priv_change"
+      - id: "030590"
+        path: "/usr/sbin/setfiles"
+        key: "privileged-priv_change"
+      - id: "030630"
+        path: "/usr/bin/passwd"
+        key: "privileged-passwd"
+      - id: "030640"
+        path: "/usr/sbin/unix_chkpwd"
+        key: "privileged-passwd"
+      - id: "030650"
+        path: "/usr/bin/gpasswd"
+        key: "privileged-passwd"
+      - id: "030660"
+        path: "/usr/bin/chage"
+        key: "privileged-passwd"
+      - id: "030670"
+        path: "/usr/sbin/userhelper"
+        key: "privileged-passwd"
+      - id: "030680"
+        path: "/usr/bin/su"
+        key: "privileged-priv_change"
+      - id: "030690"
+        path: "/usr/bin/sudo"
+        key: "privileged-priv_change"
+      - id: "030710"
+        path: "/usr/bin/newgrp"
+        key: "privileged-priv_change"
+      - id: "030720"
+        path: "/usr/bin/chsh"
+        key: "privileged-priv_change"
+      - id: "030730"
+        path: "/bin/sudoedit"
+        key: "privileged-priv_change"
+      - id: "030740"
+        path: "/bin/mount"
+        key: "privileged-mount"
+      - id: "030740"
+        path: "/usr/bin/mount"
+        key: "privileged-mount"
+      - id: "030750"
+        path: "/bin/umount"
+        key: "privileged-mount"
+      - id: "030760"
+        path: "/usr/sbin/postdrop"
+        key: "privileged-postfix"
+      - id: "030770"
+        path: "/usr/sbin/postqueue"
+        key: "privileged-postfix"
+      - id: "030780"
+        path: "/usr/libexec/openssh/ssh-keysign"
+        key: "privileged-ssh"
+      - id: "030800"
+        path: "/usr/bin/crontab"
+        key: "privileged-cron"
+      - id: "030810"
+        path: "/sbin/pam_timestamp_check"
+        key: "privileged-pam"
+      - id: "030840"
+        path: "/sbin/insmod"
+        trivial: yes
+        key: "module-change"
+      - id: "030850"
+        path: "/sbin/rmmod"
+        trivial: yes
+        key: "module-change"
+      - id: "030860"
+        path: "/sbin/modprobe"
+        trivial: yes
+        key: "module-change"
+  tags:
+      - cat2
+      - medium
+      - patch
+      - audit-rules
 
 - name: "MEDIUM | Auditing files"
   include_tasks: audit_file.yml
   with_items:
-    - {id: "030600", path: "/var/log/tallylog", description: "successful/unsuccessful account access count events", key: "logins", create: "{{ rhel_07_030600 }}"}
-    - {id: "030610", path: "/var/run/faillock", description: "unsuccessful account access events", key: "logins", create: "{{ rhel_07_030610 }}"}
-    - {id: "030620", path: "/var/log/lastlog", description: "successful account access events", key: "logins", create: "{{ rhel_07_030620 }}"}
-    - {id: "030700", path: "/etc/sudoers", description: "modifications to sudoers", key: "privileged-actions", create: "{{ rhel_07_030700 }}"}
-    - {id: "030700", path: "/etc/sudoers.d/", description: "modifications to sudoers", key: "privileged-actions", create: "{{ rhel_07_030700 }}"}
-    - {id: "030870", path: "/etc/passwd", description: "account creations, modifications, disabling, and termination events that affect /etc/passwd", key: "identity", create: "{{ rhel_07_030870 }}"}
-    - {id: "030871", path: "/etc/group", description: "account creations, modifications, disabling, and termination events that affect /etc/group", key: "identity", create: "{{ rhel_07_030871 }}"}
-    - {id: "030872", path: "/etc/gshadow", description: "account creations, modifications, disabling, and termination events that affect /etc/gshadow", key: "identity", create: "{{ rhel_07_030872 }}"}
-    - {id: "030873", path: "/etc/shadow", description: "account creations, modifications, disabling, and termination events that affect /etc/shadow", key: "identity", create: "{{ rhel_07_030873 }}"}
-    - {id: "030874", path: "/etc/security/opasswd", description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd", key: "identity", create: "{{ rhel_07_030874 }}"}
+      - id: "030600"
+        path: "/var/log/tallylog"
+        description: "successful/unsuccessful account access count events"
+        key: "logins"
+      - id: "030610"
+        path: "/var/run/faillock"
+        description: "unsuccessful account access events"
+        key: "logins"
+      - id: "030620"
+        path: "/var/log/lastlog"
+        description: "successful account access events"
+        key: "logins"
+      - id: "030700"
+        path: "/etc/sudoers"
+        description: "modifications to sudoers"
+        key: "privileged-actions"
+      - id: "030700"
+        path: "/etc/sudoers.d/"
+        description: "modifications to sudoers"
+        key: "privileged-actions"
+      - id: "030870"
+        path: "/etc/passwd"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/passwd"
+        key: "identity"
+      - id: "030871"
+        path: "/etc/group"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/group"
+        key: "identity"
+      - id: "030872"
+        path: "/etc/gshadow"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/gshadow"
+        key: "identity"
+      - id: "030873"
+        path: "/etc/shadow"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/shadow"
+        key: "identity"
+      - id: "030874"
+        path: "/etc/security/opasswd"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd"
+        key: "identity"
+  tags:
+      - cat2
+      - medium
+      - patch
+      - audit-rules
 
 - name: "MEDIUM | RHEL-07-031000 | PATCH | The system must send rsyslog output to a log aggregation server."
   command: "true"
@@ -1941,21 +2139,47 @@
       - patch
       - RHEL-07-040670
 
-- name: "MEDIUM | RHEL-07-040680 | PATCH | The system must be configured to prevent unrestricted mail relaying."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040680
+- block:
+    - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
+      command: rpm -q postfix
+      failed_when: no
+      check_mode: no
+      changed_when: no
+      register: rhel_07_040680_rpm_audit
+
+    - name: "MEDIUM | RHEL-07-040680 | AUDIT | The system must be configured to prevent unrestricted mail relaying."
+      command: "postconf -n smtpd_client_restrictions"
+      check_mode: no
+      changed_when: no
+      register: rhel_07_040680_postconf_audit
+      when: rhel_07_040680_rpm_audit.rc == 0
+
+    - name: "MEDIUM | RHEL-07-040680 | PATCH | The system must be configured to prevent unrestricted mail relaying."
+      command: "postconf -e 'smtpd_client_restrictions=permit_mynetworks, reject'"
+      when: 
+        - rhel_07_040680_rpm_audit.rc == 0
+        - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
+
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040680
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-040720 | PATCH | If the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon must be configured to operate in secure mode."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040720
+  lineinfile:
+    path: /etc/xinetd.d/tftp
+    regexp: "(?i)^.*server_args.*="
+    line: "\tserver_args\t\t= -s /var/lib/tftpboot"
+    insertafter: "\tserver\t\t\t="
+    state: present
+    register: result
+    failed_when:
+      - result | failed
+      - result.rc != 257
+  when:
+    - rhel7stig_tftp_required
+    - rhel_07_040720
   tags:
       - cat2
       - medium
@@ -2019,15 +2243,16 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-040820 | PATCH | The system must not have unauthorized IP tunnels configured."
-  command: "true"
-  changed_when: no
+  yum:
+    name:
+      - libreswan
+    state: absent
   when: rhel_07_040820
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-040820
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-040830 | PATCH | The system must not forward IPv6 source-routed packets."
   sysctl:
@@ -2072,6 +2297,7 @@
         shell: 'grep -E "^\s*services\s*=.*pam" /etc/sssd/sssd.conf'
         changed_when: no
         failed_when: no
+        check_mode: no
         register: sssd_services_check
 
       - name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."

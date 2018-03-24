@@ -16,7 +16,7 @@ Requirements
 
 RHEL 7 or CentOS 7 - Other versions are not supported.
 
-`passlib` >= 1.7 on the control node
+`passlib` >= 1.5 on the control node
 
 Role Variables
 --------------

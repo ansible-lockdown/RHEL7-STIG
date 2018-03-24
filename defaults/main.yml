@@ -436,11 +436,17 @@ rhel7stig_login_defaults:
 # RHEL-07-030330: set this to 25% of the free space in /var/log/audit (measured in megabytes)
 rhel7stig_auditd_space_left: 225
 
+# RHEL-07-020630
+rhel7stig_homedir_mode: 0750
+
 # RHEL-07-040180
 # Whether the system should be using LDAP for authentication
 rhel7stig_auth_settings:
     use_ldap: no
     use_sssd: no
+
+# RHEL-07-040820
+rhel7stig_ipsec_required: no
 
 # RHEL-07-010340
 # Setting to enable or disable fixes that depend on password-based authentication
