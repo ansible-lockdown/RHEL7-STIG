@@ -1061,24 +1061,16 @@
             group: root
             mode: 0600
         when: cron_allow_file_check.stat.exists
-  when: rhel_07_021110
+  when:
+    - rhel_07_021110
+    - rhel_07_021120
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-021110
-      - cron
-
-- name: "MEDIUM | RHEL-07-021120 | PATCH | If the cron.allow file exists it must be group-owned by root."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021120
-  tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021120
-      - notimplemented
+      - cron
 
 - block:
     - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
@@ -1180,15 +1172,16 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-030330 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer ISSO (at a minimum) when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity."
-  command: "true"
-  changed_when: no
+  lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: "space_left =.*"
+    line: "space_left = {{ rhel7stig_auditd_space_left }}"
   when: rhel_07_030330
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-030330
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-030340 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) via email when the threshold for the repository maximum audit record storage capacity is reached."
   lineinfile:
