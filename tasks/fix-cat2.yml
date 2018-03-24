@@ -1182,9 +1182,9 @@
 
 - name: "MEDIUM | RHEL-07-030330 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer ISSO (at a minimum) when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity."
   lineinfile:
-    path: /etc/audit/auditd.conf
-    regexp: "space_left =.*"
-    line: "space_left = {{ rhel7stig_auditd_space_left }}"
+      path: /etc/audit/auditd.conf
+      regexp: ^space_left\s*=\s*
+      line: "space_left = {{ rhel7stig_auditd_space_left }}"
   when: rhel_07_030330
   tags:
       - cat2
