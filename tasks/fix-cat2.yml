@@ -811,48 +811,55 @@
       - home
 
 - name: "MEDIUM | RHEL-07-020620 | PATCH | All local interactive user home directories defined in the /etc/passwd file must exist."
-  command: "true"
-  changed_when: no
+  file:
+    path: "{{ item.split(':')[2] }}"
+    state: directory
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020620
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020620
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
-  command: "true"
-  changed_when: no
+  file:
+    path: "{{ item.split(':')[2] }}"
+    mode: "{{ rhel7stig_homedir_mode }}"
+    state: directory
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020630
   tags:
       - cat2
       - medium
       - patch
       - RHEL-07-020630
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-020640 | PATCH | All local interactive user home directories must be owned by their respective users."
-  command: "true"
-  changed_when: no
+  file:
+    path: "{{ item.split(':')[2] }}"
+    owner: "{{ item.split(':')[0] }}"
+    state: directory
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020640
   tags:
       - cat2
       - medium
       - patch
-      - RHEL-07-020660
-      - notimplemented
+      - RHEL-07-020640
 
 - name: "MEDIUM | RHEL-07-020650 | PATCH | All local interactive user home directories must be group-owned by the home directory owners primary group."
-  command: "true"
-  changed_when: no
+  file:
+    path: "{{ item.split(':')[2] }}"
+    group: "{{ item.split(':')[1] }}"
+    state: directory
+  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020650
   tags:
       - cat2
       - medium
       - patch
-      - RHEL-07-020670
-      - notimplemented
+      - RHEL-07-020650
 
 - name: "MEDIUM | RHEL-07-020660 | PATCH | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
   command: "true"

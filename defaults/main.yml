@@ -433,6 +433,9 @@ rhel7stig_login_defaults:
   umask: '077'
   create_home: 'yes'
 
+# RHEL-07-020630
+rhel7stig_homedir_mode: 0750
+
 # RHEL-07-040180
 # Whether the system should be using LDAP for authentication
 rhel7stig_auth_settings:
