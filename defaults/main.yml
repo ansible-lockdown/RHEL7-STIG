@@ -304,6 +304,14 @@ rhel7stig_time_service_configs:
 
 rhel7stig_firewall_service: firewalld
 
+# RHEL-07-030010
+# set to rhel7stig_auditd_failure_mode to:
+# - 0 for silent (satisfies Category I)
+# - 1 for syslog/printk (satisfies Category II, and satisfies Category III if there is monitoring of kernel messages)
+# - 2 for panic (satisfies Category III)
+# RHEL7 out-of-box default is 1
+rhel7stig_auditd_failure_mode: 1
+
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
 
