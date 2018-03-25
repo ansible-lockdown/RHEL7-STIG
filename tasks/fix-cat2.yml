@@ -489,7 +489,7 @@
     path: "{{ item }}"
     regexp: '^([^#].*)NOPASSWD(.*)'
     replace: '\1PASSWD\2'
-    validate: '/usr/bin/visudo -cf %s'
+    validate: '/usr/sbin/visudo -cf %s'
   with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when:
       - rhel7stig_using_password_auth
@@ -506,7 +506,7 @@
     path: "{{ item }}"
     regexp: '^([^#].*)!authenticate(.*)'
     replace: '\1authenticate\2'
-    validate: '/usr/bin/visudo -cf %s'
+    validate: '/usr/sbin/visudo -cf %s'
   with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when: rhel_07_010350
   tags:
