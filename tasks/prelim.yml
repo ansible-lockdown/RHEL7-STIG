@@ -131,6 +131,18 @@
       - RHEL-07-020640
       - RHEL-07-020650
 
+- name: "PRELIM | RHEL-07-021100 RHEL-07-031000 RHEL-07-031010 | Ensure rsyslog is installed when required."
+  yum:
+      name: rsyslog
+  when:
+      - rhel_07_021100 or
+        rhel_07_031000 or
+        rhel_07_031010
+  tags:
+      - RHEL-07-021100
+      - RHEL-07-031000
+      - RHEL-07-031010
+
 - name: "PRELIM | RHEL-07-021350 | Check if /boot or /boot/efi reside on separate partitions"
   shell: df --output=target /boot/efi | tail -n 1
   changed_when: no
