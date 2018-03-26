@@ -207,23 +207,6 @@
           state: present
       notify: rebuild initramfs
 
-    - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
-      command: rpm -q prelink
-      args:
-          warn: no
-      changed_when: no
-      failed_when: no
-      check_mode: no
-      register: rhel_07_021350_prelink_installed
-
-    - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
-      lineinfile:
-          dest: /etc/sysconfig/prelink
-          regexp: ^#?PRELINKING
-          line: PRELINKING=no
-      when: rhel_07_021350_prelink_installed.rc == 0
-      notify: undo existing prelinking
-
     - name: "HIGH | RHEL-07-021350 | AUDIT | Check for GRUB_CMDLINE_LINUX in /etc/default/grub"
       command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*"$' /etc/default/grub
       check_mode: no
