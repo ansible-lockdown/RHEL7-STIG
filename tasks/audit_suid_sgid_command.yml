@@ -1,0 +1,13 @@
+---
+# tasks/audit_suid_command.yml
+
+- name: "MEDIUM | RHEL-07-030360 | All privileged function executions must be audited."
+  lineinfile:
+    path: "/etc/audit/rules.d/rhel7stig_commands.rules"
+    create: yes
+    owner: root
+    group: root
+    mode: 0600
+    line: "-a always,exit -F path={{ item }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k setuid/setgid"
+    state: present
+  with_items: "{{ outer_item.stdout_lines }}"
