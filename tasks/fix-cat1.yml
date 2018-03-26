@@ -473,10 +473,10 @@
 
 - name: "HIGH | RHEL-07-040690 | PATCH | A File Transfer Protocol (FTP) server package must not be installed unless needed."
   yum:
-      name: lftpd
+      name: vsftpd
       state: absent
   when:
-      - not rhel7stig_lftpd_required
+      - not rhel7stig_vsftpd_required
       - rhel_07_040690
   tags:
       - cat1

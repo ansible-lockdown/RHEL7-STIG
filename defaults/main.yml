@@ -302,8 +302,8 @@ rhel7stig_firewall_service: firewalld
 rhel7stig_system_is_log_aggregator: false
 
 # RHEL-07-040490
-# If not required, remove lftpd.
-rhel7stig_lftpd_required: no
+# If not required, remove vsftpd.
+rhel7stig_vsftpd_required: no
 
 # RHEL-07-040500
 # If not required, remove tftp
