@@ -40,7 +40,6 @@ Role Variables
 | `rhel7stig_kdump_required` | `no` | If set to `no`, disable `kdump` service. |
 | `rhel7stig_snmp_community` | `Endgam3Ladyb0g` | SNMP community string that will replace `public` and `private` in `snmpd.conf`. |
 | `rhel7stig_bootloader_password` | `Boot1tUp!` | GRUB2 bootloader password. This should be stored in an Ansible Vault. |
-| `rhel7stig_boot_superuser` | `root` | Used to set the boot superuser in the GRUB2 config. |
 | `rhel7stig_boot_password_config` | [see defaults/main.yml](./defaults/main.yml) | GRUB2 bootloader password configuration. |
 | `rhel7stig_aide_cron` | [see defaults/main.yml](./defaults/main.yml) | AIDE Cron settings |
 | `rhel7stig_maxlogins` | `10` | Set maximum number of simultaneous system logins (RHEL-07-040000) |
