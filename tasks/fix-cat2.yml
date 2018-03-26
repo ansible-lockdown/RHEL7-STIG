@@ -1856,7 +1856,6 @@
     - rhel_07_040720
   tags:
       - RHEL-07-040720
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-040730 | PATCH | An X Windows display manager must not be installed unless approved."
   yum:
