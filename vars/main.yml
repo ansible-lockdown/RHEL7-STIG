@@ -1,23 +1,5 @@
 rhel7stig_min_ansible_version: 2.4
 
-rhel7stig_cat1_patch: yes
-rhel7stig_cat2_patch: yes
-rhel7stig_cat3_patch: yes
-
-rhel7stig_time_service_configs:
-    chronyd:
-        conf: /etc/chrony.conf
-        block: |
-          server 0.rhel.pool.ntp.org iburst maxpoll 10
-          server 1.rhel.pool.ntp.org iburst maxpoll 10
-          server 2.rhel.pool.ntp.org iburst maxpoll 10
-          server 3.rhel.pool.ntp.org iburst maxpoll 10
-    ntpd:
-        conf: /etc/ntp.conf
-        lines:
-            - regexp: ^#?maxpoll
-              line: maxpoll 10
-
 # this allows us to insert a name=value into a line of the format:
 # key="name1=value1 name2=value2 nameN=valueN"
 rhel7stig_regexp_quoted_params: ^({{ rhel7stig_re_qp_key }})({{ rhel7stig_re_qp_other_params }})({{
