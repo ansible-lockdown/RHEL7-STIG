@@ -1,9 +1,9 @@
 galaxy_info:
-  author: "Sam Doran, Josh Springer"
+  author: "Sam Doran, Josh Springer, Daniel Shepherd"
   description: "Apply the DISA RHEL 7 STIG"
   company:
   license: MIT
-  min_ansible_version: 2.1
+  min_ansible_version: 2.4
 
   platforms:
   - name: EL
