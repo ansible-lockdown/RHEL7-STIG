@@ -231,7 +231,7 @@
       changed_when: rhel_07_021350_default_grub_missing_audit.rc > 0
       register: rhel_07_021350_default_grub_missing_audit
 
-    - name: "HIGH | RHEL-07-021350 | AUIDT | parse sane GRUB_CMDLINE_LINUX from /proc/cmdline"
+    - name: "HIGH | RHEL-07-021350 | AUDIT | parse sane GRUB_CMDLINE_LINUX from /proc/cmdline"
       command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
       check_mode: no
       changed_when: no
