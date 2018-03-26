@@ -34,7 +34,7 @@ Role Variables
 | `rhel7stig_time_service` | `chronyd` | Set to `ntpd` or `chronyd`. |
 | `rhel7stig_time_service_configs` | [see defaults/main.yml](./defaults/main.yml) | Time service packages and service configs. |
 | `rhel7stig_firewall_service` | `firewalld` | Set to `firewalld` or `iptables`. |
-| `rhel7stig_lftpd_required` | `no` | If set to `no`, remove `lftpd`. |
+| `rhel7stig_vsftpd_required` | `no` | If set to `no`, remove `vsftpd`. |
 | `rhel7stig_tftp_required` | `no` | If set to `no`, remove `tftp` client and server packages. |
 | `rhel7stig_autofs_required` | `no` | If set to `no`, disable `autofs` service. |
 | `rhel7stig_kdump_required` | `no` | If set to `no`, disable `kdump` service. |
