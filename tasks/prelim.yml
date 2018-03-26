@@ -1,3 +1,4 @@
+---
 - name: "PRELIM | RHEL-07-010240 | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
   command: "awk -F: '$4 < 1 {print $1}' /etc/shadow"
   register: rhel_07_010240_audit
@@ -8,7 +9,6 @@
   tags:
       - cat2
       - medium
-      - audit
       - RHEL-07-010240
 
 - name: "PRELIM | Find all sudoers files."
@@ -17,7 +17,13 @@
   failed_when: no
   register: rhel7stig_sudoers_files
   when: 
-    - rhel_07_010340 or rhel_07_010350
+      - rhel_07_010340 or
+        rhel_07_010350
+  tags:
+      - cat2
+      - medium
+      - RHEL-07-010340
+      - RHEL-07-010350
 
 - name: "PRELIM | RHEL-07-010260 | Existing passwords must be restricted to a 60-day maximum lifetime."
   command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
@@ -29,7 +35,6 @@
   tags:
       - cat2
       - medium
-      - audit
       - RHEL-07-010260
 
 - name: "PRELIM | RHEL-07-010480 RHEL-07-010490 RHEL-07-021350 | Install grub2-tools."
@@ -40,6 +45,8 @@
         rhel_07_010490 or
         rhel_07_021350
   tags:
+      - cat1
+      - high
       - RHEL-07-010480
       - RHEL-07-010490
       - RHEL-07-021350
@@ -54,6 +61,10 @@
         rhel_07_021350 or
         rhel_07_021700
   tags:
+      - cat1
+      - high
+      - cat2
+      - medium
       - RHEL-07-010480
       - RHEL-07-010490
       - RHEL-07-021350
@@ -73,6 +84,12 @@
         rhel_07_021350 or
         rhel_07_030330 or
   tags:
+      - cat1
+      - high
+      - cat2
+      - medium
+      - cat3
+      - low
       - RHEL-07-020320
       - RHEL-07-020330
       - RHEL-07-021310
@@ -93,7 +110,6 @@
   tags:
       - cat2
       - medium
-      - audit
       - RHEL-07-020320
 
 - name: "PRELIM | RHEL-07-020330 | All files and directories must have a valid group owner."
@@ -108,7 +124,6 @@
   tags:
       - cat2
       - medium
-      - audit
       - RHEL-07-020330
 
 - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-021640 RHEL-07-021650 | Check /etc/passwd entries for local user home directories"
@@ -125,7 +140,6 @@
   tags:
       - cat2
       - medium
-      - audit
       - RHEL-07-020620
       - RHEL-07-020630
       - RHEL-07-020640
@@ -139,6 +153,8 @@
         rhel_07_031000 or
         rhel_07_031010
   tags:
+      - cat2
+      - medium
       - RHEL-07-021100
       - RHEL-07-031000
       - RHEL-07-031010
@@ -151,6 +167,8 @@
   when:
       - rhel_07_021350
   tags:
+      - cat1
+      - high
       - RHEL-07-021350
 
 - name: "PRELIM | RHEL-07-030330 | Determine audit log partition."
@@ -169,6 +187,8 @@
   when:
       - rhel_07_030330
   tags:
+      - cat2
+      - medium
       - RHEL-07-030330
 
 - name: "PRELIM | RHEL-07-030300 RHEL-07-030310 RHEL-07-030320 RHEL-07-030321 | Install audit remote plugin."
@@ -180,6 +200,8 @@
         rhel_07_030320 or
         rhel_07_030321
   tags:
+      - cat2
+      - medium
       - RHEL-07-030300
       - RHEL-07-030310
       - RHEL-07-030320
@@ -199,8 +221,7 @@
   when: rhel_07_040410
   tags:
       - cat2
-      - high
-      - audit
+      - medium
       - RHEL-07-040410
       - ssh
 
@@ -218,8 +239,7 @@
   when: rhel_07_040420
   tags:
       - cat2
-      - high
-      - audit
+      - medium
       - RHEL-07-040420
       - ssh
 
@@ -228,8 +248,15 @@
       name: aide
       state: present
   notify: init aide
-  when: rhel_07_020030 or rhel_07_020040 or rhel_07_021620 or rhel_07_021610 or rhel_07_021600
+  when:
+      - rhel_07_020030 or
+        rhel_07_020040 or
+        rhel_07_021600 or
+        rhel_07_021610 or
+        rhel_07_021620
   tags:
+      - cat2
+      - medium
       - patch
       - aide
       - RHEL-07-020030

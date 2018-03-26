@@ -16,7 +16,6 @@
   become: yes
   tags:
       - prelim_tasks
-      - always
 
 - name: Include CAT I patches
   import_tasks: fix-cat1.yml
@@ -24,7 +23,6 @@
   when: rhel7stig_cat1_patch | bool
   tags:
       - cat1
-      - patch
       - high
 
 - name: Include CAT II patches
@@ -33,7 +31,6 @@
   when: rhel7stig_cat2_patch | bool
   tags:
       - cat2
-      - patch
       - medium
 
 - name: Include CAT III patches
@@ -42,5 +39,4 @@
   when: rhel7stig_cat3_patch | bool
   tags:
       - cat3
-      - patch
       - low
