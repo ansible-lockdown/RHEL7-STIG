@@ -1176,17 +1176,10 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-030320 | PATCH | The audit system must take appropriate action when the audit storage volume is full."
-  block:
-    - name: "Install audispd-plugins"
-      yum:
-        name: audispd-plugins
-        state: present
-
-    - name: "Set disk_full_action"
-      lineinfile:
-        path: /etc/audisp/audisp-remote.conf
-        regexp: "disk_full_action =.*"
-        line: "disk_full_action = {{ rhel7stig_audisp_disk_full_action }}"
+  lineinfile:
+    path: /etc/audisp/audisp-remote.conf
+    regexp: "disk_full_action =.*"
+    line: "disk_full_action = {{ rhel7stig_audisp_disk_full_action }}"
   when: rhel_07_030320
   tags:
       - cat2
@@ -1195,17 +1188,10 @@
       - RHEL-07-030320
 
 - name: "MEDIUM | RHEL-07-030321 | PATCH | The audit system must take appropriate action when there is an error sending audit records to a remote system."
-  block:
-    - name: "Install audispd-plugins"
-      yum:
-        name: audispd-plugins
-        state: present
-        
-    - name: "Set network_failure_action"
-      lineinfile:
-        path: /etc/audisp/audisp-remote.conf
-        regexp: "network_failure_action =.*"
-        line: "network_failure_action = {{ rhel7stig_audisp_network_failure_action }}"
+  lineinfile:
+    path: /etc/audisp/audisp-remote.conf
+    regexp: "network_failure_action =.*"
+    line: "network_failure_action = {{ rhel7stig_audisp_network_failure_action }}"
   when: rhel_07_030321
   tags:
       - cat2
