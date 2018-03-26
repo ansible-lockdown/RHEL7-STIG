@@ -48,7 +48,6 @@ rhel_07_010050: true
 rhel_07_010060: true
 rhel_07_010061: true
 rhel_07_010070: true
-rhel_07_010080: true
 rhel_07_010081: true
 rhel_07_010082: true
 rhel_07_010090: true
@@ -243,7 +242,6 @@ rhel_07_040830: true
 rhel_07_041001: true
 rhel_07_041002: true
 rhel_07_041003: true
-rhel_07_041004: true
 rhel_07_041010: true
 # CAT 3 rules
 rhel_07_020200: true
