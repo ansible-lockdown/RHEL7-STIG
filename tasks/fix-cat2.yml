@@ -71,6 +71,16 @@
       - RHEL-07-010061
       - notimplemented
 
+- name: "MEDIUM | RHEL-07-010062 | PATCH | The operating system must prevent a user from overriding the screensaver lock-enabled setting for the graphical user interface."
+  command: "true"
+  changed_when: no
+  when:
+      - rhel7stig_gui
+      - rhel_07_010062
+  tags:
+      - RHEL-07-010062
+      - notimplemented
+
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   command: "true"
   changed_when: no
