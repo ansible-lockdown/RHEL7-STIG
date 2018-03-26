@@ -318,10 +318,9 @@ rhel7stig_snmp_community: Endgam3Ladyb0g
 # RHEL-07-010460 and RHEL-07-010470
 # Password protect the boot loader
 rhel7stig_bootloader_password: 'Boot1tUp!'
-rhel7stig_boot_superuser: root
 rhel7stig_boot_password_config:
     - regexp: ^set superusers
-      line: 'set superusers="{{rhel7stig_boot_superuser}}"'
+      line: 'set superusers="root"'
 
     - regexp: ^password_pbkdf2 {{rhel7stig_boot_superuser}}
       line: password_pbkdf2 {{rhel7stig_boot_superuser}} {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
