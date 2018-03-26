@@ -84,19 +84,6 @@
       - RHEL-07-010070
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-010080 | PATCH | The operating system must set the idle delay setting for all connection types."
-  command: "true"
-  changed_when: no
-  when:
-      - rhel7stig_gui
-      - rhel_07_010080
-  tags:
-      - cat2
-      - medium
-      - patch
-      - RHEL-07-010080
-      - notimplemented
-
 - name: "MEDIUM | RHEL-07-010081 | PATCH | The operating system must set the lock delay setting for all connection types."
   command: "true"
   changed_when: no
