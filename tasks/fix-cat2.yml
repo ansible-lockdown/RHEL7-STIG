@@ -5,9 +5,6 @@
       - rhel7stig_gui
       - rhel_07_010030
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010030
       - dod_logon_banner
       - notimplemented
@@ -19,9 +16,6 @@
       - rhel7stig_gui
       - rhel_07_010040
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010040
       - dod_logon_banner
       - notimplemented
@@ -38,9 +32,6 @@
       - /etc/issue
       - /etc/issue.net
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010050
       - ssh
       - dod_logon_banner
@@ -52,9 +43,6 @@
       - rhel7stig_gui
       - rhel_07_010060
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010060
       - notimplemented
 
@@ -65,9 +53,6 @@
       - rhel7stig_gui
       - rhel_07_010061
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010061
       - notimplemented
 
@@ -88,9 +73,6 @@
       - rhel7stig_gui
       - rhel_07_010070
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010070
       - notimplemented
 
@@ -101,9 +83,6 @@
       - rhel7stig_gui
       - rhel_07_010081
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010081
       - notimplemented
 
@@ -114,9 +93,6 @@
       - rhel7stig_gui
       - rhel_07_010082
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010082
       - notimplemented
 
@@ -126,9 +102,6 @@
       state: present
   when: rhel_07_010090
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010090
 
 - name: "MEDIUM | RHEL-07-010100 | PATCH | The operating system must initiate a session lock for the screensaver after a period of inactivity for graphical user interfaces."
@@ -138,9 +111,6 @@
       - rhel7stig_gui
       - rhel_07_010100
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010100
       - notimplemented
 
@@ -161,9 +131,6 @@
       - rhel7stig_gui
       - rhel_07_010110
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010110
       - notimplemented
 
@@ -175,9 +142,6 @@
       line: password required pam_pwquality.so retry=3
   when: rhel_07_010119
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010119
 
 - name: "MEDIUM | RHEL-07-010120 | PATCH | When passwords are changed or new passwords are established, the new password must contain at least one upper-case character."
@@ -188,9 +152,6 @@
       line: "ucredit = {{rhel7stig_password_complexity.ucredit|default('-1')}}"
   when: rhel_07_010120
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010120
       - pwquality
 
@@ -202,9 +163,6 @@
       line: "lcredit = {{rhel7stig_password_complexity.lcredit|default('-1')}}"
   when: rhel_07_010130
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010130
       - pwquality
 
@@ -216,9 +174,6 @@
       line: "dcredit = {{rhel7stig_password_complexity.dcredit|default('-1')}}"
   when: rhel_07_010140
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010140
       - pwquality
 
@@ -230,9 +185,6 @@
       line: "ocredit = {{rhel7stig_password_complexity.ocredit|default('-1')}}"
   when: rhel_07_010150
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010150
       - pwquality
 
@@ -244,9 +196,6 @@
       line: "difok = {{rhel7stig_password_complexity.difok|default('8')}}"
   when: rhel_07_010160
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010160
       - pwquality
 
@@ -258,9 +207,6 @@
       line: "minclass = {{rhel7stig_password_complexity.minclass|default('4')}}"
   when: rhel_07_010170
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010170
       - pwquality
 
@@ -272,9 +218,6 @@
       line: "maxrepeat = {{rhel7stig_password_complexity.maxrepeat|default('3')}}"
   when: rhel_07_010180
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010180
       - pwquality
 
@@ -286,9 +229,6 @@
       line: "maxclassrepeat = {{rhel7stig_password_complexity.maxclassrepeat|default('4')}}"
   when: rhel_07_010190
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010190
       - pwquality
 
@@ -312,9 +252,6 @@
           - "blowfish"
   when: rhel_07_010200
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010200
       - pamd
 
@@ -325,9 +262,6 @@
       line: "ENCRYPT_METHOD {{rhel7stig_login_defaults.encrypt_method|default('SHA512')}}"
   when: rhel_07_010210
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010210
       - login
 
@@ -338,9 +272,6 @@
       line: crypt_style = sha512
   when: rhel_07_010220
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010220
 
 - name: "MEDIUM | RHEL-07-010230 | PATCH | Passwords for new users must be restricted to a 24 hours/1 day minimum lifetime."
@@ -351,9 +282,6 @@
       line: "PASS_MIN_DAYS {{rhel7stig_login_defaults.pass_min_days|default('1')}}"
   when: rhel_07_010230
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010230
       - login
 
@@ -363,9 +291,6 @@
   with_items: "{{ rhel_07_010240_audit.stdout_lines | default([]) }}"
   when: rhel_07_010240
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010240
 
 - name: "MEDIUM | RHEL-07-010250 | PATCH | Passwords for new users must be restricted to a 60-day maximum lifetime."
@@ -376,9 +301,6 @@
       line: "PASS_MAX_DAYS {{rhel7stig_login_defaults.pass_max_days|default('60')}}"
   when: rhel_07_010250
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010250
       - login
 
@@ -387,9 +309,6 @@
   with_items: "{{ rhel_07_010260_audit.stdout_lines | default([]) }}"
   when: rhel_07_010260
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010260
       - password
 
@@ -403,9 +322,6 @@
       module_arguments: "remember=5"
   when: rhel_07_010270
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010270
       - pamd
 
@@ -417,9 +333,6 @@
       line: "minlen = {{rhel7stig_password_complexity.minlen|default('15')}}"
   when: rhel_07_010280
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010280
       - pwquality
 
@@ -430,9 +343,6 @@
       line: INACTIVE=0
   when: rhel_07_010310
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010310
 
 - block:
@@ -484,9 +394,6 @@
 
   when: rhel_07_010320 or rhel_07_010330
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010320
       - RHEL-07-010330
       - pamd
@@ -502,9 +409,6 @@
       - rhel7stig_using_password_auth
       - rhel_07_010340
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010340
       - sudoers
 
@@ -517,9 +421,6 @@
   with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when: rhel_07_010350
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010350
       - sudoers
 
@@ -530,9 +431,6 @@
       line: "FAIL_DELAY {{rhel7stig_login_defaults.fail_delay_secs|default('4')}}"
   when: rhel_07_010430
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010430
       - login
 
@@ -545,9 +443,6 @@
   notify: restart sshd
   when: rhel_07_010460
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010460
       - ssh
 
@@ -559,9 +454,6 @@
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010470
       - ssh
 
@@ -585,9 +477,6 @@
         when: systemd_rescue_unit_check.rc == 1
   when: rhel_07_010481
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010481
       - rescue
 
@@ -596,9 +485,6 @@
   changed_when: no
   when: rhel_07_010500
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-010500
       - notimplemented
 
@@ -607,9 +493,6 @@
   changed_when: no
   when: rhel_07_020020
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020020
       - notimplemented
 
@@ -624,9 +507,6 @@
       special_time: "{{ rhel7stig_aide_cron.special_time }}"
   when: rhel_07_020030 or rhel_07_020040
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020030
       - RHEL-07-020040
       - aide
@@ -642,9 +522,6 @@
     mode: "0644"
   when: rhel_07_020100
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020100
       - usb_devices
 
@@ -659,9 +536,6 @@
     mode: "0644"
   when: rhel_07_020101
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020101
       - dccp
 
@@ -673,9 +547,6 @@
   when:
       - rhel_07_020110
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020110
 
 - name: "MEDIUM | RHEL-07-020110 | PATCH | File system automounter must be disabled unless required."
@@ -688,9 +559,6 @@
       - rhel_07_020110_autofs_service_status == "loaded"
       - not rhel7stig_autofs_required
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020110
 
 - name: "MEDIUM | RHEL-07-020240 | PATCH | The operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
@@ -700,9 +568,6 @@
       line: "UMASK {{rhel7stig_login_defaults.umask|default('077')}}"
   when: rhel_07_020240
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020240
       - login
       - umask
@@ -752,9 +617,6 @@
 
   when: rhel_07_020260
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020260
       - packaging
 
@@ -763,9 +625,6 @@
   changed_when: no
   when: rhel_07_020270
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020270
       - notimplemented
 
@@ -779,9 +638,6 @@
     - item.stdout_lines | length > 0
   with_items: "{{ rhel_07_020320_audit.results }}"
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020320
 
 - name: "MEDIUM | RHEL-07-020330 | PATCH | All files and directories must have a valid group owner."
@@ -794,9 +650,6 @@
     - item.stdout_lines | length > 0
   with_items: "{{ rhel_07_020330_audit.results }}"
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020330
 
 - name: "MEDIUM | RHEL-07-020600 | PATCH | All local interactive users must have a home directory assigned in the /etc/passwd file."
@@ -804,9 +657,6 @@
   changed_when: no
   when: rhel_07_020600
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020600
       - notimplemented
 
@@ -817,9 +667,6 @@
       line: "CREATE_HOME {{rhel7stig_login_defaults.create_home|default('yes')}}"
   when: rhel_07_020610
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020610
       - login
       - home
@@ -831,9 +678,6 @@
   with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020620
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020620
 
 - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
@@ -844,9 +688,6 @@
   with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020630
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020630
 
 - name: "MEDIUM | RHEL-07-020640 | PATCH | All local interactive user home directories must be owned by their respective users."
@@ -857,9 +698,6 @@
   with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020640
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020640
 
 - name: "MEDIUM | RHEL-07-020650 | PATCH | All local interactive user home directories must be group-owned by the home directory owners primary group."
@@ -870,9 +708,6 @@
   with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
   when: rhel_07_020650
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020650
 
 - name: "MEDIUM | RHEL-07-020660 | PATCH | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
@@ -880,9 +715,6 @@
   changed_when: no
   when: rhel_07_020660
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020680
       - notimplemented
 
@@ -891,9 +723,6 @@
   changed_when: no
   when: rhel_07_020670
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020670
       - notimplemented
 
@@ -902,9 +731,6 @@
   changed_when: no
   when: rhel_07_020680
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020680
       - notimplemented
 
@@ -913,9 +739,6 @@
   changed_when: no
   when: rhel_07_020690
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020690
       - notimplemented
 
@@ -924,9 +747,6 @@
   changed_when: no
   when: rhel_07_020700
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020700
       - notimplemented
 
@@ -935,9 +755,6 @@
   changed_when: no
   when: rhel_07_020710
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020710
       - notimplemented
 
@@ -946,9 +763,6 @@
   changed_when: no
   when: rhel_07_020720
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020720
       - notimplemented
 
@@ -957,9 +771,6 @@
   changed_when: no
   when: rhel_07_020730
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020730
       - notimplemented
 
@@ -968,9 +779,6 @@
   changed_when: no
   when: rhel_07_020900
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-020900
       - notimplemented
 
@@ -979,9 +787,6 @@
   changed_when: no
   when: rhel_07_021000
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021000
       - notimplemented
 
@@ -990,9 +795,6 @@
   changed_when: no
   when: rhel_07_021010
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021010
       - notimplemented
 
@@ -1001,9 +803,6 @@
   changed_when: no
   when: rhel_07_021020
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021020
       - notimplemented
 
@@ -1012,9 +811,6 @@
   changed_when: no
   when: rhel_07_021021
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021021
       - notimplemented
 
@@ -1023,9 +819,6 @@
   changed_when: no
   when: rhel_07_021030
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021030
       - notimplemented
 
@@ -1034,9 +827,6 @@
   changed_when: no
   when: rhel_07_021040
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021040
       - notimplemented
 
@@ -1053,9 +843,6 @@
     - result.rc != 257
   when: rhel_07_021100
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021100
 
 - name: |
@@ -1079,9 +866,6 @@
     - rhel_07_021110
     - rhel_07_021120
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021110
       - RHEL-07-021120
       - cron
@@ -1103,9 +887,6 @@
         - not rhel7stig_kdump_required
   when: rhel_07_021300
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021300
 
 - name: "MEDIUM | RHEL-07-021620 | PATCH | The file integrity tool must use FIPS 140-2 approved cryptographic hashes for validating file contents and directories."
@@ -1131,9 +912,6 @@
         - rhel_07_021620_sha256_result.rc != 257
   when: rhel_07_021620
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021620
 
 - name: "MEDIUM | RHEL-07-021700 | PATCH | The system must not allow removable media to be used as the boot loader unless approved."
@@ -1141,9 +919,6 @@
   changed_when: no
   when: rhel_07_021700
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-021700
       - notimplemented
 
@@ -1155,9 +930,6 @@
   notify: update running audit failure mode
   when: rhel_07_030010
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-030010
 
 - name: "MEDIUM | RHEL-07-030300 | PATCH | The operating system must off-load audit records onto a different system or media from the system being audited."
@@ -1165,9 +937,6 @@
   changed_when: no
   when: rhel_07_030300
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-030300
       - notimplemented
 
@@ -1176,9 +945,6 @@
   changed_when: no
   when: rhel_07_030310
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-030310
       - notimplemented
 
@@ -1189,9 +955,6 @@
     line: "disk_full_action = {{ rhel7stig_audisp_disk_full_action }}"
   when: rhel_07_030320
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-030320
 
 - name: "MEDIUM | RHEL-07-030321 | PATCH | The audit system must take appropriate action when there is an error sending audit records to a remote system."
@@ -1201,9 +964,6 @@
     line: "network_failure_action = {{ rhel7stig_audisp_network_failure_action }}"
   when: rhel_07_030321
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-030321
 
 - name: "MEDIUM | RHEL-07-030330 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer ISSO (at a minimum) when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity."
@@ -1213,9 +973,6 @@
       line: "space_left = {{ rhel7stig_auditd_space_left }}"
   when: rhel_07_030330
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-030330
 
 - name: "MEDIUM | RHEL-07-030340 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) via email when the threshold for the repository maximum audit record storage capacity is reached."
@@ -1229,9 +986,6 @@
     - rhel7stig_auditd_space_left_action_result.rc != 257
   when: rhel_07_030340
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-030340
 
 - name: "MEDIUM | RHEL-07-030350 | PATCH | The operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) when the threshold for the repository maximum audit record storage capacity is reached."
@@ -1245,9 +999,6 @@
     - rhel7stig_auditd_action_mail_acct_result.rc != 257
   when: rhel_07_030350
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-030350
 
 - name: "MEDIUM | RHEL-07-030360 | PATCH | All privileged function executions must be audited."
@@ -1255,9 +1006,6 @@
   changed_when: no
   when: rhel_07_030360
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-030360
       - notimplemented
 
@@ -1386,9 +1134,6 @@
         call: "unlinkat"
         key: "delete"
   tags:
-      - cat2
-      - medium
-      - patch
       - audit-rules
 
 - name: "MEDIUM | Auditing commands"
@@ -1473,9 +1218,6 @@
         trivial: yes
         key: "module-change"
   tags:
-      - cat2
-      - medium
-      - patch
       - audit-rules
 
 - name: "MEDIUM | Auditing files"
@@ -1522,9 +1264,6 @@
         description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd"
         key: "identity"
   tags:
-      - cat2
-      - medium
-      - patch
       - audit-rules
 
 - name: "MEDIUM | RHEL-07-031000 | PATCH | The system must send rsyslog output to a log aggregation server."
@@ -1548,9 +1287,6 @@
     - rhel_07_031000
     - rhel7stig_log_aggregation_server is defined
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-031000
       - rsyslog
 
@@ -1572,9 +1308,6 @@
     - result | failed
     - result.rc != 257
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-031010
       - rsyslog
 
@@ -1583,9 +1316,6 @@
   changed_when: no
   when: rhel_07_032010
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-032010
       - notimplemented
 
@@ -1594,9 +1324,6 @@
   changed_when: no
   when: rhel_07_040100
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040100
       - notimplemented
 
@@ -1609,9 +1336,6 @@
   notify: restart sshd
   when: rhel_07_040110
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040110
       - ssh
 
@@ -1627,9 +1351,6 @@
         export TMOUT
   when: rhel_07_040160
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040160
       - profile
 
@@ -1642,9 +1363,6 @@
   notify: restart sshd
   when: rhel_07_040170
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040170
       - ssh
       - dod_logon_banner
@@ -1664,9 +1382,6 @@
       when: "'yes' in rhel_07_040180_audit.stdout"
   when: rhel_07_040180
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040180
       - ldap
       - notimplemented
@@ -1676,9 +1391,6 @@
   changed_when: no
   when: rhel_07_040190
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040190
       - notimplemented
 
@@ -1687,9 +1399,6 @@
   changed_when: no
   when: rhel_07_040200
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040200
       - notimplemented
 
@@ -1703,9 +1412,6 @@
       ignoreerrors: yes
   when: rhel_07_040201
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040201
       - sysctl
 
@@ -1717,9 +1423,6 @@
       state: present
   when: rhel_07_040300
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040300
       - ssh
 
@@ -1730,9 +1433,6 @@
       enabled: yes
   when: rhel_07_040310
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040310
       - ssh
 
@@ -1746,9 +1446,6 @@
   notify: restart sshd
   when: rhel_07_040320
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040320
       - ssh
 
@@ -1761,9 +1458,6 @@
   notify: restart sshd
   when: rhel_07_040330
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040330
       - ssh
 
@@ -1777,9 +1471,6 @@
   notify: restart sshd
   when: rhel_07_040340
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040340
       - ssh
 
@@ -1792,9 +1483,6 @@
   notify: restart sshd
   when: rhel_07_040350
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040350
       - ssh
 
@@ -1807,9 +1495,6 @@
   notify: restart sshd
   when: rhel_07_040360
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040360
       - ssh
 
@@ -1824,9 +1509,6 @@
   notify: restart sshd
   when: rhel_07_040370
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040370
       - ssh
 
@@ -1840,9 +1522,6 @@
   notify: restart sshd
   when: rhel_07_040380
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040380
       - ssh
 
@@ -1856,9 +1535,6 @@
   notify: restart sshd
   when: rhel_07_040400
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040400
 
 - name: "MEDIUM | RHEL-07-040410 | PATCH | The SSH public host key files must have mode 0644 or less permissive."
@@ -1869,9 +1545,6 @@
   with_items: "{{ rhel_07_040410_audit.files | default([]) }}"
   when: rhel_07_040410
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040410
       - ssh
 
@@ -1883,9 +1556,6 @@
   with_items: "{{ rhel_07_040420_audit.files | default([]) }}"
   when: rhel_07_040420
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040420
       - ssh
 
@@ -1899,9 +1569,6 @@
   notify: restart sshd
   when: rhel_07_040430
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040430
       - ssh
 
@@ -1914,9 +1581,6 @@
   notify: restart sshd
   when: rhel_07_040440
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040440
       - ssh
 
@@ -1929,9 +1593,6 @@
   notify: restart sshd
   when: rhel_07_040450
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040450
       - ssh
 
@@ -1944,9 +1605,6 @@
   notify: restart sshd
   when: rhel_07_040460
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040460
       - ssh
 
@@ -1959,9 +1617,6 @@
   notify: restart sshd
   when: rhel_07_040470
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040470
       - ssh
 
@@ -1988,9 +1643,6 @@
       - rhel7stig_time_service == 'ntpd'
       - rhel_07_040500
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040500
       - ntp
       - ntpd
@@ -2015,9 +1667,6 @@
       - rhel7stig_time_service == 'chronyd'
       - rhel_07_040500
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040500
       - chronyd
 
@@ -2032,9 +1681,6 @@
       - rhel7stig_time_service == 'chronyd'
       - rhel_07_040500
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040500
       - chronyd
 
@@ -2043,9 +1689,6 @@
   changed_when: no
   when: rhel_07_040510
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040510
       - firewall
       - notimplemented
@@ -2056,9 +1699,6 @@
       state: present
   when: rhel_07_040520
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040520
       - firewall
 
@@ -2069,9 +1709,6 @@
       enabled: yes
   when: rhel_07_040520
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040520
       - firewall
 
@@ -2084,9 +1721,6 @@
       ignoreerrors: yes
   when: rhel_07_040610
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040610
       - ipv4
 
@@ -2099,9 +1733,6 @@
       ignoreerrors: yes
   when: rhel_07_040620
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040620
       - ipv4
 
@@ -2115,9 +1746,6 @@
       ignoreerrors: yes
   when: rhel_07_040630
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040630
       - ipv4
 
@@ -2130,9 +1758,6 @@
       ignoreerrors: yes
   when: rhel_07_040640
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040640
       - ipv4
 
@@ -2145,9 +1770,6 @@
       ignoreerrors: yes
   when: rhel_07_040641
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040641
       - ipv4
 
@@ -2160,9 +1782,6 @@
       ignoreerrors: yes
   when: rhel_07_040650
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040650
       - ipv4
 
@@ -2175,9 +1794,6 @@
       ignoreerrors: yes
   when: rhel_07_040660
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040660
       - ipv4
 
@@ -2198,9 +1814,6 @@
       - rhel_07_040670
       - not rhel7stig_net_promisc_mode_required
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040670
 
 - block:
@@ -2225,9 +1838,6 @@
         - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
 
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040680
 
 - name: "MEDIUM | RHEL-07-040720 | PATCH | If the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon must be configured to operate in secure mode."
@@ -2245,9 +1855,6 @@
     - rhel7stig_tftp_required
     - rhel_07_040720
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040720
       - notimplemented
 
@@ -2261,9 +1868,6 @@
       - not rhel7stig_gui
       - rhel_07_040730
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040730
       - x11
 
@@ -2278,9 +1882,6 @@
       - not rhel7stig_system_is_router
       - rhel_07_040740
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040740
       - ipv4
 
@@ -2289,9 +1890,6 @@
   changed_when: no
   when: rhel_07_040750
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040750
       - notimplemented
 
@@ -2300,9 +1898,6 @@
   changed_when: no
   when: rhel_07_040810
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040810
       - notimplemented
 
@@ -2313,9 +1908,6 @@
     state: absent
   when: rhel_07_040820
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040820
 
 - name: "MEDIUM | RHEL-07-040830 | PATCH | The system must not forward IPv6 source-routed packets."
@@ -2327,9 +1919,6 @@
       ignoreerrors: yes
   when: rhel_07_040830
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-040830
       - ipv6
 
@@ -2349,9 +1938,6 @@
 
   when: rhel_07_041001
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-041001
       - multifactor
 
@@ -2372,9 +1958,6 @@
       - rhel7stig_auth_settings.use_sssd
       - rhel_07_041002
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-041002
       - sssd
 
@@ -2383,9 +1966,6 @@
   changed_when: no
   when: rhel_07_041003
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-041003
       - notimplemented
 
@@ -2394,7 +1974,4 @@
   changed_when: no
   when: rhel_07_041010
   tags:
-      - cat2
-      - medium
-      - patch
       - RHEL-07-041010

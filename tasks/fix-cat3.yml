@@ -6,9 +6,6 @@
       insertafter: '\[main\]'
   when: rhel_07_020200
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-020200
 
 - name: "LOW | RHEL-07-020300 | PATCH | All Group Identifiers (GIDs) referenced in the /etc/passwd file must be defined in the /etc/group file."
@@ -26,9 +23,6 @@
         when: passwd_gid_check.stdout_lines
   when: rhel_07_020300
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-020300
       - passwd
 
@@ -39,9 +33,6 @@
     - rhel_07_021310
     - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length == 0
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-021310
       - mount
       - home
@@ -53,9 +44,6 @@
     - rhel_07_021320
     - ansible_mounts | selectattr('mount', 'match', '^/var$') | list | length == 0
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-021320
       - mount
       - var
@@ -67,9 +55,6 @@
     - rhel_07_021330
     - ansible_mounts | selectattr('mount', 'match', '^/var/log/audit$') | list | length == 0
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-021330
       - mount
       - auditd
@@ -83,9 +68,6 @@
       state: started
   when: rhel_07_021340
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-021340
       - mount
       - tmp
@@ -95,9 +77,6 @@
   changed_when: no
   when: rhel_07_021600
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-021600
       - notimplemented
 
@@ -106,9 +85,6 @@
   changed_when: no
   when: rhel_07_021610
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-021610
       - notimplemented
 
@@ -121,9 +97,6 @@
     line: '*           hard    maxlogins     {{ rhel7stig_maxlogins }}'
   when: rhel_07_040000
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-040000
 
 - name: "LOW | RHEL-07-040530 | PATCH | The system must display the date and time of the last successful account logon upon logon."
@@ -136,9 +109,6 @@
         session required pam_lastlog.so showfailed
   when: rhel_07_040530
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-040530
 
 - name: "LOW | RHEL-07-040600 | PATCH | For systems using DNS resolution, at least two name servers must be configured."
@@ -146,9 +116,6 @@
   changed_when: no
   when: rhel_07_040600
   tags:
-      - cat3
-      - low
-      - patch
       - RHEL-07-040600
       - notimplemented
 
