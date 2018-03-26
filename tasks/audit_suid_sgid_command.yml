@@ -1,5 +1,5 @@
 ---
-# tasks/audit_suid_command.yml
+# tasks/audit_suid_sgid_command.yml
 
 - name: "MEDIUM | RHEL-07-030360 | All privileged function executions must be audited."
   lineinfile:

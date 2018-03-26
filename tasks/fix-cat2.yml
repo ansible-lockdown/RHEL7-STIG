@@ -1002,12 +1002,27 @@
       - RHEL-07-030350
 
 - name: "MEDIUM | RHEL-07-030360 | PATCH | All privileged function executions must be audited."
-  command: "true"
-  changed_when: no
+  block:
+    - name: "MEDIUM | RHEL-07-030360 | PATCH | All privileged function executions must be audited. (find suid/sgid programs)"
+      command: find "{{ item.mount }}" -type f ( -perm -4000 -o -perm -2000 ) -xdev
+      changed_when: false
+      register: rhel_07_030360_audit
+      when: item['device'].startswith('/dev') and not 'bind' in item['options']
+      with_items:
+        - "{{ ansible_mounts }}"
+
+    - name: "MEDIUM | RHEL-07-030360 | PATCH | All privileged function executions must be audited. (add programs to audit file)"
+      include_tasks: audit_suid_sgid_command.yml
+      when:
+        - item.stdout_lines is defined
+        - item.stdout_lines | length > 0
+      with_items: "{{ rhel_07_030360_audit.results }}"
+      loop_control:
+        loop_var: outer_item
+      
   when: rhel_07_030360
   tags:
       - RHEL-07-030360
-      - notimplemented
 
 - name: "MEDIUM | Auditing system calls"
   include_tasks: audit_system_call.yml
