@@ -258,12 +258,6 @@ rhel_07_040000: true
 rhel_07_040530: true
 rhel_07_040600: true
 
-# These values match patch values by defaults. To override these values,
-# set them in group_vars, host_vars, or with the -e flag via CLI
-# rhel7stig_cat1_audit: "{{ rhel7stig_cat1_patch }}"
-# rhel7stig_cat2_audit: "{{ rhel7stig_cat2_patch }}"
-# rhel7stig_cat3_audit: "{{ rhel7stig_cat3_patch }}"
-
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: no
 
