@@ -2382,20 +2382,6 @@
       - RHEL-07-041003
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-041004 | PATCH | The operating system must implement smart card logons for multifactor authentication for access to privileged accounts."
-  command: "true"
-  changed_when: no
-  when:
-      - rhel7stig_gui
-      - rhel_07_041004
-  tags:
-      - cat2
-      - medium
-      - patch
-      - RHEL-07-041004
-      - multifactor
-      - notimplemented
-
 - name: "MEDIUM | RHEL-07-041010 | PATCH | Wireless network adapters must be disabled."
   command: nmcli radio wifi off
   changed_when: no
