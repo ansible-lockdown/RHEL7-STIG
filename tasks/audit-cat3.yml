@@ -1,7 +1,0 @@
-- name: "Place holder for Cat III Audits"
-  command: "true"
-  changed_when: no
-  tags:
-      - cat3
-      - low
-      - audit
