@@ -144,6 +144,16 @@
       - RHEL-07-010100
       - notimplemented
 
+- name: "MEDIUM | RHEL-07-010101 | PATCH | The operating system must prevent a user from overriding the screensaver idle-activation-enabled setting for the graphical user interface."
+  command: "true"
+  changed_when: no
+  when:
+      - rhel7stig_gui
+      - rhel_07_010101
+  tags:
+      - RHEL-07-010101
+      - notimplemented
+
 - name: "MEDIUM | RHEL-07-010110 | PATCH | The operating system must initiate a session lock for graphical user interfaces when the screensaver is activated."
   command: "true"
   changed_when: no
