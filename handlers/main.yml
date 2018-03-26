@@ -40,6 +40,9 @@
 - name: rebuild initramfs
   command: dracut -f
 
+- name: undo existing prelinking
+  command: prelink -ua
+
 - name: update running audit failure mode
   command: auditctl -f {{ rhel7stig_auditd_failure_flag }}
   failed_when: no
