@@ -621,12 +621,24 @@
       - packaging
 
 - name: "MEDIUM | RHEL-07-020270 | PATCH | The system must not have unnecessary accounts."
-  command: "true"
-  changed_when: no
+  block:
+    - name: "MEDIUM | RHEL-07-020270 | AUDIT | The system must not have unnecessary accounts."
+      command: "grep '^{{ item }}:' /etc/passwd"
+      failed_when: no
+      check_mode: no
+      changed_when: no
+      with_items: "{{ rhel7stig_unnecessary_accounts }}"
+
+    - name: "MEDIUM | RHEL-07-020270 | PATCH | The system must not have unnecessary accounts."
+      user:
+        name: "{{ item }}"
+        state: absent
+        remove: "{{ rhel7stig_remove_unnecessary_user_files }}"
+      with_items: "{{ rhel7stig_unnecessary_accounts }}"
+
   when: rhel_07_020270
   tags:
       - RHEL-07-020270
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-020320 | PATCH | All files and directories must have a valid owner."
   assert:
