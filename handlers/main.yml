@@ -23,10 +23,13 @@
       name: "{{ rhel7stig_time_service }}"
       state: restarted
 
-- name: init aide
-  command: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
-  async: 45
-  poll: 0
+- name: init aide status
+  async_status:
+    jid: "{{ rhel7stig_aide_init_status.ansible_job_id }}"
+  register: rhel7stig_aide_init_job_result
+  until: rhel7stig_aide_init_job_result.finished
+  retries: 60
+  delay: 5
   tags:
     - aide
 

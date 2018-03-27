@@ -243,11 +243,32 @@
       - RHEL-07-040420
       - ssh
 
-- name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Install AIDE"
-  yum:
-      name: aide
-      state: present
-  notify: init aide
+- name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Install and initialize AIDE"
+  block:
+      - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Install AIDE"
+        yum:
+            name: aide
+            state: present
+
+      - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Check for existing AIDE database"
+        stat:
+          path: "{{ rhel7stig_aide_db_file }}"
+        register: rhel7stig_aide_db_status
+        check_mode: no
+
+      - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Initialize AIDE"
+        command: /usr/sbin/aide --init -B 'database_out=file:{{ rhel7stig_aide_db_file }}'
+        async: "{{ rhel7stig_aide_init_timeout | default(omit) }}"
+        poll: "{{ (rhel7stig_aide_init_timeout is defined) | ternary(0,omit) }}"
+        register: rhel7stig_aide_init_status
+        when: not rhel7stig_aide_db_status.stat.exists
+
+      - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Notify AIDE init handler"
+        command: "true"
+        when:
+          - rhel7stig_aide_init_status.changed
+          - rhel7stig_wait_for_aide_init
+        notify: init aide status
   when:
       - rhel_07_020030 or
         rhel_07_020040 or
