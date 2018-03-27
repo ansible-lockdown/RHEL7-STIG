@@ -320,6 +320,10 @@
         changed_when: no
         register: rhel_07_010260_audit
 
+      - name: "MEDIUM | RHEL-07-010260 | AUDIT | Reset password timeout to prevent locking out user."
+        command: chage -d today {{ item }}
+        with_items: "{{ rhel_07_010260_audit.stdout_lines }}"
+
       - name: "MEDIUM | RHEL-07-010260 | PATCH | Existing passwords must be restricted to a 60-day maximum lifetime."
         command: chage -M 60 {{ item }}
         with_items: "{{ rhel_07_010260_audit.stdout_lines }}"
