@@ -1,16 +1,4 @@
 ---
-- name: "PRELIM | RHEL-07-010240 | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-  command: "awk -F: '$4 < 1 {print $1}' /etc/shadow"
-  register: rhel_07_010240_audit
-  failed_when: no
-  changed_when: no
-  ignore_errors: yes
-  when: rhel_07_010240
-  tags:
-      - cat2
-      - medium
-      - RHEL-07-010240
-
 - name: "PRELIM | Find all sudoers files."
   command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
   changed_when: no
@@ -24,18 +12,6 @@
       - medium
       - RHEL-07-010340
       - RHEL-07-010350
-
-- name: "PRELIM | RHEL-07-010260 | Existing passwords must be restricted to a 60-day maximum lifetime."
-  command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
-  register: rhel_07_010260_audit
-  failed_when: no
-  changed_when: no
-  ignore_errors: yes
-  when: rhel_07_010260
-  tags:
-      - cat2
-      - medium
-      - RHEL-07-010260
 
 - name: "PRELIM | RHEL-07-010480 RHEL-07-010490 RHEL-07-021350 | Install grub2-tools."
   yum:

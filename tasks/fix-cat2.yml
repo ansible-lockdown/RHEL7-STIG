@@ -285,12 +285,21 @@
       - RHEL-07-010230
       - login
 
-- name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-  command: chage -m 1 {{ item }}
-  with_items: "{{ rhel_07_010240_audit.stdout_lines | default([]) }}"
+- name: "MEDIUM | RHEL-07-010240 | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
+  block:
+      - name: "MEDIUM | RHEL-07-010240 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
+        command: "awk -F: '$4 < 1 {print $1}' /etc/shadow"
+        check_mode: no
+        changed_when: no
+        register: rhel_07_010240_audit
+
+      - name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
+        command: chage -m 1 {{ item }}
+        with_items: "{{ rhel_07_010240_audit.stdout_lines }}"
   when: rhel_07_010240
   tags:
       - RHEL-07-010240
+      - password
 
 - name: "MEDIUM | RHEL-07-010250 | PATCH | Passwords for new users must be restricted to a 60-day maximum lifetime."
   lineinfile:
@@ -303,9 +312,17 @@
       - RHEL-07-010250
       - login
 
-- name: "MEDIUM | RHEL-07-010260 | PATCH | Existing passwords must be restricted to a 60-day maximum lifetime."
-  command: chage -M 60 {{ item }}
-  with_items: "{{ rhel_07_010260_audit.stdout_lines | default([]) }}"
+- name: "MEDIUM | RHEL-07-010260 | Existing passwords must be restricted to a 60-day maximum lifetime."
+  block:
+      - name: "MEDIUM | RHEL-07-010260 | AUDIT | Existing passwords must be restricted to a 60-day maximum lifetime."
+        command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
+        check_mode: no
+        changed_when: no
+        register: rhel_07_010260_audit
+
+      - name: "MEDIUM | RHEL-07-010260 | PATCH | Existing passwords must be restricted to a 60-day maximum lifetime."
+        command: chage -M 60 {{ item }}
+        with_items: "{{ rhel_07_010260_audit.stdout_lines }}"
   when: rhel_07_010260
   tags:
       - RHEL-07-010260
