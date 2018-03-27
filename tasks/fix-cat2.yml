@@ -790,6 +790,7 @@
   block:
     - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
       command: find {{ ansible_mounts | to_json | from_json | json_query("[?starts_with(device, '/dev/')].mount") | join(' ') }} ( -context *:device_t:* -o -context *:unlabeled_t:* ) ( -type c -o -type b ) -printf '%p %Z\n'
+      when: ansible_selinux
       changed_when: no
       register: rhel_07_020900_audit
 
