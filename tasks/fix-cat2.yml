@@ -288,7 +288,7 @@
 - name: "MEDIUM | RHEL-07-010240 | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
   block:
       - name: "MEDIUM | RHEL-07-010240 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-        command: "awk -F: '$4 < 1 {print $1}' /etc/shadow"
+        command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $4 < 1 {print $1}' /etc/shadow"
         check_mode: no
         changed_when: no
         register: rhel_07_010240_audit
@@ -315,7 +315,7 @@
 - name: "MEDIUM | RHEL-07-010260 | Existing passwords must be restricted to a 60-day maximum lifetime."
   block:
       - name: "MEDIUM | RHEL-07-010260 | AUDIT | Existing passwords must be restricted to a 60-day maximum lifetime."
-        command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
+        command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $5 > 60 {print $1}' /etc/shadow"
         check_mode: no
         changed_when: no
         register: rhel_07_010260_audit
