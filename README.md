@@ -16,7 +16,8 @@ Requirements
 
 RHEL 7 or CentOS 7 - Other versions are not supported.
 
-`passlib` >= 1.5 on the control node
+`passlib` >= 1.5 on the control node (1.6.2 is in EPEL as `python-passlib`)
+`jmespath` on the control node (in EPEL as `python2-jmespath`)
 
 Role Variables
 --------------
@@ -45,7 +46,7 @@ Role Variables
 | `rhel7stig_aide_cron` | [see defaults/main.yml](./defaults/main.yml) | AIDE Cron settings |
 | `rhel7stig_maxlogins` | `10` | Set maximum number of simultaneous system logins (RHEL-07-040000) |
 | `rhel7stig_logon_banner` | [see defaults/main.yml](./defaults/main.yml) | Logon banner displayed when logging in to the system. Defaults to nicely formatted standard logon banner. |
-| `rhel7stig_password_complexity` | `see below for specific settings` | Dictionary of password complexity settings |
+| `rhel7stig_password_complexity` | see below for specific settings | Dictionary of password complexity settings |
 | `rhel7stig_password_complexity.ucredit` | `-1` | Minimum number of upper-case characters to be set in a new password - expressed as a negative number.  |
 | `rhel7stig_password_complexity.lcredit` | `-1` | Minimum number of lower-case characters to be set in a new password - expressed as a negative number.  |
 | `rhel7stig_password_complexity.dcredit` | `-1` | Minimum number of numeric characters to be set in a new password - expressed as a negative number.  |
