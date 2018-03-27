@@ -1,0 +1,6 @@
+---
+# tasks/chown_user_file.yml
+
+- debug:
+    msg: "{{ outer_item.cmd[5] }} should own {{ item }}"
+  with_items: "{{outer_item.stdout_lines}}"
