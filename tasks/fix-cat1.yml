@@ -368,19 +368,16 @@
 
 - block:
     - name: "HIGH | RHEL-07-040540 | AUDIT | There must be no .shosts files on the system."
-      find:
-          paths: /
-          recurse: yes
-          hidden: yes
-          patterns: '*.shosts'
+      command: find {{ ansible_mounts | to_json | from_json | json_query("[?starts_with(device, '/dev/')].mount") | join(' ') }} -name '.shosts'
       check_mode: no
+      changed_when: no
       register: rhel_07_040540_audit
 
     - name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
       file:
-          path: "{{ item.path }}"
+          path: "{{ item }}"
           state: absent
-      with_items: "{{ rhel_07_040540_audit.files }}"
+      with_items: "{{ rhel_07_040540_audit.stdout_lines }}"
   when: rhel_07_040540
   tags:
       - RHEL-07-040540
@@ -388,18 +385,16 @@
 
 - block:
     - name: "HIGH | RHEL-07-040550 | AUDIT | There must be no shosts.equiv files on the system."
-      find:
-          paths: /
-          recurse: yes
-          patterns: shosts.equiv
+      command: find {{ ansible_mounts | to_json | from_json | json_query("[?starts_with(device, '/dev/')].mount") | join(' ') }} -name 'shosts.equiv'
       check_mode: no
+      changed_when: no
       register: rhel_07_040550_audit
 
     - name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
       file:
-          path: "{{ item.path }}"
+          path: "{{ item }}"
           state: absent
-      with_items: "{{ rhel_07_040550_audit.files }}"
+      with_items: "{{ rhel_07_040550_audit.stdout_lines }}"
   when: rhel_07_040550
   tags:
       - RHEL-07-040550
