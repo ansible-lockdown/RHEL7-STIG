@@ -16,9 +16,9 @@ Requirements
 
 RHEL 7 or CentOS 7 - Other versions are not supported.
 
-`passlib` >= 1.5 on the control node (1.6.2 is in EPEL as `python-passlib`)
+`passlib` >= 1.5 on the control node (1.6.5 is available in RHEL and CentOS as `python-passlib`)
 
-`jmespath` on the control node (in EPEL as `python2-jmespath`)
+`jmespath` on the control node (available in RHEL and CentOS as `python2-jmespath`)
 
 Role Variables
 --------------
