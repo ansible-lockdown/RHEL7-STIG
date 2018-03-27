@@ -786,13 +786,20 @@
       - RHEL-07-020730
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-020900 | PATCH | All system device files must be correctly labeled to prevent unauthorized modification."
-  command: "true"
-  changed_when: no
+- name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
+  block:
+    - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
+      command: find {{ ansible_mounts | to_json | from_json | json_query("[?starts_with(device, '/dev/')].mount") | join(' ') }} ( -context *:device_t:* -o -context *:unlabeled_t:* ) ( -type c -o -type b ) -printf '%p %Z\n'
+      changed_when: no
+      register: rhel_07_020900_audit
+
+    - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
+      debug:
+        msg: "{{ rhel_07_020900_audit.stdout_lines }}"
+
   when: rhel_07_020900
   tags:
       - RHEL-07-020900
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-021000 | PATCH | File systems that contain user home directories must be mounted to prevent files with the setuid and setgid bit set from being executed."
   command: "true"
