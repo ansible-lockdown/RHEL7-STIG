@@ -1003,23 +1003,21 @@
 
 - name: "MEDIUM | RHEL-07-030360 | PATCH | All privileged function executions must be audited."
   block:
-    - name: "MEDIUM | RHEL-07-030360 | PATCH | All privileged function executions must be audited. (find suid/sgid programs)"
-      command: find "{{ item.mount }}" -type f ( -perm -4000 -o -perm -2000 ) -xdev
-      changed_when: false
-      register: rhel_07_030360_audit
-      when: item['device'].startswith('/dev') and not 'bind' in item['options']
-      with_items:
-        - "{{ ansible_mounts }}"
+      - name: "MEDIUM | RHEL-07-030360 | AUDIT | All privileged function executions must be audited. (find suid/sgid programs)"
+        command: find {{ ansible_mounts | to_json | from_json | json_query("[?starts_with(device, '/dev/')].mount") | join(' ') }} -xdev -type f ( -perm -4000 -o -perm -2000 )
+        changed_when: no
+        register: rhel_07_030360_audit
 
-    - name: "MEDIUM | RHEL-07-030360 | PATCH | All privileged function executions must be audited. (add programs to audit file)"
-      include_tasks: audit_suid_sgid_command.yml
-      when:
-        - item.stdout_lines is defined
-        - item.stdout_lines | length > 0
-      with_items: "{{ rhel_07_030360_audit.results }}"
-      loop_control:
-        loop_var: outer_item
-      
+      - name: "MEDIUM | RHEL-07-030360 | All privileged function executions must be audited."
+        lineinfile:
+            path: "/etc/audit/rules.d/rhel7stig_suid_sgid_commands.rules"
+            create: yes
+            owner: root
+            group: root
+            mode: 0600
+            line: "-a always,exit -F path={{ item }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k setuid/setgid"
+            state: present
+        with_items: "{{ rhel_07_030360_audit.stdout_lines }}"
   when: rhel_07_030360
   tags:
       - RHEL-07-030360
