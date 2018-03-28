@@ -1445,14 +1445,17 @@
       - ssh
       - dod_logon_banner
 
-- block:
-    - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+- name: "MEDIUM | RHEL-07-040180 | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+  block:
+    - name: "MEDIUM | RHEL-07-040180 | AUDIT | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
       command: grep -i useldapauth /etc/sysconfig/authconfig
+      check_mode: no
       register: rhel_07_040180_audit
       failed_when: no
-      changed_when: no
-      ignore_errors: yes
-      check_mode: no
+      # todo only run this if authconfig is installed, or the file exists
+      # do we want to create it?
+      #failed_when: rhel_07_040180_audit.rc > 1
+      changed_when: rhel_07_040180_audit.rc == 1
 
     - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
       command: "true"
