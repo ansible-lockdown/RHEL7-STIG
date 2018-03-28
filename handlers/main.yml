@@ -23,23 +23,6 @@
       name: "{{ rhel7stig_time_service }}"
       state: restarted
 
-- name: init aide
-  command: /usr/sbin/aide --init -B 'database_out=file:{{ rhel7stig_aide_db_output_file }}'
-  async: "{{ rhel7stig_aide_init_timeout | default(omit) }}"
-  poll: "{{ rhel7stig_aide_init_interval | default(omit) }}"
-  when: not rhel7stig_aide_db_status.stat.exists
-  notify: move aide db
-  tags:
-    - aide
-
-- name: move aide db
-  command: "mv {{ rhel7stig_aide_db_output_file }} {{ rhel7stig_aide_db_file }}"
-  when:
-    - rhel7stig_aide_init_interval is defined
-    - rhel7stig_aide_init_interval > 0
-  tags:
-    - aide
-
 - name: restart auditd
   command: service auditd restart
   args:
@@ -56,3 +39,17 @@
 - name: update running audit failure mode
   command: auditctl -f {{ rhel7stig_auditd_failure_flag }}
   failed_when: no
+
+- name: init aide
+  command: /usr/sbin/aide --init -B 'database_out=file:{{ rhel7stig_aide_temp_db_file }}'
+  async: "{{ rhel7stig_aide_init_timeout | default(omit) }}"
+  poll: "{{ rhel7stig_aide_init_interval | default(omit) }}"
+  when: not rhel7stig_aide_db_status.stat.exists
+  notify: move aide db
+  tags:
+    - aide
+
+- name: move aide db
+  command: "mv {{ rhel7stig_aide_temp_db_file }} {{ rhel7stig_aide_db_file }}"
+  tags:
+    - aide
