@@ -327,15 +327,14 @@ rhel7stig_boot_password_config:
       line: password_pbkdf2 {{rhel7stig_boot_superuser}} {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
 # AIDE settings
-# AIDE initialization timeout - set to 0 or comment out to run task in
-# blocking/synchronous mode
+# AIDE initialization timeout - set to 0 to run task in blocking/synchronous mode
 rhel7stig_aide_init_timeout: 300
 
-# Set to false to have aide init job run as fire and forget
-# be sure to set rhel7stig_aide_init_timeout value to long enough timeout for job to complete
-rhel7stig_wait_for_aide_init: true
+# AIDE init polling interval - set to 0 for fire and forget mode - used in conjunction with rhel7stig_aide_init_timeout
+rhel7stig_aide_init_interval: 0
 
-# AIDE database file location
+# AIDE database file locations
+rhel7stig_aide_temp_db_file: /var/lib/aide/aide.db.new.gz
 rhel7stig_aide_db_file: /var/lib/aide/aide.db.gz
 
 rhel7stig_aide_cron:
