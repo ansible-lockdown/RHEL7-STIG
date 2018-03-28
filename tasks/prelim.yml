@@ -233,7 +233,7 @@
         register: rhel7stig_aide_db_status
         check_mode: no
         changed_when: not rhel7stig_aide_db_status.stat.exists
-        notify: init aide
+        notify: "{{ rhel7stig_aide_handler }}"
   when:
       - rhel_07_020030 or
         rhel_07_020040 or
