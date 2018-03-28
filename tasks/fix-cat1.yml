@@ -361,7 +361,9 @@
       line: Protocol 2
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
-  when: rhel_07_040390
+  when:
+      - rhel_07_040390
+      - not ansible_distribution_version | version_compare('7.4', '>=')
   tags:
       - RHEL-07-040390
       - ssh
