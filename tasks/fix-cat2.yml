@@ -898,9 +898,6 @@
         replace: '\1sha512\3'
       register: rhel_07_021620_sha256_512_result
       notify: "{{ rhel7stig_aide_handler }}"
-      failed_when:
-        - rhel_07_021620_sha256_512_result | failed
-        - rhel_07_021620_sha256_512_result.rc != 257
 
     - name: "Replace sha256 entries with sha512"
       replace:
@@ -909,9 +906,7 @@
         replace: '\1sha512\3'
       register: rhel_07_021620_sha256_result
       notify: "{{ rhel7stig_aide_handler }}"
-      failed_when:
-        - rhel_07_021620_sha256_result | failed
-        - rhel_07_021620_sha256_result.rc != 257
+
   when: rhel_07_021620
   tags:
       - aide
