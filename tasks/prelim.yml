@@ -258,11 +258,6 @@
         check_mode: no
         changed_when: not rhel7stig_aide_db_status.stat.exists
         notify: init aide
-
-      - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Set AIDE database output file"
-        set_fact:
-          rhel7stig_aide_db_output_file: "{{ (rhel7stig_aide_init_interval == 0) | ternary(rhel7stig_aide_db_file,rhel7stig_aide_temp_db_file) }}"
-        check_mode: no 
   when:
       - rhel_07_020030 or
         rhel_07_020040 or
