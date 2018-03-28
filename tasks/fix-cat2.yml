@@ -660,27 +660,51 @@
   tags:
       - RHEL-07-020270
 
-- name: "MEDIUM | RHEL-07-020320 | PATCH | All files and directories must have a valid owner."
-  assert:
-    that: "{{ item.stdout_lines | length }} == 0"
-    msg: "Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+- name: "MEDIUM | RHEL-07-020320 | All files and directories must have a valid owner."
+  block:
+      - name: "MEDIUM | RHEL-07-020320 | AUDIT | All files and directories must have a valid owner."
+        command: find "{{ item.mount }}" -xdev -nouser
+        check_mode: no
+        register: rhel_07_020320_audit
+        failed_when: no
+        changed_when: no
+        when: item['device'].startswith('/dev') and not 'bind' in item['options']
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "MEDIUM | RHEL-07-020320 | PATCH | All files and directories must have a valid owner."
+        assert:
+            that: "{{ item.stdout_lines | length }} == 0"
+            msg: "Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        when:
+            - item.stdout_lines is defined
+            - item.stdout_lines | length > 0
+        with_items: "{{ rhel_07_020320_audit.results }}"
   when:
-    - rhel_07_020320
-    - item.stdout_lines is defined
-    - item.stdout_lines | length > 0
-  with_items: "{{ rhel_07_020320_audit.results }}"
+      - rhel_07_020320
   tags:
       - RHEL-07-020320
 
-- name: "MEDIUM | RHEL-07-020330 | PATCH | All files and directories must have a valid group owner."
-  assert:
-    that: "{{ item.stdout_lines | length }} == 0"
-    msg: "Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
-  when: 
-    - rhel_07_020330
-    - item.stdout_lines is defined
-    - item.stdout_lines | length > 0
-  with_items: "{{ rhel_07_020330_audit.results }}"
+- name: "MEDIUM | RHEL-07-020330 | All files and directories must have a valid group owner."
+  block:
+      - name: "MEDIUM | RHEL-07-020330 | AUDIT | All files and directories must have a valid group owner."
+        command: find "{{ item.mount }}" -xdev -nogroup
+        check_mode: no
+        register: rhel_07_020330_audit
+        failed_when: no
+        changed_when: no
+        when: item['device'].startswith('/dev') and not 'bind' in item['options']
+        with_items: "{{ ansible_mounts }}"
+
+      - name: "MEDIUM | RHEL-07-020330 | PATCH | All files and directories must have a valid group owner."
+        assert:
+            that: "{{ item.stdout_lines | length }} == 0"
+            msg: "Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        when:
+            - item.stdout_lines is defined
+            - item.stdout_lines | length > 0
+        with_items: "{{ rhel_07_020330_audit.results }}"
+  when:
+      - rhel_07_020330
   tags:
       - RHEL-07-020330
 

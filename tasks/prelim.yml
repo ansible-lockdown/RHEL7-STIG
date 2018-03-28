@@ -55,34 +55,6 @@
   tags:
       - always
 
-- name: "PRELIM | RHEL-07-020320 | All files and directories must have a valid owner."
-  command: find "{{ item.mount }}" -xdev -nouser
-  register: rhel_07_020320_audit
-  failed_when: no
-  changed_when: no
-  ignore_errors: yes
-  when: rhel_07_020320 and item['device'].startswith('/dev') and not 'bind' in item['options']
-  with_items:
-    - "{{ ansible_mounts }}"
-  tags:
-      - cat2
-      - medium
-      - RHEL-07-020320
-
-- name: "PRELIM | RHEL-07-020330 | All files and directories must have a valid group owner."
-  command: find "{{ item.mount }}" -xdev -nogroup
-  register: rhel_07_020330_audit
-  failed_when: no
-  changed_when: no
-  ignore_errors: yes
-  when: rhel_07_020320 and item['device'].startswith('/dev') and not 'bind' in item['options']
-  with_items:
-    - "{{ ansible_mounts }}"
-  tags:
-      - cat2
-      - medium
-      - RHEL-07-020330
-
 - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-021640 RHEL-07-021650 | Check /etc/passwd entries for local user home directories"
   shell: "egrep ':[0-9]{4}' /etc/passwd | cut -d: -f1,4,6"
   changed_when: no
