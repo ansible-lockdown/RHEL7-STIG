@@ -23,13 +23,20 @@
       name: "{{ rhel7stig_time_service }}"
       state: restarted
 
-- name: init aide status
-  async_status:
-    jid: "{{ rhel7stig_aide_init_status.ansible_job_id }}"
-  register: rhel7stig_aide_init_job_result
-  until: rhel7stig_aide_init_job_result.finished
-  retries: 60
-  delay: 5
+- name: init aide
+  command: /usr/sbin/aide --init -B 'database_out=file:{{ rhel7stig_aide_db_output_file }}'
+  async: "{{ rhel7stig_aide_init_timeout | default(omit) }}"
+  poll: "{{ rhel7stig_aide_init_interval | default(omit) }}"
+  when: not rhel7stig_aide_db_status.stat.exists
+  notify: move aide db
+  tags:
+    - aide
+
+- name: move aide db
+  command: "mv {{ rhel7stig_aide_db_output_file }} {{ rhel7stig_aide_db_file }}"
+  when:
+    - rhel7stig_aide_init_interval is defined
+    - rhel7stig_aide_init_interval > 0
   tags:
     - aide
 
