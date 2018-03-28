@@ -282,7 +282,10 @@ rhel7stig_av_package:
 # RHEL-07-032010
 # How to check if your definitions are up to date. Passed to an Ansible
 # shell task, and that task's stdout_lines will be printed in a debug task.
-rhel7stig_av_status_command: "savlog | grep 'Successfully updated' | tail -2"
+rhel7stig_av_status_command: "ls -l $(grep -i '^DatabaseDirectory' /etc/clamav.conf | awk '{print $NF}')/*.cvd"
+# For ClamAV: "ls -l $(grep -i '^DatabaseDirectory' /etc/clamav.conf | awk '{print $NF}')/*.cvd"
+# For McAfee: "ls -l /opt/NAI/LinuxShield/engine/dat/*.dat"
+# For Sophos: "/opt/sophos-av/bin/savlog | grep 'Successfully updated' | tail -2"
 
 rhel7stig_time_service: chronyd
 rhel7stig_time_service_configs:
