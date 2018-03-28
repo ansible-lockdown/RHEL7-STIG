@@ -93,8 +93,8 @@
     state: present
     dest: /etc/security/limits.conf
     insertbefore: '^# End of file'
-    regexp: '^#?\\*.*maxlogins'
-    line: '*           hard    maxlogins     {{ rhel7stig_maxlogins }}'
+    regexp: '^\*.*maxlogins'
+    line: '*               hard    maxlogins       {{ rhel7stig_maxlogins }}'
   when: rhel_07_040000
   tags:
       - RHEL-07-040000
