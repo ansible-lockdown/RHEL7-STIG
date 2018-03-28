@@ -1455,7 +1455,9 @@
       # todo only run this if authconfig is installed, or the file exists
       # do we want to create it?
       #failed_when: rhel_07_040180_audit.rc > 1
-      changed_when: rhel_07_040180_audit.rc == 1
+      changed_when:
+          - rhel_07_040180_audit.rc == 1
+          - not rhel7stig_skip_for_travis
 
     - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
       command: "true"
@@ -2023,13 +2025,17 @@
       - RHEL-07-041001
       - multifactor
 
-- name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
+- name: "MEDIUM | RHEL-07-041002 | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
   block:
-      - name: "MEDIUM | RHEL-07-041002 | PATCH | Check if pam service is configured in sssd file"
-        shell: 'grep -E "^\s*services\s*=.*pam" /etc/sssd/sssd.conf'
-        changed_when: no
-        failed_when: no
+      - name: "MEDIUM | RHEL-07-041002 | AUDIT | Check if pam service is configured in sssd file"
+        command: 'grep -E "^\s*services\s*=.*pam" /etc/sssd/sssd.conf'
         check_mode: no
+        changed_when:
+            - sssd_services_check.rc == 1
+            - not rhel7stig_skip_for_travis
+        failed_when: no
+        # todo: only run if sssd installed and config file present
+        #failed_when: sssd_services_check.rc > 1
         register: sssd_services_check
 
       - name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
