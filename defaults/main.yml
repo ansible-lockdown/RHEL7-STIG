@@ -327,8 +327,12 @@ rhel7stig_boot_password_config:
       line: password_pbkdf2 {{rhel7stig_boot_superuser}} {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
 # AIDE settings
+# Set to false for fire and forget mode
 rhel7stig_wait_for_aide_init: true
 rhel7stig_aide_handler: "{{ (rhel7stig_wait_for_aide_init) | ternary('init aide and wait','init aide') }}"
+
+# Set to false to not overwrite an existing AIDE DB
+rhel7stig_overwrite_aide_db: true
 
 # AIDE database file locations
 rhel7stig_aide_temp_db_file: /var/lib/aide/aide.db.new.gz

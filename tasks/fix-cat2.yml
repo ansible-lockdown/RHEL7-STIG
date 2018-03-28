@@ -939,6 +939,7 @@
         regexp: '([A-Z]+ = .*)(sha256\+sha512)(.*)'
         replace: '\1sha512\3'
       register: rhel_07_021620_sha256_512_result
+      notify: "{{ rhel7stig_aide_handler }}"
       failed_when:
         - rhel_07_021620_sha256_512_result | failed
         - rhel_07_021620_sha256_512_result.rc != 257
@@ -949,11 +950,13 @@
         regexp: '([A-Z]+ = .*)(sha256)(.*)'
         replace: '\1sha512\3'
       register: rhel_07_021620_sha256_result
+      notify: "{{ rhel7stig_aide_handler }}"
       failed_when:
         - rhel_07_021620_sha256_result | failed
         - rhel_07_021620_sha256_result.rc != 257
   when: rhel_07_021620
   tags:
+      - aide
       - RHEL-07-021620
 
 - name: "MEDIUM | RHEL-07-021700 | PATCH | The system must not allow removable media to be used as the boot loader unless approved."

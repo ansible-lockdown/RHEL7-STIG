@@ -225,7 +225,7 @@
         yum:
             name: aide
             state: present
-        notify: init aide
+        notify: "{{ rhel7stig_aide_handler }}"
 
       - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Check for existing AIDE database"
         stat:
