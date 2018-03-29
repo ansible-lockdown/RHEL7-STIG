@@ -318,10 +318,10 @@
       - name: "MEDIUM | RHEL-07-010260 | AUDIT | Existing passwords must be restricted to a 60-day maximum lifetime."
         command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $5 > 60 {print $1}' /etc/shadow"
         check_mode: no
-        changed_when: no
+        changed_when: rhel_07_010260_audit.stdout != ""
         register: rhel_07_010260_audit
 
-      - name: "MEDIUM | RHEL-07-010260 | AUDIT | Reset password timeout to prevent locking out user."
+      - name: "MEDIUM | RHEL-07-010260 | PATCH | Reset password timeout to prevent locking out user."
         command: chage -d today {{ item }}
         with_items: "{{ rhel_07_010260_audit.stdout_lines }}"
 
