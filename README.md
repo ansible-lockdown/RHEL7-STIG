@@ -8,7 +8,7 @@ RHEL 7 DISA STIG
 Configure a RHEL 7 system to be DISA STIG compliant. CAT I findings will be corrected and audited by default. CAT II and III findings can be enabled by setting the appropriate variables to `yes`.
 
 
-This role is based on RHEL 7 DISA STIG: [Version 1, Rel 3 released on October 27, 2017](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx).
+This role is based on RHEL 7 DISA STIG: [Version 1, Rel 4 released on January 26, 2018](http://iase.disa.mil/stigs/os/unix-linux/Pages/index.aspx).
 
 
 Requirements
@@ -16,7 +16,9 @@ Requirements
 
 RHEL 7 or CentOS 7 - Other versions are not supported.
 
-`passlib` >= 1.7 on the control node
+`passlib` >= 1.5 on the control node (1.6.5 is available in RHEL and CentOS as `python-passlib`)
+
+`jmespath` on the control node (available in RHEL and CentOS as `python2-jmespath`)
 
 Role Variables
 --------------
@@ -34,7 +36,7 @@ Role Variables
 | `rhel7stig_time_service` | `chronyd` | Set to `ntpd` or `chronyd`. |
 | `rhel7stig_time_service_configs` | [see defaults/main.yml](./defaults/main.yml) | Time service packages and service configs. |
 | `rhel7stig_firewall_service` | `firewalld` | Set to `firewalld` or `iptables`. |
-| `rhel7stig_lftpd_required` | `no` | If set to `no`, remove `lftpd`. |
+| `rhel7stig_vsftpd_required` | `no` | If set to `no`, remove `vsftpd`. |
 | `rhel7stig_tftp_required` | `no` | If set to `no`, remove `tftp` client and server packages. |
 | `rhel7stig_autofs_required` | `no` | If set to `no`, disable `autofs` service. |
 | `rhel7stig_kdump_required` | `no` | If set to `no`, disable `kdump` service. |
@@ -45,7 +47,7 @@ Role Variables
 | `rhel7stig_aide_cron` | [see defaults/main.yml](./defaults/main.yml) | AIDE Cron settings |
 | `rhel7stig_maxlogins` | `10` | Set maximum number of simultaneous system logins (RHEL-07-040000) |
 | `rhel7stig_logon_banner` | [see defaults/main.yml](./defaults/main.yml) | Logon banner displayed when logging in to the system. Defaults to nicely formatted standard logon banner. |
-| `rhel7stig_password_complexity` | `see below for specific settings` | Dictionary of password complexity settings |
+| `rhel7stig_password_complexity` | see below for specific settings | Dictionary of password complexity settings |
 | `rhel7stig_password_complexity.ucredit` | `-1` | Minimum number of upper-case characters to be set in a new password - expressed as a negative number.  |
 | `rhel7stig_password_complexity.lcredit` | `-1` | Minimum number of lower-case characters to be set in a new password - expressed as a negative number.  |
 | `rhel7stig_password_complexity.dcredit` | `-1` | Minimum number of numeric characters to be set in a new password - expressed as a negative number.  |

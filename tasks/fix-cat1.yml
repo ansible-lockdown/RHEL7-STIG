@@ -15,9 +15,6 @@
       when: rhel_07_010010_audit.stdout_lines | length > 0
   when: rhel_07_010010
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-010010
 
 - block:
@@ -38,9 +35,6 @@
       when: rhel_07_010020_audit.stdout_lines | length > 0
   when: rhel_07_010020
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-010020
 
 - name: "HIGH | RHEL-07-010290 | PATCH | The system must not have accounts configured with blank or null passwords."
@@ -50,9 +44,6 @@
       regexp: 'nullok ?'
   when: rhel_07_010290
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-010290
 
 - name: "HIGH | RHEL-07-010300 | PATCH | The SSH daemon must not allow authentication using an empty password."
@@ -65,9 +56,6 @@
   notify: restart sshd
   when: rhel_07_010300
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-010300
       - ssh
 
@@ -81,9 +69,6 @@
       - rhel7stig_gui
       - rhel_07_010440
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-010440
       - gui
 
@@ -97,9 +82,6 @@
       - rhel7stig_gui
       - rhel_07_010450
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-010450
 
 
@@ -116,9 +98,6 @@
   notify: make grub2 config
   when: rhel_07_010480 or rhel_07_010490
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-010480
       - RHEL-07-010490
       - grub
@@ -130,9 +109,6 @@
       state: absent
   when: rhel_07_020000
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-020000
       - rsh
 
@@ -142,9 +118,6 @@
      state: absent
   when: rhel_07_020010
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-020010
       - ypserv
 
@@ -156,9 +129,6 @@
       insertafter: '\[main\]'
   when: rhel_07_020050
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-020050
       - yum
 
@@ -170,9 +140,6 @@
       insertafter: '\[main\]'
   when: rhel_07_020060
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-020060
       - yum
 
@@ -184,9 +151,6 @@
       insertafter: '\[main\]'
   when: rhel_07_020070
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-020070
       - yum
 
@@ -199,9 +163,6 @@
       policy: targeted
   when: rhel_07_020210 or rhel_07_020220
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-020210
       - RHEL-07-020220
       - selinux
@@ -216,9 +177,6 @@
       state: link
   when: rhel_07_020230
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-020230
 
 # RHEL-07-020250 | PATCH | The operating system must be a supported release."
@@ -240,9 +198,6 @@
       when: rhel_07_020310_audit.rc
   when: rhel_07_020310
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-020310
 
 - block:
@@ -250,30 +205,109 @@
       yum:
           name: dracut-fips
           state: present
+      notify: rebuild initramfs
 
-    - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
-      lineinfile:
-          create: yes
-          dest: /etc/sysconfig/prelink
-          regexp: ^#?PRELINKING
-          line: PRELINKING=no
-
-    - name: "HIGH | RHEL-07-021350 | PATCH | Check if prelink package is installed"
+    - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
       command: rpm -q prelink
       args:
           warn: no
       changed_when: no
       failed_when: no
+      check_mode: no
       register: rhel_07_021350_prelink_installed
 
-    - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
-      command: prelink -ua
+    - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
+      lineinfile:
+          dest: /etc/sysconfig/prelink
+          regexp: ^#?PRELINKING
+          line: PRELINKING=no
       when: rhel_07_021350_prelink_installed.rc == 0
+      notify: undo existing prelinking
+
+    - name: "HIGH | RHEL-07-021350 | AUDIT | Check for GRUB_CMDLINE_LINUX in /etc/default/grub"
+      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*"$' /etc/default/grub
+      check_mode: no
+      failed_when: no
+      changed_when: rhel_07_021350_default_grub_missing_audit.rc > 0
+      register: rhel_07_021350_default_grub_missing_audit
+
+    - name: "HIGH | RHEL-07-021350 | AUDIT | parse sane GRUB_CMDLINE_LINUX from /proc/cmdline"
+      command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
+      check_mode: no
+      changed_when: no
+      failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
+      when: rhel_07_021350_default_grub_missing_audit | changed
+      register: rhel_07_021350_grub_cmdline_linux_audit
+
+    - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
+      template:
+          src: etc_default_grub.j2
+          dest: /etc/default/grub
+          owner: root
+          group: root
+          mode: 0644
+      vars:
+          grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
+      when: rhel_07_021350_default_grub_missing_audit | changed
+
+    - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
+      replace:
+          path: /etc/default/grub
+          regexp: "{{ rhel7stig_regexp_quoted_params }}"
+          replace: "{{ rhel7stig_replace_quoted_params }}"
+      vars:
+          key: GRUB_CMDLINE_LINUX
+          param: fips
+          value: 1
+          append: yes # this is the default
+      when:
+          - not ansible_check_mode or
+            not rhel_07_021350_default_grub_missing_audit | changed
+      notify: make grub2 config
+
+    - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
+      replace:
+          path: /etc/default/grub
+          regexp: "{{ rhel7stig_regexp_quoted_params }}"
+          replace: "{{ rhel7stig_replace_quoted_params }}"
+      with_items:
+          - "{{ ansible_mounts | json_query(query) }}"
+      vars:
+          query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
+          key: GRUB_CMDLINE_LINUX
+          param: boot
+          value: UUID={{ item.uuid }}
+          insert: yes
+      when:
+          - rhel7stig_boot_part not in ['/', '']
+          - not ansible_check_mode or
+            not rhel_07_021350_default_grub_missing_audit | changed
+      notify: make grub2 config
+      register: result
+
+    - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
+      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
+      check_mode: no
+      with_items:
+          - fips=1
+          - boot=UUID={{ ansible_mounts | json_query(query) }}
+      vars:
+          query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
+      register: rhel_07_021350_audit
+      when:
+          - not ansible_check_mode or
+            not rhel_07_021350_default_grub_missing_audit | changed
+          - rhel7stig_boot_part not in ['/', ''] or
+            'boot=' not in item
+      changed_when:
+          - ansible_check_mode
+          - rhel_07_021350_audit | failed
+      failed_when:
+          - rhel_07_021350_audit | failed
+          - not ansible_check_mode or
+            rhel_07_021350_audit.rc > 1
   when: rhel_07_021350
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-021350
 
 - name: "HIGH | RHEL-07-021710 | PATCH | The telnet-server package must not be installed."
@@ -282,9 +316,6 @@
       state: absent
   when: rhel_07_021710
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-021710
       - telnet
 
@@ -301,9 +332,6 @@
           enabled: yes
   when: rhel_07_030000
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-030000
       - auditd
 
@@ -323,9 +351,6 @@
       - rhel7stig_antivirus_required
       - rhel_07_032000
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-032000
       - antivirus
 
@@ -336,70 +361,55 @@
       line: Protocol 2
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
-  when: rhel_07_040390
+  when:
+      - rhel_07_040390
+      - not ansible_distribution_version | version_compare('7.4', '>=')
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-040390
       - ssh
 
 - block:
     - name: "HIGH | RHEL-07-040540 | AUDIT | There must be no .shosts files on the system."
-      find:
-          paths: /
-          recurse: yes
-          hidden: yes
-          patterns: '*.shosts'
+      command: find {{ ansible_mounts | to_json | from_json | json_query("[?starts_with(device, '/dev/')].mount") | join(' ') }} -name '.shosts'
       check_mode: no
+      changed_when: no
       register: rhel_07_040540_audit
 
     - name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
       file:
-          path: "{{ item.path }}"
+          path: "{{ item }}"
           state: absent
-      with_items: "{{ rhel_07_040540_audit.files }}"
+      with_items: "{{ rhel_07_040540_audit.stdout_lines }}"
   when: rhel_07_040540
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-040540
       - shosts
 
 - block:
     - name: "HIGH | RHEL-07-040550 | AUDIT | There must be no shosts.equiv files on the system."
-      find:
-          paths: /
-          recurse: yes
-          patterns: shosts.equiv
+      command: find {{ ansible_mounts | to_json | from_json | json_query("[?starts_with(device, '/dev/')].mount") | join(' ') }} -name 'shosts.equiv'
       check_mode: no
+      changed_when: no
       register: rhel_07_040550_audit
 
     - name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
       file:
-          path: "{{ item.path }}"
+          path: "{{ item }}"
           state: absent
-      with_items: "{{ rhel_07_040550_audit.files }}"
+      with_items: "{{ rhel_07_040550_audit.stdout_lines }}"
   when: rhel_07_040550
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-040550
       - shosts
 
 - name: "HIGH | RHEL-07-040690 | PATCH | A File Transfer Protocol (FTP) server package must not be installed unless needed."
   yum:
-      name: lftpd
+      name: vsftpd
       state: absent
   when:
-      - not rhel7stig_lftpd_required
+      - not rhel7stig_vsftpd_required
       - rhel_07_040690
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-040690
       - ftp
 
@@ -413,9 +423,6 @@
       - not rhel7stig_tftp_required
       - rhel_07_040700
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-040700
       - tftp
 
@@ -429,9 +436,6 @@
   notify: restart sshd
   when: rhel_07_040710
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-040710
       - ssh
 
@@ -457,8 +461,5 @@
       when: item.stdout_lines | length > 0
   when: rhel_07_040800
   tags:
-      - cat1
-      - high
-      - patch
       - RHEL-07-040800
       - snmp

@@ -12,59 +12,28 @@
   tags:
       - always
 
-- include: prelim.yml
+- import_tasks: prelim.yml
   become: yes
   tags:
       - prelim_tasks
-      - always
-
-# - name: Run CAT I audits
-#   include: audit-cat1.yml
-#   static: no
-#   check_mode: no
-#   when: rhel7stig_cat1_audit | bool
-#   tags:
-#       - cat1
-#       - audit
-
-# - name: Run CAT II audits
-#   include: audit-cat2.yml
-#   check_mode: no
-#   static: no
-#   when: rhel7stig_cat2_audit | bool
-#   tags:
-#       - cat2
-#       - audit
-
-# - name: Run CAT III audits
-#   include: audit-cat3.yml
-#   static: no
-#   check_mode: no
-#   when: rhel7stig_cat3_audit | bool
-#   tags:
-#       - cat2
-#       - audit
 
 - name: Include CAT I patches
-  include: fix-cat1.yml
-  static: no
+  import_tasks: fix-cat1.yml
   when: rhel7stig_cat1_patch | bool
   tags:
       - cat1
-      - patch
+      - high
 
 - name: Include CAT II patches
-  include: fix-cat2.yml
-  static: no
+  import_tasks: fix-cat2.yml
   when: rhel7stig_cat2_patch | bool
   tags:
       - cat2
-      - patch
+      - medium
 
 - name: Include CAT III patches
-  include: fix-cat3.yml
-  static: no
+  import_tasks: fix-cat3.yml
   when: rhel7stig_cat3_patch | bool
   tags:
       - cat3
-      - patch
+      - low

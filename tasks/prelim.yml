@@ -1,153 +1,140 @@
-# - name: "PRELIM | RHEL-07-010010 | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
-#   shell: 'rpm -Va | grep ''^.M'''
-#   args:
-#     warn: no
-#   failed_when: no
-#   changed_when: no
-#   ignore_errors: yes
-#   register: rhel_07_010010_audit
-#   when: rhel_07_010010
-
-# - name: "PRELIM | RHEL-07-010020 | The cryptographic hash of system files and commands must match vendor values."
-#   shell: 'rpm -Va | grep ''^..5'' | grep -E ''/.?bin/'''
-#   args:
-#       warn: no
-#   failed_when: no
-#   changed_when: no
-#   ignore_errors: yes
-#   register: rhel_07_010020_audit
-#   when: rhel_07_010020
-
-# - name: "PRELIM | RHEL-07-020310 | The root account must be the only account having unrestricted access to the system"
-#   shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
-#   changed_when: no
-#   failed_when: no
-#   ignore_errors: yes
-#   register: rhel_07_020310_audit
-#   when: rhel_07_020310
-
-# - name: "PRELIM | RHEL-07-021350 | Check if prelink package is installed"
-#   command: rpm -q prelink
-#   args:
-#       warn: no
-#   changed_when: no
-#   failed_when: no
-#   register: rhel_07_021350_prelink_installed
-#   when: rhel_07_021350
-
-# - name: "PRELIM | RHEL-07-040540 | There must be no .shosts files on the system."
-#   find:
-#       paths: /
-#       recurse: yes
-#       hidden: yes
-#       patterns: '*.shosts'
-#   register: rhel_07_040540_audit
-#   when: rhel_07_040540
-#   tags:
-#       - cat1
-#       - high
-#       - audit
-#       - RHEL-07-040540
-
-# - name: "PRELIM | RHEL-07-040550 | There must be no shosts.equiv files on the system."
-#   find:
-#       paths: /
-#       recurse: yes
-#       patterns: shosts.equiv
-#   register: rhel_07_040550_audit
-#   when: rhel_07_040550
-#   tags:
-#       - cat1
-#       - high
-#       - audit
-#       - RHEL-07-040550
-
-# - name: "PRELIM | RHEL-07-040800 | SNMP community strings must be changed from the default."
-#   command: grep {{ item }} /etc/snmp/snmpd.conf
-#   failed_when: no
-#   changed_when: no
-#   ignore_errors: yes
-#   with_items:
-#       - public
-#       - private
-#   register: rhel_07_040800_audit
-#   when: rhel_07_040800
-#   tags:
-#       - cat1
-#       - high
-#       - audit
-#       - RHEL-07-040800
-#       - snmp
-
-- name: "PRELIM | RHEL-07-010240 | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-  command: "awk -F: '$4 < 1 {print $1}' /etc/shadow"
-  register: rhel_07_010240_audit
-  failed_when: no
+---
+- name: "PRELIM | Find all sudoers files."
+  command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
   changed_when: no
-  ignore_errors: yes
-  when: rhel_07_010240
+  failed_when: no
+  register: rhel7stig_sudoers_files
+  when: 
+      - rhel_07_010340 or
+        rhel_07_010350
   tags:
       - cat2
       - medium
-      - audit
-      - RHEL-07-010240
+      - RHEL-07-010340
+      - RHEL-07-010350
 
-- name: "PRELIM | RHEL-07-010260 | Existing passwords must be restricted to a 60-day maximum lifetime."
-  command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
-  register: rhel_07_010260_audit
-  failed_when: no
+- name: "PRELIM | RHEL-07-010480 RHEL-07-010490 RHEL-07-021350 | Install grub2-tools."
+  yum:
+      name: grub2-tools
+  when:
+      - rhel_07_010480 or
+        rhel_07_010490 or
+        rhel_07_021350
+  tags:
+      - cat1
+      - high
+      - RHEL-07-010480
+      - RHEL-07-010490
+      - RHEL-07-021350
+
+- name: "PRELIM | RHEL-07-010480 RHEL-07-010490 RHEL-07-021350 RHEL-07-021700 | Check whether machine is UEFI-based"
+  stat:
+      path: /sys/firmware/efi
+  register: rhel_07_sys_firmware_efi
+  when:
+      - rhel_07_010480 or
+        rhel_07_010490 or
+        rhel_07_021350 or
+        rhel_07_021700
+  tags:
+      - cat1
+      - high
+      - cat2
+      - medium
+      - RHEL-07-010480
+      - RHEL-07-010490
+      - RHEL-07-021350
+      - RHEL-07-021700
+
+- name: "PRELIM | Gather mount information"
+  setup:
+      gather_subset: hardware,!all,!min
+      filter: ansible_mounts
+  when:
+      - ansible_mounts is not defined
+  tags:
+      - always
+
+- name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-021640 RHEL-07-021650 | Check /etc/passwd entries for local user home directories"
+  shell: "egrep ':[0-9]{4}' /etc/passwd | cut -d: -f1,4,6"
   changed_when: no
-  ignore_errors: yes
-  when: rhel_07_010260
+  failed_when: no
+  check_mode: no
+  register: rhel7stig_passwd_homedir_audit
+  when: 
+    - rhel_07_020620 or
+      rhel_07_020630 or
+      rhel_07_020640 or
+      rhel_07_020650
   tags:
       - cat2
       - medium
-      - audit
-      - RHEL-07-010260
+      - RHEL-07-020620
+      - RHEL-07-020630
+      - RHEL-07-020640
+      - RHEL-07-020650
 
-- name: "PRELIM | RHEL-07-020320 | All files and directories must have a valid owner."
-  command: find "{{ item.mount }}" -xdev -nouser
-  register: rhel_07_020320_audit
-  failed_when: no
-  changed_when: no
-  ignore_errors: yes
-  when: rhel_07_020320 and item['device'].startswith('/dev') and not 'bind' in item['options']
-  with_items:
-    - "{{ ansible_mounts }}"
+- name: "PRELIM | RHEL-07-021100 RHEL-07-031000 RHEL-07-031010 | Ensure rsyslog is installed when required."
+  yum:
+      name: rsyslog
+  when:
+      - rhel_07_021100 or
+        rhel_07_031000 or
+        rhel_07_031010
   tags:
       - cat2
       - medium
-      - audit
-      - RHEL-07-020320
+      - RHEL-07-021100
+      - RHEL-07-031000
+      - RHEL-07-031010
 
-- name: "PRELIM | RHEL-07-020330 | All files and directories must have a valid group owner."
-  command: find "{{ item.mount }}" -xdev -nogroup
-  register: rhel_07_020330_audit
-  failed_when: no
+- name: "PRELIM | RHEL-07-021350 | Check if /boot or /boot/efi reside on separate partitions"
+  shell: df --output=target /boot/efi | tail -n 1
   changed_when: no
-  ignore_errors: yes
-  when: rhel_07_020320 and item['device'].startswith('/dev') and not 'bind' in item['options']
-  with_items:
-    - "{{ ansible_mounts }}"
+  check_mode: no
+  register: rhel_07_boot_part
+  when:
+      - rhel_07_021350
+  tags:
+      - cat1
+      - high
+      - RHEL-07-021350
+
+- name: "PRELIM | RHEL-07-030330 | Determine audit log partition."
+  block:
+      - name: "PRELIM | RHEL-07-030330 | Find audit.log location"
+        command: grep -oP '^log_file\s*=\s*\K.*?(?=\s*$)' /etc/audit/auditd.conf
+        changed_when: no
+        check_mode: no
+        register: rhel_07_audit_log_file
+
+      - name: "PRELIM | RHEL-07-030330 | Find partition holding audit.log"
+        shell: df --output=target {{ rhel_07_audit_log_file.stdout }} | tail -n 1
+        changed_when: no
+        check_mode: no
+        register: rhel_07_audit_part
+  when:
+      - rhel_07_030330
   tags:
       - cat2
       - medium
-      - audit
-      - RHEL-07-020330
+      - RHEL-07-030330
 
-# - name: "PRELIM | RHEL-07-040180 | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-#   command: grep -i useldapauth /etc/sysconfig/authconfig
-#   register: rhel_07_040180_audit
-#   failed_when: no
-#   changed_when: no
-#   ignore_errors: yes
-#   when: rhel_07_040180
-#   tags:
-#       - cat2
-#       - medium
-#       - audit
-#       - RHEL-07-040180
-#       - ldap
+- name: "PRELIM | RHEL-07-030300 RHEL-07-030310 RHEL-07-030320 RHEL-07-030321 | Install audit remote plugin."
+  yum:
+      name: audispd-plugins
+  when:
+      - rhel_07_030300 or
+        rhel_07_030310 or
+        rhel_07_030320 or
+        rhel_07_030321
+  tags:
+      - cat2
+      - medium
+      - RHEL-07-030300
+      - RHEL-07-030310
+      - RHEL-07-030320
+      - RHEL-07-030321
 
 - name: "PRELIM | RHEL-07-040410 | The SSH public host key files must have mode 0644 or less permissive."
   find:
@@ -163,8 +150,7 @@
   when: rhel_07_040410
   tags:
       - cat2
-      - high
-      - audit
+      - medium
       - RHEL-07-040410
       - ssh
 
@@ -182,17 +168,38 @@
   when: rhel_07_040420
   tags:
       - cat2
-      - high
-      - audit
+      - medium
       - RHEL-07-040420
       - ssh
 
-- name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Install AIDE"
-  yum:
-      name: aide
-      state: present
-  notify: init aide
-  when: rhel_07_020030 or rhel_07_020040 or rhel_07_021620 or rhel_07_021610 or rhel_07_021600
+- name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Install and initialize AIDE"
+  block:
+      - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Install AIDE"
+        yum:
+            name: aide
+            state: present
+        notify: "{{ rhel7stig_aide_handler }}"
+
+      - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Check for existing AIDE database"
+        stat:
+          path: "{{ rhel7stig_aide_db_file }}"
+        register: rhel7stig_aide_db_status
+        check_mode: no
+        changed_when: not rhel7stig_aide_db_status.stat.exists
+        notify: "{{ rhel7stig_aide_handler }}"
+  when:
+      - rhel_07_020030 or
+        rhel_07_020040 or
+        rhel_07_021600 or
+        rhel_07_021610 or
+        rhel_07_021620
   tags:
+      - cat2
+      - medium
       - patch
       - aide
+      - RHEL-07-020030
+      - RHEL-07-020040
+      - RHEL-07-021600
+      - RHEL-07-021610
+      - RHEL-07-021620

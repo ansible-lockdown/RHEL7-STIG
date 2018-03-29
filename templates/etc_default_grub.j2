@@ -1,0 +1,10 @@
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="{{ grub_cmdline_linux }}"
+{#{% for param, value in ansible_cmdline.iteritems()
+%}{% if param not in blacklist %} {{ param }}{% if value is string %}={{ value }}{%
+endif %}{% endif %}{% endfor %}"#}
+GRUB_DISABLE_RECOVERY="true"

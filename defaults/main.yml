@@ -1,5 +1,3 @@
-rhel7stig_min_ansible_version: 2.1
-
 rhel7stig_cat1_patch: yes
 rhel7stig_cat2_patch: yes
 rhel7stig_cat3_patch: yes
@@ -47,12 +45,13 @@ rhel_07_010040: true
 rhel_07_010050: true
 rhel_07_010060: true
 rhel_07_010061: true
+rhel_07_010062: true
 rhel_07_010070: true
-rhel_07_010080: true
 rhel_07_010081: true
 rhel_07_010082: true
 rhel_07_010090: true
 rhel_07_010100: true
+rhel_07_010101: true
 rhel_07_010110: true
 rhel_07_010119: true
 rhel_07_010120: true
@@ -243,7 +242,6 @@ rhel_07_040830: true
 rhel_07_041001: true
 rhel_07_041002: true
 rhel_07_041003: true
-rhel_07_041004: true
 rhel_07_041010: true
 # CAT 3 rules
 rhel_07_020200: true
@@ -257,12 +255,6 @@ rhel_07_021610: true
 rhel_07_040000: true
 rhel_07_040530: true
 rhel_07_040600: true
-
-# These values match patch values by defaults. To override these values,
-# set them in group_vars, host_vars, or with the -e flag via CLI
-# rhel7stig_cat1_audit: "{{ rhel7stig_cat1_patch }}"
-# rhel7stig_cat2_audit: "{{ rhel7stig_cat2_patch }}"
-# rhel7stig_cat3_audit: "{{ rhel7stig_cat3_patch }}"
 
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: no
@@ -304,9 +296,12 @@ rhel7stig_time_service_configs:
 
 rhel7stig_firewall_service: firewalld
 
+# RHEL-07-031010
+rhel7stig_system_is_log_aggregator: false
+
 # RHEL-07-040490
-# If not required, remove lftpd.
-rhel7stig_lftpd_required: no
+# If not required, remove vsftpd.
+rhel7stig_vsftpd_required: no
 
 # RHEL-07-040500
 # If not required, remove tftp
@@ -332,6 +327,17 @@ rhel7stig_boot_password_config:
       line: password_pbkdf2 {{rhel7stig_boot_superuser}} {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
 # AIDE settings
+# Set to false for fire and forget mode
+rhel7stig_wait_for_aide_init: true
+rhel7stig_aide_handler: "{{ (rhel7stig_wait_for_aide_init) | ternary('init aide and wait','init aide') }}"
+
+# Set to false to not overwrite an existing AIDE DB
+rhel7stig_overwrite_aide_db: true
+
+# AIDE database file locations
+rhel7stig_aide_temp_db_file: /var/lib/aide/aide.db.new.gz
+rhel7stig_aide_db_file: /var/lib/aide/aide.db.gz
+
 rhel7stig_aide_cron:
   user: root
   cron_file: aide
@@ -405,6 +411,20 @@ rhel7stig_auto_package_updates:
   update_cmd: "minimal-security"
   frequency: daily
 
+# RHEL-07-020270
+# If vsftpd is required, remove 'ftp' from rhel7stig_unnecessary_accounts.
+#
+# By default, files owned by removed users will be retained, but this may
+# trigger RHEL-07-020320 (all files and directories must have a valid owner).
+# Set rhel7stig_remove_unnecessary_user_files to yes to remove old files,
+# but this could remove files you intended to keep. And it's probably best to
+# avoid removing 'dbus', 'nobody', 'systemd-network', and 'polkitd', as they all
+# have home directories of '/' by default.
+rhel7stig_unnecessary_accounts:
+  - ftp
+  - games
+rhel7stig_remove_unnecessary_user_files: no
+
 # RHEL-07-010320
 # RHEL-07-010330
 # pam_faillock settings - accounts must be locked for max time period after 3 unsuccessful attempts within 15 minutes.
@@ -413,6 +433,10 @@ rhel7stig_pam_faillock:
   interval: 900
   unlock_time: 604800
   fail_for_root: yes
+
+# RHEL-07-030320 and RHEL-07-030321
+rhel7stig_audisp_disk_full_action: syslog
+rhel7stig_audisp_network_failure_action: syslog
 
 # RHEL-07-040670
 # Network interface promiscuous mode setting will be disabled unless set to true
@@ -433,14 +457,47 @@ rhel7stig_login_defaults:
   umask: '077'
   create_home: 'yes'
 
+# RHEL-07-030330: set this to 25% of the free space in /var/log/audit (measured in megabytes)
+rhel7stig_auditd_space_left: "{{ ( ansible_mounts | json_query(rhel7stig_audit_disk_size_query) / 4 / 1024 / 1024 ) | int + 1 }}"
+rhel7stig_audit_disk_size_query: "[?mount=='{{ rhel7stig_audit_part }}'].size_total | [0]"
+
+# RHEL-07-030350
+rhel7stig_auditd_mail_acct: root
+
+# RHEL-07-020630
+rhel7stig_homedir_mode: 0750
+
+# RHEL-07-031000
+# rhel7stig_log_aggregation_server: logagg.example.com
+
 # RHEL-07-040180
 # Whether the system should be using LDAP for authentication
 rhel7stig_auth_settings:
     use_ldap: no
     use_sssd: no
 
+# RHEL-07-040820
+rhel7stig_ipsec_required: no
+
 # RHEL-07-010340
 # Setting to enable or disable fixes that depend on password-based authentication
 # i.e. if users authenticate with a means other than passwords (pubkey)
 # and will not know or use passwords then this should be 'no'
 rhel7stig_using_password_auth: yes
+
+rhel7stig_availability_override: false
+# auditd_failure_flag
+# 2    Tells your system to perform an immediate shutdown without
+#      flushing any pending data to disk when the limits of your
+#      audit system are exceeded. Because this shutdown is not a clean shutdown.
+#      restrict the use of -f 2 to only the most security conscious environments
+# 1    System continues to run, issues a warning and audit stops.
+#      Use this for any other setup to avoid loss of data or data corruption.
+rhel7stig_auditd_failure_flag: "{{ rhel7stig_availability_override | ternary(1, 2) }}"
+
+rhel7stig_audit_part: "{{ rhel_07_audit_part.stdout }}"
+
+rhel7stig_boot_part: "{{ rhel_07_boot_part.stdout }}"
+
+rhel7stig_machine_uses_uefi: "{{ rhel_07_sys_firmware_efi.stat.exists }}"
+rhel7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/{{ ansible_distribution | lower }}/grub.cfg', '/boot/grub2/grub.cfg') }}"
