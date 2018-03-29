@@ -915,8 +915,7 @@
   lineinfile:
     path: /etc/rsyslog.conf
     state: present
-    regexp: 'cron.\*'
-    line: 'cron.* /var/log/cron.log'
+    line: 'cron.*                                                  /var/log/cron'
     insertafter: '#### RULES ####'
   register: result
   failed_when:
