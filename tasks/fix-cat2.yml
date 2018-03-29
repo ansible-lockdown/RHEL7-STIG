@@ -737,11 +737,25 @@
       - RHEL-07-020620
 
 - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
-  file:
-    path: "{{ item.split(':')[2] }}"
-    mode: "{{ rhel7stig_homedir_mode }}"
-    state: directory
-  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
+  block:
+    - name: "MEDIUM | RHEL-07-020630 | AUDIT | All local interactive user home directories must have mode 0750 or less permissive."
+      stat:
+        path: "{{ item.split(':')[2] }}"
+      register: rhel_07_020630_audit
+      with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
+
+    - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
+      file:
+        path: "{{ item.stat.path }}"
+        mode: "{{ rhel7stig_homedir_mode }}"
+        state: directory
+      with_items: "{{ rhel_07_020630_audit.results }}"
+      when:
+        - item.stat.wgrp or
+          item.stat.roth or
+          item.stat.woth or
+          item.stat.xoth
+
   when: rhel_07_020630
   tags:
       - RHEL-07-020630
