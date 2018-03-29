@@ -718,6 +718,11 @@
       stat:
         path: "{{ item.split(':')[2] }}"
       register: rhel_07_020630_audit
+      changed_when:
+        - rhel_07_020630_audit.stat.wgrp or
+          rhel_07_020630_audit.stat.roth or
+          rhel_07_020630_audit.stat.woth or
+          rhel_07_020630_audit.stat.xoth
       with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
 
     - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
@@ -726,11 +731,7 @@
         mode: "{{ rhel7stig_homedir_mode }}"
         state: directory
       with_items: "{{ rhel_07_020630_audit.results }}"
-      when:
-        - item.stat.wgrp or
-          item.stat.roth or
-          item.stat.woth or
-          item.stat.xoth
+      when: item | changed
 
   when: rhel_07_020630
   tags:
