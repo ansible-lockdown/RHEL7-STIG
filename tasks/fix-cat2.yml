@@ -1736,7 +1736,9 @@
   notify: restart sshd
   when:
       - rhel_07_040340
-      - not ansible_distribution_version | version_compare('7.4', '>=')
+      - not ansible_distribution_version | version_compare('7.4', '>=') or
+        rhel7stig_workaround_for_disa_benchmark or
+        rhel7stig_workaround_for_ssg_benchmark
   tags:
       - RHEL-07-040340
       - ssh
