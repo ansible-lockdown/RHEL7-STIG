@@ -876,6 +876,7 @@
   lineinfile:
     path: /etc/rsyslog.conf
     state: present
+    regexp: '^cron\.\*[ \t]+/var/log/cron$'
     line: 'cron.*                                                  /var/log/cron'
     insertafter: '#### RULES ####'
   register: result
