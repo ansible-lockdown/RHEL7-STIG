@@ -5,6 +5,8 @@ rhel7stig_cat3_patch: yes
 
 rhel7stig_skip_for_travis: false
 
+rhel7stig_workaround_for_ssg_benchmark: true
+
 # These variables correspond with the STIG IDs defined in the STIG and allows you to enable/disable specific rules.
 # PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
 # in order for the variables below to take effect.
