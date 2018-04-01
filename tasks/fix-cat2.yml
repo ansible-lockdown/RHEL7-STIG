@@ -1753,7 +1753,7 @@
   lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?UsePrivilegeSeparation"
-      line: UsePrivilegeSeparation yes
+      line: UsePrivilegeSeparation sandbox
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   when: rhel_07_040460
