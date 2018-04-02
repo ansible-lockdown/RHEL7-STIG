@@ -880,12 +880,17 @@
       - RHEL-07-020900
 
 - name: "MEDIUM | RHEL-07-021000 | PATCH | File systems that contain user home directories must be mounted to prevent files with the setuid and setgid bit set from being executed."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021000
+  mount:
+    path: /home
+    src: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].device') }}"
+    fstype: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].fstype') }}"
+    opts: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].options') }},nosuid"
+  when:
+    - rhel_07_021000
+    - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
+    - "'nosuid' not in (ansible_mounts | json_query('[?mount == `/home`] | [0].options'))"
   tags:
-      - RHEL-07-021000
-      - notimplemented
+    - RHEL-07-021000
 
 - name: "MEDIUM | RHEL-07-021010 | PATCH | File systems that are used with removable media must be mounted to prevent files with the setuid and setgid bit set from being executed."
   command: "true"
