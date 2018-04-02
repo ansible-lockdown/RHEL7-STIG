@@ -823,7 +823,9 @@
         vars:
             this_item: "{{ item.item }}"
   vars:
-      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1 -path "{{ this_item.dir }}/.*" -prune -o -not -user {{ this_item.uid }}'
+      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1
+             ( -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*" -type f )
+             -prune -o -not -user {{ this_item.uid }}'
   when: rhel_07_020660
   tags:
       - RHEL-07-020660
@@ -869,7 +871,9 @@
         vars:
             this_item: "{{ item.item }}"
   vars:
-      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1 -path "{{ this_item.dir }}/.*" -not ( -user {{ this_item.uid }} -o -user root )'
+      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1 -type f
+              -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*"
+              -not ( -user {{ this_item.uid }} -o -user root )'
   when: rhel_07_020690
   tags:
       - RHEL-07-020690
