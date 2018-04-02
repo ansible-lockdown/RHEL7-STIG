@@ -729,10 +729,14 @@
 
 - name: "MEDIUM | RHEL-07-020620 | PATCH | All local interactive user home directories defined in the /etc/passwd file must exist."
   file:
-    path: "{{ item.split(':')[2] }}"
+    path: "{{ item.dir }}"
     state: directory
-  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
-  when: rhel_07_020620
+  with_items: "{{ rhel7stig_passwd }}"
+  loop_control:
+      label: "{{ item.id }}: {{ item.dir }}"
+  when:
+      - rhel_07_020620
+      - item.uid >= 1000
   tags:
       - RHEL-07-020620
 
@@ -740,14 +744,18 @@
   block:
     - name: "MEDIUM | RHEL-07-020630 | AUDIT | All local interactive user home directories must have mode 0750 or less permissive."
       stat:
-        path: "{{ item.split(':')[2] }}"
+        path: "{{ item.dir }}"
       register: rhel_07_020630_audit
       changed_when:
         - rhel_07_020630_audit.stat.wgrp or
           rhel_07_020630_audit.stat.roth or
           rhel_07_020630_audit.stat.woth or
           rhel_07_020630_audit.stat.xoth
-      with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
+      with_items: "{{ rhel7stig_passwd }}"
+      loop_control:
+          label: "{{ item.id }}: {{ item.dir }}"
+      when:
+          - item.uid >= 1000
 
     - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
       file:
@@ -763,21 +771,29 @@
 
 - name: "MEDIUM | RHEL-07-020640 | PATCH | All local interactive user home directories must be owned by their respective users."
   file:
-    path: "{{ item.split(':')[2] }}"
-    owner: "{{ item.split(':')[0] }}"
+    path: "{{ item.dir }}"
+    owner: "{{ item.id }}"
     state: directory
-  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
-  when: rhel_07_020640
+  with_items: "{{ rhel7stig_passwd }}"
+  loop_control:
+      label: "{{ item.id }}: {{ item.dir }}"
+  when:
+      - rhel_07_020640
+      - item.uid >= 1000
   tags:
       - RHEL-07-020640
 
 - name: "MEDIUM | RHEL-07-020650 | PATCH | All local interactive user home directories must be group-owned by the home directory owners primary group."
   file:
-    path: "{{ item.split(':')[2] }}"
-    group: "{{ item.split(':')[1] }}"
+    path: "{{ item.dir }}"
+    group: "{{ item.gid }}"
     state: directory
-  with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
-  when: rhel_07_020650
+  with_items: "{{ rhel7stig_passwd }}"
+  loop_control:
+      label: "{{ item.id }}: {{ item.dir }}"
+  when:
+      - rhel_07_020650
+      - item.uid >= 1000
   tags:
       - RHEL-07-020650
 
