@@ -1932,10 +1932,10 @@
     line: "\tserver_args\t\t= -s /var/lib/tftpboot"
     insertafter: "\tserver\t\t\t="
     state: present
-    register: result
-    failed_when:
-      - result | failed
-      - result.rc != 257
+  register: result
+  failed_when:
+    - result | failed
+    - result.rc != 257
   when:
     - rhel7stig_tftp_required
     - rhel_07_040720
