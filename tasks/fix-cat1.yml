@@ -370,7 +370,7 @@
 
 - block:
     - name: "HIGH | RHEL-07-040540 | AUDIT | There must be no .shosts files on the system."
-      command: find {{ ansible_mounts | to_json | from_json | json_query("[?starts_with(device, '/dev/')].mount") | join(' ') }} -name '.shosts'
+      command: find {{ rhel7stig_local_mounts | join(' ') }} -name '.shosts'
       check_mode: no
       changed_when: no
       register: rhel_07_040540_audit
@@ -387,7 +387,7 @@
 
 - block:
     - name: "HIGH | RHEL-07-040550 | AUDIT | There must be no shosts.equiv files on the system."
-      command: find {{ ansible_mounts | to_json | from_json | json_query("[?starts_with(device, '/dev/')].mount") | join(' ') }} -name 'shosts.equiv'
+      command: find {{ rhel7stig_local_mounts | join(' ') }} -name 'shosts.equiv'
       check_mode: no
       changed_when: no
       register: rhel_07_040550_audit
