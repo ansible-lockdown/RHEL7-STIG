@@ -866,6 +866,7 @@
 - name: "MEDIUM | RHEL-07-021000 | PATCH | File systems that contain user home directories must be mounted to prevent files with the setuid and setgid bit set from being executed."
   mount:
     path: /home
+    state: mounted
     src: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].device') }}"
     fstype: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].fstype') }}"
     opts: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].options') }},nosuid"
