@@ -1,0 +1,13 @@
+---
+
+extends: default
+
+rules:
+    indentation:
+        spaces: 4
+    truthy: disable
+    line-length: disable
+    # todo: it would be nice to limit lines to 132
+    # line-length:
+    #     max: 132
+    #     allow-non-breakable-inline-mappings: true
