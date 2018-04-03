@@ -16,7 +16,7 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install Ansible
 RUN yum -y install epel-release openssh-server audit authconfig initscripts
-RUN yum -y install git ansible sudo anacron python2-pip
+RUN yum -y install git ansible sudo anacron python2-pip yamllint
 RUN yum clean all
 RUN pip install -U passlib
 
