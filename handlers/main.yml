@@ -1,7 +1,8 @@
+---
 - name: restart sshd
   service:
-    name: sshd
-    state: restarted
+      name: sshd
+      state: restarted
 
 - name: reboot system
   shell: sleep 3; reboot
@@ -26,7 +27,7 @@
 - name: restart auditd
   command: service auditd restart
   args:
-     warn: no
+      warn: no
   when:
       - rhel7stig_skip_for_travis == false
 

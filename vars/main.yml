@@ -1,3 +1,4 @@
+---
 rhel7stig_min_ansible_version: 2.4
 
 # this allows us to insert a name=value into a line of the format:

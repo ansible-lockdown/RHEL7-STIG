@@ -1,24 +1,25 @@
+---
 - name: Apply STIG
   hosts: baseline_hosts
   become: yes
 
   tasks:
-    - name: Register system with RedHat
-      import_role:
-        name: redhat-subscription
-      when: ansible_distribution == 'RedHat'
-      tags:
-        - setup
+      - name: Register system with RedHat
+        import_role:
+            name: redhat-subscription
+        when: ansible_distribution == 'RedHat'
+        tags:
+            - setup
 
-    - name: Remove EPEL
-      yum:
-        name: epel-release
-        state: absent
-      tags:
-        - setup
-  
-    - name: Apply STIG
-      import_role:
-        name: ../../RHEL7-STIG
-      tags:
-        - stig
+      - name: Remove EPEL
+        yum:
+            name: epel-release
+            state: absent
+        tags:
+            - setup
+
+      - name: Apply STIG
+        import_role:
+            name: ../../RHEL7-STIG
+        tags:
+            - stig

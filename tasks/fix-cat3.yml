@@ -1,3 +1,4 @@
+---
 - name: "LOW | RHEL-07-020200 | PATCH | The operating system must remove all software components after updated versions have been installed."
   lineinfile:
       dest: /etc/yum.conf
@@ -30,8 +31,8 @@
   debug:
       msg: "WARNING: /home is not mounted on a separate partition"
   when:
-    - rhel_07_021310
-    - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length == 0
+      - rhel_07_021310
+      - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length == 0
   tags:
       - RHEL-07-021310
       - mount
@@ -41,8 +42,8 @@
   debug:
       msg: "WARNING: /var is not mounted on a separate partition"
   when:
-    - rhel_07_021320
-    - ansible_mounts | selectattr('mount', 'match', '^/var$') | list | length == 0
+      - rhel_07_021320
+      - ansible_mounts | selectattr('mount', 'match', '^/var$') | list | length == 0
   tags:
       - RHEL-07-021320
       - mount
@@ -52,8 +53,8 @@
   debug:
       msg: "WARNING: /var/log/audit is not mounted on a separate partition"
   when:
-    - rhel_07_021330
-    - ansible_mounts | selectattr('mount', 'match', '^/var/log/audit$') | list | length == 0
+      - rhel_07_021330
+      - ansible_mounts | selectattr('mount', 'match', '^/var/log/audit$') | list | length == 0
   tags:
       - RHEL-07-021330
       - mount
@@ -90,23 +91,23 @@
 
 - name: "LOW | RHEL-07-040000 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
   lineinfile:
-    state: present
-    dest: /etc/security/limits.conf
-    insertbefore: '^# End of file'
-    regexp: '^\*.*maxlogins'
-    line: '*               hard    maxlogins       {{ rhel7stig_maxlogins }}'
+      state: present
+      dest: /etc/security/limits.conf
+      insertbefore: '^# End of file'
+      regexp: '^\*.*maxlogins'
+      line: '*               hard    maxlogins       {{ rhel7stig_maxlogins }}'
   when: rhel_07_040000
   tags:
       - RHEL-07-040000
 
 - name: "LOW | RHEL-07-040530 | PATCH | The system must display the date and time of the last successful account logon upon logon."
   blockinfile:
-    state: present
-    path: /etc/pam.d/postlogin
-    insertafter: '^# User changes will be destroyed'
-    block: |
-        ### RHEL-07-040530 ###
-        session required pam_lastlog.so showfailed
+      state: present
+      path: /etc/pam.d/postlogin
+      insertafter: '^# User changes will be destroyed'
+      block: |
+          ### RHEL-07-040530 ###
+          session required pam_lastlog.so showfailed
   when: rhel_07_040530
   tags:
       - RHEL-07-040530
@@ -118,4 +119,3 @@
   tags:
       - RHEL-07-040600
       - notimplemented
-

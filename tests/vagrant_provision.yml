@@ -1,18 +1,19 @@
+---
 - name: Setup hosts and apply STIG
   hosts: all
   become: yes
 
   tasks:
-    - name: Register system with RedHat
-      include_role:
-        name: redhat-subscription
-      when: ansible_distribution == 'RedHat'
+      - name: Register system with RedHat
+        include_role:
+            name: redhat-subscription
+        when: ansible_distribution == 'RedHat'
 
-    - name: Remove EPEL
-      yum:
-        name: epel-release
-        state: absent
+      - name: Remove EPEL
+        yum:
+            name: epel-release
+            state: absent
 
-    - name: Apply STIG
-      include_role:
-        name: ../../RHEL7-STIG
+      - name: Apply STIG
+        include_role:
+            name: ../../RHEL7-STIG

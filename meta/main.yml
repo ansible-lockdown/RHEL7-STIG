@@ -1,19 +1,20 @@
+---
 galaxy_info:
-  author: "Sam Doran, Josh Springer, Daniel Shepherd, James Cassell, Mike Renfro"
-  description: "Apply the DISA RHEL 7 STIG"
-  company:
-  license: MIT
-  min_ansible_version: 2.4
+    author: "Sam Doran, Josh Springer, Daniel Shepherd, James Cassell, Mike Renfro"
+    description: "Apply the DISA RHEL 7 STIG"
+    company:
+    license: MIT
+    min_ansible_version: 2.4
 
-  platforms:
-  - name: EL
-    versions:
-      - 7
+    platforms:
+        - name: EL
+          versions:
+              - 7
 
-  galaxy_tags:
-    - system
-    - security
-    - stig
-    - hardening
+    galaxy_tags:
+        - system
+        - security
+        - stig
+        - hardening
 
 dependencies: []
