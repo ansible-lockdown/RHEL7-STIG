@@ -4,7 +4,7 @@
   changed_when: no
   failed_when: no
   register: rhel7stig_sudoers_files
-  when: 
+  when:
       - rhel_07_010340 or
         rhel_07_010350
   tags:
@@ -75,11 +75,11 @@
         with_items: "{{ rhel7stig_passwd_file_audit.stdout_lines }}"
         vars:
             item_sp: "{{ item.split(':') }}"
-  when: 
-    - rhel_07_020620 or
-      rhel_07_020630 or
-      rhel_07_020640 or
-      rhel_07_020650
+  when:
+      - rhel_07_020620 or
+        rhel_07_020630 or
+        rhel_07_020640 or
+        rhel_07_020650
   tags:
       - cat2
       - medium
@@ -196,7 +196,7 @@
 
       - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Check for existing AIDE database"
         stat:
-          path: "{{ rhel7stig_aide_db_file }}"
+            path: "{{ rhel7stig_aide_db_file }}"
         register: rhel7stig_aide_db_status
         check_mode: no
         changed_when: not rhel7stig_aide_db_status.stat.exists

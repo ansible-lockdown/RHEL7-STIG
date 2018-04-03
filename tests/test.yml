@@ -1,14 +1,15 @@
+---
 - hosts: all
   become: yes
   become_method: sudo
 
   pre_tasks:
-  - name: OS
-    debug:
-      var: "{{item}}"
-    with_items:
-      - ansible_os_family
-      - ansible_distribution_major_version
+      - name: OS
+        debug:
+            var: "{{item}}"
+        with_items:
+            - ansible_os_family
+            - ansible_distribution_major_version
 
   roles:
-    - ../../RHEL7-STIG
+      - ../../RHEL7-STIG

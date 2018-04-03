@@ -1,3 +1,4 @@
+---
 - name: "MEDIUM | RHEL-07-010030 | PATCH | The operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
   command: "true"
   changed_when: no
@@ -243,13 +244,13 @@
   with_items:
       - state: args_present
         args:
-          - "sha512"
+            - "sha512"
       - state: args_absent
         args:
-          - "md5"
-          - "bigcrypt"
-          - "sha256"
-          - "blowfish"
+            - "md5"
+            - "bigcrypt"
+            - "sha256"
+            - "blowfish"
   when: rhel_07_010200
   tags:
       - RHEL-07-010200
@@ -366,51 +367,51 @@
       - RHEL-07-010310
 
 - block:
-    - name: |
-            "MEDIUM | RHEL-07-010320 | PATCH | Accounts subject to three unsuccessful login attempts within 15 minutes must be locked for the maximum configurable period."
-            "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
-      pamd:
-          name: "{{ item }}"
-          state: before
-          type: auth
-          control: sufficient
-          module_path: pam_unix.so
-          new_type: auth
-          new_control: required
-          new_module_path: pam_faillock.so
-          module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
-      with_items:
-          - "system-auth"
-          - "password-auth"
+      - name: |
+              "MEDIUM | RHEL-07-010320 | PATCH | Accounts subject to three unsuccessful login attempts within 15 minutes must be locked for the maximum configurable period."
+              "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+        pamd:
+            name: "{{ item }}"
+            state: before
+            type: auth
+            control: sufficient
+            module_path: pam_unix.so
+            new_type: auth
+            new_control: required
+            new_module_path: pam_faillock.so
+            module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+        with_items:
+            - "system-auth"
+            - "password-auth"
 
-    - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
-      pamd:
-          name: "{{ item }}"
-          state: after
-          type: auth
-          control: sufficient
-          module_path: pam_unix.so
-          new_type: auth
-          new_control: "[default=die]"
-          new_module_path: pam_faillock.so
-          module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
-      with_items:
-          - "system-auth"
-          - "password-auth"
+      - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+        pamd:
+            name: "{{ item }}"
+            state: after
+            type: auth
+            control: sufficient
+            module_path: pam_unix.so
+            new_type: auth
+            new_control: "[default=die]"
+            new_module_path: pam_faillock.so
+            module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+        with_items:
+            - "system-auth"
+            - "password-auth"
 
-    - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
-      pamd:
-          name: "{{ item }}"
-          state: before
-          type: account
-          control: required
-          module_path: pam_unix.so
-          new_type: account
-          new_control: required
-          new_module_path: pam_faillock.so
-      with_items:
-          - "system-auth"
-          - "password-auth"
+      - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+        pamd:
+            name: "{{ item }}"
+            state: before
+            type: account
+            control: required
+            module_path: pam_unix.so
+            new_type: account
+            new_control: required
+            new_module_path: pam_faillock.so
+        with_items:
+            - "system-auth"
+            - "password-auth"
 
   when: rhel_07_010320 or rhel_07_010330
   tags:
@@ -420,10 +421,10 @@
 
 - name: "MEDIUM | RHEL-07-010340 | PATCH | Users must provide a password for privilege escalation."
   replace:
-    path: "{{ item }}"
-    regexp: '^([^#].*)NOPASSWD(.*)'
-    replace: '\1PASSWD\2'
-    validate: '/usr/sbin/visudo -cf %s'
+      path: "{{ item }}"
+      regexp: '^([^#].*)NOPASSWD(.*)'
+      replace: '\1PASSWD\2'
+      validate: '/usr/sbin/visudo -cf %s'
   with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when:
       - rhel7stig_using_password_auth
@@ -434,10 +435,10 @@
 
 - name: "MEDIUM | RHEL-07-010350 | PATCH | Users must re-authenticate for privilege escalation."
   replace:
-    path: "{{ item }}"
-    regexp: '^([^#].*)!authenticate(.*)'
-    replace: '\1authenticate\2'
-    validate: '/usr/sbin/visudo -cf %s'
+      path: "{{ item }}"
+      regexp: '^([^#].*)!authenticate(.*)'
+      replace: '\1authenticate\2'
+      validate: '/usr/sbin/visudo -cf %s'
   with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when: rhel_07_010350
   tags:
@@ -533,13 +534,13 @@
 
 - name: "MEDIUM | RHEL-07-020100 | PATCH | USB mass storage must be disabled."
   lineinfile:
-    dest: /etc/modprobe.d/blacklist.conf
-    regexp: "^(#)?blacklist usb-storage(\\s|$)"
-    line: 'blacklist usb-storage'
-    create: yes
-    owner: root
-    group: root
-    mode: "0644"
+      dest: /etc/modprobe.d/blacklist.conf
+      regexp: "^(#)?blacklist usb-storage(\\s|$)"
+      line: 'blacklist usb-storage'
+      create: yes
+      owner: root
+      group: root
+      mode: "0644"
   when: rhel_07_020100
   tags:
       - RHEL-07-020100
@@ -547,13 +548,13 @@
 
 - name: "MEDIUM | RHEL-07-020101 | PATCH | The Datagram Congestion Control Protocol (DCCP) kernel module must be disabled unless required."
   lineinfile:
-    dest: /etc/modprobe.d/nodccp.conf
-    regexp: "^(#)?install dccp /bin/true(\\s|$)"
-    line: 'install dccp /bin/true'
-    create: yes
-    owner: root
-    group: root
-    mode: "0644"
+      dest: /etc/modprobe.d/nodccp.conf
+      regexp: "^(#)?install dccp /bin/true(\\s|$)"
+      line: 'install dccp /bin/true'
+      create: yes
+      owner: root
+      group: root
+      mode: "0644"
   when: rhel_07_020101
   tags:
       - RHEL-07-020101
@@ -571,9 +572,9 @@
 
 - name: "MEDIUM | RHEL-07-020110 | PATCH | File system automounter must be disabled unless required."
   service:
-    name: autofs
-    enabled: no
-    state: stopped
+      name: autofs
+      enabled: no
+      state: stopped
   when:
       - rhel_07_020110
       - rhel_07_020110_autofs_service_status == "loaded"
@@ -593,47 +594,47 @@
       - umask
 
 - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date."
-  block: 
-    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Install yum-cron"
-      yum:
-          name: yum-cron
-          state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
-          enablerepo: "{{ (ansible_distribution == 'RedHat') | ternary('rhel-7-server-optional-rpms','') }}"
+  block:
+      - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Install yum-cron"
+        yum:
+            name: yum-cron
+            state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
+            enablerepo: "{{ (ansible_distribution == 'RedHat') | ternary('rhel-7-server-optional-rpms','') }}"
 
-    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify yum-cron config file exists"
-      stat:
-          path: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
-      check_mode: no
-      register: yum_cron_config_file
+      - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify yum-cron config file exists"
+        stat:
+            path: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+        check_mode: no
+        register: yum_cron_config_file
 
-    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Enable/disable automatic updates in the appropriate yum-cron.conf file."
-      lineinfile:
-          dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
-          regexp: "^apply_updates"
-          line: "apply_updates = {{ (rhel7stig_auto_package_updates.enabled) | ternary('yes','no')}}"
-          state: present
-      when: yum_cron_config_file.stat.exists
+      - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Enable/disable automatic updates in the appropriate yum-cron.conf file."
+        lineinfile:
+            dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+            regexp: "^apply_updates"
+            line: "apply_updates = {{ (rhel7stig_auto_package_updates.enabled) | ternary('yes','no')}}"
+            state: present
+        when: yum_cron_config_file.stat.exists
 
-    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Set update command to configured setting."
-      lineinfile:
-          dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
-          regexp: "^update_cmd"
-          line: "update_cmd = {{rhel7stig_auto_package_updates.update_cmd|default('minimal-security')}}"
-          state: present
-      when: yum_cron_config_file.stat.exists
+      - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Set update command to configured setting."
+        lineinfile:
+            dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+            regexp: "^update_cmd"
+            line: "update_cmd = {{rhel7stig_auto_package_updates.update_cmd|default('minimal-security')}}"
+            state: present
+        when: yum_cron_config_file.stat.exists
 
-    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify the yum-cron service exists"
-      shell: "systemctl show yum-cron | grep LoadState | cut -d = -f 2"
-      register: rhel_07_020260_yumcron_service_status
-      changed_when: no
-      check_mode: no
+      - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify the yum-cron service exists"
+        shell: "systemctl show yum-cron | grep LoadState | cut -d = -f 2"
+        register: rhel_07_020260_yumcron_service_status
+        changed_when: no
+        check_mode: no
 
-    - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Set the yum-cron service state"
-      service:
-        name: yum-cron
-        enabled: "{{ rhel7stig_auto_package_updates.enabled }}"
-        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('started','stopped')}}"
-      when: rhel_07_020260_yumcron_service_status.stdout == "loaded"
+      - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Set the yum-cron service state"
+        service:
+            name: yum-cron
+            enabled: "{{ rhel7stig_auto_package_updates.enabled }}"
+            state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('started','stopped')}}"
+        when: rhel_07_020260_yumcron_service_status.stdout == "loaded"
 
   when: rhel_07_020260
   tags:
@@ -642,19 +643,19 @@
 
 - name: "MEDIUM | RHEL-07-020270 | PATCH | The system must not have unnecessary accounts."
   block:
-    - name: "MEDIUM | RHEL-07-020270 | AUDIT | The system must not have unnecessary accounts."
-      command: "grep '^{{ item }}:' /etc/passwd"
-      failed_when: no
-      check_mode: no
-      changed_when: no
-      with_items: "{{ rhel7stig_unnecessary_accounts }}"
+      - name: "MEDIUM | RHEL-07-020270 | AUDIT | The system must not have unnecessary accounts."
+        command: "grep '^{{ item }}:' /etc/passwd"
+        failed_when: no
+        check_mode: no
+        changed_when: no
+        with_items: "{{ rhel7stig_unnecessary_accounts }}"
 
-    - name: "MEDIUM | RHEL-07-020270 | PATCH | The system must not have unnecessary accounts."
-      user:
-        name: "{{ item }}"
-        state: absent
-        remove: "{{ rhel7stig_remove_unnecessary_user_files }}"
-      with_items: "{{ rhel7stig_unnecessary_accounts }}"
+      - name: "MEDIUM | RHEL-07-020270 | PATCH | The system must not have unnecessary accounts."
+        user:
+            name: "{{ item }}"
+            state: absent
+            remove: "{{ rhel7stig_remove_unnecessary_user_files }}"
+        with_items: "{{ rhel7stig_unnecessary_accounts }}"
 
   when: rhel_07_020270
   tags:
@@ -729,8 +730,8 @@
 
 - name: "MEDIUM | RHEL-07-020620 | PATCH | All local interactive user home directories defined in the /etc/passwd file must exist."
   file:
-    path: "{{ item.dir }}"
-    state: directory
+      path: "{{ item.dir }}"
+      state: directory
   with_items: "{{ rhel7stig_passwd }}"
   loop_control:
       label: "{{ rhel7stig_passwd_label }}"
@@ -742,28 +743,28 @@
 
 - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
   block:
-    - name: "MEDIUM | RHEL-07-020630 | AUDIT | All local interactive user home directories must have mode 0750 or less permissive."
-      stat:
-        path: "{{ item.dir }}"
-      register: rhel_07_020630_audit
-      changed_when:
-        - rhel_07_020630_audit.stat.wgrp or
-          rhel_07_020630_audit.stat.roth or
-          rhel_07_020630_audit.stat.woth or
-          rhel_07_020630_audit.stat.xoth
-      with_items: "{{ rhel7stig_passwd }}"
-      loop_control:
-          label: "{{ rhel7stig_passwd_label }}"
-      when:
-          - item.uid >= 1000
+      - name: "MEDIUM | RHEL-07-020630 | AUDIT | All local interactive user home directories must have mode 0750 or less permissive."
+        stat:
+            path: "{{ item.dir }}"
+        register: rhel_07_020630_audit
+        changed_when:
+            - rhel_07_020630_audit.stat.wgrp or
+              rhel_07_020630_audit.stat.roth or
+              rhel_07_020630_audit.stat.woth or
+              rhel_07_020630_audit.stat.xoth
+        with_items: "{{ rhel7stig_passwd }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when:
+            - item.uid >= 1000
 
-    - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
-      file:
-        path: "{{ item.stat.path }}"
-        mode: "{{ rhel7stig_homedir_mode }}"
-        state: directory
-      with_items: "{{ rhel_07_020630_audit.results }}"
-      when: item | changed
+      - name: "MEDIUM | RHEL-07-020630 | PATCH | All local interactive user home directories must have mode 0750 or less permissive."
+        file:
+            path: "{{ item.stat.path }}"
+            mode: "{{ rhel7stig_homedir_mode }}"
+            state: directory
+        with_items: "{{ rhel_07_020630_audit.results }}"
+        when: item | changed
 
   when: rhel_07_020630
   tags:
@@ -771,9 +772,9 @@
 
 - name: "MEDIUM | RHEL-07-020640 | PATCH | All local interactive user home directories must be owned by their respective users."
   file:
-    path: "{{ item.dir }}"
-    owner: "{{ item.id }}"
-    state: directory
+      path: "{{ item.dir }}"
+      owner: "{{ item.id }}"
+      state: directory
   with_items: "{{ rhel7stig_passwd }}"
   loop_control:
       label: "{{ rhel7stig_passwd_label }}"
@@ -785,9 +786,9 @@
 
 - name: "MEDIUM | RHEL-07-020650 | PATCH | All local interactive user home directories must be group-owned by the home directory owners primary group."
   file:
-    path: "{{ item.dir }}"
-    group: "{{ item.gid }}"
-    state: directory
+      path: "{{ item.dir }}"
+      group: "{{ item.gid }}"
+      state: directory
   with_items: "{{ rhel7stig_passwd }}"
   loop_control:
       label: "{{ rhel7stig_passwd_label }}"
@@ -863,35 +864,35 @@
 
 - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
   block:
-    - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
-      command: find {{ rhel7stig_local_mounts | join(' ') }} ( -context *:device_t:* -o -context *:unlabeled_t:* ) ( -type c -o -type b ) -printf '%p %Z\n'
-      changed_when: no
-      check_mode: no
-      register: rhel_07_020900_audit
+      - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
+        command: find {{ rhel7stig_local_mounts | join(' ') }} ( -context *:device_t:* -o -context *:unlabeled_t:* ) ( -type c -o -type b ) -printf '%p %Z\n'
+        changed_when: no
+        check_mode: no
+        register: rhel_07_020900_audit
 
-    - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
-      debug:
-        msg: "{{ rhel_07_020900_audit.stdout_lines }}"
+      - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
+        debug:
+            msg: "{{ rhel_07_020900_audit.stdout_lines }}"
 
-  when: 
-    - rhel_07_020900
-    - ansible_selinux.status == "enabled"
+  when:
+      - rhel_07_020900
+      - ansible_selinux.status == "enabled"
   tags:
       - RHEL-07-020900
 
 - name: "MEDIUM | RHEL-07-021000 | PATCH | File systems that contain user home directories must be mounted to prevent files with the setuid and setgid bit set from being executed."
   mount:
-    path: /home
-    src: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].device') }}"
-    fstype: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].fstype') }}"
-    opts: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].options') }},nosuid"
-    state: mounted
+      path: /home
+      src: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].device') }}"
+      fstype: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].fstype') }}"
+      opts: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].options') }},nosuid"
+      state: mounted
   when:
-    - rhel_07_021000
-    - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
-    - "'nosuid' not in (ansible_mounts | json_query('[?mount == `/home`] | [0].options'))"
+      - rhel_07_021000
+      - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
+      - "'nosuid' not in (ansible_mounts | json_query('[?mount == `/home`] | [0].options'))"
   tags:
-    - RHEL-07-021000
+      - RHEL-07-021000
 
 - name: "MEDIUM | RHEL-07-021010 | PATCH | File systems that are used with removable media must be mounted to prevent files with the setuid and setgid bit set from being executed."
   command: "true"
@@ -903,38 +904,38 @@
 
 - name: "MEDIUM | RHEL-07-021020 | PATCH | File systems that are being imported via Network File System (NFS) must be mounted to prevent files with the setuid and setgid bit set from being executed."
   mount:
-    path: "{{ item }}"
-    src: "{{ ansible_mounts | json_query(device_query) }}"
-    fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
-    opts: "{{ ansible_mounts | json_query(options_query) }},nosuid"
-    state: mounted
+      path: "{{ item }}"
+      src: "{{ ansible_mounts | json_query(device_query) }}"
+      fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
+      opts: "{{ ansible_mounts | json_query(options_query) }},nosuid"
+      state: mounted
   vars:
-    device_query: '[?mount == `{{ item }}`] | [0].device'
-    fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
-    options_query: '[?mount == `{{ item }}`] | [0].options'
+      device_query: '[?mount == `{{ item }}`] | [0].device'
+      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
+      options_query: '[?mount == `{{ item }}`] | [0].options'
   with_items: "{{ rhel7stig_nfs_mounts }}"
   when:
-    - rhel_07_021020
-    - "'nosuid' not in (ansible_mounts | json_query(options_query))"
+      - rhel_07_021020
+      - "'nosuid' not in (ansible_mounts | json_query(options_query))"
   tags:
       - RHEL-07-021020
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-021021 | PATCH | File systems that are being imported via Network File System (NFS) must be mounted to prevent binary files from being executed."
   mount:
-    path: "{{ item }}"
-    src: "{{ ansible_mounts | json_query(device_query) }}"
-    fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
-    opts: "{{ ansible_mounts | json_query(options_query) }},noexec"
-    state: mounted
+      path: "{{ item }}"
+      src: "{{ ansible_mounts | json_query(device_query) }}"
+      fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
+      opts: "{{ ansible_mounts | json_query(options_query) }},noexec"
+      state: mounted
   vars:
-    device_query: '[?mount == `{{ item }}`] | [0].device'
-    fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
-    options_query: '[?mount == `{{ item }}`] | [0].options'
+      device_query: '[?mount == `{{ item }}`] | [0].device'
+      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
+      options_query: '[?mount == `{{ item }}`] | [0].options'
   with_items: "{{ rhel7stig_nfs_mounts }}"
   when:
-    - rhel_07_021021
-    - "'noexec' not in (ansible_mounts | json_query(options_query))"
+      - rhel_07_021021
+      - "'noexec' not in (ansible_mounts | json_query(options_query))"
   tags:
       - RHEL-07-021021
       - notimplemented
@@ -957,15 +958,15 @@
 
 - name: "MEDIUM | RHEL-07-021100 | PATCH | Cron logging must be implemented."
   lineinfile:
-    path: /etc/rsyslog.conf
-    state: present
-    regexp: '^cron\.\*[ \t]+/var/log/cron$'
-    line: 'cron.*                                                  /var/log/cron'
-    insertafter: '#### RULES ####'
+      path: /etc/rsyslog.conf
+      state: present
+      regexp: '^cron\.\*[ \t]+/var/log/cron$'
+      line: 'cron.*                                                  /var/log/cron'
+      insertafter: '#### RULES ####'
   register: result
   failed_when:
-    - result | failed
-    - result.rc != 257
+      - result | failed
+      - result.rc != 257
   when: rhel_07_021100
   tags:
       - RHEL-07-021100
@@ -988,49 +989,49 @@
             mode: 0600
         when: cron_allow_file_check.stat.exists
   when:
-    - rhel_07_021110
-    - rhel_07_021120
+      - rhel_07_021110
+      - rhel_07_021120
   tags:
       - RHEL-07-021110
       - RHEL-07-021120
       - cron
 
 - block:
-    - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
-      shell: "systemctl show kdump | grep LoadState | cut -d = -f 2"
-      register: rhel_07_021300_kdump_service_status
-      changed_when: no
-      check_mode: no
+      - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
+        shell: "systemctl show kdump | grep LoadState | cut -d = -f 2"
+        register: rhel_07_021300_kdump_service_status
+        changed_when: no
+        check_mode: no
 
-    - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
-      service:
-        name: kdump
-        enabled: no
-        state: stopped
-      when:
-        - rhel_07_021300_kdump_service_status.stdout == "loaded"
-        - not rhel7stig_kdump_required
+      - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
+        service:
+            name: kdump
+            enabled: no
+            state: stopped
+        when:
+            - rhel_07_021300_kdump_service_status.stdout == "loaded"
+            - not rhel7stig_kdump_required
   when: rhel_07_021300
   tags:
       - RHEL-07-021300
 
 - name: "MEDIUM | RHEL-07-021620 | PATCH | The file integrity tool must use FIPS 140-2 approved cryptographic hashes for validating file contents and directories."
   block:
-    - name: "Replace sha256+sha512 entries with sha512"
-      replace:
-        path: /etc/aide.conf
-        regexp: '([A-Z]+ = .*)(sha256\+sha512)(.*)'
-        replace: '\1sha512\3'
-      register: rhel_07_021620_sha256_512_result
-      notify: "{{ rhel7stig_aide_handler }}"
+      - name: "Replace sha256+sha512 entries with sha512"
+        replace:
+            path: /etc/aide.conf
+            regexp: '([A-Z]+ = .*)(sha256\+sha512)(.*)'
+            replace: '\1sha512\3'
+        register: rhel_07_021620_sha256_512_result
+        notify: "{{ rhel7stig_aide_handler }}"
 
-    - name: "Replace sha256 entries with sha512"
-      replace:
-        path: /etc/aide.conf
-        regexp: '([A-Z]+ = .*)(sha256)(.*)'
-        replace: '\1sha512\3'
-      register: rhel_07_021620_sha256_result
-      notify: "{{ rhel7stig_aide_handler }}"
+      - name: "Replace sha256 entries with sha512"
+        replace:
+            path: /etc/aide.conf
+            regexp: '([A-Z]+ = .*)(sha256)(.*)'
+            replace: '\1sha512\3'
+        register: rhel_07_021620_sha256_result
+        notify: "{{ rhel7stig_aide_handler }}"
 
   when: rhel_07_021620
   tags:
@@ -1106,8 +1107,8 @@
       line: "space_left_action = email"
   register: rhel7stig_auditd_space_left_action_result
   failed_when:
-    - rhel7stig_auditd_space_left_action_result | failed
-    - rhel7stig_auditd_space_left_action_result.rc != 257
+      - rhel7stig_auditd_space_left_action_result | failed
+      - rhel7stig_auditd_space_left_action_result.rc != 257
   when: rhel_07_030340
   tags:
       - RHEL-07-030340
@@ -1119,8 +1120,8 @@
       line: "action_mail_acct = {{ rhel7stig_auditd_mail_acct }}"
   register: rhel7stig_auditd_action_mail_acct_result
   failed_when:
-    - rhel7stig_auditd_action_mail_acct_result | failed
-    - rhel7stig_auditd_action_mail_acct_result.rc != 257
+      - rhel7stig_auditd_action_mail_acct_result | failed
+      - rhel7stig_auditd_action_mail_acct_result.rc != 257
   when: rhel_07_030350
   tags:
       - RHEL-07-030350
@@ -1405,60 +1406,60 @@
 
 - name: "MEDIUM | RHEL-07-031000 | PATCH | The system must send rsyslog output to a log aggregation server."
   blockinfile:
-    path: /etc/rsyslog.conf
-    state: present
-    block: |
-      $ActionQueueFileName rhel-07-031000 # unique name prefix for spool files
-      $ActionQueueMaxDiskSpace 1g   # 1gb space limit (use as much as possible)
-      $ActionQueueSaveOnShutdown on # save messages to disk on shutdown
-      $ActionQueueType LinkedList   # run asynchronously
-      $ActionResumeRetryCount -1    # infinite retries if host is down
-      # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
-      *.* @@{{ rhel7stig_log_aggregation_server }}
-    insertafter: EOF
+      path: /etc/rsyslog.conf
+      state: present
+      block: |
+          $ActionQueueFileName rhel-07-031000  # unique name prefix for spool files
+          $ActionQueueMaxDiskSpace 1g    # 1gb space limit (use as much as possible)
+          $ActionQueueSaveOnShutdown on  # save messages to disk on shutdown
+          $ActionQueueType LinkedList    # run asynchronously
+          $ActionResumeRetryCount -1     # infinite retries if host is down
+          # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
+          *.* @@{{ rhel7stig_log_aggregation_server }}
+      insertafter: EOF
   register: result
   failed_when:
-    - result | failed
-    - result.rc != 257
-  when: 
-    - rhel_07_031000
-    - rhel7stig_log_aggregation_server is defined
+      - result | failed
+      - result.rc != 257
+  when:
+      - rhel_07_031000
+      - rhel7stig_log_aggregation_server is defined
   tags:
       - RHEL-07-031000
       - rsyslog
 
 - name: "MEDIUM | RHEL-07-031010 | PATCH | The rsyslog daemon must not accept log messages from other servers unless the server is being used for log aggregation."
   replace:
-    path: /etc/rsyslog.conf
-    regexp: '({{ item }})'
-    replace: '#\1'
+      path: /etc/rsyslog.conf
+      regexp: '({{ item }})'
+      replace: '#\1'
   with_items:
-    - '^(\$ModLoad imtcp)'
-    - '^(\$ModLoad imudp)'
-    - '^(\$UDPServerRun)'
-    - '^(\$InputTCPServerRun)'
+      - '^(\$ModLoad imtcp)'
+      - '^(\$ModLoad imudp)'
+      - '^(\$UDPServerRun)'
+      - '^(\$InputTCPServerRun)'
   when:
-    - rhel_07_031010
-    - not rhel7stig_system_is_log_aggregator
+      - rhel_07_031010
+      - not rhel7stig_system_is_log_aggregator
   register: result
   failed_when:
-    - result | failed
-    - result.rc != 257
+      - result | failed
+      - result.rc != 257
   tags:
       - RHEL-07-031010
       - rsyslog
 
 - name: "MEDIUM | RHEL-07-032010 | AUDIT | The system must update the DoD-approved virus scan program every seven days or more frequently."
   block:
-    - name: "MEDIUM | RHEL-07-032010 | AUDIT | The system must update the DoD-approved virus scan program every seven days or more frequently."
-      shell: "{{ rhel7stig_av_status_command }}"
-      changed_when: no
-      check_mode: no
-      register: rhel_07_032010_audit
+      - name: "MEDIUM | RHEL-07-032010 | AUDIT | The system must update the DoD-approved virus scan program every seven days or more frequently."
+        shell: "{{ rhel7stig_av_status_command }}"
+        changed_when: no
+        check_mode: no
+        register: rhel_07_032010_audit
 
-    - name: "MEDIUM | RHEL-07-032010 | AUDIT | The system must update the DoD-approved virus scan program every seven days or more frequently."
-      debug:
-        msg: "{{ rhel_07_032010_audit.stdout_lines }}"
+      - name: "MEDIUM | RHEL-07-032010 | AUDIT | The system must update the DoD-approved virus scan program every seven days or more frequently."
+        debug:
+            msg: "{{ rhel_07_032010_audit.stdout_lines }}"
 
   when: rhel_07_032010
   tags:
@@ -1514,22 +1515,22 @@
 
 - name: "MEDIUM | RHEL-07-040180 | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
   block:
-    - name: "MEDIUM | RHEL-07-040180 | AUDIT | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-      command: grep -i useldapauth /etc/sysconfig/authconfig
-      check_mode: no
-      register: rhel_07_040180_audit
-      failed_when: no
-      # todo only run this if authconfig is installed, or the file exists
-      # do we want to create it?
-      #failed_when: rhel_07_040180_audit.rc > 1
-      changed_when:
-          - rhel_07_040180_audit.rc == 1
-          - not rhel7stig_skip_for_travis
+      - name: "MEDIUM | RHEL-07-040180 | AUDIT | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+        command: grep -i useldapauth /etc/sysconfig/authconfig
+        check_mode: no
+        register: rhel_07_040180_audit
+        failed_when: no
+        # todo only run this if authconfig is installed, or the file exists
+        # do we want to create it?
+        # failed_when: rhel_07_040180_audit.rc > 1
+        changed_when:
+            - rhel_07_040180_audit.rc == 1
+            - not rhel7stig_skip_for_travis
 
-    - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-      command: "true"
-      changed_when: no
-      when: "'yes' in rhel_07_040180_audit.stdout"
+      - name: "MEDIUM | RHEL-07-040180 | PATCH | The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+        command: "true"
+        changed_when: no
+        when: "'yes' in rhel_07_040180_audit.stdout"
   when: rhel_07_040180
   tags:
       - RHEL-07-040180
@@ -1773,24 +1774,24 @@
       - ssh
 
 - block:
-    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-      yum:
-          name: chrony
-          state: absent
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        yum:
+            name: chrony
+            state: absent
 
-    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-      yum:
-          name: ntp
-          state: present
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        yum:
+            name: ntp
+            state: present
 
-    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-      lineinfile:
-          create: yes
-          dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
-          regexp: "{{ item.regexp }}"
-          line: "{{ item.line }}"
-      notify: restart {{ rhel7stig_time_service }}
-      with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        lineinfile:
+            create: yes
+            dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
+            regexp: "{{ item.regexp }}"
+            line: "{{ item.line }}"
+        notify: restart {{ rhel7stig_time_service }}
+        with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
   when:
       - rhel7stig_time_service == 'ntpd'
       - rhel_07_040500
@@ -1800,21 +1801,21 @@
       - ntpd
 
 - block:
-    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-      yum:
-          name: ntp
-          state: absent
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        yum:
+            name: ntp
+            state: absent
 
-    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-      yum:
-          name: chrony
-          state: present
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        yum:
+            name: chrony
+            state: present
 
-    - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-      replace:
-          dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
-          regexp: '^server \S+( \w+)?$'
-      notify: restart {{ rhel7stig_time_service }}
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        replace:
+            dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
+            regexp: '^server \S+( \w+)?$'
+        notify: restart {{ rhel7stig_time_service }}
   when:
       - rhel7stig_time_service == 'chronyd'
       - rhel_07_040500
@@ -1950,17 +1951,17 @@
       - ipv4
 
 - block:
-    - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
-      shell: "ip link | grep -i promisc | cut -d ':' -f 2"
-      check_mode: no
-      failed_when: no
-      changed_when: rhel_07_040670_promisc_check.stdout != ''
-      ignore_errors: yes
-      register: rhel_07_040670_promisc_check
+      - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
+        shell: "ip link | grep -i promisc | cut -d ':' -f 2"
+        check_mode: no
+        failed_when: no
+        changed_when: rhel_07_040670_promisc_check.stdout != ''
+        ignore_errors: yes
+        register: rhel_07_040670_promisc_check
 
-    - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
-      shell: "ip link set dev {{ item }} promisc off"
-      with_items: "{{ rhel_07_040670_promisc_check.stdout_lines }}"
+      - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
+        shell: "ip link set dev {{ item }} promisc off"
+        with_items: "{{ rhel_07_040670_promisc_check.stdout_lines }}"
 
   when:
       - rhel_07_040670
@@ -1969,43 +1970,43 @@
       - RHEL-07-040670
 
 - block:
-    - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
-      command: rpm -q postfix
-      failed_when: no
-      check_mode: no
-      changed_when: no
-      register: rhel_07_040680_rpm_audit
+      - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
+        command: rpm -q postfix
+        failed_when: no
+        check_mode: no
+        changed_when: no
+        register: rhel_07_040680_rpm_audit
 
-    - name: "MEDIUM | RHEL-07-040680 | AUDIT | The system must be configured to prevent unrestricted mail relaying."
-      command: "postconf -n smtpd_client_restrictions"
-      check_mode: no
-      changed_when: no
-      register: rhel_07_040680_postconf_audit
-      when: rhel_07_040680_rpm_audit.rc == 0
+      - name: "MEDIUM | RHEL-07-040680 | AUDIT | The system must be configured to prevent unrestricted mail relaying."
+        command: "postconf -n smtpd_client_restrictions"
+        check_mode: no
+        changed_when: no
+        register: rhel_07_040680_postconf_audit
+        when: rhel_07_040680_rpm_audit.rc == 0
 
-    - name: "MEDIUM | RHEL-07-040680 | PATCH | The system must be configured to prevent unrestricted mail relaying."
-      command: "postconf -e 'smtpd_client_restrictions=permit_mynetworks, reject'"
-      when: 
-        - rhel_07_040680_rpm_audit.rc == 0
-        - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
+      - name: "MEDIUM | RHEL-07-040680 | PATCH | The system must be configured to prevent unrestricted mail relaying."
+        command: "postconf -e 'smtpd_client_restrictions=permit_mynetworks, reject'"
+        when:
+            - rhel_07_040680_rpm_audit.rc == 0
+            - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
 
   tags:
       - RHEL-07-040680
 
 - name: "MEDIUM | RHEL-07-040720 | PATCH | If the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon must be configured to operate in secure mode."
   lineinfile:
-    path: /etc/xinetd.d/tftp
-    regexp: "(?i)^.*server_args.*="
-    line: "\tserver_args\t\t= -s /var/lib/tftpboot"
-    insertafter: "\tserver\t\t\t="
-    state: present
+      path: /etc/xinetd.d/tftp
+      regexp: "(?i)^.*server_args.*="
+      line: "\tserver_args\t\t= -s /var/lib/tftpboot"
+      insertafter: "\tserver\t\t\t="
+      state: present
   register: result
   failed_when:
-    - result | failed
-    - result.rc != 257
+      - result | failed
+      - result.rc != 257
   when:
-    - rhel7stig_tftp_required
-    - rhel_07_040720
+      - rhel7stig_tftp_required
+      - rhel_07_040720
   tags:
       - RHEL-07-040720
 
@@ -2054,9 +2055,9 @@
 
 - name: "MEDIUM | RHEL-07-040820 | PATCH | The system must not have unauthorized IP tunnels configured."
   yum:
-    name:
-      - libreswan
-    state: absent
+      name:
+          - libreswan
+      state: absent
   when: rhel_07_040820
   tags:
       - RHEL-07-040820
@@ -2074,18 +2075,18 @@
       - ipv6
 
 - block:
-    - name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
-      yum:
-          name:
-              - esc
-              - authconfig-gtk
-          state: present
-      when: rhel7stig_gui
+      - name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
+        yum:
+            name:
+                - esc
+                - authconfig-gtk
+            state: present
+        when: rhel7stig_gui
 
-    - name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
-      yum:
-          name: pam_pkcs11
-          state: present
+      - name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
+        yum:
+            name: pam_pkcs11
+            state: present
 
   when: rhel_07_041001
   tags:
@@ -2102,7 +2103,7 @@
             - not rhel7stig_skip_for_travis
         failed_when: no
         # todo: only run if sssd installed and config file present
-        #failed_when: sssd_services_check.rc > 1
+        # failed_when: sssd_services_check.rc > 1
         register: sssd_services_check
 
       - name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."

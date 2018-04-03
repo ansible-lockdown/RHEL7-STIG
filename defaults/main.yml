@@ -1,3 +1,4 @@
+---
 rhel7stig_cat1_patch: yes
 rhel7stig_cat2_patch: yes
 rhel7stig_cat3_patch: yes
@@ -347,16 +348,16 @@ rhel7stig_aide_temp_db_file: /var/lib/aide/aide.db.new.gz
 rhel7stig_aide_db_file: /var/lib/aide/aide.db.gz
 
 rhel7stig_aide_cron:
-  user: root
-  cron_file: aide
-  job: '/usr/sbin/aide --check'
-  special_time: daily
-  # Disable the notification check rule to disable mailing notifications
-  notify_by_mail: "{{rhel_07_020040}}"
-  notify_cmd: ' | /bin/mail -s "$HOSTNAME - Daily aide integrity check run" root'
+    user: root
+    cron_file: aide
+    job: '/usr/sbin/aide --check'
+    special_time: daily
+    # Disable the notification check rule to disable mailing notifications
+    notify_by_mail: "{{rhel_07_020040}}"
+    notify_cmd: ' | /bin/mail -s "$HOSTNAME - Daily aide integrity check run" root'
 
 rhel7stig_aide_conf:
-  file: /etc/aide.conf
+    file: /etc/aide.conf
 
 # Set maximum number of simultaneous system logins (RHEL-07-040000)
 rhel7stig_maxlogins: 10
@@ -389,21 +390,21 @@ rhel7stig_logon_banner: |
 
 # Password complexity settings
 rhel7stig_password_complexity:
-  ucredit: -1
-  lcredit: -1
-  dcredit: -1
-  ocredit: -1
-  difok: 8
-  minclass: 4
-  maxrepeat: 3
-  maxclassrepeat: 4
-  minlen: 15
+    ucredit: -1
+    lcredit: -1
+    dcredit: -1
+    ocredit: -1
+    difok: 8
+    minclass: 4
+    maxrepeat: 3
+    maxclassrepeat: 4
+    minlen: 15
 
 # RHEL-07-040160
 # Session timeout setting file (TMOUT setting can be set in multiple files)
 rhel7stig_shell_session_timeout:
-  file: /etc/profile
-  timeout: 600
+    file: /etc/profile
+    timeout: 600
 
 # RHEL-07-020260
 # Configure regular automatic package updates using yum-cron
@@ -415,9 +416,9 @@ rhel7stig_shell_session_timeout:
 # minimal-security                   = yum --security upgrade-minimal
 # minimal-security-severity:Critical =  --sec-severity=Critical upgrade-minimal
 rhel7stig_auto_package_updates:
-  enabled: yes
-  update_cmd: "minimal-security"
-  frequency: daily
+    enabled: yes
+    update_cmd: "minimal-security"
+    frequency: daily
 
 # RHEL-07-020270
 # If vsftpd is required, remove 'ftp' from rhel7stig_unnecessary_accounts.
@@ -429,18 +430,18 @@ rhel7stig_auto_package_updates:
 # avoid removing 'dbus', 'nobody', 'systemd-network', and 'polkitd', as they all
 # have home directories of '/' by default.
 rhel7stig_unnecessary_accounts:
-  - ftp
-  - games
+    - ftp
+    - games
 rhel7stig_remove_unnecessary_user_files: no
 
 # RHEL-07-010320
 # RHEL-07-010330
 # pam_faillock settings - accounts must be locked for max time period after 3 unsuccessful attempts within 15 minutes.
 rhel7stig_pam_faillock:
-  attempts: 3
-  interval: 900
-  unlock_time: 604800
-  fail_for_root: yes
+    attempts: 3
+    interval: 900
+    unlock_time: 604800
+    fail_for_root: yes
 
 # RHEL-07-030320 and RHEL-07-030321
 rhel7stig_audisp_disk_full_action: syslog
@@ -458,12 +459,12 @@ rhel7stig_net_promisc_mode_required: no
 # RHEL-07-020240
 # RHEL-07-020610
 rhel7stig_login_defaults:
-  encrypt_method: SHA512
-  pass_min_days: 1
-  pass_max_days: 60
-  fail_delay_secs: 4
-  umask: '077'
-  create_home: 'yes'
+    encrypt_method: SHA512
+    pass_min_days: 1
+    pass_max_days: 60
+    fail_delay_secs: 4
+    umask: '077'
+    create_home: 'yes'
 
 # RHEL-07-030330: set this to 25% of the free space in /var/log/audit (measured in megabytes)
 rhel7stig_auditd_space_left: "{{ ( ansible_mounts | json_query(rhel7stig_audit_disk_size_query) / 4 / 1024 / 1024 ) | int + 1 }}"

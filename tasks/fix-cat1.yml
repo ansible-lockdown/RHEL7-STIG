@@ -1,38 +1,39 @@
+---
 - block:
-    - name: "HIGH | RHEL-07-010010 | AUDIT | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
-      shell: 'rpm -Va | grep ''^.M'''
-      args:
-        warn: no
-      check_mode: no
-      failed_when: no
-      changed_when: no
-      ignore_errors: yes
-      register: rhel_07_010010_audit
+      - name: "HIGH | RHEL-07-010010 | AUDIT | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
+        shell: 'rpm -Va | grep ''^.M'''
+        args:
+            warn: no
+        check_mode: no
+        failed_when: no
+        changed_when: no
+        ignore_errors: yes
+        register: rhel_07_010010_audit
 
-    - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
-      shell: 'rpm --setperms $(rpm -qf {{ item.split('' '')[-1] }}); rpm --setugids $(rpm -qf {{ item.split('' '')[-1] }})'
-      with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
-      when: rhel_07_010010_audit.stdout_lines | length > 0
+      - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
+        shell: 'rpm --setperms $(rpm -qf {{ item.split('' '')[-1] }}); rpm --setugids $(rpm -qf {{ item.split('' '')[-1] }})'
+        with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
+        when: rhel_07_010010_audit.stdout_lines | length > 0
   when: rhel_07_010010
   tags:
       - RHEL-07-010010
 
 - block:
-    - name: "HIGH | RHEL-07-010020 | AUDIT | The cryptographic hash of system files and commands must match vendor values."
-      shell: 'rpm -Va | grep ''^..5'' | grep -E ''/.?bin/'''
-      args:
-          warn: no
-      check_mode: no
-      failed_when: no
-      changed_when: no
-      ignore_errors: yes
-      register: rhel_07_010020_audit
+      - name: "HIGH | RHEL-07-010020 | AUDIT | The cryptographic hash of system files and commands must match vendor values."
+        shell: 'rpm -Va | grep ''^..5'' | grep -E ''/.?bin/'''
+        args:
+            warn: no
+        check_mode: no
+        failed_when: no
+        changed_when: no
+        ignore_errors: yes
+        register: rhel_07_010020_audit
 
-    - name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
-      shell: yum reinstall -y $(rpm -qf {{ item.split(' ')[-1] }})
-      with_items: "{{ rhel_07_010020_audit.stdout_lines }}"
-      ignore_errors: yes
-      when: rhel_07_010020_audit.stdout_lines | length > 0
+      - name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
+        shell: yum reinstall -y $(rpm -qf {{ item.split(' ')[-1] }})
+        with_items: "{{ rhel_07_010020_audit.stdout_lines }}"
+        ignore_errors: yes
+        when: rhel_07_010020_audit.stdout_lines | length > 0
   when: rhel_07_010020
   tags:
       - RHEL-07-010020
@@ -114,8 +115,8 @@
 
 - name: "HIGH | RHEL-07-020010 | PATCH | The ypserv package must not be installed."
   yum:
-     name: ypserv
-     state: absent
+      name: ypserv
+      state: absent
   when: rhel_07_020010
   tags:
       - RHEL-07-020010
@@ -183,129 +184,129 @@
 # Not automated since current end of life for RHEL 7 is 2024-06-30
 
 - block:
-    # Currently just locks user account
-    - name: "HIGH | RHEL-07-020310 | AUDIT | The root account must be the only account having unrestricted access to the system"
-      shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
-      check_mode: no
-      changed_when: no
-      failed_when: no
-      ignore_errors: yes
-      register: rhel_07_020310_audit
+      # Currently just locks user account
+      - name: "HIGH | RHEL-07-020310 | AUDIT | The root account must be the only account having unrestricted access to the system"
+        shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
+        check_mode: no
+        changed_when: no
+        failed_when: no
+        ignore_errors: yes
+        register: rhel_07_020310_audit
 
-    - name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system"
-      command: "passwd -l {{ item }}"
-      with_items: "{{ rhel_07_020310_audit.stdout_lines }}"
-      when: rhel_07_020310_audit.rc
+      - name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system"
+        command: "passwd -l {{ item }}"
+        with_items: "{{ rhel_07_020310_audit.stdout_lines }}"
+        when: rhel_07_020310_audit.rc
   when: rhel_07_020310
   tags:
       - RHEL-07-020310
 
 - block:
-    - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
-      yum:
-          name: dracut-fips
-          state: present
-      notify: rebuild initramfs
+      - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+        yum:
+            name: dracut-fips
+            state: present
+        notify: rebuild initramfs
 
-    - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
-      command: rpm -q prelink
-      args:
-          warn: no
-      changed_when: no
-      failed_when: no
-      check_mode: no
-      register: rhel_07_021350_prelink_installed
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
+        command: rpm -q prelink
+        args:
+            warn: no
+        changed_when: no
+        failed_when: no
+        check_mode: no
+        register: rhel_07_021350_prelink_installed
 
-    - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
-      lineinfile:
-          dest: /etc/sysconfig/prelink
-          regexp: ^#?PRELINKING
-          line: PRELINKING=no
-      when: rhel_07_021350_prelink_installed.rc == 0
-      notify: undo existing prelinking
+      - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
+        lineinfile:
+            dest: /etc/sysconfig/prelink
+            regexp: ^#?PRELINKING
+            line: PRELINKING=no
+        when: rhel_07_021350_prelink_installed.rc == 0
+        notify: undo existing prelinking
 
-    - name: "HIGH | RHEL-07-021350 | AUDIT | Check for GRUB_CMDLINE_LINUX in /etc/default/grub"
-      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*"$' /etc/default/grub
-      check_mode: no
-      failed_when: no
-      changed_when: rhel_07_021350_default_grub_missing_audit.rc > 0
-      register: rhel_07_021350_default_grub_missing_audit
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Check for GRUB_CMDLINE_LINUX in /etc/default/grub"
+        command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*"$' /etc/default/grub
+        check_mode: no
+        failed_when: no
+        changed_when: rhel_07_021350_default_grub_missing_audit.rc > 0
+        register: rhel_07_021350_default_grub_missing_audit
 
-    - name: "HIGH | RHEL-07-021350 | AUDIT | parse sane GRUB_CMDLINE_LINUX from /proc/cmdline"
-      command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
-      check_mode: no
-      changed_when: no
-      failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
-      when: rhel_07_021350_default_grub_missing_audit | changed
-      register: rhel_07_021350_grub_cmdline_linux_audit
+      - name: "HIGH | RHEL-07-021350 | AUDIT | parse sane GRUB_CMDLINE_LINUX from /proc/cmdline"
+        command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
+        check_mode: no
+        changed_when: no
+        failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
+        when: rhel_07_021350_default_grub_missing_audit | changed
+        register: rhel_07_021350_grub_cmdline_linux_audit
 
-    - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
-      template:
-          src: etc_default_grub.j2
-          dest: /etc/default/grub
-          owner: root
-          group: root
-          mode: 0644
-      vars:
-          grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
-      when: rhel_07_021350_default_grub_missing_audit | changed
+      - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
+        template:
+            src: etc_default_grub.j2
+            dest: /etc/default/grub
+            owner: root
+            group: root
+            mode: 0644
+        vars:
+            grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
+        when: rhel_07_021350_default_grub_missing_audit | changed
 
-    - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
-      replace:
-          path: /etc/default/grub
-          regexp: "{{ rhel7stig_regexp_quoted_params }}"
-          replace: "{{ rhel7stig_replace_quoted_params }}"
-      vars:
-          key: GRUB_CMDLINE_LINUX
-          param: fips
-          value: 1
-          append: yes # this is the default
-      when:
-          - not ansible_check_mode or
-            not rhel_07_021350_default_grub_missing_audit | changed
-      notify: make grub2 config
+      - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
+        replace:
+            path: /etc/default/grub
+            regexp: "{{ rhel7stig_regexp_quoted_params }}"
+            replace: "{{ rhel7stig_replace_quoted_params }}"
+        vars:
+            key: GRUB_CMDLINE_LINUX
+            param: fips
+            value: 1
+            append: yes  # this is the default
+        when:
+            - not ansible_check_mode or
+              not rhel_07_021350_default_grub_missing_audit | changed
+        notify: make grub2 config
 
-    - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
-      replace:
-          path: /etc/default/grub
-          regexp: "{{ rhel7stig_regexp_quoted_params }}"
-          replace: "{{ rhel7stig_replace_quoted_params }}"
-      with_items:
-          - "{{ ansible_mounts | json_query(query) }}"
-      vars:
-          query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
-          key: GRUB_CMDLINE_LINUX
-          param: boot
-          value: UUID={{ item.uuid }}
-          insert: yes
-      when:
-          - rhel7stig_boot_part not in ['/', '']
-          - not ansible_check_mode or
-            not rhel_07_021350_default_grub_missing_audit | changed
-      notify: make grub2 config
-      register: result
+      - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
+        replace:
+            path: /etc/default/grub
+            regexp: "{{ rhel7stig_regexp_quoted_params }}"
+            replace: "{{ rhel7stig_replace_quoted_params }}"
+        with_items:
+            - "{{ ansible_mounts | json_query(query) }}"
+        vars:
+            query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
+            key: GRUB_CMDLINE_LINUX
+            param: boot
+            value: UUID={{ item.uuid }}
+            insert: yes
+        when:
+            - rhel7stig_boot_part not in ['/', '']
+            - not ansible_check_mode or
+              not rhel_07_021350_default_grub_missing_audit | changed
+        notify: make grub2 config
+        register: result
 
-    - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
-      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
-      check_mode: no
-      with_items:
-          - fips=1
-          - boot=UUID={{ ansible_mounts | json_query(query) }}
-      vars:
-          query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
-      register: rhel_07_021350_audit
-      when:
-          - not ansible_check_mode or
-            not rhel_07_021350_default_grub_missing_audit | changed
-          - rhel7stig_boot_part not in ['/', ''] or
-            'boot=' not in item
-      changed_when:
-          - ansible_check_mode
-          - rhel_07_021350_audit | failed
-      failed_when:
-          - rhel_07_021350_audit | failed
-          - not ansible_check_mode or
-            rhel_07_021350_audit.rc > 1
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
+        command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
+        check_mode: no
+        with_items:
+            - fips=1
+            - boot=UUID={{ ansible_mounts | json_query(query) }}
+        vars:
+            query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
+        register: rhel_07_021350_audit
+        when:
+            - not ansible_check_mode or
+              not rhel_07_021350_default_grub_missing_audit | changed
+            - rhel7stig_boot_part not in ['/', ''] or
+              'boot=' not in item
+        changed_when:
+            - ansible_check_mode
+            - rhel_07_021350_audit | failed
+        failed_when:
+            - rhel_07_021350_audit | failed
+            - not ansible_check_mode or
+              rhel_07_021350_audit.rc > 1
   when: rhel_07_021350
   tags:
       - RHEL-07-021350
@@ -320,33 +321,33 @@
       - telnet
 
 - block:
-    - name: "HIGH | RHEL-07-030000 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
-      yum:
-          name: audit
-          state: present
+      - name: "HIGH | RHEL-07-030000 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+        yum:
+            name: audit
+            state: present
 
-    - name: "HIGH | RHEL-07-030000 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
-      service:
-          name: auditd
-          state: started
-          enabled: yes
+      - name: "HIGH | RHEL-07-030000 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+        service:
+            name: auditd
+            state: started
+            enabled: yes
   when: rhel_07_030000
   tags:
       - RHEL-07-030000
       - auditd
 
 - block:
-    - name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
-      yum:
-          name: "{{ rhel7stig_av_package.package }}"
-          state: present
+      - name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
+        yum:
+            name: "{{ rhel7stig_av_package.package }}"
+            state: present
 
-    - name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
-      service:
-          name: "{{ rhel7stig_av_package.service }}"
-          state: started
-          enabled: yes
-      ignore_errors: yes
+      - name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
+        service:
+            name: "{{ rhel7stig_av_package.service }}"
+            state: started
+            enabled: yes
+        ignore_errors: yes
   when:
       - rhel7stig_antivirus_required
       - rhel_07_032000
@@ -369,34 +370,34 @@
       - ssh
 
 - block:
-    - name: "HIGH | RHEL-07-040540 | AUDIT | There must be no .shosts files on the system."
-      command: find {{ rhel7stig_local_mounts | join(' ') }} -name '.shosts'
-      check_mode: no
-      changed_when: no
-      register: rhel_07_040540_audit
+      - name: "HIGH | RHEL-07-040540 | AUDIT | There must be no .shosts files on the system."
+        command: find {{ rhel7stig_local_mounts | join(' ') }} -name '.shosts'
+        check_mode: no
+        changed_when: no
+        register: rhel_07_040540_audit
 
-    - name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
-      file:
-          path: "{{ item }}"
-          state: absent
-      with_items: "{{ rhel_07_040540_audit.stdout_lines }}"
+      - name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
+        file:
+            path: "{{ item }}"
+            state: absent
+        with_items: "{{ rhel_07_040540_audit.stdout_lines }}"
   when: rhel_07_040540
   tags:
       - RHEL-07-040540
       - shosts
 
 - block:
-    - name: "HIGH | RHEL-07-040550 | AUDIT | There must be no shosts.equiv files on the system."
-      command: find {{ rhel7stig_local_mounts | join(' ') }} -name 'shosts.equiv'
-      check_mode: no
-      changed_when: no
-      register: rhel_07_040550_audit
+      - name: "HIGH | RHEL-07-040550 | AUDIT | There must be no shosts.equiv files on the system."
+        command: find {{ rhel7stig_local_mounts | join(' ') }} -name 'shosts.equiv'
+        check_mode: no
+        changed_when: no
+        register: rhel_07_040550_audit
 
-    - name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
-      file:
-          path: "{{ item }}"
-          state: absent
-      with_items: "{{ rhel_07_040550_audit.stdout_lines }}"
+      - name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
+        file:
+            path: "{{ item }}"
+            state: absent
+        with_items: "{{ rhel_07_040550_audit.stdout_lines }}"
   when: rhel_07_040550
   tags:
       - RHEL-07-040550
@@ -440,25 +441,25 @@
       - ssh
 
 - block:
-    - name: "PRELIM | RHEL-07-040800 | AUDIT | SNMP community strings must be changed from the default."
-      command: grep {{ item }} /etc/snmp/snmpd.conf
-      check_mode: no
-      failed_when: no
-      changed_when: no
-      ignore_errors: yes
-      with_items:
-          - public
-          - private
-      register: rhel_07_040800_audit
+      - name: "PRELIM | RHEL-07-040800 | AUDIT | SNMP community strings must be changed from the default."
+        command: grep {{ item }} /etc/snmp/snmpd.conf
+        check_mode: no
+        failed_when: no
+        changed_when: no
+        ignore_errors: yes
+        with_items:
+            - public
+            - private
+        register: rhel_07_040800_audit
 
-    - name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings must be changed from the default."
-      replace:
-          dest: /etc/snmp/snmpd.conf
-          regexp: (^com2sec.*default\s+)(public|private)
-          replace: \1{{ rhel7stig_snmp_community }}
-      with_items: "{{ rhel_07_040800_audit.results }}"
-      notify: restart snmpd
-      when: item.stdout_lines | length > 0
+      - name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings must be changed from the default."
+        replace:
+            dest: /etc/snmp/snmpd.conf
+            regexp: (^com2sec.*default\s+)(public|private)
+            replace: \1{{ rhel7stig_snmp_community }}
+        with_items: "{{ rhel_07_040800_audit.results }}"
+        notify: restart snmpd
+        when: item.stdout_lines | length > 0
   when: rhel_07_040800
   tags:
       - RHEL-07-040800
