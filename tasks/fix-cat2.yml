@@ -869,6 +869,7 @@
     src: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].device') }}"
     fstype: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].fstype') }}"
     opts: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0].options') }},nosuid"
+    state: mounted
   when:
     - rhel_07_021000
     - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
