@@ -511,3 +511,6 @@ rhel7stig_machine_uses_uefi: "{{ rhel_07_sys_firmware_efi.stat.exists }}"
 rhel7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/{{ ansible_distribution | lower }}/grub.cfg', '/boot/grub2/grub.cfg') }}"
 
 rhel7stig_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
+
+rhel7stig_nfs_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_nfs_mounts_query) }}"
+rhel7stig_nfs_mounts_query: "[?starts_with(fstype, 'nfs')].mount"
