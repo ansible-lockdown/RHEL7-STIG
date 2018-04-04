@@ -824,8 +824,8 @@
             this_item: "{{ item.item }}"
   vars:
       find_command_base: 'find "{{ this_item.dir }}" -mindepth 1
-             ( -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*" -type f )
-             -prune -o -not -user {{ this_item.uid }}'
+             ( -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*" -type f ) -o
+             -not -user {{ this_item.uid }}'
   when: rhel_07_020660
   tags:
       - RHEL-07-020660
