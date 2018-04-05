@@ -919,7 +919,6 @@
       - "'nosuid' not in (ansible_mounts | json_query(options_query))"
   tags:
       - RHEL-07-021020
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-021021 | PATCH | File systems that are being imported via Network File System (NFS) must be mounted to prevent binary files from being executed."
   mount:
@@ -938,7 +937,6 @@
       - "'noexec' not in (ansible_mounts | json_query(options_query))"
   tags:
       - RHEL-07-021021
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-021030 | PATCH | All world-writable directories must be group-owned by root, sys, bin, or an application group."
   command: "true"
