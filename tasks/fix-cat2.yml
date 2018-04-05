@@ -902,17 +902,39 @@
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-021020 | PATCH | File systems that are being imported via Network File System (NFS) must be mounted to prevent files with the setuid and setgid bit set from being executed."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021020
+  mount:
+    path: "{{ item }}"
+    src: "{{ ansible_mounts | json_query(device_query) }}"
+    fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
+    opts: "{{ ansible_mounts | json_query(options_query) }},nosuid"
+    state: mounted
+  vars:
+    device_query: '[?mount == `{{ item }}`] | [0].device'
+    fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
+    options_query: '[?mount == `{{ item }}`] | [0].options'
+  with_items: "{{ rhel7stig_nfs_mounts }}"
+  when:
+    - rhel_07_021020
+    - "'nosuid' not in (ansible_mounts | json_query(options_query))"
   tags:
       - RHEL-07-021020
       - notimplemented
 
 - name: "MEDIUM | RHEL-07-021021 | PATCH | File systems that are being imported via Network File System (NFS) must be mounted to prevent binary files from being executed."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021021
+  mount:
+    path: "{{ item }}"
+    src: "{{ ansible_mounts | json_query(device_query) }}"
+    fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
+    opts: "{{ ansible_mounts | json_query(options_query) }},noexec"
+    state: mounted
+  vars:
+    device_query: '[?mount == `{{ item }}`] | [0].device'
+    fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
+    options_query: '[?mount == `{{ item }}`] | [0].options'
+  with_items: "{{ rhel7stig_nfs_mounts }}"
+  when:
+    - rhel_07_021021
+    - "'noexec' not in (ansible_mounts | json_query(options_query))"
   tags:
       - RHEL-07-021021
       - notimplemented

@@ -514,3 +514,6 @@ rhel7stig_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | d
 
 rhel7stig_local_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_local_mounts_query) }}"
 rhel7stig_local_mounts_query: "[?starts_with(device, '/dev/')].mount"
+
+rhel7stig_nfs_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_nfs_mounts_query) }}"
+rhel7stig_nfs_mounts_query: "[?starts_with(fstype, 'nfs')].mount"
