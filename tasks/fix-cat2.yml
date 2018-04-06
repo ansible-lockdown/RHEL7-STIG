@@ -884,9 +884,9 @@
   mount:
       path: /home
       state: mounted
-      src: "{{ ansible_mounts.device }}"
-      fstype: "{{ ansible_mounts.fstype }}"
-      opts: "{{ ansible_mounts.options }},nosuid"
+      src: "{{ home_mount.device }}"
+      fstype: "{{ home_mount.fstype }}"
+      opts: "{{ home_mount.options }},nosuid"
   when:
       - rhel_07_021000
       - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
