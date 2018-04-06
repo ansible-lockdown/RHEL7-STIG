@@ -801,67 +801,6 @@
 - name: "MEDIUM | RHEL-07-020660 | PATCH | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
   block:
     - name: "MEDIUM | RHEL-07-020660 | AUDIT | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
-<<<<<<< HEAD
-      # All files in subdirectories
-      shell: find {{ item.split(':')[2] }} -mindepth 2 -type f ! -user {{ item.split(':')[0] }}
-<<<<<<< HEAD
-      with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
-      changed_when: rhel_07_020660_audit_1.stdout != ""
-      register: rhel_07_020660_audit_1
-      check_mode: no
-
-    - name: "MEDIUM | RHEL-07-020660 | AUDIT | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
-      # All non-dotfiles in home directory
-      shell: find {{ item.split(':')[2] }} -maxdepth 1 -type f ! -name '.*' ! -user {{ item.split(':')[0] }}
-      with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
-=======
-      with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
-      changed_when: rhel_07_020660_audit_1.stdout != ""
-      register: rhel_07_020660_audit_1
-      check_mode: no
-
-    - name: "MEDIUM | RHEL-07-020660 | AUDIT | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
-      # All non-dotfiles in home directory
-      shell: find {{ item.split(':')[2] }} -maxdepth 1 -type f ! -name '.*' ! -user {{ item.split(':')[0] }}
-      with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
->>>>>>> 521e1c2... Implementing correct find and xargs commands for everything but home dotfiles.
-      changed_when: rhel_07_020660_audit_2.stdout != ""
-      register: rhel_07_020660_audit_2
-
-    - name: "MEDIUM | RHEL-07-020660 | AUDIT | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
-      # Everything not a file, at any depth
-      shell: find {{ item.split(':')[2] }} ! -type f ! -user {{ item.split(':')[0] }}
-      with_items: "{{ rhel7stig_passwd_homedir_audit.stdout_lines }}"
-      changed_when: rhel_07_020660_audit_3.stdout != ""
-      register: rhel_07_020660_audit_3
-<<<<<<< HEAD
-
-    - name: "MEDIUM | RHEL-07-020660 | PATCH | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
-      # All files in subdirectories
-      shell: "{{ item.cmd }} -print0 | xargs -r -0 chown {{ item.item.split(':')[0] }}"
-      with_items: "{{rhel_07_020660_audit_1.results}}"
-      when: rhel_07_020660_audit_1 | changed
-=======
-
-    - name: "MEDIUM | RHEL-07-020660 | PATCH | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
-      # All files in subdirectories
-      shell: "{{ item.cmd }} -print0 | xargs -r -0 chown {{ item.item.split(':')[0] }}"
-      with_items: "{{rhel_07_020660_audit_1.results}}"
-      when: rhel_07_020660_audit_1 | changed
-
-    - name: "MEDIUM | RHEL-07-020660 | PATCH | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
-      # All non-dotfiles in home directory
-      shell: "{{ item.cmd }} -print0 | xargs -r -0 chown {{ item.item.split(':')[0] }}"
-      with_items: "{{rhel_07_020660_audit_2.results}}"
-      when: rhel_07_020660_audit_2 | changed
-
-    - name: "MEDIUM | RHEL-07-020660 | PATCH | All files and directories contained in local interactive user home directories must be owned by the owner of the home directory."
-      # Everything not a file, at any depth
-      shell: "{{ item.cmd }} -print0 | xargs -r -0 chown {{ item.item.split(':')[0] }}"
-      with_items: "{{rhel_07_020660_audit_3.results}}"
-      when: rhel_07_020660_audit_3 | changed
->>>>>>> 521e1c2... Implementing correct find and xargs commands for everything but home dotfiles.
-=======
       shell: "{{ find_command_base }} -print -quit"
       check_mode: no
       changed_when: rhel_07_020660_audit.stdout != ""
@@ -883,7 +822,6 @@
         - item | changed
       vars:
         this_item: "{{ item.item }}"
->>>>>>> f3754c8... Adding James' find commands
 
   vars:
     find_command_base: 'find "{{ this_item.dir }}" -mindepth 1 \( -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*" -type f \) -o -not -user {{ this_item.uid }}'
