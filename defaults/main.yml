@@ -359,6 +359,11 @@ rhel7stig_aide_cron:
     notify_by_mail: "{{rhel_07_020040}}"
     notify_cmd: ' | /bin/mail -s "$HOSTNAME - Daily aide integrity check run" root'
 
+rhel7stig_cron_special_disable: "{{
+        rhel7stig_workaround_for_disa_benchmark or
+        rhel7stig_workaround_for_ssg_benchmark or
+        false }}"
+
 rhel7stig_aide_conf:
     file: /etc/aide.conf
 

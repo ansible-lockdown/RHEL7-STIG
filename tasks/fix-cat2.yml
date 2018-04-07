@@ -525,7 +525,21 @@
       user: "{{ rhel7stig_aide_cron.user }}"
       cron_file: "{{ rhel7stig_aide_cron.cron_file }}"
       job: "{{ rhel7stig_aide_cron.job + ((rhel7stig_aide_cron.notify_by_mail) | ternary(rhel7stig_aide_cron.notify_cmd,'')) }}"
-      special_time: "{{ rhel7stig_aide_cron.special_time }}"
+      minute: "{{ rhel7stig_aide_cron.minute | default((rhel7stig_cron_special_disable and
+              rhel7stig_aide_cron.special_time in ['hourly', 'daily', 'weekly', 'monthly']) |
+              ternary('0', omit)) | default(omit) }}"
+      hour: "{{ rhel7stig_aide_cron.hour | default((rhel7stig_cron_special_disable and
+              rhel7stig_aide_cron.special_time in ['daily', 'weekly', 'monthly']) |
+              ternary('0', omit)) | default(omit) }}"
+      weekday: "{{ rhel7stig_aide_cron.weekday | default((rhel7stig_cron_special_disable and
+              rhel7stig_aide_cron.special_time in ['weekly']) |
+              ternary('0', omit)) | default(omit) }}"
+      day: "{{ rhel7stig_aide_cron.day | default((rhel7stig_cron_special_disable and
+              rhel7stig_aide_cron.special_time in ['monthly']) |
+              ternary('1', omit)) | default(omit) }}"
+      special_time: "{{ (rhel7stig_cron_special_disable and
+              rhel7stig_aide_cron.special_time in ['hourly', 'daily', 'weekly', 'monthly']) |
+              ternary(omit, rhel7stig_aide_cron.special_time) }}"
   when: rhel_07_020030 or rhel_07_020040
   tags:
       - RHEL-07-020030
