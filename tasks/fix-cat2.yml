@@ -836,13 +836,48 @@
   tags:
       - RHEL-07-020660
 
-- name: "MEDIUM | RHEL-07-020670 | PATCH | All files and directories contained in local interactive user home directories must be group-owned by a group of which the home directory owner is a member."
-  command: "true"
-  changed_when: no
+- name: "MEDIUM | RHEL-07-020670 | All files and directories contained in local interactive user home directories must be group-owned by a group of which the home directory owner is a member."
+  block:
+      - name: "MEDIUM | RHEL-07-020670 | AUDIT | Get all GIDs for each user."
+        command: id -G "{{ item.id }}"
+        check_mode: no
+        changed_when: no
+        register: rhel_07_all_gid_audit
+        with_items: "{{ rhel7stig_passwd }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+
+      - name: "MEDIUM | RHEL-07-020670 | AUDIT | All files and directories contained in local interactive user home directories must be group-owned by a group of which the home directory owner is a member."
+        command: "{{ find_command_base }} -print -quit"
+        check_mode: no
+        changed_when: rhel_07_020670_audit.stdout != ""
+        register: rhel_07_020670_audit
+        with_items: "{{ rhel_07_all_gid_audit.results }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when:
+            - this_item.uid >= 1000
+        vars:
+            this_item: "{{ item.item }}"
+            this_result: "{{ item }}"
+
+      - name: "MEDIUM | RHEL-07-020670 | PATCH | All files and directories contained in local interactive user home directories must be group-owned by a group of which the home directory owner is a member."
+        command: "{{ find_command_base }} -exec chgrp {{ this_item.gid }} {} +"
+        with_items: "{{ rhel_07_020670_audit.results }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when:
+            - item | changed
+        vars:
+            this_item: "{{ item.item.item }}"
+            this_result: "{{ item.item }}"
+  vars:
+      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1
+              ( -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*" -type f ) -o
+              -not -group {{ this_result.stdout.split(" ") | join(" -not -group ") }}'
   when: rhel_07_020670
   tags:
       - RHEL-07-020670
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-020680 | PATCH | All files and directories contained in local interactive user home directories must have mode 0750 or less permissive."
   command: "true"
