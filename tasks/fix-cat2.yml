@@ -655,8 +655,14 @@
             name: "{{ item }}"
             state: absent
             remove: "{{ rhel7stig_remove_unnecessary_user_files }}"
+        register: rhel_07_020270_patch
         with_items: "{{ rhel7stig_unnecessary_accounts }}"
 
+      - name: "MEDIUM | RHEL-07-020270 | AUDIT | Re-parse /etc/passwd since it changed."
+        include_tasks: parse_etc_passwd.yml
+        vars:
+            rhel7stig_passwd_tasks: "RHEL-07-020270"
+        when: rhel_07_020270_patch | changed
   when: rhel_07_020270
   tags:
       - RHEL-07-020270
