@@ -919,13 +919,37 @@
   tags:
       - RHEL-07-020690
 
-- name: "MEDIUM | RHEL-07-020700 | PATCH | Local initialization files for local interactive users must be group-owned by the users primary group or root."
-  command: "true"
-  changed_when: no
+- name: "MEDIUM | RHEL-07-020700 | Local initialization files for local interactive users must be group-owned by the users primary group or root."
+  block:
+      - name: "MEDIUM | RHEL-07-020700 | AUDIT | Local initialization files for local interactive users must be group-owned by the users primary group or root."
+        command: "{{ find_command_base }} -print -quit"
+        check_mode: no
+        changed_when: rhel_07_020700_audit.stdout != ""
+        register: rhel_07_020700_audit
+        with_items: "{{ rhel7stig_passwd }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when:
+            - this_item.uid >= 1000
+        vars:
+            this_item: "{{ item }}"
+
+      - name: "MEDIUM | RHEL-07-020700 | PATCH | Local initialization files for local interactive users must be group-owned by the users primary group or root."
+        command: "{{ find_command_base }} -exec chgrp {{ this_item.gid }} {} +"
+        with_items: "{{ rhel_07_020700_audit.results }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when:
+            - item | changed
+        vars:
+            this_item: "{{ item.item }}"
+  vars:
+      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1 -type f
+              -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*"
+              -not ( -group {{ this_item.gid }} -o -group root )'
   when: rhel_07_020700
   tags:
       - RHEL-07-020700
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-020710 | PATCH | All local initialization files must have mode 0740 or less permissive."
   command: "true"

@@ -67,6 +67,7 @@
         rhel_07_020660 or
         rhel_07_020670 or
         rhel_07_020690 or
+        rhel_07_020700 or
         false
   tags:
       - cat2
@@ -78,6 +79,7 @@
       - RHEL-07-020660
       - RHEL-07-020670
       - RHEL-07-020690
+      - RHEL-07-020700
 
 - name: "PRELIM | RHEL-07-021100 RHEL-07-031000 RHEL-07-031010 | Ensure rsyslog is installed when required."
   yum:
