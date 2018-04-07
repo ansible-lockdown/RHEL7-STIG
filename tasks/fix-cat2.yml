@@ -641,13 +641,14 @@
       - RHEL-07-020260
       - packaging
 
-- name: "MEDIUM | RHEL-07-020270 | PATCH | The system must not have unnecessary accounts."
+- name: "MEDIUM | RHEL-07-020270 | The system must not have unnecessary accounts."
   block:
       - name: "MEDIUM | RHEL-07-020270 | AUDIT | The system must not have unnecessary accounts."
         command: "grep '^{{ item }}:' /etc/passwd"
-        failed_when: no
         check_mode: no
-        changed_when: no
+        failed_when: rhel_07_020270_audit.rc > 1
+        changed_when: rhel_07_020270_audit.rc == 0
+        register: rhel_07_020270_audit
         with_items: "{{ rhel7stig_unnecessary_accounts }}"
 
       - name: "MEDIUM | RHEL-07-020270 | PATCH | The system must not have unnecessary accounts."
