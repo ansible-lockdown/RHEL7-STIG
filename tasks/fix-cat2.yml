@@ -979,7 +979,7 @@
 - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
   block:
       - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
-        command: find {{ rhel7stig_local_mounts | join(' ') }} ( -context *:device_t:* -o -context *:unlabeled_t:* ) ( -type c -o -type b ) -printf '%p %Z\n'
+        command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev ( -context *:device_t:* -o -context *:unlabeled_t:* ) ( -type c -o -type b ) -printf '%p %Z\n'
         changed_when: no
         check_mode: no
         register: rhel_07_020900_audit
