@@ -56,25 +56,9 @@
       - always
 
 - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690 | Parse /etc/passwd"
-  block:
-      - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690 | Parse /etc/passwd"
-        command: cat /etc/passwd
-        changed_when: no
-        check_mode: no
-        register: rhel7stig_passwd_file_audit
-
-      - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690 | Split passwd entries"
-        set_fact:
-            rhel7stig_passwd: "{{ rhel7stig_passwd | default([]) + [ {
-                    'id': item_sp[0],
-                    'uid': item_sp[2] | int,
-                    'gid': item_sp[3] | int,
-                    'gecos': item_sp[4],
-                    'dir': item_sp[5],
-                    'shell': item_sp[6] } ] }}"
-        with_items: "{{ rhel7stig_passwd_file_audit.stdout_lines }}"
-        vars:
-            item_sp: "{{ item.split(':') }}"
+  include_tasks: parse_etc_passwd.yml
+  vars:
+      rhel7stig_passwd_tasks: "RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690"
   when:
       - rhel_07_020620 or
         rhel_07_020630 or

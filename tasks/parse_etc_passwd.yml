@@ -1,0 +1,25 @@
+---
+- name: "PRELIM | {{ rhel7stig_passwd_tasks }} | Parse /etc/passwd"
+  block:
+      - name: "PRELIM | {{ rhel7stig_passwd_tasks }} | Parse /etc/passwd"
+        command: cat /etc/passwd
+        changed_when: no
+        check_mode: no
+        register: rhel7stig_passwd_file_audit
+
+      - name: "PRELIM | {{ rhel7stig_passwd_tasks }} | Clear passwd variable"
+        set_fact:
+            rhel7stig_passwd: []
+
+      - name: "PRELIM | {{ rhel7stig_passwd_tasks }} | Split passwd entries"
+        set_fact:
+            rhel7stig_passwd: "{{ rhel7stig_passwd | default([]) + [ {
+                    'id': item_sp[0],
+                    'uid': item_sp[2] | int,
+                    'gid': item_sp[3] | int,
+                    'gecos': item_sp[4],
+                    'dir': item_sp[5],
+                    'shell': item_sp[6] } ] }}"
+        with_items: "{{ rhel7stig_passwd_file_audit.stdout_lines }}"
+        vars:
+            item_sp: "{{ item.split(':') }}"
