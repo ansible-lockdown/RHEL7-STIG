@@ -55,15 +55,15 @@
   tags:
       - always
 
-- name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-021640 RHEL-07-021650 RHEL-07-020660 RHEL-07-020690 | Parse /etc/passwd"
+- name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690 | Parse /etc/passwd"
   block:
-      - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-021640 RHEL-07-021650 RHEL-07-020660 RHEL-07-020690 | Parse /etc/passwd"
+      - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690 | Parse /etc/passwd"
         command: cat /etc/passwd
         changed_when: no
         check_mode: no
         register: rhel7stig_passwd_file_audit
 
-      - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-021640 RHEL-07-021650 RHEL-07-020660 RHEL-07-020690 | Split passwd entries"
+      - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690 | Split passwd entries"
         set_fact:
             rhel7stig_passwd: "{{ rhel7stig_passwd | default([]) + [ {
                     'id': item_sp[0],
