@@ -549,12 +549,17 @@
 - name: "MEDIUM | RHEL-07-020100 | PATCH | USB mass storage must be disabled."
   lineinfile:
       dest: /etc/modprobe.d/blacklist.conf
-      regexp: "^(#)?blacklist usb-storage(\\s|$)"
-      line: 'blacklist usb-storage'
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
       create: yes
       owner: root
       group: root
       mode: "0644"
+  with_items:
+      - regexp: "^(#)?blacklist usb-storage(\\s|$)"
+        line: 'blacklist usb-storage'
+      - regexp: "^(#)?install usb-storage"
+        line: 'install usb-storage /bin/false'
   when: rhel_07_020100
   tags:
       - RHEL-07-020100
