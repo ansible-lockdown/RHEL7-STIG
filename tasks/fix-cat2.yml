@@ -614,11 +614,20 @@
 
 - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date."
   block:
+      - name: "MEDIUM | RHEL-07-020260 | AUDIT | Check RHEL type"
+        command: rpm -q redhat-release-workstation
+        check_mode: no
+        changed_when: no
+        failed_when: no
+        register: rhel_07_020260_rhel_type
+
       - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Install yum-cron"
         yum:
             name: yum-cron
             state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
-            enablerepo: "{{ (ansible_distribution == 'RedHat') | ternary('rhel-7-server-optional-rpms','') }}"
+            enablerepo: "{{ (ansible_distribution == 'RedHat') | ternary('rhel-7-' +
+                    (rhel_07_020260_rhel_type.rc == 0) | ternary('workstation', 'server') +
+                    '-optional-rpms','') }}"
 
       - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify yum-cron config file exists"
         stat:
