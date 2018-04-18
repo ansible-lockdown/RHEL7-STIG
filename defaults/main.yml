@@ -3,6 +3,25 @@ rhel7stig_cat1_patch: yes
 rhel7stig_cat2_patch: yes
 rhel7stig_cat3_patch: yes
 
+# We've defined complexity-high to mean that we cannot automatically remediate
+# the rule in question.  In the future this might mean that the remediation
+# may fail in some cases.
+rhel7stig_complexity_high: no
+
+# Show "changed" for complex items not remediated per complexity-high setting
+# to make them stand out.  "changed" items on a second run of the role would
+# indicate items requiring manual review.
+rhel7stig_audit_complex: yes
+
+# We've defined disruption-high to indicate items that are likely to cause
+# disruption in a normal workflow.  These items can be remediated automatically
+# but are disabled by default to avoid disruption.
+rhel7stig_disruption_high: no
+
+# Show "changed" for disruptive items not remediated per disruption-high
+# setting to make them stand out.
+rhel7stig_audit_disruptive: yes
+
 rhel7stig_skip_for_travis: false
 
 rhel7stig_workaround_for_disa_benchmark: true
