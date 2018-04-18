@@ -49,7 +49,7 @@ rhel_07_020210: true
 rhel_07_020220: true
 rhel_07_020230: true
 # Not an automated task
-rhel_07_020250: false
+rhel_07_020250: true
 rhel_07_020310: true
 rhel_07_021350: true
 rhel_07_021710: true
@@ -281,6 +281,14 @@ rhel_07_040600: true
 
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: no
+
+# RHEL-07-020250
+# This is a check for a "supported release"
+# These are the minimum supported releases.
+# (Red Hat has support for older versions if you pay extra for it.)
+rhel7stig_min_supported_os_ver:
+    RedHat: "7.5"
+    CentOS: "7.4.1708"
 
 # RHEL-07-040740
 # If system is not router, run tasks that disable router functions.
