@@ -1,6 +1,17 @@
 ---
 rhel7stig_min_ansible_version: 2.4
 
+# these variables are for enabling tasks to run that will be further controled
+# by check_mode to prevent the remediation task from making changes as
+# requested
+rhel7stig_complex: "{{ rhel7stig_complexity_high or rhel7stig_audit_complex }}"
+rhel7stig_disruptive: "{{ rhel7stig_disruption_high or rhel7stig_audit_disruptive }}"
+
+# These vars are made to go in the check_mode property of a task that is
+# complex or disruptive, respectively.
+rhel7stig_complex_check_mode: "{{ ansible_check_mode or rhel7stig_audit_complex }}"
+rhel7stig_disruptive_check_mode: "{{ ansible_check_mode or rhel7stig_audit_disruptive }}"
+
 # this allows us to insert a name=value into a line of the format:
 # key="name1=value1 name2=value2 nameN=valueN"
 rhel7stig_regexp_quoted_params: ^({{ rhel7stig_re_qp_key }})({{ rhel7stig_re_qp_other_params }})({{
