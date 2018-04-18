@@ -691,7 +691,7 @@
         include_tasks: parse_etc_passwd.yml
         vars:
             rhel7stig_passwd_tasks: "RHEL-07-020270"
-        when: rhel_07_020270_patch | changed
+        when: rhel_07_020270_patch is changed
   when: rhel_07_020270
   tags:
       - RHEL-07-020270
@@ -799,7 +799,7 @@
             mode: "{{ rhel7stig_homedir_mode }}"
             state: directory
         with_items: "{{ rhel_07_020630_audit.results }}"
-        when: item | changed
+        when: item is changed
 
   when: rhel_07_020630
   tags:
@@ -854,7 +854,7 @@
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
         when:
-            - item | changed
+            - item is changed
         vars:
             this_item: "{{ item.item }}"
   vars:
@@ -896,7 +896,7 @@
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
         when:
-            - item | changed
+            - item is changed
         vars:
             this_item: "{{ item.item.item }}"
             this_result: "{{ item.item }}"
@@ -937,7 +937,7 @@
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
         when:
-            - item | changed
+            - item is changed
         vars:
             this_item: "{{ item.item }}"
   vars:
@@ -969,7 +969,7 @@
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
         when:
-            - item | changed
+            - item is changed
         vars:
             this_item: "{{ item.item }}"
   vars:
@@ -1107,7 +1107,7 @@
       insertafter: '#### RULES ####'
   register: result
   failed_when:
-      - result | failed
+      - result is failed
       - result.rc != 257
   when: rhel_07_021100
   tags:
@@ -1249,7 +1249,7 @@
       line: "space_left_action = email"
   register: rhel7stig_auditd_space_left_action_result
   failed_when:
-      - rhel7stig_auditd_space_left_action_result | failed
+      - rhel7stig_auditd_space_left_action_result is failed
       - rhel7stig_auditd_space_left_action_result.rc != 257
   when: rhel_07_030340
   tags:
@@ -1262,7 +1262,7 @@
       line: "action_mail_acct = {{ rhel7stig_auditd_mail_acct }}"
   register: rhel7stig_auditd_action_mail_acct_result
   failed_when:
-      - rhel7stig_auditd_action_mail_acct_result | failed
+      - rhel7stig_auditd_action_mail_acct_result is failed
       - rhel7stig_auditd_action_mail_acct_result.rc != 257
   when: rhel_07_030350
   tags:
@@ -1561,7 +1561,7 @@
       insertafter: EOF
   register: result
   failed_when:
-      - result | failed
+      - result is failed
       - result.rc != 257
   when:
       - rhel_07_031000
@@ -1585,7 +1585,7 @@
       - not rhel7stig_system_is_log_aggregator
   register: result
   failed_when:
-      - result | failed
+      - result is failed
       - result.rc != 257
   tags:
       - RHEL-07-031010
@@ -1764,7 +1764,7 @@
   notify: restart sshd
   when:
       - rhel_07_040340
-      - not ansible_distribution_version | version_compare('7.4', '>=') or
+      - ansible_distribution_version is not version_compare('7.4', '>=') or
         rhel7stig_workaround_for_disa_benchmark or
         rhel7stig_workaround_for_ssg_benchmark
   tags:
@@ -2146,7 +2146,7 @@
       state: present
   register: result
   failed_when:
-      - result | failed
+      - result is failed
       - result.rc != 257
   when:
       - rhel7stig_tftp_required
