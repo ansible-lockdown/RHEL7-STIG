@@ -5,6 +5,9 @@ rhel7stig_cat3_patch: yes
 
 rhel7stig_skip_for_travis: true
 
+# we're not worried about disrupting CI, plus it's good to test all tasks
+rhel7stig_audit_disruptive: true
+
 rhel7stig_antivirus_required: no
 
 # Potential for locking out users - doesn't matter during CI
