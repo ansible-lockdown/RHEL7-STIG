@@ -237,7 +237,7 @@
         check_mode: no
         changed_when: no
         failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
-        when: rhel_07_021350_default_grub_missing_audit | changed
+        when: rhel_07_021350_default_grub_missing_audit is changed
         register: rhel_07_021350_grub_cmdline_linux_audit
 
       - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
@@ -249,7 +249,7 @@
             mode: 0644
         vars:
             grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
-        when: rhel_07_021350_default_grub_missing_audit | changed
+        when: rhel_07_021350_default_grub_missing_audit is changed
 
       - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
         replace:
@@ -263,7 +263,7 @@
             append: yes  # this is the default
         when:
             - not ansible_check_mode or
-              not rhel_07_021350_default_grub_missing_audit | changed
+              rhel_07_021350_default_grub_missing_audit is not changed
         notify: make grub2 config
 
       - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
@@ -282,7 +282,7 @@
         when:
             - rhel7stig_boot_part not in ['/', '']
             - not ansible_check_mode or
-              not rhel_07_021350_default_grub_missing_audit | changed
+              rhel_07_021350_default_grub_missing_audit is not changed
         notify: make grub2 config
         register: result
 
@@ -297,14 +297,14 @@
         register: rhel_07_021350_audit
         when:
             - not ansible_check_mode or
-              not rhel_07_021350_default_grub_missing_audit | changed
+              rhel_07_021350_default_grub_missing_audit is not changed
             - rhel7stig_boot_part not in ['/', ''] or
               'boot=' not in item
         changed_when:
             - ansible_check_mode
-            - rhel_07_021350_audit | failed
+            - rhel_07_021350_audit is failed
         failed_when:
-            - rhel_07_021350_audit | failed
+            - rhel_07_021350_audit is failed
             - not ansible_check_mode or
               rhel_07_021350_audit.rc > 1
   when: rhel_07_021350
@@ -364,7 +364,7 @@
   notify: restart sshd
   when:
       - rhel_07_040390
-      - not ansible_distribution_version | version_compare('7.4', '>=')
+      - ansible_distribution_version is not version_compare('7.4', '>=')
   tags:
       - RHEL-07-040390
       - ssh
