@@ -42,7 +42,7 @@ script:
     # Test role idempotence.
     - idempotence_log=$(mktemp)
 
-    - docker exec --tty $container_id ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --extra-vars "@/etc/ansible/roles/role_under_test/tests/extra_vars_travis.yml" -vv | tee -a $idempotence_log
+    - docker exec --tty $container_id ansible-playbook /etc/ansible/roles/role_under_test/tests/travis.yml --extra-vars "@/etc/ansible/roles/role_under_test/tests/extra_vars_travis.yml" --extra-vars "@/etc/ansible/roles/role_under_test/tests/extra_vars_travis_idempotence.yml" -vv | tee -a $idempotence_log
     - >
       tail $idempotence_log
       | grep -q "changed=0.*failed=0"
