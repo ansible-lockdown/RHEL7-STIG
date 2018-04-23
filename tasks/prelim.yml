@@ -153,7 +153,6 @@
       hidden: true
   failed_when: no
   changed_when: no
-  ignore_errors: yes
   register: rhel_07_040410_audit
   when: rhel_07_040410
   tags:
@@ -171,7 +170,6 @@
       hidden: true
   failed_when: no
   changed_when: no
-  ignore_errors: yes
   register: rhel_07_040420_audit
   when: rhel_07_040420
   tags:

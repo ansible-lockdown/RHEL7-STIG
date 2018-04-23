@@ -7,7 +7,6 @@
         check_mode: no
         failed_when: no
         changed_when: no
-        ignore_errors: yes
         register: rhel_07_010010_audit
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
@@ -26,7 +25,6 @@
         check_mode: no
         failed_when: no
         changed_when: no
-        ignore_errors: yes
         register: rhel_07_010020_audit
 
       - name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
@@ -206,7 +204,6 @@
         check_mode: no
         changed_when: no
         failed_when: no
-        ignore_errors: yes
         register: rhel_07_020310_audit
 
       - name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system"
@@ -462,7 +459,6 @@
         check_mode: no
         failed_when: no
         changed_when: no
-        ignore_errors: yes
         with_items:
             - public
             - private
