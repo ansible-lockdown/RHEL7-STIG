@@ -1,6 +1,7 @@
 ---
 - name: "PRELIM | Find all sudoers files."
   command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
+  check_mode: no
   changed_when: no
   failed_when: no
   register: rhel7stig_sudoers_files
