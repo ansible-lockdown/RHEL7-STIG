@@ -97,7 +97,7 @@
       - RHEL-07-031010
 
 - name: "PRELIM | RHEL-07-021350 | Check if /boot or /boot/efi reside on separate partitions"
-  shell: df --output=target /boot/efi | tail -n 1
+  shell: df --output=target /boot | tail -n 1
   changed_when: no
   check_mode: no
   register: rhel_07_boot_part
