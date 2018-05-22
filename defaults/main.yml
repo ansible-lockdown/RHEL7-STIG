@@ -354,7 +354,7 @@ rhel7stig_kdump_required: false
 # Set the SNMP community string to this from the default of public or private
 rhel7stig_snmp_community: Endgam3Ladyb0g
 
-# RHEL-07-010460 and RHEL-07-010470
+# RHEL-07-010480 and RHEL-07-010490
 # Password protect the boot loader
 rhel7stig_bootloader_password: 'Boot1tUp!'
 rhel7stig_boot_superuser: root
