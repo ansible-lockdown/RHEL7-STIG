@@ -2155,10 +2155,10 @@
   tags:
       - RHEL-07-040720
 
-- name: "MEDIUM | RHEL-07-040730 | PATCH | An X Windows display manager must not be installed unless approved."
+- name: "MEDIUM | RHEL-07-040730 | PATCH | An X Window display manager must not be installed unless approved."
   yum:
       name:
-          - "@X Windows System"
+          - "@x11"
           - xorg-x11-server-common
       state: absent
   when:
