@@ -1023,12 +1023,16 @@
       - name: "MEDIUM | RHEL-07-020900 | AUDIT | All system device files must be correctly labeled to prevent unauthorized modification."
         debug:
             msg: "{{ rhel_07_020900_audit.stdout_lines }}"
+        changed_when:
+            - rhel7stig_audit_complex
 
   when:
       - rhel_07_020900
+      - rhel7stig_complex
       - ansible_selinux.status == "enabled"
   tags:
       - RHEL-07-020900
+      - complexity-high
 
 - name: "MEDIUM | RHEL-07-021000 | PATCH | File systems that contain user home directories must be mounted to prevent files with the setuid and setgid bit set from being executed."
   mount:
@@ -1611,10 +1615,15 @@
       - name: "MEDIUM | RHEL-07-032010 | AUDIT | The system must update the DoD-approved virus scan program every seven days or more frequently."
         debug:
             msg: "{{ rhel_07_032010_audit.stdout_lines }}"
+        changed_when:
+            - rhel7stig_audit_complex
 
-  when: rhel_07_032010
+  when:
+      - rhel_07_032010
+      - rhel7stig_complex
   tags:
       - RHEL-07-032010
+      - complexity-high
 
 - name: "MEDIUM | RHEL-07-040100 | PATCH | The host must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
   command: "true"
@@ -2262,12 +2271,16 @@
       - name: "MEDIUM | RHEL-07-041002 | PATCH | The operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
         debug:
             msg: "WARNING: SSSD is in use and /etc/sssd/sssd.conf is not configured to use the PAM service (services = nss, pam)"
+        changed_when:
+            - rhel7stig_audit_complex
         when: sssd_services_check.rc == 1
   when:
       - rhel7stig_auth_settings.use_sssd
+      - rhel7stig_complex
       - rhel_07_041002
   tags:
       - RHEL-07-041002
+      - complexity-high
       - sssd
 
 - name: "MEDIUM | RHEL-07-041003 | PATCH | The operating system must implement certificate status checking for PKI authentication."
