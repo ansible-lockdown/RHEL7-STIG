@@ -123,7 +123,7 @@
 - name: "HIGH | RHEL-07-020050 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   lineinfile:
       dest: /etc/yum.conf
-      regexp: gpgcheck
+      regexp: ^gpgcheck
       line: gpgcheck=1
       insertafter: '\[main\]'
   when: rhel_07_020050
@@ -134,7 +134,7 @@
 - name: "HIGH | RHEL-07-020060 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   lineinfile:
       dest: /etc/yum.conf
-      regexp: localpkg_gpgcheck
+      regexp: ^localpkg_gpgcheck
       line: localpkg_gpgcheck=1
       insertafter: '\[main\]'
   when: rhel_07_020060
@@ -145,7 +145,7 @@
 - name: "HIGH | RHEL-07-020070 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of packages without verification of the repository metadata."
   lineinfile:
       dest: /etc/yum.conf
-      regexp: repo_gpgcheck
+      regexp: ^repo_gpgcheck
       line: repo_gpgcheck=1
       insertafter: '\[main\]'
   check_mode: "{{ rhel7stig_complex_check_mode }}"
