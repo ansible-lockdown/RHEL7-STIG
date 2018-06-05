@@ -708,17 +708,21 @@
         with_items: "{{ ansible_mounts }}"
 
       - name: "MEDIUM | RHEL-07-020320 | PATCH | All files and directories must have a valid owner."
-        assert:
-            that: "{{ item.stdout_lines | length }} == 0"
+        debug:
             msg: "Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        changed_when:
+            - rhel7stig_audit_complex
+            - "{{ item.stdout_lines | length }} == 0"
         when:
             - item.stdout_lines is defined
             - item.stdout_lines | length > 0
         with_items: "{{ rhel_07_020320_audit.results }}"
   when:
       - rhel_07_020320
+      - rhel7stig_complex
   tags:
       - RHEL-07-020320
+      - complexity-high
 
 - name: "MEDIUM | RHEL-07-020330 | All files and directories must have a valid group owner."
   block:
@@ -732,17 +736,21 @@
         with_items: "{{ ansible_mounts }}"
 
       - name: "MEDIUM | RHEL-07-020330 | PATCH | All files and directories must have a valid group owner."
-        assert:
-            that: "{{ item.stdout_lines | length }} == 0"
+        debug:
             msg: "Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        changed_when:
+            - rhel7stig_audit_complex
+            - "{{ item.stdout_lines | length }} == 0"
         when:
             - item.stdout_lines is defined
             - item.stdout_lines | length > 0
         with_items: "{{ rhel_07_020330_audit.results }}"
   when:
       - rhel_07_020330
+      - rhel7stig_complex
   tags:
       - RHEL-07-020330
+      - complexity-high
 
 - name: "MEDIUM | RHEL-07-020600 | PATCH | All local interactive users must have a home directory assigned in the /etc/passwd file."
   command: "true"
