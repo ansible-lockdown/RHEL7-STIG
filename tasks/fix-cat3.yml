@@ -21,42 +21,59 @@
       - name: "LOW | RHEL-07-020300 | PATCH | Print warning about users with invalid GIDs missing GID entries in /etc/group"
         debug:
             msg: "WARNING: The following users have non-existent GIDs: {{ passwd_gid_check.stdout_lines | join (', ')}}"
+        changed_when:
+            - rhel7stig_audit_complex
         when: passwd_gid_check.stdout_lines
-  when: rhel_07_020300
+  when:
+      - rhel_07_020300
+      - rhel7stig_complex
   tags:
       - RHEL-07-020300
+      - complexity-high
       - passwd
 
 - name: "LOW | RHEL-07-021310 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
   debug:
       msg: "WARNING: /home is not mounted on a separate partition"
+  changed_when:
+      - rhel7stig_audit_complex
   when:
       - rhel_07_021310
+      - rhel7stig_complex
       - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length == 0
   tags:
       - RHEL-07-021310
+      - complexity-high
       - mount
       - home
 
 - name: "LOW | RHEL-07-021320 | PATCH | The system must use a separate file system for /var."
   debug:
       msg: "WARNING: /var is not mounted on a separate partition"
+  changed_when:
+      - rhel7stig_audit_complex
   when:
       - rhel_07_021320
+      - rhel7stig_complex
       - ansible_mounts | selectattr('mount', 'match', '^/var$') | list | length == 0
   tags:
       - RHEL-07-021320
+      - complexity-high
       - mount
       - var
 
 - name: "LOW | RHEL-07-021330 | PATCH | The system must use a separate file system for the system audit data path."
   debug:
       msg: "WARNING: /var/log/audit is not mounted on a separate partition"
+  changed_when:
+      - rhel7stig_audit_complex
   when:
       - rhel_07_021330
+      - rhel7stig_complex
       - ansible_mounts | selectattr('mount', 'match', '^/var/log/audit$') | list | length == 0
   tags:
       - RHEL-07-021330
+      - complexity-high
       - mount
       - auditd
 
