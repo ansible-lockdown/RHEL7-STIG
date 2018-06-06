@@ -1025,6 +1025,8 @@
             msg: "{{ rhel_07_020900_audit.stdout_lines }}"
         changed_when:
             - rhel7stig_audit_complex
+        when:
+            - rhel_07_020900_audit.stdout_lines | length > 0
 
   when:
       - rhel_07_020900
@@ -1617,6 +1619,8 @@
             msg: "{{ rhel_07_032010_audit.stdout_lines }}"
         changed_when:
             - rhel7stig_audit_complex
+        when:
+            - rhel_07_032010_audit.stdout_lines | length > 0
 
   when:
       - rhel_07_032010
