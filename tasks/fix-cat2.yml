@@ -2122,14 +2122,14 @@
         register: rhel_07_040680_rpm_audit
 
       - name: "MEDIUM | RHEL-07-040680 | AUDIT | The system must be configured to prevent unrestricted mail relaying."
-        shell: "$(whereis postconf | cut -d ' ' -f2) -n smtpd_client_restrictions"
+        shell: "/usr/sbin/postconf -n smtpd_client_restrictions"
         check_mode: no
         changed_when: no
         register: rhel_07_040680_postconf_audit
         when: rhel_07_040680_rpm_audit.rc == 0
 
       - name: "MEDIUM | RHEL-07-040680 | PATCH | The system must be configured to prevent unrestricted mail relaying."
-        shell: "$(whereis postconf | cut -d ' ' -f2) -e 'smtpd_client_restrictions=permit_mynetworks, reject'"
+        shell: "/usr/sbin/postconf -e 'smtpd_client_restrictions=permit_mynetworks, reject'"
         when:
             - rhel_07_040680_rpm_audit.rc == 0
             - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
