@@ -712,7 +712,6 @@
             msg: "Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
         changed_when:
             - rhel7stig_audit_complex
-            - "{{ item.stdout_lines | length }} == 0"
         when:
             - item.stdout_lines is defined
             - item.stdout_lines | length > 0
@@ -740,7 +739,6 @@
             msg: "Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
         changed_when:
             - rhel7stig_audit_complex
-            - "{{ item.stdout_lines | length }} == 0"
         when:
             - item.stdout_lines is defined
             - item.stdout_lines | length > 0
