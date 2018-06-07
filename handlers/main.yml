@@ -15,7 +15,7 @@
       state: restarted
 
 - name: make grub2 config
-  command: grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
+  command: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
   when:
       - not rhel7stig_skip_for_travis
 
@@ -25,7 +25,7 @@
       state: restarted
 
 - name: restart auditd
-  command: service auditd restart
+  command: /usr/sbin/service auditd restart
   args:
       warn: no
   when:
