@@ -450,9 +450,16 @@ rhel7stig_password_complexity:
 
 # RHEL-07-040160
 # Session timeout setting file (TMOUT setting can be set in multiple files)
+# Timeout value is in seconds. (60 seconds * 10 = 600)
 rhel7stig_shell_session_timeout:
     file: /etc/profile.d/tmout.sh
     timeout: 600
+
+# RHEL-07-040320 | All network connections associated with SSH traffic must
+# terminate at the end of the session or after 10 minutes of inactivity, except
+# to fulfill documented and validated mission requirements.
+# Timeout value is in seconds. (60 seconds * 10 = 600)
+rhel7stig_ssh_session_timeout: 600
 
 # RHEL-07-020260
 # Configure regular automatic package updates using yum-cron
