@@ -108,6 +108,22 @@
       - high
       - RHEL-07-021350
 
+- name: "PRELIM | RHEL-07-030300 RHEL-07-030310 RHEL-07-030320 RHEL-07-030321 | Install audit remote plugin."
+  yum:
+      name: audispd-plugins
+  when:
+      - rhel_07_030300 or
+        rhel_07_030310 or
+        rhel_07_030320 or
+        rhel_07_030321
+  tags:
+      - cat2
+      - medium
+      - RHEL-07-030300
+      - RHEL-07-030310
+      - RHEL-07-030320
+      - RHEL-07-030321
+
 - name: "PRELIM | RHEL-07-030330 | Determine audit log partition."
   block:
       - name: "PRELIM | RHEL-07-030330 | Find audit.log location"
@@ -127,22 +143,6 @@
       - cat2
       - medium
       - RHEL-07-030330
-
-- name: "PRELIM | RHEL-07-030300 RHEL-07-030310 RHEL-07-030320 RHEL-07-030321 | Install audit remote plugin."
-  yum:
-      name: audispd-plugins
-  when:
-      - rhel_07_030300 or
-        rhel_07_030310 or
-        rhel_07_030320 or
-        rhel_07_030321
-  tags:
-      - cat2
-      - medium
-      - RHEL-07-030300
-      - RHEL-07-030310
-      - RHEL-07-030320
-      - RHEL-07-030321
 
 - name: "PRELIM | RHEL-07-040410 | The SSH public host key files must have mode 0644 or less permissive."
   find:
