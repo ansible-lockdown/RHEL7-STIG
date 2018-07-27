@@ -31,8 +31,8 @@ rhel7stig_workaround_for_ssg_benchmark: true
 # PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
 # in order for the variables below to take effect.
 # CAT 1 rules
-rhel_07_010010: true
-rhel_07_010020: true
+rhel_07_010010: false
+rhel_07_010020: false
 rhel_07_010290: true
 rhel_07_010300: true
 rhel_07_010440: true

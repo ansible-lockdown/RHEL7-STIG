@@ -1,5 +1,5 @@
 ---
-rhel7stig_min_ansible_version: 2.4
+rhel7stig_min_ansible_version: 2.5
 
 # these variables are for enabling tasks to run that will be further controled
 # by check_mode to prevent the remediation task from making changes as
@@ -32,3 +32,22 @@ rhel7stig_re_qp_key_end: (?:" *)
 
 # insert the parameter at the beginning or append to the end, default append
 rhel7stig_re_qp_insert: "{{ insert | default(not (append | default(true))) }}"
+
+#Developers said the STIG lockdowns made ssh too difficult as the CAT2 finding says we must disconnect after 10 minutes of inactivity on ssh and console sessions. This will not be done on production/integration environments, but if teams want it in their sandbox, modify the following values:
+# rhel_07_040320_ssh_keepalive_interval:
+# rhel_07_040160_console_keepalive_interval:
+#Both values are in seconds (60 seconds * 10 = 600)
+             
+#The following will set the ssh timeout to 1 day:
+#RHEL-07-040320 | All network connections associated with SSH traffic must terminate at the end of the session or after 10 minutes of inactivity, except to fulfill documented and validated mission requirements
+rhel_07_040320_ssh_keepalive_interval: 28800
+             
+#RHEL-07-040160 | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements.
+rhel_07_040160_console_keepalive_interval: 28800
+         
+#Requiring a bootloader password is required under the STIG. If you are on a AWS/C2S environment, this is not applicable and you need to disable this value in a vars.yml file
+#Set these to false to disable it.
+rhel_07_010480: false
+rhel_07_010490: false
+
+            
