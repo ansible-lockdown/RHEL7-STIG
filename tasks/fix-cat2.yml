@@ -1095,12 +1095,26 @@
       - RHEL-07-021021
 
 - name: "MEDIUM | RHEL-07-021030 | PATCH | All world-writable directories must be group-owned by root, sys, bin, or an application group."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021030
+  block:
+      - name: "MEDIUM | RHEL-07-021030 | AUDIT | All world-writable directories must be group-owned by root, sys, bin, or an application group."
+        command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -type d -perm -002 -gid +999
+        changed_when: rhel_07_021030_audit.stdout != ""
+        check_mode: no
+        register: rhel_07_021030_audit
+
+      - name: "MEDIUM | RHEL-07-021030 | PATCH | All world-writable directories must be group-owned by root, sys, bin, or an application group."
+        file:
+            path: "{{ item }}"
+            group: root
+        check_mode: "{{ rhel7stig_disruptive_check_mode }}"
+        with_items: "{{ rhel_07_021030_audit.stdout_lines }}"
+
+  when:
+      - rhel_07_021030
+      - rhel7stig_disruptive
   tags:
       - RHEL-07-021030
-      - notimplemented
+      - disruption-high
 
 - name: "MEDIUM | RHEL-07-021040 | PATCH | The umask must be set to 077 for all local interactive user accounts."
   command: "true"
