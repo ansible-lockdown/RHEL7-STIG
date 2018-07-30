@@ -1768,7 +1768,7 @@
       create: yes
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?ClientAliveInterval"
-      line: ClientAliveInterval 600
+      line: ClientAliveInterval {{ rhel_07_040320_ssh_keepalive_interval }}
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   when: rhel_07_040320

@@ -31,8 +31,8 @@ rhel7stig_workaround_for_ssg_benchmark: true
 # PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
 # in order for the variables below to take effect.
 # CAT 1 rules
-rhel_07_010010: false
-rhel_07_010020: false
+rhel_07_010010: true
+rhel_07_010020: true
 rhel_07_010290: true
 rhel_07_010300: true
 rhel_07_010440: true
@@ -437,11 +437,15 @@ rhel7stig_password_complexity:
     maxclassrepeat: 4
     minlen: 15
 
+#Both values in RHEL-07-040160 & RHEL-07-040320 are in seconds (60 seconds * 10 = 600)
 # RHEL-07-040160
 # Session timeout setting file (TMOUT setting can be set in multiple files)
 rhel7stig_shell_session_timeout:
     file: /etc/profile
     timeout: 600
+
+#RHEL-07-040320 | All network connections associated with SSH traffic must terminate at the end of the session or after 10 minutes of inactivity, except to fulfill documented and validated mission requirements
+rhel_07_040320_ssh_keepalive_interval: 600
 
 # RHEL-07-020260
 # Configure regular automatic package updates using yum-cron
