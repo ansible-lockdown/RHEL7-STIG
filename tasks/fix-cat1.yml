@@ -11,6 +11,8 @@
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
         shell: 'rpm --setperms $(rpm -qf {{ item.split('' '')[-1] }}); rpm --setugids $(rpm -qf {{ item.split('' '')[-1] }})'
+        args:
+            warn: no
         with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
         when: rhel_07_010010_audit.stdout_lines | length > 0
   when: rhel_07_010010
@@ -29,6 +31,8 @@
 
       - name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
         shell: yum reinstall -y $(rpm -qf {{ item.split(' ')[-1] }})
+        args:
+            warn: no
         with_items: "{{ rhel_07_010020_audit.stdout_lines }}"
         ignore_errors: yes
         when: rhel_07_010020_audit.stdout_lines | length > 0
