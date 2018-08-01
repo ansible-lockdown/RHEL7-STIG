@@ -667,7 +667,7 @@
         service:
             name: yum-cron
             enabled: "{{ rhel7stig_auto_package_updates.enabled }}"
-            state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('started','stopped')}}"
+            state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary(rhel7stig_service_started, 'stopped')}}"
         when: rhel_07_020260_yumcron_service_status.stdout == "loaded"
 
   when: rhel_07_020260
@@ -1776,7 +1776,7 @@
 - name: "MEDIUM | RHEL-07-040310 | PATCH | All networked systems must use SSH for confidentiality and integrity of transmitted and received information as well as information during preparation for transmission."
   service:
       name: sshd
-      state: started
+      state: "{{ rhel7stig_service_started }}"
       enabled: yes
   when:
       - rhel_07_040310
@@ -2114,7 +2114,7 @@
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The system must use a local firewall."
   service:
       name: "{{ rhel7stig_firewall_service }}"
-      state: started
+      state: "{{ rhel7stig_service_started }}"
       enabled: yes
   when: rhel_07_040520
   tags:
