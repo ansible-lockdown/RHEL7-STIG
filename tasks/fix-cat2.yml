@@ -1875,23 +1875,49 @@
   tags:
       - RHEL-07-040400
 
-- name: "MEDIUM | RHEL-07-040410 | PATCH | The SSH public host key files must have mode 0644 or less permissive."
-  file:
-      dest: "{{ item.path }}"
-      mode: 0644
-      state: file
-  with_items: "{{ rhel_07_040410_audit.files | default([]) }}"
+- name: "MEDIUM | RHEL-07-040410 | The SSH public host key files must have mode 0644 or less permissive."
+  block:
+      - name: "MEDIUM | RHEL-07-040410 | AUDIT | The SSH public host key files must have mode 0644 or less permissive."
+        find:
+            paths: /etc/ssh
+            recurse: yes
+            file_type: file
+            patterns: 'ssh_host*_key.pub'
+            hidden: true
+        failed_when: no
+        changed_when: no
+        register: rhel_07_040410_audit
+
+      - name: "MEDIUM | RHEL-07-040410 | PATCH | The SSH public host key files must have mode 0644 or less permissive."
+        file:
+            dest: "{{ item.path }}"
+            mode: u-x,go-wx
+            state: file
+        with_items: "{{ rhel_07_040410_audit.files | default([]) }}"
   when: rhel_07_040410
   tags:
       - RHEL-07-040410
       - ssh
 
-- name: "MEDIUM | RHEL-07-040420 | PATCH | The SSH private host key files must have mode 0600 or less permissive."
-  file:
-      dest: "{{ item.path }}"
-      mode: 0600
-      state: file
-  with_items: "{{ rhel_07_040420_audit.files | default([]) }}"
+- name: "MEDIUM | RHEL-07-040420 | The SSH private host key files must have mode 0600 or less permissive."
+  block:
+      - name: "MEDIUM | RHEL-07-040420 | AUDIT | The SSH private host key files must have mode 0600 or less permissive."
+        find:
+            paths: /etc/ssh
+            recurse: yes
+            file_type: file
+            patterns: 'ssh_host*_key'
+            hidden: true
+        failed_when: no
+        changed_when: no
+        register: rhel_07_040420_audit
+
+      - name: "MEDIUM | RHEL-07-040420 | PATCH | The SSH private host key files must have mode 0600 or less permissive."
+        file:
+            dest: "{{ item.path }}"
+            mode: u-x,go-rwx
+            state: file
+        with_items: "{{ rhel_07_040420_audit.files | default([]) }}"
   when: rhel_07_040420
   tags:
       - RHEL-07-040420
