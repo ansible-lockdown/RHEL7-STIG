@@ -379,6 +379,8 @@
             name: auditd
             state: "{{ rhel7stig_service_started }}"
             enabled: yes
+        when:
+            - not rhel7stig_system_is_container
   when: rhel_07_030000
   tags:
       - RHEL-07-030000
