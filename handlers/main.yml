@@ -3,6 +3,8 @@
   service:
       name: sshd
       state: restarted
+  when:
+      - not rhel7stig_system_is_chroot
 
 - name: reboot system
   shell: sleep 3; reboot
@@ -13,6 +15,8 @@
   service:
       name: snmpd
       state: restarted
+  when:
+      - not rhel7stig_system_is_chroot
 
 - name: make grub2 config
   command: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
@@ -23,6 +27,8 @@
   service:
       name: "{{ rhel7stig_time_service }}"
       state: restarted
+  when:
+      - not rhel7stig_system_is_chroot
 
 - name: restart auditd
   command: /usr/sbin/service auditd restart
@@ -30,6 +36,7 @@
       warn: no
   when:
       - rhel7stig_skip_for_travis == false
+      - not rhel7stig_system_is_chroot
 
 - name: rebuild initramfs
   command: dracut -f
