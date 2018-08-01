@@ -6,7 +6,7 @@
             warn: no
         check_mode: no
         failed_when: no
-        changed_when: no
+        changed_when: rhel_07_010010_audit.stdout != ""
         register: rhel_07_010010_audit
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
@@ -24,7 +24,7 @@
             warn: no
         check_mode: no
         failed_when: no
-        changed_when: no
+        changed_when: rhel_07_010020_audit.stdout != ""
         register: rhel_07_010020_audit
 
       - name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
