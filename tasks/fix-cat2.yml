@@ -1752,7 +1752,7 @@
       name: kernel.randomize_va_space
       value: 2
       state: present
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       sysctl_set: yes
       ignoreerrors: yes
   when: rhel_07_040201
@@ -2126,7 +2126,7 @@
       name: net.ipv4.conf.all.accept_source_route
       state: present
       value: 0
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       ignoreerrors: yes
   when: rhel_07_040610
   tags:
@@ -2138,7 +2138,7 @@
       name: net.ipv4.conf.default.accept_source_route
       state: present
       value: 0
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       ignoreerrors: yes
   when: rhel_07_040620
   tags:
@@ -2151,7 +2151,7 @@
       state: present
       value: 1
       sysctl_set: yes
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       ignoreerrors: yes
   when: rhel_07_040630
   tags:
@@ -2163,7 +2163,7 @@
       name: net.ipv4.conf.default.accept_redirects
       state: present
       value: 0
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       ignoreerrors: yes
   when: rhel_07_040640
   tags:
@@ -2175,7 +2175,7 @@
       name: net.ipv4.conf.all.accept_redirects
       state: present
       value: 0
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       ignoreerrors: yes
   when: rhel_07_040641
   tags:
@@ -2187,7 +2187,7 @@
       name: net.ipv4.conf.default.send_redirects
       state: present
       value: 0
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       ignoreerrors: yes
   when: rhel_07_040650
   tags:
@@ -2199,7 +2199,7 @@
       name: net.ipv4.conf.all.send_redirects
       state: present
       value: 0
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       ignoreerrors: yes
   when: rhel_07_040660
   tags:
@@ -2284,7 +2284,7 @@
       name: net.ipv4.ip_forward
       state: present
       value: 0
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       ignoreerrors: yes
   when:
       - not rhel7stig_system_is_router
@@ -2323,7 +2323,7 @@
       name: net.ipv6.conf.all.accept_source_route
       state: present
       value: 0
-      reload: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
       ignoreerrors: yes
   when: rhel_07_040830
   tags:
