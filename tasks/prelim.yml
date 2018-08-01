@@ -132,6 +132,7 @@
   tags:
       - cat2
       - medium
+      - auditd
       - RHEL-07-030300
       - RHEL-07-030310
       - RHEL-07-030320
@@ -155,6 +156,7 @@
   tags:
       - cat2
       - medium
+      - auditd
       - RHEL-07-030330
 
 - name: "PRELIM | RHEL-07-020030 RHEL-07-020040 RHEL-07-021600 RHEL-07-021610 RHEL-07-021620 | Install and initialize AIDE"
