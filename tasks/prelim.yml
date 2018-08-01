@@ -56,6 +56,19 @@
   tags:
       - always
 
+- name: ensure cronie is available
+  yum:
+      name: cronie
+  when:
+      - rhel_07_020030 or
+        rhel_07_020040 or
+        false
+  tags:
+      - cat2
+      - medium
+      - RHEL-07-020030
+      - RHEL-07-020040
+
 - name: "PRELIM | RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690 | Parse /etc/passwd"
   include_tasks: parse_etc_passwd.yml
   vars:
