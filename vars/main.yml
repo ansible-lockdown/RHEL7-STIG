@@ -1,5 +1,5 @@
 ---
-rhel7stig_min_ansible_version: 2.5
+rhel7stig_min_ansible_version: 2.4
 
 # these variables are for enabling tasks to run that will be further controled
 # by check_mode to prevent the remediation task from making changes as
