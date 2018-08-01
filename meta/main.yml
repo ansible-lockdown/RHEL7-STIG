@@ -2,7 +2,7 @@
 galaxy_info:
     author: "Sam Doran, Josh Springer, Daniel Shepherd, James Cassell, Mike Renfro"
     description: "Apply the DISA RHEL 7 STIG"
-    company: "SSCPAC"
+    company: 
     license: MIT
     min_ansible_version: 2.4
 
