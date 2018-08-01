@@ -22,6 +22,7 @@
   command: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
   when:
       - not rhel7stig_skip_for_travis
+      - not rhel7stig_system_is_container
 
 - name: "restart {{ rhel7stig_time_service }}"
   service:
