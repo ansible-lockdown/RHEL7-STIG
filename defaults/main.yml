@@ -338,6 +338,11 @@ rhel7stig_firewall_service: firewalld
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
 
+# RHEL-07-040300
+# RHEL-07-040310
+# Install and enable ssh on networked systems
+rhel7stig_ssh_required: yes
+
 # RHEL-07-040490
 # If not required, remove vsftpd.
 rhel7stig_vsftpd_required: no
