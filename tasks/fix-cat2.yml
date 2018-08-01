@@ -2307,9 +2307,27 @@
       - RHEL-07-041003
       - notimplemented
 
-- name: "MEDIUM | RHEL-07-041010 | PATCH | Wireless network adapters must be disabled."
-  command: nmcli radio wifi off
-  changed_when: no
+- name: "MEDIUM | RHEL-07-041010 | Wireless network adapters must be disabled."
+  block:
+      - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if nmcli command is available"
+        command: rpm -q NetworkManager
+        args:
+            warn: no
+        check_mode: no
+        changed_when: no
+        register: rhel_07_nmcli_available
+        failed_when: no
+
+      - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if wifi is enabled"
+        command: nmcli radio wifi
+        register: rhel_07_wifi_enabled
+        check_mode: no
+        changed_when: rhel_07_wifi_enabled.stdout != "disabled"
+        when: rhel_07_nmcli_available.rc == 0
+
+      - name: "MEDIUM | RHEL-07-041010 | PATCH | Wireless network adapters must be disabled."
+        command: nmcli radio wifi off
+        when: rhel_07_wifi_enabled is changed
   when: rhel_07_041010
   tags:
       - RHEL-07-041010
