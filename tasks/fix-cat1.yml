@@ -197,7 +197,9 @@
       state: enforcing
       policy: targeted
   check_mode: "{{ ansible_check_mode or rhel7stig_system_is_chroot }}"
-  when: rhel_07_020210 or rhel_07_020220
+  when:
+      - rhel_07_020210 or rhel_07_020220
+      - not rhel7stig_system_is_container
   tags:
       - RHEL-07-020210
       - RHEL-07-020220
