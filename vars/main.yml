@@ -9,8 +9,8 @@ rhel7stig_disruptive: "{{ rhel7stig_disruption_high or rhel7stig_audit_disruptiv
 
 # These vars are made to go in the check_mode property of a task that is
 # complex or disruptive, respectively.
-rhel7stig_complex_check_mode: "{{ ansible_check_mode or rhel7stig_audit_complex }}"
-rhel7stig_disruptive_check_mode: "{{ ansible_check_mode or rhel7stig_audit_disruptive }}"
+rhel7stig_complex_check_mode: "{{ ansible_check_mode or rhel7stig_audit_complex and not rhel7stig_complexity_high }}"
+rhel7stig_disruptive_check_mode: "{{ ansible_check_mode or rhel7stig_audit_disruptive and not rhel7stig_disruption_high }}"
 
 # this allows us to insert a name=value into a line of the format:
 # key="name1=value1 name2=value2 nameN=valueN"
