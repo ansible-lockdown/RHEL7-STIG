@@ -342,7 +342,7 @@
       - name: "HIGH | RHEL-07-030000 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
         service:
             name: auditd
-            state: started
+            state: "{{ rhel7stig_service_started }}"
             enabled: yes
   when: rhel_07_030000
   tags:
@@ -358,7 +358,7 @@
       - name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
         service:
             name: "{{ rhel7stig_av_package.service }}"
-            state: started
+            state: "{{ rhel7stig_service_started }}"
             enabled: yes
         ignore_errors: yes
   when:

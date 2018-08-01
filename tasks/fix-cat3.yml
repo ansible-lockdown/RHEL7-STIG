@@ -83,7 +83,7 @@
       daemon_reload: yes
       enabled: yes
       masked: no
-      state: started
+      state: "{{ rhel7stig_service_started }}"
   when: rhel_07_021340
   tags:
       - RHEL-07-021340
