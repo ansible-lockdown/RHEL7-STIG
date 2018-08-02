@@ -17,8 +17,19 @@
             warn: no
         register: rhel_07_010010_patch
         failed_when: rhel_07_010010_patch.stdout != ""
+        ignore_errors: yes
         with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
-        when: rhel_07_010010_audit.stdout_lines | length > 0
+
+      - name: "HIGH | RHEL-07-010010 | AUDIT | WARNING: error during remediation"
+        debug:
+            msg: "{{ item.stdout_lines }}"
+        changed_when: yes
+        with_items: "{{ rhel_07_010010_patch.results }}"
+        loop_control:
+            label: "{{ item.item }}"
+        when:
+            - rhel_07_010010_patch is changed
+            - item is failed
   when: rhel_07_010010
   tags:
       - RHEL-07-010010
