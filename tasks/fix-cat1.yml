@@ -17,7 +17,7 @@
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
         shell: >
-                ( rpm --setperms {{ item }}; rpm --setugids {{ item }} )
+                ( rpm --setugids {{ item }}; rpm --setperms {{ item }} )
                 2>&1 1>&2 | grep -v ': No such file or directory$'
         args:
             warn: no
