@@ -1664,13 +1664,20 @@
 - name: "MEDIUM | RHEL-07-040160 | PATCH | All network connections associated with a communication session must be terminated at the  the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
   blockinfile:
       create: yes
-      dest: "{{ rhel7stig_shell_session_timeout.file }}"
+      mode: 0644
+      dest: "{{ item.dest }}"
+      state: "{{ item.state }}"
       marker: "# {mark} ANSIBLE MANAGED"
       block: |
         # Set session timeout - STIG ID RHEL-07-040160
         TMOUT={{rhel7stig_shell_session_timeout.timeout}}
         readonly TMOUT
         export TMOUT
+  with_items:
+      - dest: "{{ rhel7stig_shell_session_timeout.file }}"
+        state: present
+      - dest: /etc/profile
+        state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/profile') | ternary('present', 'absent') }}"
   when: rhel_07_040160
   tags:
       - RHEL-07-040160
