@@ -1,7 +1,7 @@
 ---
 - block:
       - name: "HIGH | RHEL-07-010010 | AUDIT | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
-        shell: 'rpm -Va --nolinkto --nofiledigest --nosize --nomtime --nodigest --nosignature | grep -E ''^(.M|.....U|......G)'''
+        shell: 'rpm -Va --nolinkto --nofiledigest --nosize --nomtime --nodigest --nosignature | grep -E ''^(.M|.....U|......G)'' | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
         args:
             warn: no
         check_mode: no
@@ -10,7 +10,7 @@
         register: rhel_07_010010_audit
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
-        shell: 'rpm --setperms $(rpm -qf {{ item.split('' '')[-1] }}); rpm --setugids $(rpm -qf {{ item.split('' '')[-1] }})'
+        shell: 'rpm --setperms {{ item }}; rpm --setugids {{ item }}'
         args:
             warn: no
         with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
@@ -21,7 +21,7 @@
 
 - block:
       - name: "HIGH | RHEL-07-010020 | AUDIT | The cryptographic hash of system files and commands must match vendor values."
-        shell: 'rpm -Va --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | grep -E ''/(.?bin|libexec)/'''
+        shell: 'rpm -Va --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | grep -E ''/(.?bin|libexec)/'' | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
         args:
             warn: no
         check_mode: no
@@ -30,7 +30,7 @@
         register: rhel_07_010020_audit
 
       - name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
-        shell: yum reinstall -y $(rpm -qf {{ item.split(' ')[-1] }})
+        command: yum reinstall -y {{ item }}
         args:
             warn: no
         with_items: "{{ rhel_07_010020_audit.stdout_lines }}"
