@@ -21,7 +21,7 @@
 
 - block:
       - name: "HIGH | RHEL-07-010020 | AUDIT | The cryptographic hash of system files and commands must match vendor values."
-        shell: 'rpm -Va | grep ''^..5'' | grep -E ''/.?bin/'''
+        shell: 'rpm -Va | grep ''^..5'' | grep -E ''/(.?bin|libexec)/'''
         args:
             warn: no
         check_mode: no
