@@ -2,6 +2,7 @@
 rhel7stig_min_ansible_version: 2.4
 
 rhel7stig_service_started: "{{ rhel7stig_system_is_chroot | ternary(omit, 'started') }}"
+rhel7stig_systemd_daemon_reload: "{{ not rhel7stig_system_is_chroot }}"
 
 # these variables are for enabling tasks to run that will be further controled
 # by check_mode to prevent the remediation task from making changes as
