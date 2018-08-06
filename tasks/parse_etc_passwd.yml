@@ -23,3 +23,5 @@
         with_items: "{{ rhel7stig_passwd_file_audit.stdout_lines }}"
         vars:
             item_sp: "{{ item.split(':') }}"
+  tags:
+      - always
