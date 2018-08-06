@@ -522,7 +522,7 @@ rhel7stig_audit_disk_size_query: "[?mount=='{{ rhel7stig_audit_part }}'].size_to
 rhel7stig_auditd_mail_acct: root
 
 # RHEL-07-020630
-rhel7stig_homedir_mode: 0750
+rhel7stig_homedir_mode: g-w,o-rwx
 
 # RHEL-07-031000
 # rhel7stig_log_aggregation_server: logagg.example.com
