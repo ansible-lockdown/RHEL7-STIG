@@ -27,11 +27,8 @@ platforms:
     command: /usr/sbin/init
     capabilities:
       - ALL
-    network_mode: host
-    tls: yes
     privileged: true
     pull: true
-    pid_mode: host
     groups:
       - docker
 
