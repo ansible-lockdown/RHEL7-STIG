@@ -1,0 +1,30 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7-stretch-node
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "ci-requirements.txt" }}
+
+      - setup_remote_docker
+
+      - run:
+          name: Install python deps
+          command: |
+            python3 -m venv .venv
+            . .venv/bin/activate
+            pip3 install -r ci-requirements.txt
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "ci-requirements.txt" }}
+          paths:
+            - venv
+      - run:
+          name: Molecule Test
+          command: |
+            . .venv/bin/activate
+            ls /home/circleci/project
+            ln -s /home/circleci/project/RHEL7-STIG ~/RHEL7-STIG
+            sudo -E env PATH=$PATH PYTHONPATH=$PYTHONPATH .venv/bin/molecule --debug test

@@ -1254,7 +1254,7 @@
   lineinfile:
       path: /etc/audit/auditd.conf
       regexp: ^space_left +=
-      line: "space_left = {{ [rhel7stig_auditd_space_left, 51] | min }}"
+      line: "space_left = {{ [rhel7stig_auditd_space_left|int, 51] | min }}"
   when: rhel_07_030330
   tags:
       - auditd
