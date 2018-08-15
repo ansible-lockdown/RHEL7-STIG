@@ -29,8 +29,8 @@ platforms:
       - ALL
     privileged: true
     pull: true
-    tls: true
-    tls_verify: true
+    tls: false
+    tls_verify: false
     groups:
       - docker
 
