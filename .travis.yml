@@ -9,7 +9,4 @@ before_install:
 install:
   - pip3 install -r ci-requirements.txt
 script:
-  - molecule --debug test
-
-
-
+  - molecule test
