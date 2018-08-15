@@ -1,4 +1,6 @@
 *.pyc
+*.swp
 *.retry
 .vagrant
 tests/*redhat-subscription
+tests/Dockerfile

@@ -22,3 +22,15 @@
   roles:
     - role: RHEL7-STIG
       rhel7stig_system_is_container: yes
+
+  post_tasks:
+    - name: Check if rhel
+      command: which subscription-manager
+      ignore_errors: true
+      changed_when: false
+      register: sm
+
+    - name: Deregister from RH
+      redhat_subscription:
+        state: absent
+      when: not sm|failed

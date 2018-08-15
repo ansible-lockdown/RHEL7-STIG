@@ -1,6 +1,0 @@
----
-- hosts: localhost
-  become: yes
-
-  roles:
-      - role_under_test

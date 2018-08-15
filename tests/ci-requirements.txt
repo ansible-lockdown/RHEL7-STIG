@@ -28,7 +28,6 @@ jinja2-time==0.2.0
 jmespath==0.9.3
 MarkupSafe==1.0
 mccabe==0.6.1
--e git://github.com/metacloud/molecule.git@40031adf4c55472b862252c46e45b7e94d4c85bb#egg=molecule
 monotonic==1.5
 more-itertools==4.3.0
 paramiko==2.4.1
