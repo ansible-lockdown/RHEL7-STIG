@@ -26,5 +26,9 @@ jobs:
           command: |
             . .venv/bin/activate
             ls /home/circleci/project
-            ln -s /home/circleci/project/RHEL7-STIG ~/RHEL7-STIG
-            sudo -E env PATH=$PATH PYTHONPATH=$PYTHONPATH .venv/bin/molecule --debug test
+            if [[ $CIRCLE_ENV == *"localbuild"* ]]; then
+              ln -s /home/circleci/project/RHEL7-STIG ~/RHEL7-STIG
+              sudo -E env PATH=$PATH PYTHONPATH=$PYTHONPATH .venv/bin/molecule --debug test
+            else
+              molecule --debug test
+            fi
