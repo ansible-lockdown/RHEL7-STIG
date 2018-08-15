@@ -8,6 +8,7 @@ before_install:
   - docker pull centos/systemd
   - docker pull registry.access.redhat.com/rhel7:latest
   - (cd molecule/default; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
+  - cd ../../
 install:
   - pip3 install -r test/ci-requirements.txt
 script:
