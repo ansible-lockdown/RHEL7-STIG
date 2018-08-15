@@ -27,9 +27,6 @@ platforms:
     command: /usr/sbin/init
     capabilities:
       - ALL
-      - SYS_ADMIN
-      - AUDIT_READ
-      - AUDIT_CONTROL
     network_mode: host
     privileged: true
     pull: true
