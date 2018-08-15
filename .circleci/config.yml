@@ -8,7 +8,8 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "ci-requirements.txt" }}
 
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 18.06.0-ce
 
       - run:
           name: Install python deps
@@ -25,10 +26,4 @@ jobs:
           name: Molecule Test
           command: |
             . .venv/bin/activate
-            ls /home/circleci/project
-            if [[ $CIRCLE_ENV == *"localbuild"* ]]; then
-              ln -s /home/circleci/project/RHEL7-STIG ~/RHEL7-STIG
-              sudo -E env PATH=$PATH PYTHONPATH=$PYTHONPATH .venv/bin/molecule --debug test
-            else
-              DOCKER_TLS=1 molecule --debug test
-            fi
+            molecule --debug test
