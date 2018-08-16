@@ -33,4 +33,4 @@
     - name: Deregister from RH
       redhat_subscription:
         state: absent
-      when: not sm|failed
+      when: not sm is failed
