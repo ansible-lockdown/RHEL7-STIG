@@ -1,0 +1,48 @@
+{
+  "builders": [
+    {
+      "headless": true,
+      "type": "virtualbox-iso",
+      "guest_os_type": "RedHat_64",
+      "vm_name": "RHEL7-STIG-TEST",
+      "iso_url": "./rhel.iso",
+      "iso_checksum": "d0dd6ae5e001fb050dafefdfd871e7e648b147fb2d35f0e106e0b34a0163e8f5",
+      "iso_checksum_type": "sha256",
+      "disk_size": 10000,
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "http_directory": "http",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "1024"],
+        ["modifyvm", "{{.Name}}", "--cpus", "2"],
+        ["modifyvm", "{{.Name}}", "--ioapic", "on"],
+        ["modifyvm", "{{.Name}}", "--pae", "on"],
+        ["modifyvm", "{{.Name}}", "--rtcuseutc", "on"],
+        ["modifyvm", "{{.Name}}", "--bioslogodisplaytime", "1"]
+],
+      "ssh_wait_timeout": "20m",
+      "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><wait>",
+        "vmlinuz initrd=initrd.img net.ifnames=0 biosdevname=0 ",
+        "ks=http://{{.HTTPIP}}:{{.HTTPPort}}/vbox-ks.cfg",
+        "<enter>"
+      ]
+    }
+  ],
+  "provisioners": [{
+    "type": "shell",
+    "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+    "scripts": [
+      "scripts/vagrant.sh",
+      "scripts/sshd.sh",
+      "scripts/virtualbox.sh",
+      "scripts/cleanup.sh"
+    ]
+  }],
+  "post-processors": [{
+    "type": "vagrant",
+    "output": "RHEL7-STIG_TEST.box"
+}]
+}
