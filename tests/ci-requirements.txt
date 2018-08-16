@@ -28,6 +28,7 @@ jinja2-time==0.2.0
 jmespath==0.9.3
 MarkupSafe==1.0
 mccabe==0.6.1
+molecule==2.17.0
 monotonic==1.5
 more-itertools==4.3.0
 paramiko==2.4.1
