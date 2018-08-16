@@ -5,9 +5,6 @@ lint:
   name: yamllint
   options:
     config-data:
-      ignore: |
-        /home/circleci/project/venv/*
-        /home/circleci/project/src/*
       extends: relaxed
       rules:
         braces:
@@ -54,8 +51,9 @@ provisioner:
   config_options:
     defaults:
       remote_tmp: /tmp/.ansible
+      retry_files_enabled: false
 scenario:
-  name: default
+  name: docker
   test_sequence:
     - lint
     - destroy
@@ -64,7 +62,7 @@ scenario:
     - create
     - prepare
     - converge
-    #- idempotence # Current bug with lineinfile module
+    # - idempotence # Current bug with lineinfile module
     - side_effect
     - verify
     - destroy
