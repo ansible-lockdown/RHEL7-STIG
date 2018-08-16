@@ -44,12 +44,14 @@
 
     - name: Delete remote keypair
       ec2_key:
+        region: "{{ lookup('env', 'STIG_CI_AWS_REGION') | default('us-east-1') }}"
         name: "{{ keypair_name }}"
         state: absent
       when: not keypair_local.stat.exists
 
     - name: Create keypair
       ec2_key:
+        region: "{{ lookup('env', 'STIG_CI_AWS_REGION') | default('us-east-1') }}"
         name: "{{ keypair_name }}"
       register: keypair
 
