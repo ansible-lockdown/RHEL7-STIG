@@ -637,11 +637,11 @@
                           '-optional-rpms','') }}"
         rescue:
               # Might be an AWS RHEL instance, try it...
-              - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Install yum-cron"
-                yum:
-                    name: yum-cron
-                    state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
-                    enablerepo: rhui-REGION-rhel-server-optional
+            - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Install yum-cron"
+              yum:
+                  name: yum-cron
+                  state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
+                  enablerepo: rhui-REGION-rhel-server-optional
 
       - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Verify yum-cron config file exists"
         stat:
