@@ -5,7 +5,6 @@ dist: xenial
 language: python
 python:
   - 3.7
-  - 3.7
 env:
   - TYPE=aws
   - TYPE=default
