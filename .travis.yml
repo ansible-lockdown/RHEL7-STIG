@@ -1,5 +1,5 @@
 ---
-sudo: false
+sudo: required
 services: docker
 dist: xenial
 language: python
