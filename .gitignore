@@ -1,4 +1,10 @@
 *.pyc
+*.log
+*.swp
 *.retry
 .vagrant
 tests/*redhat-subscription
+tests/Dockerfile
+*.iso
+*.box
+packer_cache

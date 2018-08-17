@@ -1,0 +1,34 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  pre_tasks:
+    - name: Check if rhel
+      command: which subscription-manager
+      ignore_errors: true
+      changed_when: false
+      register: sm
+
+    - name: Register RHEL
+      redhat_subscription:
+        state: present
+        password: "{{ lookup('env', 'RHN_PASSWORD') }}"
+        username: "{{ lookup('env', 'RHN_USERNAME') }}"
+        auto_attach: true
+      when: not sm is failed
+
+  roles:
+    - role: RHEL7-STIG
+      rhel7stig_using_password_auth: false
+
+  post_tasks:
+    - name: Check if rhel
+      command: which subscription-manager
+      ignore_errors: true
+      changed_when: false
+      register: sm
+
+    - name: Deregister from RH
+      redhat_subscription:
+        state: absent
+      when: not sm is failed

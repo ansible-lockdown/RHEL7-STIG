@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  become: yes
+  roles:
+    - role: RHEL7-STIG
+      rhel7stig_using_password_auth: false

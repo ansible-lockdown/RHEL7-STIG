@@ -1,13 +1,10 @@
 ---
 driver:
-  name: docker
+  name: ec2
 lint:
   name: yamllint
   options:
     config-data:
-      ignore: |
-        /home/circleci/project/venv/*
-        /home/circleci/project/src/*
       extends: relaxed
       rules:
         braces:
@@ -19,20 +16,21 @@ lint:
         line-length: disable
 
 platforms:
-  - name: instance
-    image: centos/systemd
-    image_version: latest
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    command: /usr/sbin/init
-    capabilities:
-      - ALL
-    network_mode: host
-    privileged: true
-    pull: true
-    pid_mode: host
-    groups:
-      - docker
+  - name: centos7-aws
+    image: ${STIG_CI_CENTOS_AWS_AMI_ID}
+    instance_type: t2.medium
+    vpc_subnet_id: ${STIG_CI_AWS_VPC_SUBNET_ID}
+    ssh_user: centos
+    region: ${STIG_CI_AWS_REGION}
+    security_group_vpc: ${STIG_CI_AWS_VPC_ID}
+
+  - name: rhel7-aws
+    image: ${STIG_CI_RHEL_AWS_AMI_ID}
+    instance_type: t2.medium
+    ssh_user: ec2-user
+    vpc_subnet_id: ${STIG_CI_AWS_VPC_SUBNET_ID}
+    region: ${STIG_CI_AWS_REGION}
+    security_group_vpc: ${STIG_CI_AWS_VPC_ID}
 
 provisioner:
   name: ansible
@@ -42,19 +40,17 @@ provisioner:
   config_options:
     defaults:
       remote_tmp: /tmp/.ansible
+      retry_files_enabled: false
+
 scenario:
-  name: default
+  name: aws
   test_sequence:
     - lint
     - destroy
-    - dependency
     - syntax
     - create
-    - prepare
     - converge
-    #- idempotence # Current bug with lineinfile module
-    - side_effect
-    - verify
+    # - idempotence # Current bug with lineinfile module
     - destroy
 verifier:
   name: testinfra
