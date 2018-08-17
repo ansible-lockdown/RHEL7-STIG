@@ -14,10 +14,7 @@ before_install:
     if [ "${TYPE}" == "docker" ]; then
       docker pull centos/systemd
       docker pull registry.access.redhat.com/rhel7:latest
-      pwd
-      ls -alrth molecule
-      docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .
-      cd ../../
+      (cd molecule/docker; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
     fi
 
 install:
