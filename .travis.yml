@@ -3,15 +3,23 @@ sudo: false
 services: docker
 dist: xenial
 language: python
-python: 3.7
+python:
+  - 3.7
+  - 3.7
+env:
+  - TYPE=aws
+  - TYPE=default
 before_install:
-  - docker pull centos/systemd
-  - docker pull registry.access.redhat.com/rhel7:latest
-  - (cd molecule/default; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
-  # we dont want to (and probably cant) run vagrant in travis
   - rm -rf molecule/vagrant
+  - |
+    if ["$TYPE" -eq "aws"];
+    then
+      docker pull centos/systemd
+      docker pull registry.access.redhat.com/rhel7:latest
+      (cd molecule/default; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
 
 install:
   - pip3 install -r tests/ci-requirements.txt
 script:
-  - molecule --debug test --all
+  - |
+    molecule test --scenario-name $TYPE
