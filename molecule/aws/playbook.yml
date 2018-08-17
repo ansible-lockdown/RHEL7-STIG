@@ -1,24 +1,6 @@
 ---
-- name: Set SSH username
-  hosts: all
-  connection: local
-  tasks:
-    - name: add host for ssh name settings
-      add_host:
-        groups: prepped
-        name: "{{ inventory_hostname }}"
-        ansible_user: centos
-      when: "'centos' in inventory_hostname"
-
-    - name: add host for ssh name settings
-      add_host:
-        groups: prepped
-        name: "{{ inventory_hostname }}"
-        ansible_user: ec2-user
-      when: "'rhel' in inventory_hostname"
-
 - name: Converge
-  hosts: prepped
+  hosts: all
   become: yes
   roles:
     - role: RHEL7-STIG
