@@ -1,9 +1,9 @@
 ---
-sudo: false
+sudo: true
 services: docker
 dist: xenial
 language: python
-python: 3.6
+python: 3.7
 before_install:
   - docker pull centos/systemd
   - docker pull registry.access.redhat.com/rhel7:latest
