@@ -7,7 +7,7 @@ python:
   - 3.7
 env:
   - TYPE=aws
-  - TYPE=default
+  - TYPE=docker
 before_install:
   - rm -rf molecule/vagrant
   - |
