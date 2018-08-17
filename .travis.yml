@@ -13,9 +13,11 @@ before_install:
   - |
     if ["$TYPE" -eq "aws"]
     then
+      echo 'Docker Testing'
       docker pull centos/systemd
       docker pull registry.access.redhat.com/rhel7:latest
       (cd molecule/default; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
+    fi
 
 install:
   - pip3 install -r tests/ci-requirements.txt
