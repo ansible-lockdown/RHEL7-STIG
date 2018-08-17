@@ -11,8 +11,7 @@ env:
 before_install:
   - rm -rf molecule/vagrant
   - |
-    if ["$TYPE" -eq "docker"];
-    then
+    if [ "${TYPE}" == "docker" ]; then
       echo 'Docker Testing'
       docker pull centos/systemd
       docker pull registry.access.redhat.com/rhel7:latest
