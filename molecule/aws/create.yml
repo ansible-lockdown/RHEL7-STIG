@@ -35,7 +35,7 @@
         rules: "{{ security_group_rules }}"
         rules_egress: "{{ security_group_rules_egress }}"
         vpc_id: "{{ item.security_group_vpc }}"
-      with_items: "{{ molecule_yml.platforms }}"
+      loop: "{{ molecule_yml.platforms }}"
 
     - name: Test for presence of local keypair
       stat:
@@ -79,7 +79,7 @@
         count_tag:
           instance: "{{ item.name }}"
       register: server
-      with_items: "{{ molecule_yml.platforms }}"
+      loop: "{{ molecule_yml.platforms }}"
       async: 7200
       poll: 0
 
@@ -89,16 +89,9 @@
       register: ec2_jobs
       until: ec2_jobs.finished
       retries: 300
-      with_items: "{{ server.results }}"
+      loop: "{{ server.results }}"
 
     # Mandatory configuration for Molecule to function.
-    - debug: var=ec2_jobs.results
-    - debug: var=molecule_yml.platforms
-
-    - debug:
-        msg: "{{ item.0.tagged_instances[0].tags.instance }} {{ item.1 }}"
-      loop: "{{ query('together', ec2_jobs.results, molecule_yml.platforms, wanttlist=True) }}"
-
     - name: Populate instance config dict
       set_fact:
         instance_conf_dict: {
@@ -132,7 +125,7 @@
         search_regex: SSH
         delay: 10
         timeout: 320
-      with_items: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
+      loop: "{{ lookup('file', molecule_instance_config) | molecule_from_yaml }}"
 
     - name: Wait for boot process to finish
       pause:
