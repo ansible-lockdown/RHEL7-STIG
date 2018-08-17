@@ -12,9 +12,10 @@ before_install:
   - rm -rf molecule/vagrant
   - |
     if [ "${TYPE}" == "docker" ]; then
-      echo 'Docker Testing'
       docker pull centos/systemd
       docker pull registry.access.redhat.com/rhel7:latest
+      pwd
+      ls -arlth
       (cd molecule/default; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
     fi
 
