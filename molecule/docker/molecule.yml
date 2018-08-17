@@ -1,0 +1,70 @@
+---
+driver:
+  name: docker
+lint:
+  name: yamllint
+  options:
+    config-data:
+      extends: relaxed
+      rules:
+        braces:
+          max-spaces-inside: 1
+          level: error
+        brackets:
+          max-spaces-inside: 1
+          level: error
+        line-length: disable
+
+platforms:
+  - name: centOS
+    image: centos/systemd
+    image_version: latest
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    command: /usr/sbin/init
+    capabilities:
+      - ALL
+    privileged: true
+    pull: true
+    groups:
+      - docker
+
+  - name: RHEL
+    command: /usr/sbin/init
+    image: molly:latest
+    image_version: latest
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - ALL
+    privileged: true
+    init: true
+    pull: false
+    groups:
+      - docker
+
+provisioner:
+  name: ansible
+  log: true
+  lint:
+    name: ansible-lint
+  config_options:
+    defaults:
+      remote_tmp: /tmp/.ansible
+      retry_files_enabled: false
+scenario:
+  name: docker
+  test_sequence:
+    - lint
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # - idempotence # Current bug with lineinfile module
+    - destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
+    enabled: false

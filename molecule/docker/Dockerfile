@@ -4,17 +4,8 @@ FROM registry.access.redhat.com/rhel7:latest
 ARG rhn_user
 ARG rhn_pass
 
-ENV ANSIBLE_CONFIG /etc/ansible/roles/role_under_test/tests/ansible.cfg
-
 # Register
 RUN subscription-manager register --username=$rhn_user --password=$rhn_pass --auto-attach
-RUN subscription-manager repos --enable rhel-7-server-extras-rpms --enable rhel-7-server-optional-rpms
-RUN yum -y install wget
-RUN wget https://getfedora.org/static/352C64E5.txt
-RUN mv 352C64E5.txt /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
-RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
-RUN wget https://download-ib01.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN rpm -Uvh epel-release-latest-7*.rpm
 
 # Install systemd -- See https://hub.docker.com/_/centos/
 RUN yum -y swap -- remove fakesystemd -- install systemd systemd-libs
@@ -30,18 +21,10 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install
 RUN yum -y install openssh-server audit authconfig initscripts
-RUN yum -y install git ansible sudo anacron python2-pip yamllint
 RUN yum clean all
-RUN pip install passlib
 
 # Fix for Travis docker containers
 RUN mkdir /var/log/audit; chmod 700 /var/log/audit;
-
-# Disable requiretty
-RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/'  /etc/sudoers
-
-# Install Ansible inventory file
-RUN echo -e '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts
 
 VOLUME ["/sys/fs/cgroup", "/var/log/audit"]
 
