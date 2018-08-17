@@ -1,6 +1,7 @@
 ---
 - name: Prepare Pre
   hosts: all
+  connection: local
   tasks:
     - name: add host for ssh name settings
       add_host:
