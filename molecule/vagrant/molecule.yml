@@ -17,8 +17,8 @@ lint:
           level: error
         line-length: disable
 platforms:
-  #  - name: centos-vagrant
-  #    box: centos/7
+  - name: centos-vagrant
+    box: centos/7
   - name: rhel-vagrant
     box: rhel7
 provisioner:
