@@ -1530,10 +1530,6 @@
 - name: "MEDIUM | Auditing files"
   include_tasks: audit_file.yml
   with_items:
-      - id: "030600"
-        path: "/var/log/tallylog"
-        description: "successful/unsuccessful account access count events"
-        key: "logins"
       - id: "030610"
         path: "/var/run/faillock"
         description: "unsuccessful account access events"
