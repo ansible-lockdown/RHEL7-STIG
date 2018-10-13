@@ -1503,10 +1503,6 @@
         path: "/usr/bin/kmod"
         trivial: yes
         key: "module-change"
-      - id: "030860"
-        path: "/usr/sbin/modprobe"
-        trivial: yes
-        key: "module-change"
   tags:
       - audit-rules
 
