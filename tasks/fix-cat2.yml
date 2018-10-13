@@ -170,7 +170,7 @@
       - RHEL-07-010140
       - pwquality
 
-- name: "MEDIUM | RHEL-07-010150 | PATCH | When passwords are changed or new passwords are assigned, the new password must contain at least one special character."
+- name: "MEDIUM | RHEL-07-010150 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one special character."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
