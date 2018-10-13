@@ -1500,7 +1500,7 @@
         path: "/usr/sbin/pam_timestamp_check"
         key: "privileged-pam"
       - id: "030840"
-        path: "/usr/sbin/insmod"
+        path: "/usr/bin/kmod"
         trivial: yes
         key: "module-change"
       - id: "030850"
