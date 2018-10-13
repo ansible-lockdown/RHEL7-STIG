@@ -49,8 +49,6 @@ rhel_07_020000: true
 rhel_07_020010: true
 rhel_07_020050: true
 rhel_07_020060: true
-# This check breaks with redhat.com repos as they do not sign repo data
-rhel_07_020070: "{{ ansible_distribution == 'CentOS' }}"
 rhel_07_020210: true
 rhel_07_020220: true
 rhel_07_020230: true

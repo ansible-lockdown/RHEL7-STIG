@@ -175,21 +175,6 @@
       - RHEL-07-020060
       - yum
 
-- name: "HIGH | RHEL-07-020070 | PATCH | The operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of packages without verification of the repository metadata."
-  lineinfile:
-      dest: /etc/yum.conf
-      regexp: ^repo_gpgcheck
-      line: repo_gpgcheck=1
-      insertafter: '\[main\]'
-  check_mode: "{{ rhel7stig_disruptive_check_mode }}"
-  when:
-      - rhel_07_020070
-      - rhel7stig_disruptive
-  tags:
-      - RHEL-07-020070
-      - disruption-high
-      - yum
-
 - name: |
       "HIGH | RHEL-07-020210 | PATCH | The operating system must enable SELinux."
       "HIGH | RHEL-07-020220 | PATCH | The operating system must enable the SELinux targeted policy."
