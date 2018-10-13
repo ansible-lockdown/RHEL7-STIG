@@ -1611,29 +1611,6 @@
       - RHEL-07-031010
       - rsyslog
 
-- name: "MEDIUM | RHEL-07-032010 | AUDIT | The system must update the DoD-approved virus scan program every seven days or more frequently."
-  block:
-      - name: "MEDIUM | RHEL-07-032010 | AUDIT | The system must update the DoD-approved virus scan program every seven days or more frequently."
-        shell: "{{ rhel7stig_av_status_command }}"
-        changed_when: no
-        check_mode: no
-        register: rhel_07_032010_audit
-
-      - name: "MEDIUM | RHEL-07-032010 | AUDIT | The system must update the DoD-approved virus scan program every seven days or more frequently."
-        debug:
-            msg: "{{ rhel_07_032010_audit.stdout_lines }}"
-        changed_when:
-            - rhel7stig_audit_complex
-        when:
-            - rhel_07_032010_audit.stdout_lines | length > 0
-
-  when:
-      - rhel_07_032010
-      - rhel7stig_complex
-  tags:
-      - RHEL-07-032010
-      - complexity-high
-
 - name: "MEDIUM | RHEL-07-040100 | PATCH | The host must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
   command: "true"
   changed_when: no
