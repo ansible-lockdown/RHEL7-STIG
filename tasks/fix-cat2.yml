@@ -225,24 +225,26 @@
       - RHEL-07-010190
       - pwquality
 
-- name: "MEDIUM | RHEL-07-010200 | PATCH | The PAM system service must be configured to store only encrypted representations of passwords."
+- name: "MEDIUM | RHEL-07-010200 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the PAM system service is configured to store only encrypted representations of passwords."
   pamd:
-      name: system-auth
-      state: "{{ item.state }}"
+      name: "{{ item[0] }}"
+      state: "{{ item[1].state }}"
       type: password
       control: sufficient
       module_path: pam_unix.so
-      module_arguments: "{{ item.args }}"
-  with_items:
-      - state: args_present
-        args:
-            - "sha512"
-      - state: args_absent
-        args:
-            - "md5"
-            - "bigcrypt"
-            - "sha256"
-            - "blowfish"
+      module_arguments: "{{ item[1].args }}"
+  with_nested:
+      - [ 'system-auth', 'password-auth' ]
+      -
+        - state: args_present
+          args:
+              - "sha512"
+        - state: args_absent
+          args:
+              - "md5"
+              - "bigcrypt"
+              - "sha256"
+              - "blowfish"
   when: rhel_07_010200
   tags:
       - RHEL-07-010200
