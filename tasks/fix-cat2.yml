@@ -498,7 +498,7 @@
       - RHEL-07-010330
       - pamd
 
-- name: "MEDIUM | RHEL-07-010340 | PATCH | Users must provide a password for privilege escalation."
+- name: "MEDIUM | RHEL-07-010340 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must provide a password for privilege escalation."
   replace:
       path: "{{ item }}"
       regexp: '^([^#].*)NOPASSWD(.*)'
@@ -512,7 +512,7 @@
       - RHEL-07-010340
       - sudoers
 
-- name: "MEDIUM | RHEL-07-010350 | PATCH | Users must re-authenticate for privilege escalation."
+- name: "MEDIUM | RHEL-07-010350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must re-authenticate for privilege escalation."
   replace:
       path: "{{ item }}"
       regexp: '^([^#].*)!authenticate(.*)'
