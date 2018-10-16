@@ -2145,10 +2145,10 @@
       name: "{{ rhel7stig_firewall_service }}"
       state: "{{ rhel7stig_service_started }}"
       enabled: yes
-  # XXX: fix this.  The above task should work just fine in a chroot, but
-  # fails for some reason when the chroot is also a container.
-  ignore_errors: "{{ rhel7stig_system_is_chroot and rhel7stig_system_is_container }}"
-  when: rhel_07_040520
+  when: 
+    - rhel_07_040520
+    - not rhel7stig_system_is_chroot
+    - not rhel7stig_system_is_container
   tags:
       - RHEL-07-040520
       - firewall
