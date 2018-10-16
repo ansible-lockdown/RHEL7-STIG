@@ -2,9 +2,6 @@
 driver:
   name: ec2
   ssh_connection_options:
-    - -o ControlPath=~/.ansible/cp/%r@%h-%p
-    - -C
-    - -o ControlMaster=auto
     - -o ControlPersist=30m
 lint:
   name: yamllint
