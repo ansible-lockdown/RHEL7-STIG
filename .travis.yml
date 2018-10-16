@@ -24,10 +24,13 @@ script:
   - |
     if [[ "${TRAVIS_PULL_REQUEST}" == "false" || "${TRAVIS_PULL_REQUEST_SLUG}" == "mindpointgroup/rhel7-stig" ]]; then
       case "${TYPE}" in
-      docker) (cd tests/$TYPE; molecule --base-config with-rhel.yml test)
-              ;;
-      aws) (cd tests/$TYPE; molecule test)
-           ;;
+      docker)
+        (cd tests/$TYPE; molecule --base-config with-rhel.yml test)
+        ;;
+      aws)
+        (cd tests/$TYPE; molecule test)
+        ;;
+      esac
     elif [[ "${TYPE}" == "docker" ]]; then
       (cd tests/$TYPE; molecule test)
     fi
