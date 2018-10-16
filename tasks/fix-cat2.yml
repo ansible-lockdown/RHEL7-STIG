@@ -339,6 +339,10 @@
             new_type: password
             new_control: requisite
             new_module_path: pam_pwhistory.so
+            module_arguments:
+              - use_authtok
+              - remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}
+              - retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}
         with_items:
             - "system-auth"
             - "password-auth"
@@ -411,6 +415,32 @@
             - "system-auth"
             - "password-auth"
 
+      # Temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+      - name: |
+              "MEDIUM | RHEL-07-010320 | AUDIT | Check for existing account lockout settings"
+              "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
+        command: "grep -iE '^auth\\s+required\\s+pam_faillock.so\\s+preauth\\s+silent\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
+        check_mode: no
+        changed_when: no
+        failed_when: rhel_07_010320_010330_preauth_audit.rc > 1
+        register: rhel_07_010320_010330_preauth_audit
+        with_items:
+            - "system-auth"
+            - "password-auth"
+
+      - name: |
+              "MEDIUM | RHEL-07-010320 | PATCH | Accounts subject to three unsuccessful login attempts within 15 minutes must be locked for the maximum configurable period."
+              "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+        pamd:
+            name: "{{ item.item }}"
+            state: updated
+            type: auth
+            control: required
+            module_path: pam_faillock.so
+            module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+        with_items: "{{rhel_07_010320_010330_preauth_audit.results}}"
+        when: item.rc == 1
+
       - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
         pamd:
             name: "{{ item }}"
@@ -425,6 +455,28 @@
         with_items:
             - "system-auth"
             - "password-auth"
+
+      # Temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+      - name: "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
+        command: "grep -iE '^auth\\s+\\[default=die\\]\\s+pam_faillock.so\\s+authfail\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
+        check_mode: no
+        changed_when: no
+        failed_when: rhel_07_010330_authfail_audit.rc > 1
+        register: rhel_07_010330_authfail_audit
+        with_items:
+            - "system-auth"
+            - "password-auth"
+
+      - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+        pamd:
+            name: "{{ item.item }}"
+            state: updated
+            type: auth
+            control: "[default=die]"
+            module_path: pam_faillock.so
+            module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+        with_items: "{{rhel_07_010330_authfail_audit.results}}"
+        when: item.rc == 1
 
       - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
         pamd:
