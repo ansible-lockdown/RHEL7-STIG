@@ -524,7 +524,7 @@
       - RHEL-07-010350
       - sudoers
 
-- name: "MEDIUM | RHEL-07-010430 | PATCH | The delay between logon prompts following a failed console logon attempt must be at least four seconds."
+- name: "MEDIUM | RHEL-07-010430 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the delay between logon prompts following a failed console logon attempt is at least four seconds."
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?FAIL_DELAY
