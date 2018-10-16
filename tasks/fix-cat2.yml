@@ -327,14 +327,47 @@
       - RHEL-07-010260
       - password
 
-- name: "MEDIUM | RHEL-07-010270 | PATCH | Passwords must be prohibited from reuse for a minimum of five generations."
-  pamd:
-      name: system-auth
-      state: args_present
-      type: password
-      control: sufficient
-      module_path: pam_unix.so
-      module_arguments: "remember=5"
+- name: "MEDIUM | RHEL-07-010270 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are prohibited from reuse for a minimum of five generations."
+  block:
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory rule exists"
+        pamd:
+            name: "{{ item }}"
+            state: before
+            type: password
+            control: sufficient
+            module_path: pam_unix.so
+            new_type: password
+            new_control: requisite
+            new_module_path: pam_pwhistory.so
+        with_items:
+            - "system-auth"
+            - "password-auth"
+
+      # Temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+      - name: "MEDIUM | RHEL-07-010270 | AUDIT | Check for existing password history reuse settings"
+        command: "grep -iE '^password\\s+requisite\\s+pam_pwhistory.so\\s+use_authtok\\s+remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}\\s+retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}$' /etc/pam.d/{{ item }}"
+        check_mode: no
+        changed_when: no
+        failed_when: rhel_07_010270_audit.rc > 1
+        register: rhel_07_010270_audit
+        with_items:
+            - "system-auth"
+            - "password-auth"
+
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory module arguments are set"
+        pamd:
+            name: "{{ item.item }}"
+            state: updated
+            type: password
+            control: requisite
+            module_path: pam_pwhistory.so
+            module_arguments:
+              - use_authtok
+              - remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}
+              - retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}
+        with_items: "{{rhel_07_010270_audit.results}}"
+        when: item.rc == 1
+
   when: rhel_07_010270
   tags:
       - RHEL-07-010270

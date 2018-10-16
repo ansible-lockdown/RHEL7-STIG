@@ -473,6 +473,12 @@ rhel7stig_unnecessary_accounts:
     - games
 rhel7stig_remove_unnecessary_user_files: no
 
+# RHEL-07-010270
+# pam_pwhistory settings - Verify the operating system prohibits password reuse for a minimum of five generations.
+rhel7stig_pam_pwhistory:
+    remember: 5
+    retries: 3
+
 # RHEL-07-010320
 # RHEL-07-010330
 # pam_faillock settings - accounts must be locked for max time period after 3 unsuccessful attempts within 15 minutes.
