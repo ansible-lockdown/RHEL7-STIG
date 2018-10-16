@@ -32,3 +32,5 @@ tramp
 .\#*
 *.swp
 *.swo
+rh-creds.env
+travis.env

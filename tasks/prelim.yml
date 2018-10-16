@@ -193,24 +193,24 @@
 
 - name: "PRELIM | RHEL-07-010480 RHEL-07-010490 | Install python-passlib for hash creation"
   yum:
-    name: python-passlib
+      name: python-passlib
   when:
-    - inventory_hostname == 'localhost' or inventory_hostname == '127.0.0.1'
-    - rhel_07_020030 or rhel_07_010480
+      - inventory_hostname == 'localhost' or inventory_hostname == '127.0.0.1'
+      - rhel_07_020030 or rhel_07_010480
 
 - name: "PRELIM | RHEL-07-020210 RHEL-07-020220| Install SELinux related dependencies"
   yum:
-    name: "{{ item }}"
+      name: "{{ item }}"
   with_items:
-    - selinux-policy
-    - libselinux-python
+      - selinux-policy
+      - libselinux-python
   when:
-    - rhel_07_020210 or rhel_07_020220
+      - rhel_07_020210 or rhel_07_020220
 
 - name: "PRELIM | Install SSH"
   yum:
-      name: "{{ item }}" 
-  with_items: 
-    - openssh-server
-    - openssh-clients
+      name: "{{ item }}"
+  with_items:
+      - openssh-server
+      - openssh-clients
   when: rhel7stig_ssh_required
