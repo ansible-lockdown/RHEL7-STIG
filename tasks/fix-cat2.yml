@@ -399,8 +399,8 @@
 
 - block:
       - name: |
-              "MEDIUM | RHEL-07-010320 | PATCH | Accounts subject to three unsuccessful login attempts within 15 minutes must be locked for the maximum configurable period."
-              "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+              "MEDIUM | RHEL-07-010320 | PATCH | Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period."
+              "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
         pamd:
             name: "{{ item }}"
             state: before
@@ -429,8 +429,8 @@
             - "password-auth"
 
       - name: |
-              "MEDIUM | RHEL-07-010320 | PATCH | Accounts subject to three unsuccessful login attempts within 15 minutes must be locked for the maximum configurable period."
-              "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+              "MEDIUM | RHEL-07-010320 | PATCH | Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period."
+              "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
         pamd:
             name: "{{ item.item }}"
             state: updated
@@ -441,7 +441,7 @@
         with_items: "{{rhel_07_010320_010330_preauth_audit.results}}"
         when: item.rc == 1
 
-      - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+      - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
         pamd:
             name: "{{ item }}"
             state: after
@@ -467,7 +467,7 @@
             - "system-auth"
             - "password-auth"
 
-      - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+      - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
         pamd:
             name: "{{ item.item }}"
             state: updated
@@ -478,7 +478,7 @@
         with_items: "{{rhel_07_010330_authfail_audit.results}}"
         when: item.rc == 1
 
-      - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+      - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
         pamd:
             name: "{{ item }}"
             state: before
