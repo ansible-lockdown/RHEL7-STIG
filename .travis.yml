@@ -12,7 +12,7 @@ before_install:
   - |
     if [ "${TYPE}" == "docker" ]; then
       docker pull centos/systemd
-      if [[ "${TRAVIS_PULL_REQUEST}" == "false" || "${TRAVIS_PULL_REQUEST_SLUG}" == "mindpointgroup/rhel7-stig" ]]; then
+      if [[ "${TRAVIS_PULL_REQUEST}" == "false" || "${TRAVIS_PULL_REQUEST_SLUG}" == "MindPointGroup/RHEL7-STIG" ]]; then
         docker pull registry.access.redhat.com/rhel7:latest
         (cd tests/docker; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
       fi
@@ -22,7 +22,7 @@ install:
   - pip3 install -r tests/ci-requirements.txt
 script:
   - |
-    if [[ "${TRAVIS_PULL_REQUEST}" == "false" || "${TRAVIS_PULL_REQUEST_SLUG}" == "mindpointgroup/rhel7-stig" ]]; then
+    if [[ "${TRAVIS_PULL_REQUEST}" == "false" || "${TRAVIS_PULL_REQUEST_SLUG}" == "MindPointGroup/RHEL7-STIG" ]]; then
       case "${TYPE}" in
       docker)
         (cd tests/$TYPE; molecule --base-config with-rhel.yml test)
