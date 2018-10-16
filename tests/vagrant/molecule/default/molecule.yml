@@ -31,7 +31,7 @@ provisioner:
       remote_tmp: /tmp/.ansible
       retry_files_enabled: false
 scenario:
-  name: vagrant
+  name: default
   test_sequence:
     - lint
     - destroy

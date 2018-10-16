@@ -29,20 +29,6 @@ platforms:
     groups:
       - docker
 
-  - name: RHEL
-    command: /usr/sbin/init
-    image: molly:latest
-    image_version: latest
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    capabilities:
-      - ALL
-    privileged: true
-    init: true
-    pull: false
-    groups:
-      - docker
-
 provisioner:
   name: ansible
   log: true
@@ -53,7 +39,7 @@ provisioner:
       remote_tmp: /tmp/.ansible
       retry_files_enabled: false
 scenario:
-  name: docker
+  name: default
   test_sequence:
     - lint
     - destroy

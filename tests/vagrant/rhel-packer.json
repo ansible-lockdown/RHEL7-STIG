@@ -19,7 +19,7 @@
         ["modifyvm", "{{.Name}}", "--pae", "on"],
         ["modifyvm", "{{.Name}}", "--rtcuseutc", "on"],
         ["modifyvm", "{{.Name}}", "--bioslogodisplaytime", "1"]
-],
+      ],
       "ssh_wait_timeout": "20m",
       "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
       "boot_wait": "5s",

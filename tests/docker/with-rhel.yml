@@ -1,0 +1,28 @@
+---
+platforms:
+  - name: centOS
+    image: centos/systemd
+    image_version: latest
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    command: /usr/sbin/init
+    capabilities:
+      - ALL
+    privileged: true
+    pull: true
+    groups:
+      - docker
+
+  - name: RHEL
+    command: /usr/sbin/init
+    image: molly:latest
+    image_version: latest
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - ALL
+    privileged: true
+    init: true
+    pull: false
+    groups:
+      - docker

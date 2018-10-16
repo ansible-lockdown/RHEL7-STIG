@@ -1,6 +1,11 @@
 ---
 driver:
   name: ec2
+  ssh_connection_options:
+    - -o ControlPath=~/.ansible/cp/%r@%h-%p
+    - -C
+    - -o ControlMaster=auto
+    - -o ControlPersist=30m
 lint:
   name: yamllint
   options:
@@ -43,7 +48,7 @@ provisioner:
       retry_files_enabled: false
 
 scenario:
-  name: aws
+  name: default
   test_sequence:
     - lint
     - destroy
