@@ -53,7 +53,7 @@ provisioner:
       remote_tmp: /tmp/.ansible
       retry_files_enabled: false
 scenario:
-  name: docker
+  name: default
   test_sequence:
     - lint
     - destroy

@@ -1,6 +1,8 @@
 ---
 driver:
-  name: ec2
+  name: vagrant
+  provider:
+    name: virtualbox
 lint:
   name: yamllint
   options:
@@ -14,43 +16,33 @@ lint:
           max-spaces-inside: 1
           level: error
         line-length: disable
-
 platforms:
-  - name: centos7-aws
-    image: ${STIG_CI_CENTOS_AWS_AMI_ID}
-    instance_type: t2.medium
-    vpc_subnet_id: ${STIG_CI_AWS_VPC_SUBNET_ID}
-    ssh_user: centos
-    region: ${STIG_CI_AWS_REGION}
-    security_group_vpc: ${STIG_CI_AWS_VPC_ID}
-
-  - name: rhel7-aws
-    image: ${STIG_CI_RHEL_AWS_AMI_ID}
-    instance_type: t2.medium
-    ssh_user: ec2-user
-    vpc_subnet_id: ${STIG_CI_AWS_VPC_SUBNET_ID}
-    region: ${STIG_CI_AWS_REGION}
-    security_group_vpc: ${STIG_CI_AWS_VPC_ID}
-
+  - name: centos-vagrant
+    box: centos/7
+  - name: rhel-vagrant
+    box: rhel7
 provisioner:
   name: ansible
-  log: true
   lint:
     name: ansible-lint
+  log: true
   config_options:
     defaults:
       remote_tmp: /tmp/.ansible
       retry_files_enabled: false
-
 scenario:
-  name: aws
+  name: default
   test_sequence:
     - lint
     - destroy
+    - dependency
     - syntax
     - create
+    - prepare
     - converge
     # - idempotence # Current bug with lineinfile module
+    - side_effect
+    - verify
     - destroy
 verifier:
   name: testinfra
