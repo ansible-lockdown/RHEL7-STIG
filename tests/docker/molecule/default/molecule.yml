@@ -29,6 +29,20 @@ platforms:
     groups:
       - docker
 
+  - name: RHEL
+    command: /usr/sbin/init
+    image: molly:latest
+    image_version: latest
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - ALL
+    privileged: true
+    init: true
+    pull: false
+    groups:
+      - docker
+
 provisioner:
   name: ansible
   log: true

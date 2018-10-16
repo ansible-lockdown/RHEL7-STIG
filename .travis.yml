@@ -23,14 +23,7 @@ install:
 script:
   - |
     if [[ "${TRAVIS_PULL_REQUEST}" == "false" || "${TRAVIS_PULL_REQUEST_SLUG}" == "MindPointGroup/RHEL7-STIG" ]]; then
-      case "${TYPE}" in
-      docker)
-        (cd tests/$TYPE; molecule --base-config with-rhel.yml test)
-        ;;
-      aws)
-        (cd tests/$TYPE; molecule test)
-        ;;
-      esac
-    elif [[ "${TYPE}" == "docker" ]]; then
       (cd tests/$TYPE; molecule test)
+    elif [[ "${TYPE}" == "docker" ]]; then
+      (cd tests/docker; sed -i '/- name: RHEL/,/- docker/d' ./molecule/default/molecule.yml; molecule test)
     fi
