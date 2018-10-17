@@ -1,6 +1,5 @@
-*.pyc
+.env
 *.log
-*.swp
 *.retry
 .vagrant
 tests/*redhat-subscription
@@ -8,3 +7,27 @@ tests/Dockerfile
 *.iso
 *.box
 packer_cache
+
+# VSCode
+.vscode
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# DS_Store
+.DS_Store
+._*
+
+# Linux Editors
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+.elc
+auto-save-list
+tramp
+.\#*
+*.swp
+*.swo

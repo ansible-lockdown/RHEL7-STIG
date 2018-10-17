@@ -170,7 +170,7 @@
       - RHEL-07-010140
       - pwquality
 
-- name: "MEDIUM | RHEL-07-010150 | PATCH | When passwords are changed or new passwords are assigned, the new password must contain at least one special character."
+- name: "MEDIUM | RHEL-07-010150 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one special character."
   lineinfile:
       create: yes
       dest: /etc/security/pwquality.conf
@@ -225,24 +225,26 @@
       - RHEL-07-010190
       - pwquality
 
-- name: "MEDIUM | RHEL-07-010200 | PATCH | The PAM system service must be configured to store only encrypted representations of passwords."
+- name: "MEDIUM | RHEL-07-010200 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the PAM system service is configured to store only encrypted representations of passwords."
   pamd:
-      name: system-auth
-      state: "{{ item.state }}"
+      name: "{{ item[0] }}"
+      state: "{{ item[1].state }}"
       type: password
       control: sufficient
       module_path: pam_unix.so
-      module_arguments: "{{ item.args }}"
-  with_items:
-      - state: args_present
-        args:
-            - "sha512"
-      - state: args_absent
-        args:
-            - "md5"
-            - "bigcrypt"
-            - "sha256"
-            - "blowfish"
+      module_arguments: "{{ item[1].args }}"
+  with_nested:
+      - [ 'system-auth', 'password-auth' ]
+      -
+        - state: args_present
+          args:
+              - "sha512"
+        - state: args_absent
+          args:
+              - "md5"
+              - "bigcrypt"
+              - "sha256"
+              - "blowfish"
   when: rhel_07_010200
   tags:
       - RHEL-07-010200
@@ -325,14 +327,48 @@
       - RHEL-07-010260
       - password
 
-- name: "MEDIUM | RHEL-07-010270 | PATCH | Passwords must be prohibited from reuse for a minimum of five generations."
-  pamd:
-      name: system-auth
-      state: args_present
-      type: password
-      control: sufficient
-      module_path: pam_unix.so
-      module_arguments: "remember=5"
+- name: "MEDIUM | RHEL-07-010270 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are prohibited from reuse for a minimum of five generations."
+  block:
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory rule exists"
+        pamd:
+            name: "{{ item }}"
+            state: before
+            type: password
+            control: sufficient
+            module_path: pam_unix.so
+            new_type: password
+            new_control: requisite
+            new_module_path: pam_pwhistory.so
+        with_items:
+            - "system-auth"
+            - "password-auth"
+
+      # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+      - name: "MEDIUM | RHEL-07-010270 | AUDIT | Check for existing password history reuse settings"
+        command: "grep -iE '^password\\s+requisite\\s+pam_pwhistory.so\\s+use_authtok\\s+remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}\\s+retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}$' /etc/pam.d/{{ item }}"
+        check_mode: no
+        changed_when: no
+        failed_when: rhel_07_010270_audit.rc > 1
+        register: rhel_07_010270_audit
+        with_items:
+            - "system-auth"
+            - "password-auth"
+
+      # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory module arguments are set"
+        pamd:
+            name: "{{ item.item }}"
+            state: updated
+            type: password
+            control: requisite
+            module_path: pam_pwhistory.so
+            module_arguments:
+              - use_authtok
+              - remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}
+              - retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}
+        with_items: "{{rhel_07_010270_audit.results}}"
+        when: item.rc == 1
+
   when: rhel_07_010270
   tags:
       - RHEL-07-010270
@@ -360,8 +396,8 @@
 
 - block:
       - name: |
-              "MEDIUM | RHEL-07-010320 | PATCH | Accounts subject to three unsuccessful login attempts within 15 minutes must be locked for the maximum configurable period."
-              "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+              "MEDIUM | RHEL-07-010320 | PATCH | Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period."
+              "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
         pamd:
             name: "{{ item }}"
             state: before
@@ -371,12 +407,38 @@
             new_type: auth
             new_control: required
             new_module_path: pam_faillock.so
-            module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
         with_items:
             - "system-auth"
             - "password-auth"
 
-      - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+      # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+      - name: |
+              "MEDIUM | RHEL-07-010320 | AUDIT | Check for existing account lockout settings"
+              "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
+        command: "grep -iE '^auth\\s+required\\s+pam_faillock.so\\s+preauth\\s+silent\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
+        check_mode: no
+        changed_when: no
+        failed_when: rhel_07_010320_010330_preauth_audit.rc > 1
+        register: rhel_07_010320_010330_preauth_audit
+        with_items:
+            - "system-auth"
+            - "password-auth"
+
+      # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
+      - name: |
+              "MEDIUM | RHEL-07-010320 | PATCH | Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period."
+              "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+        pamd:
+            name: "{{ item.item }}"
+            state: updated
+            type: auth
+            control: required
+            module_path: pam_faillock.so
+            module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+        with_items: "{{rhel_07_010320_010330_preauth_audit.results}}"
+        when: item.rc == 1
+
+      - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
         pamd:
             name: "{{ item }}"
             state: after
@@ -386,12 +448,34 @@
             new_type: auth
             new_control: "[default=die]"
             new_module_path: pam_faillock.so
-            module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
         with_items:
             - "system-auth"
             - "password-auth"
 
-      - name: "MEDIUM | RHEL-07-010330 | PATCH | If three unsuccessful logon attempts within 15 minutes occur the associated account must be locked."
+      # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+      - name: "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
+        command: "grep -iE '^auth\\s+\\[default=die\\]\\s+pam_faillock.so\\s+authfail\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
+        check_mode: no
+        changed_when: no
+        failed_when: rhel_07_010330_authfail_audit.rc > 1
+        register: rhel_07_010330_authfail_audit
+        with_items:
+            - "system-auth"
+            - "password-auth"
+
+      # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
+      - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+        pamd:
+            name: "{{ item.item }}"
+            state: updated
+            type: auth
+            control: "[default=die]"
+            module_path: pam_faillock.so
+            module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+        with_items: "{{rhel_07_010330_authfail_audit.results}}"
+        when: item.rc == 1
+
+      - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
         pamd:
             name: "{{ item }}"
             state: before
@@ -411,7 +495,7 @@
       - RHEL-07-010330
       - pamd
 
-- name: "MEDIUM | RHEL-07-010340 | PATCH | Users must provide a password for privilege escalation."
+- name: "MEDIUM | RHEL-07-010340 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must provide a password for privilege escalation."
   replace:
       path: "{{ item }}"
       regexp: '^([^#].*)NOPASSWD(.*)'
@@ -425,7 +509,7 @@
       - RHEL-07-010340
       - sudoers
 
-- name: "MEDIUM | RHEL-07-010350 | PATCH | Users must re-authenticate for privilege escalation."
+- name: "MEDIUM | RHEL-07-010350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must re-authenticate for privilege escalation."
   replace:
       path: "{{ item }}"
       regexp: '^([^#].*)!authenticate(.*)'
@@ -437,7 +521,7 @@
       - RHEL-07-010350
       - sudoers
 
-- name: "MEDIUM | RHEL-07-010430 | PATCH | The delay between logon prompts following a failed console logon attempt must be at least four seconds."
+- name: "MEDIUM | RHEL-07-010430 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the delay between logon prompts following a failed console logon attempt is at least four seconds."
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?FAIL_DELAY
