@@ -339,10 +339,6 @@
             new_type: password
             new_control: requisite
             new_module_path: pam_pwhistory.so
-            module_arguments:
-              - use_authtok
-              - remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}
-              - retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}
         with_items:
             - "system-auth"
             - "password-auth"
@@ -410,7 +406,6 @@
             new_type: auth
             new_control: required
             new_module_path: pam_faillock.so
-            module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
         with_items:
             - "system-auth"
             - "password-auth"
@@ -451,7 +446,6 @@
             new_type: auth
             new_control: "[default=die]"
             new_module_path: pam_faillock.so
-            module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
         with_items:
             - "system-auth"
             - "password-auth"
