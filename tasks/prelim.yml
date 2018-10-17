@@ -204,6 +204,8 @@
   with_items:
       - selinux-policy
       - libselinux-python
+      - selinux-policy-targeted
+      - selinux-policy-mls
   when:
       - rhel_07_020210 or rhel_07_020220
 
@@ -212,5 +214,4 @@
       name: "{{ item }}"
   with_items:
       - openssh-server
-      - openssh-clients
   when: rhel7stig_ssh_required
