@@ -2147,7 +2147,7 @@
       enabled: yes
   when:
       - rhel_07_040520
-      - not rhel7stig_system_is_chroot and not rhel7stig_system_is_container
+      - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
   tags:
       - RHEL-07-040520
       - firewall
