@@ -267,6 +267,9 @@ rhel_07_041010: true
 # CAT 3 rules
 rhel_07_020200: true
 rhel_07_020300: true
+rhel_07_021022: true
+rhel_07_021023: true
+rhel_07_021024: true
 rhel_07_021310: true
 rhel_07_021320: true
 rhel_07_021330: true

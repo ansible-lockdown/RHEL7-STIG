@@ -32,6 +32,25 @@
       - complexity-high
       - passwd
 
+- name: |
+      "LOW | RHEL-07-021022 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nodev option."
+      "LOW | RHEL-07-021023 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nosuid option."
+      "LOW | RHEL-07-021024 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the noexec option."
+  mount:
+      path: /dev/shm
+      state: mounted
+      src: "{{ dev_shm_mount.device|default('tmpfs') }}"
+      fstype: "{{ dev_shm_mount.fstype|default('tmpfs') }}"
+      opts: "{{ dev_shm_mount_opts }}"
+  when: rhel_07_021022 or rhel_07_021023 or rhel_07_021024
+  vars:
+      dev_shm_mount: "{{ ansible_mounts | json_query('[?mount == `/dev/shm`] | [0]') }}"
+      dev_shm_mount_opts: "{{ dev_shm_mount.options | default('defaults') }},nodev,nosuid{{ (rhel_07_021024) | ternary(',noexec', '') }}"
+  tags:
+      - RHEL-07-021022
+      - RHEL-07-021023
+      - RHEL-07-021024
+
 - name: "LOW | RHEL-07-021310 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
   debug:
       msg: "WARNING: /home is not mounted on a separate partition"
