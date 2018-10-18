@@ -7,7 +7,8 @@ tests/Dockerfile
 *.iso
 *.box
 packer_cache
-
+delete*
+ignore*
 # VSCode
 .vscode
 
@@ -31,3 +32,5 @@ tramp
 .\#*
 *.swp
 *.swo
+rh-creds.env
+travis.env
