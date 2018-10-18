@@ -32,13 +32,6 @@
       - complexity-high
       - passwd
 
-- debug:
-    msg: "{{ dev_shm_mount }}"
-  vars:
-      dev_shm_mount: "{{ ansible_mounts | json_query('[?mount == `/dev/shm`] | [0]') }}"
-  tags:
-    - always
-
 - name: |
         "LOW | RHEL-07-021022 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nodev option."
         "LOW | RHEL-07-021023 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nosuid option."
