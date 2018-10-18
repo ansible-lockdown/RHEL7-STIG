@@ -202,7 +202,6 @@
   yum:
       name: "{{ item }}"
   with_items:
-      - selinux-policy
       - libselinux-python
       - selinux-policy-targeted
       - selinux-policy-mls
@@ -211,7 +210,5 @@
 
 - name: "PRELIM | Install SSH"
   yum:
-      name: "{{ item }}"
-  with_items:
-      - openssh-server
+      name: openssh-server
   when: rhel7stig_ssh_required
