@@ -42,7 +42,7 @@
       src: "{{ dev_shm_mount.device|default('tmpfs') }}"
       fstype: "{{ dev_shm_mount.fstype|default('tmpfs') }}"
       opts: "{{ dev_shm_mount_opts }}"
-  when: (rhel_07_021022 or rhel_07_021023 or rhel_07_021024)
+  when: rhel_07_021022 or rhel_07_021023 or rhel_07_021024
   vars:
       dev_shm_mount: "{{ ansible_mounts | json_query('[?mount == `/dev/shm`] | [0]') }}"
       dev_shm_mount_opts: "{{ dev_shm_mount.options|default('defaults') }},nodev,nosuid{{ (rhel_07_021024) | ternary(',noexec', '') }}"
