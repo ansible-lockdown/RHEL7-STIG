@@ -1,0 +1,15 @@
+---
+lint:
+  name: yamllint
+  options:
+    config-file: .yamllint
+
+provisioner:
+  name: ansible
+  log: true
+  lint:
+    name: ansible-lint
+  config_options:
+    defaults:
+      remote_tmp: /tmp/.ansible
+      retry_files_enabled: false

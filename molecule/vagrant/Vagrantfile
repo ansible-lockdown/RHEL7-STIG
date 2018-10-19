@@ -1,0 +1,15 @@
+Vagrant.configure("2") do |config|
+  
+    # RHEL 7
+    config.vm.define "rhel7-stig" do |rhel7|
+      rhel7.vm.box = "rhel7"
+      rhel7.vm.hostname = "rhel7-stig"
+      rhel7.vm.network "forwarded_port", guest: 22, host: 2201, id: 'ssh'
+      config.vm.provider "virtualbox" do |vbox|
+        vbox.name = "rhel7-stig"
+        vbox.cpus = 2
+        vbox.memory = 512
+      end
+    end
+  
+  end

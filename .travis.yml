@@ -5,9 +5,13 @@ dist: xenial
 language: python
 python:
   - 3.7
-env:
-  - TYPE=aws
-  - TYPE=docker
+jobs:
+  include:
+  - name: "AWS Test"
+    if: fork IS false
+    env: TYPE=aws
+  - name: "Docker Test"
+    env: TYPE=docker
 before_install:
   - |
     if [ "${TYPE}" == "docker" ]; then
@@ -15,15 +19,11 @@ before_install:
       if [[ "${TRAVIS_PULL_REQUEST}" == "false" || "${TRAVIS_PULL_REQUEST_SLUG}" == "MindPointGroup/RHEL7-STIG" ]]; then
         docker pull registry.access.redhat.com/rhel7:latest
         (cd tests/docker; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
+      else
+        sed -i '/- name: RHEL/,/- docker/d' ./molecule/docker/molecule.yml
       fi
     fi
-
 install:
   - pip3 install -r tests/ci-requirements.txt
 script:
-  - |
-    if [[ "${TRAVIS_PULL_REQUEST}" == "false" || "${TRAVIS_PULL_REQUEST_SLUG}" == "MindPointGroup/RHEL7-STIG" ]]; then
-      (cd tests/$TYPE; molecule test)
-    elif [[ "${TYPE}" == "docker" ]]; then
-      (cd tests/docker; sed -i '/- name: RHEL/,/- docker/d' ./molecule/default/molecule.yml; molecule test)
-    fi
+  - molecule test --base-config base-molecule.yml test --scenario-name $TYPE
