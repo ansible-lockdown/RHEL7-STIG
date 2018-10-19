@@ -201,9 +201,9 @@
 - name: "PRELIM | RHEL-07-020210 RHEL-07-020220| Install SELinux related dependencies"
   yum:
       name:
-        - libselinux-python
-        - selinux-policy-targeted
-        - selinux-policy-mls
+          - libselinux-python
+          - selinux-policy-targeted
+          - selinux-policy-mls
   when:
       - rhel_07_020210 or rhel_07_020220
 
