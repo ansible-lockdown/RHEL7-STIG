@@ -4,6 +4,11 @@ driver:
   ssh_connection_options:
     - -o ControlPersist=30m
 
+lint:
+  name: yamllint
+  options:
+    config-file: .yamllint
+
 platforms:
   - name: centos7-aws
     image: ${STIG_CI_CENTOS_AWS_AMI_ID:-default}
@@ -20,6 +25,16 @@ platforms:
     vpc_subnet_id: ${STIG_CI_AWS_VPC_SUBNET_ID}
     region: ${STIG_CI_AWS_REGION}
     security_group_vpc: ${STIG_CI_AWS_VPC_ID}
+
+provisioner:
+  name: ansible
+  log: true
+  lint:
+    name: ansible-lint
+  config_options:
+    defaults:
+      remote_tmp: /tmp/.ansible
+      retry_files_enabled: false
 
 scenario:
   name: aws
