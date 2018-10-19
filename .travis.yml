@@ -18,7 +18,7 @@ before_install:
       docker pull centos/systemd
       if [[ "${TRAVIS_PULL_REQUEST}" == "false" || "${TRAVIS_PULL_REQUEST_SLUG}" == "MindPointGroup/RHEL7-STIG" ]]; then
         docker pull registry.access.redhat.com/rhel7:latest
-        (cd tests/docker; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
+        (cd molecule/docker; docker build --build-arg rhn_user=$RHN_USERNAME --build-arg rhn_pass=$RHN_PASSWORD -t  molly .)
       else
         sed -i '/- name: RHEL/,/- docker/d' ./molecule/docker/molecule.yml
       fi
