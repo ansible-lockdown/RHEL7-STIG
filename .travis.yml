@@ -26,4 +26,4 @@ before_install:
 install:
   - pip3 install -r tests/ci-requirements.txt
 script:
-  - molecule test --base-config base-molecule.yml test --scenario-name $TYPE
+  - molecule --base-config base-molecule.yml test --scenario-name $TYPE
