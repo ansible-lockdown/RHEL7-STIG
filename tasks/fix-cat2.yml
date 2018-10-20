@@ -236,15 +236,15 @@
   with_nested:
       - [ 'system-auth', 'password-auth' ]
       -
-        - state: args_present
-          args:
-              - "sha512"
-        - state: args_absent
-          args:
-              - "md5"
-              - "bigcrypt"
-              - "sha256"
-              - "blowfish"
+          - state: args_present
+            args:
+                - "sha512"
+          - state: args_absent
+            args:
+                - "md5"
+                - "bigcrypt"
+                - "sha256"
+                - "blowfish"
   when: rhel_07_010200
   tags:
       - RHEL-07-010200
@@ -363,9 +363,9 @@
             control: requisite
             module_path: pam_pwhistory.so
             module_arguments:
-              - use_authtok
-              - remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}
-              - retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}
+                - use_authtok
+                - remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}
+                - retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}
         with_items: "{{rhel_07_010270_audit.results}}"
         when: item.rc == 1
 
@@ -699,6 +699,8 @@
         check_mode: no
         changed_when: no
         failed_when: no
+        args:
+            warn: false
         register: rhel_07_020260_rhel_type
 
       - block:
@@ -710,7 +712,7 @@
                           (rhel_07_020260_rhel_type.rc == 0) | ternary('workstation', 'server') +
                           '-optional-rpms', omit) }}"
         rescue:
-              # Might be an AWS RHEL instance, try it...
+            # Might be an AWS RHEL instance, try it...
             - name: "MEDIUM | RHEL-07-020260 | PATCH | Vendor packaged system security patches and updates must be installed and up to date. | Install yum-cron"
               yum:
                   name: yum-cron

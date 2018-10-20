@@ -1,19 +1,11 @@
 ---
 driver:
   name: docker
+
 lint:
   name: yamllint
   options:
-    config-data:
-      extends: relaxed
-      rules:
-        braces:
-          max-spaces-inside: 1
-          level: error
-        brackets:
-          max-spaces-inside: 1
-          level: error
-        line-length: disable
+    config-file: .yamllint
 
 platforms:
   - name: centOS
@@ -52,8 +44,9 @@ provisioner:
     defaults:
       remote_tmp: /tmp/.ansible
       retry_files_enabled: false
+
 scenario:
-  name: default
+  name: docker
   test_sequence:
     - lint
     - destroy
@@ -63,6 +56,7 @@ scenario:
     - converge
     # - idempotence # Current bug with lineinfile module
     - destroy
+
 verifier:
   name: testinfra
   lint:

@@ -3,35 +3,30 @@ driver:
   name: vagrant
   provider:
     name: virtualbox
+
 lint:
   name: yamllint
   options:
-    config-data:
-      extends: relaxed
-      rules:
-        braces:
-          max-spaces-inside: 1
-          level: error
-        brackets:
-          max-spaces-inside: 1
-          level: error
-        line-length: disable
+    config-file: .yamllint
+
 platforms:
   - name: centos-vagrant
     box: centos/7
   - name: rhel-vagrant
     box: rhel7
+
 provisioner:
   name: ansible
+  log: true
   lint:
     name: ansible-lint
-  log: true
   config_options:
     defaults:
       remote_tmp: /tmp/.ansible
       retry_files_enabled: false
+
 scenario:
-  name: default
+  name: vagrant
   test_sequence:
     - lint
     - destroy
@@ -44,6 +39,7 @@ scenario:
     - side_effect
     - verify
     - destroy
+
 verifier:
   name: testinfra
   lint:
