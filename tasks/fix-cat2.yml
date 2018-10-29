@@ -1565,9 +1565,7 @@
       - id: "030740"
         path: "/usr/bin/mount"
         key: "privileged-mount"
-      - id: "030740"
-        path: "/usr/bin/mount"
-        key: "privileged-mount"
+        no_perm_x_filter: true
       - id: "030750"
         path: "/usr/bin/umount"
         key: "privileged-mount"
