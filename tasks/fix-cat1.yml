@@ -74,8 +74,8 @@
       regexp: 'nullok ?'
   when: rhel_07_010290
   with_items:
-    - /etc/pam.d/system-auth
-    - /etc/pam.d/password-auth
+      - /etc/pam.d/system-auth
+      - /etc/pam.d/password-auth
   tags:
       - RHEL-07-010290
 

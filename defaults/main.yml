@@ -149,7 +149,7 @@ rhel_07_021620: true
 rhel_07_021700: true
 rhel_07_030010: true
 # if you set 030300 to 'true' ensure you define rhel7stig_audisp_remote_server
-rhel_07_030300: false
+rhel_07_030300: "{{ rhel7stig_audisp_remote_server is defined }}"
 rhel_07_030310: true
 rhel_07_030320: true
 rhel_07_030321: true
@@ -515,8 +515,8 @@ rhel7stig_login_defaults:
     umask: '077'
     create_home: 'yes'
 
-# RHEL-07-030300 set the value to a remote IP address that can receive audit logs
-#rhel7stig_audisp_remote_server: 10.10.10.10
+# RHEL-07-030300 uncomment and set the value to a remote IP address that can receive audit logs
+# rhel7stig_audisp_remote_server: 10.10.10.10
 
 # RHEL-07-030330: set this to 25% of the free space in /var/log/audit (measured in megabytes)
 rhel7stig_auditd_space_left: "{{ ( ansible_mounts | json_query(rhel7stig_audit_disk_size_query) | int / 4 / 1024 / 1024 ) | int + 1 }}"
