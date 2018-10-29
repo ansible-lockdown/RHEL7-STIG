@@ -1,7 +1,8 @@
 ---
 - block:
       - name: "HIGH | RHEL-07-010010 | AUDIT | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
-        shell: 'rpm -Va --nolinkto --nofiledigest --nosize --nomtime --nodigest --nosignature | grep -E ''^(.M|.....U|......G)'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
+        shell: |
+            rpm -Va --nolinkto --nofiledigest --nosize --nomtime --nodigest --nosignature | grep -E '^(.M|.....U|......G)' | tee /dev/stderr | cut -c13- | sed 's/^ //' | xargs rpm -qf --qf='%{name}\n' | sort -u
         args:
             warn: no
         check_mode: no
