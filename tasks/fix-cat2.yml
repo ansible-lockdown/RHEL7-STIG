@@ -1300,12 +1300,13 @@
       - RHEL-07-030010
 
 - name: "MEDIUM | RHEL-07-030300 | PATCH | The operating system must off-load audit records onto a different system or media from the system being audited."
-  command: "true"
-  changed_when: no
-  when: rhel_07_030300
+  lineinfile:
+      path: /etc/audisp/audisp-remote.conf
+      regexp: ^remote_server *=
+      line: remote_server = {{ rhel7stig_audisp_remote_server }}
+  when: rhel_07_030300 and rhel7stig_audisp_remote_server
   tags:
       - RHEL-07-030300
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-030310 | PATCH | The operating system must encrypt the transfer of audit records off-loaded onto a different system or media from the system being audited."
   lineinfile:
@@ -1564,9 +1565,7 @@
       - id: "030740"
         path: "/usr/bin/mount"
         key: "privileged-mount"
-      - id: "030740"
-        path: "/usr/bin/mount"
-        key: "privileged-mount"
+        no_perm_x_filter: true
       - id: "030750"
         path: "/usr/bin/umount"
         key: "privileged-mount"
