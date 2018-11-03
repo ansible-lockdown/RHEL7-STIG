@@ -1,0 +1,8 @@
+---
+id: V-81021
+stig_id: RHEL-07-030211
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must label all off-loaded audit logs before sending them to the central log server.

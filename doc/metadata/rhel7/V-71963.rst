@@ -1,0 +1,8 @@
+---
+id: V-71963
+stig_id: RHEL-07-010490
+status: none
+tag: misc
+---
+
+Red Hat Enterprise Linux operating systems prior to version 7.2 using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes.

@@ -1,0 +1,8 @@
+---
+id: V-81017
+stig_id: RHEL-07-030201
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must configure the au-remote plugin to off-load audit logs using the audisp-remote daemon.

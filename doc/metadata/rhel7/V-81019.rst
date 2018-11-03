@@ -1,0 +1,8 @@
+---
+id: V-81019
+stig_id: RHEL-07-030210
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must take appropriate action when the audisp-remote buffer is full.

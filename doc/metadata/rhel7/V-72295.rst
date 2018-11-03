@@ -1,0 +1,8 @@
+---
+id: V-72295
+stig_id: RHEL-07-040670
+status: none
+tag: misc
+---
+
+Network interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode.

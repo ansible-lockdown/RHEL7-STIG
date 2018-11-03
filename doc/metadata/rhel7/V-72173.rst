@@ -1,0 +1,8 @@
+---
+id: V-72173
+stig_id: RHEL-07-030750
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must audit all uses of the umount command.

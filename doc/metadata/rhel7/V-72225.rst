@@ -1,0 +1,8 @@
+---
+id: V-72225
+stig_id: RHEL-07-040170
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner immediately prior to, or as part of, remote access logon prompts.

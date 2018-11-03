@@ -1,0 +1,8 @@
+---
+id: V-72091
+stig_id: RHEL-07-030340
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) via email when the threshold for the repository maximum audit record storage capacity is reached.

@@ -1,0 +1,8 @@
+---
+id: V-72273
+stig_id: RHEL-07-040520
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must enable an application firewall, if available.

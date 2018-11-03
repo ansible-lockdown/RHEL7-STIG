@@ -1,0 +1,8 @@
+---
+id: V-71971
+stig_id: RHEL-07-020020
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures.

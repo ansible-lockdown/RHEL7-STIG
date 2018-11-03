@@ -1,0 +1,8 @@
+---
+id: V-71951
+stig_id: RHEL-07-010430
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the delay between logon prompts following a failed console logon attempt is at least four seconds.

@@ -1,0 +1,8 @@
+---
+id: V-71849
+stig_id: RHEL-07-010010
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values.

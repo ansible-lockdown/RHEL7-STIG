@@ -1,0 +1,8 @@
+---
+id: V-78997
+stig_id: RHEL-07-010101
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver idle-activation-enabled setting for the graphical user interface.

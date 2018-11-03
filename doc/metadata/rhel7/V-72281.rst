@@ -1,0 +1,8 @@
+---
+id: V-72281
+stig_id: RHEL-07-040600
+status: none
+tag: misc
+---
+
+For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured.

@@ -1,0 +1,8 @@
+---
+id: V-72311
+stig_id: RHEL-07-040750
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS.

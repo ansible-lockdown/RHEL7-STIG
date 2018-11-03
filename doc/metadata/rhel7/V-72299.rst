@@ -1,0 +1,8 @@
+---
+id: V-72299
+stig_id: RHEL-07-040690
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not have a File Transfer Protocol (FTP) server package installed unless needed.

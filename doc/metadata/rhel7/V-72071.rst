@@ -1,0 +1,8 @@
+---
+id: V-72071
+stig_id: RHEL-07-021610
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify extended attributes.

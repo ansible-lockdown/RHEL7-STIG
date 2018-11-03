@@ -1,0 +1,8 @@
+---
+id: V-72003
+stig_id: RHEL-07-020300
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all Group Identifiers (GIDs) referenced in the /etc/passwd file are defined in the /etc/group file.

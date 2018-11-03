@@ -1,0 +1,8 @@
+---
+id: V-71975
+stig_id: RHEL-07-020040
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that designated personnel are notified if baseline configurations are changed in an unauthorized manner.

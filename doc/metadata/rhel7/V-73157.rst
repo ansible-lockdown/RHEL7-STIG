@@ -1,0 +1,8 @@
+---
+id: V-73157
+stig_id: RHEL-07-010082
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must prevent a user from overriding the session idle-delay setting for the graphical user interface.

@@ -1,0 +1,8 @@
+---
+id: V-81013
+stig_id: RHEL-07-021024
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must mount /dev/shm with the noexec option.

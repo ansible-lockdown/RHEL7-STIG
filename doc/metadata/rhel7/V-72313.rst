@@ -1,0 +1,8 @@
+---
+id: V-72313
+stig_id: RHEL-07-040800
+status: none
+tag: misc
+---
+
+SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default.

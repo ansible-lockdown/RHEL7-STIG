@@ -1,0 +1,8 @@
+---
+id: V-71899
+stig_id: RHEL-07-010100
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must initiate a session lock for the screensaver after a period of inactivity for graphical user interfaces.

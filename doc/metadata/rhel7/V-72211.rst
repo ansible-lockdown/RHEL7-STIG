@@ -1,0 +1,8 @@
+---
+id: V-72211
+stig_id: RHEL-07-031010
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the rsyslog daemon does not accept log messages from other servers unless the server is being used for log aggregation.

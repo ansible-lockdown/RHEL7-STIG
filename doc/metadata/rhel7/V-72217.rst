@@ -1,0 +1,8 @@
+---
+id: V-72217
+stig_id: RHEL-07-040000
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types.

@@ -1,0 +1,8 @@
+---
+id: V-72101
+stig_id: RHEL-07-030390
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must audit all uses of the lchown syscall.

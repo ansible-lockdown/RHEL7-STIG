@@ -1,0 +1,8 @@
+---
+id: V-71959
+stig_id: RHEL-07-010470
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not allow a non-certificate trusted host SSH logon to the system.

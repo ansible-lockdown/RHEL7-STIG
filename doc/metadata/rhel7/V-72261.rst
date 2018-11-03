@@ -1,0 +1,8 @@
+---
+id: V-72261
+stig_id: RHEL-07-040440
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Kerberos authentication unless needed.

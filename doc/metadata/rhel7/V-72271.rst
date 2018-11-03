@@ -1,0 +1,8 @@
+---
+id: V-72271
+stig_id: RHEL-07-040510
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces.

@@ -1,0 +1,8 @@
+---
+id: V-72075
+stig_id: RHEL-07-021700
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved.

@@ -1,0 +1,8 @@
+---
+id: V-71955
+stig_id: RHEL-07-010450
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not allow an unrestricted logon to the system.

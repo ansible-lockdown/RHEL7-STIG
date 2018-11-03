@@ -1,0 +1,8 @@
+---
+id: V-72043
+stig_id: RHEL-07-021010
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media.

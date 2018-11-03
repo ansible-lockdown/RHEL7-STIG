@@ -1,0 +1,8 @@
+---
+id: V-71997
+stig_id: RHEL-07-020250
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be a vendor supported release.

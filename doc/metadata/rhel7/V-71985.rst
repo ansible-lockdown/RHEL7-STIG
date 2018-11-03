@@ -1,0 +1,8 @@
+---
+id: V-71985
+stig_id: RHEL-07-020110
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must disable the file system automounter unless required.

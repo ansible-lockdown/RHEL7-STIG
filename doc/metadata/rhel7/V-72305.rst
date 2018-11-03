@@ -1,0 +1,8 @@
+---
+id: V-72305
+stig_id: RHEL-07-040720
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that if the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon is configured to operate in secure mode.

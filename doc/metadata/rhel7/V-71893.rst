@@ -1,0 +1,8 @@
+---
+id: V-71893
+stig_id: RHEL-07-010070
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces.

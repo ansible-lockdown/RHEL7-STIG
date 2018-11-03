@@ -1,0 +1,8 @@
+---
+id: V-72267
+stig_id: RHEL-07-040470
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow compression or only allows compression after successful authentication.

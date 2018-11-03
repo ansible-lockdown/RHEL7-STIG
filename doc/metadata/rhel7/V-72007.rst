@@ -1,0 +1,8 @@
+---
+id: V-72007
+stig_id: RHEL-07-020320
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner.

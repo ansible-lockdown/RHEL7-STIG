@@ -1,0 +1,8 @@
+---
+id: V-81005
+stig_id: RHEL-07-010482
+status: none
+tag: misc
+---
+
+Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes.

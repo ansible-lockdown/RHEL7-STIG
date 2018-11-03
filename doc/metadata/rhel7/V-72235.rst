@@ -1,0 +1,8 @@
+---
+id: V-72235
+stig_id: RHEL-07-040310
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all networked systems use SSH for confidentiality and integrity of transmitted and received information as well as information during preparation for transmission.

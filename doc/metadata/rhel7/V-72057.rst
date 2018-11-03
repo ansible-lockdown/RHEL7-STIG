@@ -1,0 +1,8 @@
+---
+id: V-72057
+stig_id: RHEL-07-021300
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must disable Kernel core dumps unless needed.

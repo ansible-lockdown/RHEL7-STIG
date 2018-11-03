@@ -1,0 +1,8 @@
+---
+id: V-71989
+stig_id: RHEL-07-020210
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must enable SELinux.

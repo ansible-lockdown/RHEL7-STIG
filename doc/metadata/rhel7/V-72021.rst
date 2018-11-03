@@ -1,0 +1,8 @@
+---
+id: V-72021
+stig_id: RHEL-07-020650
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are group-owned by the home directory owners primary group.

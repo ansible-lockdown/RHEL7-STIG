@@ -1,0 +1,8 @@
+---
+id: V-72081
+stig_id: RHEL-07-030010
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must shut down upon audit processing failure, unless availability is an overriding concern. If availability is a concern, the system must alert the designated staff (System Administrator [SA] and Information System Security Officer [ISSO] at a minimum) in the event of an audit processing failure.

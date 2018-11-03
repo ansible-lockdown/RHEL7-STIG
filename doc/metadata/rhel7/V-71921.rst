@@ -1,0 +1,8 @@
+---
+id: V-71921
+stig_id: RHEL-07-010210
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured to use the shadow file to store only encrypted representations of passwords.

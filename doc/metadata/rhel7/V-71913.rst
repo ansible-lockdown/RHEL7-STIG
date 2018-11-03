@@ -1,0 +1,8 @@
+---
+id: V-71913
+stig_id: RHEL-07-010170
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed a minimum of four character classes must be changed.

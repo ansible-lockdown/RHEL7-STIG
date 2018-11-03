@@ -1,0 +1,8 @@
+---
+id: V-72089
+stig_id: RHEL-07-030330
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must initiate an action to notify the System Administrator (SA) and Information System Security Officer ISSO, at a minimum, when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity.

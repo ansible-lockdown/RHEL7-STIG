@@ -1,0 +1,8 @@
+---
+id: V-72251
+stig_id: RHEL-07-040390
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon is configured to only use the SSHv2 protocol.

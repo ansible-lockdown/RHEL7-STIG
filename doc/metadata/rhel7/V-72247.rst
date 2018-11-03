@@ -1,0 +1,8 @@
+---
+id: V-72247
+stig_id: RHEL-07-040370
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not permit direct logons to the root account using remote access via SSH.

@@ -1,0 +1,8 @@
+---
+id: V-71923
+stig_id: RHEL-07-010220
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that user and group account administration utilities are configured to store only encrypted representations of passwords.

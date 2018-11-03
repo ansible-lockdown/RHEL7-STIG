@@ -1,0 +1,8 @@
+---
+id: V-72291
+stig_id: RHEL-07-040650
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not allow interfaces to perform Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects by default.

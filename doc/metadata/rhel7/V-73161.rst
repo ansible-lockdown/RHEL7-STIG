@@ -1,0 +1,8 @@
+---
+id: V-73161
+stig_id: RHEL-07-021021
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must prevent binary files from being executed on file systems that are being imported via Network File System (NFS).

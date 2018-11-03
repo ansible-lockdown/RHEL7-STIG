@@ -1,0 +1,8 @@
+---
+id: V-72269
+stig_id: RHEL-07-040500
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS).

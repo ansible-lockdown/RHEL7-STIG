@@ -1,0 +1,8 @@
+---
+id: V-73173
+stig_id: RHEL-07-030874
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/opasswd.

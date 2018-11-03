@@ -1,0 +1,8 @@
+---
+id: V-71933
+stig_id: RHEL-07-010270
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that passwords are prohibited from reuse for a minimum of five generations.

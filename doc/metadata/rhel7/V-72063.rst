@@ -1,0 +1,8 @@
+---
+id: V-72063
+stig_id: RHEL-07-021330
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must use a separate file system for the system audit data path.

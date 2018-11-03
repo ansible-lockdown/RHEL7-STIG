@@ -1,0 +1,8 @@
+---
+id: V-72165
+stig_id: RHEL-07-030710
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must audit all uses of the newgrp command.

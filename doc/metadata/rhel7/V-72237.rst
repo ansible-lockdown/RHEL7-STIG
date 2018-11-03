@@ -1,0 +1,8 @@
+---
+id: V-72237
+stig_id: RHEL-07-040320
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with SSH traffic are terminated at the end of the session or after 10 minutes of inactivity, except to fulfill documented and validated mission requirements.

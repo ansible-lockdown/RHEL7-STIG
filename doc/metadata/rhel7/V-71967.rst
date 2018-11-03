@@ -1,0 +1,8 @@
+---
+id: V-71967
+stig_id: RHEL-07-020000
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not have the rsh-server package installed.

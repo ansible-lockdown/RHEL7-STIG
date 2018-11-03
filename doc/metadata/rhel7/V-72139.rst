@@ -1,0 +1,8 @@
+---
+id: V-72139
+stig_id: RHEL-07-030580
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must audit all uses of the chcon command.

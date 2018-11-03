@@ -1,0 +1,8 @@
+---
+id: V-72297
+stig_id: RHEL-07-040680
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying.

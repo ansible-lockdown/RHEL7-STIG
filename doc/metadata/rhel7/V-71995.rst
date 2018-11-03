@@ -1,0 +1,8 @@
+---
+id: V-71995
+stig_id: RHEL-07-020240
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files.

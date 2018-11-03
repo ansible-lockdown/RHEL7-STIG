@@ -1,0 +1,8 @@
+---
+id: V-71929
+stig_id: RHEL-07-010250
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that passwords for new users are restricted to a 60-day maximum lifetime.

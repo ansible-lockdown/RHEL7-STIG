@@ -1,0 +1,8 @@
+---
+id: V-71947
+stig_id: RHEL-07-010340
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that users must provide a password for privilege escalation.

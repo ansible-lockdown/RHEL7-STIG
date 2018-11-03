@@ -1,0 +1,8 @@
+---
+id: V-72309
+stig_id: RHEL-07-040740
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not be performing packet forwarding unless the system is a router.

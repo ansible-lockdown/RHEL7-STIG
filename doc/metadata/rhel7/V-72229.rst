@@ -1,0 +1,8 @@
+---
+id: V-72229
+stig_id: RHEL-07-040190
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.

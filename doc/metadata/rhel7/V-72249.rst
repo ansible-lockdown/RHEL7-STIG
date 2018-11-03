@@ -1,0 +1,8 @@
+---
+id: V-72249
+stig_id: RHEL-07-040380
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using known hosts authentication.

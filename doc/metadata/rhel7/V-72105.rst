@@ -1,0 +1,8 @@
+---
+id: V-72105
+stig_id: RHEL-07-030410
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must audit all uses of the chmod syscall.

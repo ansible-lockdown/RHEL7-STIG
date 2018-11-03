@@ -1,0 +1,8 @@
+---
+id: V-72001
+stig_id: RHEL-07-020270
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not have unnecessary accounts.

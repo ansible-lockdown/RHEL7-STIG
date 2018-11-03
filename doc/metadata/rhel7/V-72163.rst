@@ -1,0 +1,8 @@
+---
+id: V-72163
+stig_id: RHEL-07-030700
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must audit all uses of the sudoers file and all files in the /etc/sudoers.d/ directory.

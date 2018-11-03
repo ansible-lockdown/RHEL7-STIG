@@ -1,0 +1,8 @@
+---
+id: V-72221
+stig_id: RHEL-07-040110
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must use a FIPS 140-2 approved cryptographic algorithm for SSH communications.

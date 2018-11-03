@@ -1,0 +1,8 @@
+---
+id: V-72065
+stig_id: RHEL-07-021340
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must use a separate file system for /tmp (or equivalent).

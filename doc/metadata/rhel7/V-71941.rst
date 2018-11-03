@@ -1,0 +1,8 @@
+---
+id: V-71941
+stig_id: RHEL-07-010310
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must disable account identifiers (individuals, groups, roles, and devices) if the password expires.

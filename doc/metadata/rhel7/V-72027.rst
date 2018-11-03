@@ -1,0 +1,8 @@
+---
+id: V-72027
+stig_id: RHEL-07-020680
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive.

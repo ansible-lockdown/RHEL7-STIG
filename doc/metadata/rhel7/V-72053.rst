@@ -1,0 +1,8 @@
+---
+id: V-72053
+stig_id: RHEL-07-021110
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the cron.allow file, if it exists, is owned by root.

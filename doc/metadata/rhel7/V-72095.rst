@@ -1,0 +1,8 @@
+---
+id: V-72095
+stig_id: RHEL-07-030360
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must audit all executions of privileged functions.

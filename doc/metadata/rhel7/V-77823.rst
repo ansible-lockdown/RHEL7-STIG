@@ -1,0 +1,8 @@
+---
+id: V-77823
+stig_id: RHEL-07-010481
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must require authentication upon booting into single-user and maintenance modes.

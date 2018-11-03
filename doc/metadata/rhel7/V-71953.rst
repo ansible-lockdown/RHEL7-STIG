@@ -1,0 +1,8 @@
+---
+id: V-71953
+stig_id: RHEL-07-010440
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must not allow an unattended or automatic logon to the system via a graphical user interface.

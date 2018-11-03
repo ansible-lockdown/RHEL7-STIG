@@ -1,0 +1,8 @@
+---
+id: V-72145
+stig_id: RHEL-07-030610
+status: none
+tag: misc
+---
+
+The Red Hat Enterprise Linux operating system must generate audit records for all unsuccessful account access events.
