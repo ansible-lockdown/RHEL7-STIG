@@ -16,7 +16,7 @@ rhel7stig_audit_complex: yes
 # We've defined disruption-high to indicate items that are likely to cause
 # disruption in a normal workflow.  These items can be remediated automatically
 # but are disabled by default to avoid disruption.
-rhel7stig_disruption_high: no
+rhel7stig_disruption_high: yes
 
 # Show "changed" for disruptive items not remediated per disruption-high
 # setting to make them stand out.
@@ -55,10 +55,10 @@ rhel_07_020230: true
 # Not an automated task
 rhel_07_020250: true
 rhel_07_020310: true
-rhel_07_021350: true
+rhel_07_021350: false #Exeption
 rhel_07_021710: true
 rhel_07_030000: true
-rhel_07_032000: true
+rhel_07_032000: false #Exception
 rhel_07_040390: true
 rhel_07_040540: true
 rhel_07_040550: true
@@ -95,14 +95,14 @@ rhel_07_010230: true
 rhel_07_010240: true
 rhel_07_010250: true
 # Potential for locking out users
-rhel_07_010260: false
-rhel_07_010270: true
+rhel_07_010260: false #Exception
+rhel_07_010270: false #Does not execute properly
 rhel_07_010280: true
 rhel_07_010310: true
 rhel_07_010320: true
 rhel_07_010330: true
-rhel_07_010340: true
-rhel_07_010350: true
+rhel_07_010340: false #Exception
+rhel_07_010350: false #Exception
 rhel_07_010430: true
 rhel_07_010460: true
 rhel_07_010470: true
@@ -111,12 +111,12 @@ rhel_07_010500: true
 rhel_07_020020: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
-rhel_07_020040: false
+rhel_07_020040: true #Default is false
 rhel_07_020100: true
 rhel_07_020101: true
 rhel_07_020110: true
 rhel_07_020240: true
-rhel_07_020260: true
+rhel_07_020260: false #Does not execute properly
 rhel_07_020270: true
 rhel_07_020320: true
 rhel_07_020330: true
@@ -138,7 +138,7 @@ rhel_07_020900: true
 rhel_07_021000: true
 rhel_07_021010: true
 rhel_07_021020: true
-rhel_07_021021: true
+rhel_07_021021: false #Does not execute properly
 rhel_07_021030: true
 rhel_07_021040: true
 rhel_07_021100: true
@@ -244,25 +244,25 @@ rhel_07_040460: true
 rhel_07_040470: true
 rhel_07_040500: true
 rhel_07_040510: true
-rhel_07_040520: true
-rhel_07_040610: true
-rhel_07_040620: true
+rhel_07_040520: false #Exception
+rhel_07_040610: false #Exception
+rhel_07_040620: false #Exception
 rhel_07_040630: true
-rhel_07_040640: true
+rhel_07_040640: false #Exception
 rhel_07_040641: true
-rhel_07_040650: true
-rhel_07_040660: true
+rhel_07_040650: false #Exception
+rhel_07_040660: false #Exception
 rhel_07_040670: true
 rhel_07_040680: true
 rhel_07_040720: true
 rhel_07_040730: true
-rhel_07_040740: true
+rhel_07_040740: false #Exception
 rhel_07_040750: true
 rhel_07_040810: true
-rhel_07_040820: true
+rhel_07_040820: false #Exception
 rhel_07_040830: true
 rhel_07_041001: true
-rhel_07_041002: true
+rhel_07_041002: false #Exception
 rhel_07_041003: true
 rhel_07_041010: true
 # CAT 3 rules
@@ -294,7 +294,7 @@ rhel7stig_min_supported_os_ver:
 
 # RHEL-07-040740
 # If system is not router, run tasks that disable router functions.
-rhel7stig_system_is_router: no
+rhel7stig_system_is_router: yes
 
 # RHEL-07-032000
 # Install and enable a DOD-approved AV program. ClamAV and McAfee (nails)
@@ -432,7 +432,7 @@ rhel7stig_password_complexity:
     ocredit: -1
     difok: 8
     minclass: 4
-    maxrepeat: 3
+    maxrepeat: 2
     maxclassrepeat: 4
     minlen: 15
 
@@ -475,7 +475,7 @@ rhel7stig_auto_package_updates:
 rhel7stig_unnecessary_accounts:
     - ftp
     - games
-rhel7stig_remove_unnecessary_user_files: no
+rhel7stig_remove_unnecessary_user_files: yes
 
 # RHEL-07-010270
 # pam_pwhistory settings - Verify the operating system prohibits password reuse for a minimum of five generations.
@@ -544,7 +544,7 @@ rhel7stig_ipsec_required: no
 # Setting to enable or disable fixes that depend on password-based authentication
 # i.e. if users authenticate with a means other than passwords (pubkey)
 # and will not know or use passwords then this should be 'no'
-rhel7stig_using_password_auth: yes
+rhel7stig_using_password_auth: no
 
 rhel7stig_availability_override: false
 # auditd_failure_flag
