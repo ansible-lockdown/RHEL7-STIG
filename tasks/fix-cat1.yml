@@ -404,7 +404,7 @@
   when:
       - rhel_07_040390
       - rhel7stig_ssh_required
-      - ansible_distribution_version is not version_compare('7.4', '>=')
+      - ansible_distribution_version is not version_compare('7.5', '>=')
   tags:
       - RHEL-07-040390
       - ssh
