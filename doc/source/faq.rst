@@ -1,5 +1,5 @@
-Frequently Asked Questions
-==========================
+FAQ
+===
 
 Does this role work only with OpenStack environments?
 -----------------------------------------------------

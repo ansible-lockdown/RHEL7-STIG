@@ -1,11 +1,17 @@
-Additional hardening configurations
-===================================
+Additional Controls
+===================
 
 Although the Security Technical Implementation Guide (STIG) contains a very
-comprehensive set of security configurations, some ansible-hardening
-contributors want to add extra security configurations to the role. The
-*contrib* portion of the ansible-hardening role is designed to implement those
-configurations as an optional set of tasks.
+comprehensive set of security configurations, some contributors want to add
+extra security configurations to the role. The *contrib* portion of the 
+role is designed to implement those configurations as an optional set of tasks.
+
+In general, *contrib* controls are limited to items to meet backwards compatibility
+with the `Openstack Ansible Hardening`_ project. It is recommended that new *contrib*
+items (things that don't address specific STIG items) should be addressed in a separate
+Ansible role.
+
+.. _Openstack Ansible Hardening: https://github.com/openstack/ansible-hardening
 
 The *contrib* hardening configurations are disabled by default, but they can
 be enabled by setting the following Ansible variable:

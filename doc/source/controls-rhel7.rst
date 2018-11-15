@@ -1,13 +1,14 @@
-Security hardening controls in detail (RHEL 7 STIG)
+.. _stig_controls_label:
+
+STIG Controls
 ===================================================
 
-The ansible-hardening role follows the Red Hat Enteprise Linux 7
+This role follows the Red Hat Enteprise Linux 7
 `Security Technical Implementation Guide (STIG)`_. The guide has over 200
 controls that apply to various parts of a Linux system, and it is updated
 regularly by the Defense Information Systems Agency (DISA). DISA is part of the
-United States Department of Defense. The current version of the openstack-
-ansible-security role is based on release 1, version 0.2 of the Red Hat
-Enterprise Linux 7 STIG.
+United States Department of Defense. The current version of this role is based
+on Release 2, Version 1 of the Red Hat Enterprise Linux 7 STIG.
 
 Controls are divided into groups based on the following properties:
 
@@ -16,6 +17,11 @@ Controls are divided into groups based on the following properties:
   * *High severity* controls have a large impact on the security of a
     system. They also have the largest operational impact to a system and
     deployers should test them thoroughly in non-production environments.
+
+  * *Medium severity* controls are the bulk of the items in the STIG and 
+    they have a moderate level of impact on the security of a system.
+    Many controls in this category will have an operational impact on 
+    a system and should be tested thoroughly before implementation.
 
   * *Low severity* controls have a smaller impact on overall security, but they
     are generally easier to implement with a much lower operational impact.
@@ -31,33 +37,20 @@ Controls are divided into groups based on the following properties:
     process for new servers while others require manual inspection of the
     system.
 
-  * *Opt in* controls have automated tasks written, but these tasks are
+  * *Opt-In* controls have automated tasks written, but these tasks are
     disabled by default. These controls are often disabled because they could
     cause disruptions on a production system, or they do not provide a
     significant security benefit. Each control can be enabled with Ansible
     variables and these variables are documented with each control below.
 
-  * *Verification only* controls have tasks that verify that a control is met.
+  * *Verification Only* controls have tasks that verify that a control is met.
     These tasks do not take any action on the system, but they often display
     debug output with additional instructions for deployers.
 
-* **Tag:**
-
-  * Each control has a tag applied, and the tags allow deployers to select
-    specific groups of controls to apply. For example, deployers can apply the
-    controls for the ssh daemon by using ``--tags sshd`` on the Ansible command
-    line.
-
-  * Tags also make it easier to navigate through the Ansible tasks in the code
-    itself. For example, all tasks tagged with ``auditd`` are found within
-    ``tasks/rhel7stig/auditd.yml``.
-
 .. _Security Technical Implementation Guide (STIG): http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx
 
-Although the STIG is specific to Red Hat Enterprise Linux 7, it also applies to
-CentOS 7 systems. In addition, almost all of the controls are easily translated
-for Ubuntu 16.04, openSUSE Leap and SUSE Linux Enterprise 12. Any deviations
-during translation are noted within the documentation below.
+Although the STIG is specific to Red Hat Enterprise Linux 7, it can also be applied
+to CentOS 7 systems.
 
 .. toctree::
    :maxdepth: 2

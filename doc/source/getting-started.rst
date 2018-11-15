@@ -1,22 +1,30 @@
 Getting started
 ===============
 
-The ansible-hardening role can be used along with the `OpenStack-Ansible`_
-project or as a standalone role that can be used along with other Ansible
-playbooks. This documentation assumes that the reader has completed the steps
-within the
-`Ansible installation guide <http://docs.ansible.com/ansible/intro_installation.html>`_.
+This role is part of the `Ansible Lockdown`_ project and can be used as a 
+standalone role or it can be used along with other Ansible roles and playbooks.
 
-.. _OpenStack-Ansible: https://git.openstack.org/cgit/openstack/openstack-ansible/
+.. _Ansible Lockdown: https://github.com/ansible/ansible-lockdown
 
 .. contents::
    :local:
    :backlinks: none
 
-Installing the ansible-hardening role
+Requirements
+------------
+This documentation assumes that the reader has completed the steps within the
+`Ansible installation guide <http://docs.ansible.com/ansible/intro_installation.html>`_.
+
+The following additional libraries are required on the Ansible control node:
+
+``passlib`` >= 1.5 (1.6.5 is available in RHEL and CentOS as ``python-passlib``)
+
+``jmespath`` (available in RHEL and CentOS as ``python-jmespath``)
+
+Installation
 -------------------------------------
 
-The recommended installation methods for the ansible-hardening role are
+The recommended installation methods for this role are
 ``ansible-galaxy`` (recommended) or ``git``.
 
 Using ``ansible-galaxy``
@@ -27,10 +35,10 @@ is provided with your Ansible installation:
 
 .. code-block:: console
 
-   ansible-galaxy install git+https://github.com/openstack/ansible-hardening
+   ansible-galaxy install git+https://github.com/mindpointgroup/rhel7-stig
 
 The ``ansible-galaxy`` command will install the role into
-``/etc/ansible/roles/ansible-hardening`` and this makes it easy to use with
+``/etc/ansible/roles/rhel7-stig`` and this makes it easy to use with
 Ansible playbooks.
 
 Using ``git``
@@ -41,7 +49,7 @@ Start by cloning the role into a directory of your choice:
 .. code-block:: console
 
    mkdir -p ~/.ansible/roles/
-   git clone https://github.com/openstack/ansible-hardening ~/.ansible/roles/ansible-hardening
+   git clone https://github.com/mindpointgroup/rhel7-stig ~/.ansible/roles/rhel7-stig
 
 Ansible looks for roles in ``~/.ansible/roles`` by default.
 
@@ -57,39 +65,37 @@ an example of a ``ansible.cfg`` file that uses a custom path for roles:
 With this configuration, Ansible looks for roles in ``/etc/ansible/roles`` and
 ``~/custom/roles``.
 
+.. _Role Repo: https://github.com/mindpointgroup/rhel7-stig
+
 Usage
 -----
 
-The ansible-hardening role works well with existing playbooks. The following
-is an example of a basic playbook that uses the ansible-hardening role:
+This role works well with existing playbooks. The following is an
+example of a basic playbook that uses this role:
 
 .. code-block:: yaml
 
     ---
 
-    - name: Harden all systems
-      hosts: all
+    - hosts: servers
       become: yes
-      vars:
-        security_enable_firewalld: no
-        security_rhel7_initialize_aide: no
-        security_ntp_servers:
-          - 1.example.com
-          - 2.example.com
       roles:
-        - ansible-hardening
+        - role: rhel7-stig
+          when:
+            - ansible_os_family == 'RedHat'
+            - ansible_distribution_major_version | version_compare('7', '=')
 
-The variables provided in the ``vars`` section can enable, disable, or alter
-configuration for various tasks in the ansible-hardening role. For more details
-on the available variables, refer to the :ref:`hardening_domains_label`
+The role is fully customizable by setting the variables provided in the ``defaults/main.yml``.
+These variables are designed so that categories/severities or individual rules can be enabled,
+disabled, or can alter configuration for various STIG items in the role. For more details
+on the available variables, refer to the :ref:`stig_controls_label`
 section.
 
 .. note::
 
-    The role must be run as the root user or as a user with ``sudo`` access.
-    The example above uses the ``become`` option, which causes Ansible to use
-    sudo before running tasks. If the role is running as root, this option can
-    be changed to ``user: root``.
+    The role requires elevated privileges and must be run as a user with ``sudo``
+    access. The example above uses the ``become`` option, which causes Ansible to use
+    sudo before running tasks.
 
 .. warning::
 

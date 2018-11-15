@@ -230,13 +230,11 @@ def generate_docs():
             stig_ids.append(rule['id'])
             severity[rule['severity']].append(rule['id'])
             status[deployer_notes['status']].append(rule['id'])
-            tag[deployer_notes['tag']].append(rule['id'])
 
     keyorder = ['high', 'medium', 'low']
     severity = OrderedDict(sorted(severity.items(),
                                   key=lambda x: keyorder.index(x[0])))
     status = OrderedDict(sorted(status.items(), key=lambda x: x[0]))
-    tag = OrderedDict(sorted(tag.items(), key=lambda x: x[0]))
 
     all_toc = render_all(stig_ids, all_deployer_notes)
     severity_toc = render_toc('severity',
@@ -245,23 +243,6 @@ def generate_docs():
     status_toc = render_toc('implementation status',
                             status,
                             all_deployer_notes)
-
-    # Make sure auto_ files exist for all domains to avoid sphinx include errors
-    domains = glob.glob("{}/rhel7/domains/*.rst".format(DOC_SOURCE_DIR))
-    for domain in domains:
-        domain = os.path.splitext(os.path.basename(domain))[0]
-        if not domain.startswith("auto_"):
-            fname = "{0}/rhel7/domains/auto_{1}.rst".format(DOC_SOURCE_DIR, domain)
-            open(fname, 'a').close()
-
-    # Write the docs for each tag to individual files so we can include them
-    # from doc files in the domains folder.
-    unique_tags = [x for x, y in tag.items()]
-    for unique_tag in unique_tags:
-        tag_toc = render_toc_partial(None,
-                                     {unique_tag: tag[unique_tag]},
-                                     all_deployer_notes)
-        write_file("rhel7/domains/auto_{}.rst".format(unique_tag), tag_toc)
 
     write_file("rhel7/auto_controls-all.rst", all_toc)
     write_file("rhel7/auto_controls-by-severity.rst", severity_toc)

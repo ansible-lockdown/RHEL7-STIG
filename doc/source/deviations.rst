@@ -1,10 +1,11 @@
-Deviations from the Security Technical Implementation Guide (STIG)
+Control Deviations
 ==================================================================
 
-The ansible-hardening role deviates from some of the STIG's requirements when a
-security control could cause significant issues with production systems. The
-role classifies each control into an implementation status and provides notes
-on why a certain control is skipped or altered.
+The role deviates from some of the STIG's requirements when a security control
+could cause significant issues with production systems or when an item can't be
+realistically implemented via automation. The role classifies each control
+into an implementation status and provides notes on why a certain control is
+skipped, altered, or only reports a status.
 
 The following provides a brief overview of each implementation status:
 
@@ -28,6 +29,11 @@ Opt-In
   by default. They are often disabled because they could cause harm to a subset
   of systems. Each control has notes that explains the caveats of the control
   and how to enable it if needed.
+
+Verification Only
+  These controls have tasks that verify that a control is met.
+  These tasks do not take any action on the system, but they often display
+  debug output with additional instructions for deployers.
 
 Deployers should review the full list of controls
 `sorted by implementation status <rhel7/auto_controls-by-status.html>`_.

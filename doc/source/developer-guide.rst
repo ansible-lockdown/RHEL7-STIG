@@ -1,7 +1,3 @@
-.. contents::
-   :local:
-   :backlinks: none
-
 Developer Guide
 ===============
 
