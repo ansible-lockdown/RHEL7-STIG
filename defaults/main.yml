@@ -58,7 +58,7 @@ rhel_07_020310: true
 rhel_07_021350: false #Exeption
 rhel_07_021710: true
 rhel_07_030000: true
-rhel_07_032000: false #Exception
+rhel_07_032000: false #Addresed by Infrastructure
 rhel_07_040390: true
 rhel_07_040540: true
 rhel_07_040550: true
@@ -149,7 +149,7 @@ rhel_07_021620: true
 rhel_07_021700: true
 rhel_07_030010: true
 # if you set 030300 to 'true' ensure you define rhel7stig_audisp_remote_server
-rhel_07_030300: "{{ rhel7stig_audisp_remote_server is defined }}"
+rhel_07_030300: false # Addressed by infrastructure
 rhel_07_030310: true
 rhel_07_030320: true
 rhel_07_030321: true
@@ -215,7 +215,7 @@ rhel_07_030890: true
 rhel_07_030900: true
 rhel_07_030910: true
 rhel_07_030920: true
-rhel_07_031000: true
+rhel_07_031000: false # Addressed by Infrastructure
 rhel_07_031010: true
 rhel_07_040100: true
 rhel_07_040110: true
@@ -242,9 +242,9 @@ rhel_07_040440: true
 rhel_07_040450: true
 rhel_07_040460: true
 rhel_07_040470: true
-rhel_07_040500: true
+rhel_07_040500: false #Addressed by infrastructure
 rhel_07_040510: true
-rhel_07_040520: false #Exception
+rhel_07_040520: false #Addressed by infrastructure
 rhel_07_040610: false #Exception
 rhel_07_040620: false #Exception
 rhel_07_040630: true
@@ -258,7 +258,7 @@ rhel_07_040720: true
 rhel_07_040730: true
 rhel_07_040740: false #Exception
 rhel_07_040750: true
-rhel_07_040810: true
+rhel_07_040810: false #Addressed by infrastructure
 rhel_07_040820: false #Exception
 rhel_07_040830: true
 rhel_07_041001: true
@@ -279,7 +279,7 @@ rhel_07_021600: true
 rhel_07_021610: true
 rhel_07_040000: true
 rhel_07_040530: true
-rhel_07_040600: true
+rhel_07_040600: false #Addressed by infrastructure
 
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: no
