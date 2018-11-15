@@ -117,7 +117,7 @@ rhel_07_020101: true
 rhel_07_020110: true
 rhel_07_020240: true
 rhel_07_020260: false #Does not execute properly
-rhel_07_020270: true
+rhel_07_020270: false #Does not execute properly
 rhel_07_020320: true
 rhel_07_020330: true
 rhel_07_020600: true
