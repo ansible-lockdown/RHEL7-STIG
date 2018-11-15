@@ -489,7 +489,7 @@ rhel7stig_pam_pwhistory:
 rhel7stig_pam_faillock:
     attempts: 3
     interval: 900
-    unlock_time: 900
+    unlock_time: 604800 
     fail_for_root: yes
 
 # RHEL-07-030320 and RHEL-07-030321
