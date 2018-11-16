@@ -139,9 +139,7 @@
       - grub
       - bootloader
 
- name: |
-
-      "HIGH | RHEL-07-010482 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+- name: "HIGH | RHEL-07-010482 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
   lineinfile:
       dest: /boot/grub2/user.cfg
       create: yes
