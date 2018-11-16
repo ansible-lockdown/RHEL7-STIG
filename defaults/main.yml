@@ -369,6 +369,7 @@ rhel7stig_boot_password_config:
 # Set to false for fire and forget mode
 rhel7stig_wait_for_aide_init: true
 rhel7stig_aide_handler: "{{ (rhel7stig_wait_for_aide_init) | ternary('init aide and wait','init aide') }}"
+rhel7stig_aide_email_notification_address: nobody@us.navy.mil
 
 # Set to false to not overwrite an existing AIDE DB
 rhel7stig_overwrite_aide_db: true
@@ -384,7 +385,7 @@ rhel7stig_aide_cron:
     special_time: daily
     # Disable the notification check rule to disable mailing notifications
     notify_by_mail: "{{rhel_07_020040}}"
-    notify_cmd: ' | /bin/mail -s "$HOSTNAME - Daily aide integrity check run" root'
+    notify_cmd: ' | /bin/mail -s "$HOSTNAME - Daily aide integrity check run" {{rhel7stig_aide_email_notification_address}}'
 
 rhel7stig_cron_special_disable: "{{
         rhel7stig_workaround_for_disa_benchmark or
