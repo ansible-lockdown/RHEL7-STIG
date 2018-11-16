@@ -139,6 +139,23 @@
       - grub
       - bootloader
 
+ name: |
+
+      "HIGH | RHEL-07-010482 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+  lineinfile:
+      dest: /boot/grub2/user.cfg
+      create: yes
+      insertafter: EOF
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+  with_items: "{{ rhel7stig_boot_password_config }}"
+  notify: make grub2 config
+  when: rhel_07_010482
+  tags:
+      - RHEL-07-010482
+      - grub
+      - bootloader
+
 - name: "HIGH | RHEL-07-020000 | PATCH | The rsh-server package must not be installed"
   yum:
       name: rsh-server
