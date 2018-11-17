@@ -56,6 +56,7 @@ rhel_07_020230: true
 # Not an automated task
 rhel_07_020250: true
 rhel_07_020310: true
+rhel_07_020710: true
 rhel_07_021350: false #Exeption
 rhel_07_021710: true
 rhel_07_030000: true
