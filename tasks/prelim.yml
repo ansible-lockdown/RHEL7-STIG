@@ -195,7 +195,6 @@
   yum:
       name: python-passlib
   when:
-      - inventory_hostname == 'localhost' or inventory_hostname == '127.0.0.1'
       - rhel_07_020030 or rhel_07_010480
 
 - name: "PRELIM | RHEL-07-020210 RHEL-07-020220| Install SELinux related dependencies"
