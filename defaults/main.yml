@@ -57,7 +57,7 @@ rhel_07_020230: true
 rhel_07_020250: true
 rhel_07_020310: true
 rhel_07_020710: true
-rhel_07_021350: false #Exeption
+rhel_07_021350: true
 rhel_07_021710: true
 rhel_07_030000: true
 rhel_07_032000: false #Addresed by Infrastructure
@@ -98,7 +98,7 @@ rhel_07_010240: true
 rhel_07_010250: true
 # Potential for locking out users
 rhel_07_010260: true #Exception
-rhel_07_010270: false #Does not execute properly
+rhel_07_010270: true
 rhel_07_010280: true
 rhel_07_010310: true
 rhel_07_010320: true
@@ -119,7 +119,7 @@ rhel_07_020101: true
 rhel_07_020110: true
 rhel_07_020240: true
 rhel_07_020260: false #Does not execute properly
-rhel_07_020270: false #Does not execute properly
+rhel_07_020270: true
 rhel_07_020320: true
 rhel_07_020330: true
 rhel_07_020600: true
