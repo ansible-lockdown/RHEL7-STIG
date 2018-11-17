@@ -1386,7 +1386,7 @@
             owner: root
             group: root
             mode: 0600
-            line: "-a always,exit -F path={{ item }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k setuid/setgid"
+            line: "-a always,exit -F path={{ item }} -F auid>=1000 -F auid!=4294967295 -k setuid/setgid"
             state: present
         with_items: "{{ rhel_07_030360_audit.stdout_lines }}"
   when: rhel_07_030360
