@@ -56,7 +56,6 @@ rhel_07_020230: true
 # Not an automated task
 rhel_07_020250: true
 rhel_07_020310: true
-rhel_07_020710: true
 rhel_07_021350: true
 rhel_07_021710: true
 rhel_07_030000: true
@@ -133,6 +132,7 @@ rhel_07_020670: true
 rhel_07_020680: true
 rhel_07_020690: true
 rhel_07_020700: true
+rhel_07_020710: true
 rhel_07_020720: true
 rhel_07_020730: true
 rhel_07_020900: true
