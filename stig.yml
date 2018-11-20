@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes
+  vars:
+      ansible_python_interpreter: "{{ ansible_playbook_python }}"
+      is_container: false
+  roles:
+      - role: "{{ playbook_dir }}"
+        rhel7stig_system_is_container: "{{ is_container | default(false) }}"
+        rhel7stig_ssh_required: "{{ is_container == false  }}"
