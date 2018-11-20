@@ -1308,10 +1308,10 @@
 
 - name: "MEDIUM | RHEL-07-030211 | PATCH | The Red Hat Enterprise Linux operating system must label off-loaded audit logs before sending to the central log server."
   replace:
-      path: /etc/audisp/audispd.conf
-      regexp: '^[\s]*name_format[\s]*=[\s]*HOSTNAME[\s]*$'
+    path: /etc/audisp/audispd.conf
+    regexp: '^[\s]*name_format[\s]*=[\s]*HOSTNAME[\s]*$'
     replace: 'name_format=hostname'
-    backup: yes
+    backup: no
 
   when: rhel_07_030211
   tags:
