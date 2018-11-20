@@ -363,7 +363,7 @@ rhel7stig_boot_password_config:
       line: 'set superusers="{{rhel7stig_boot_superuser}}"'
 
     - regexp: ^password_pbkdf2 {{rhel7stig_boot_superuser}}
-      line: GRUB2_PASSWORD=password_pbkdf2 {{rhel7stig_boot_superuser}} {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
+      line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
 # AIDE settings
 # Set to false for fire and forget mode
