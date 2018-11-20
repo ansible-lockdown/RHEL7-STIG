@@ -1064,13 +1064,13 @@
 - name: "MEDIUM | RHEL-07-020710 | PATCH | All local initialization files must have mode 0740 or less permissive."
   block:
     - name: "HIGH | RHEL-07-020710 | PATCH | The Red Hat Enterprise Linux operating system configured so local initialization files have mode 0740 or less permissive. Find world writable permission"
-      shell: "/usr/bin/find / -perm -002 -type f | grep -v /proc"
+      shell: "/usr/bin/find /home /root -name .* -type f | grep -v /proc"
       register: rhel_07_020710_audit
 
-    - name: "HIGH | RHEL-07-020710 | PATCH | The Red Hat Enterprise Linux operating system configured so local initialization files have mode 0740 or less permissive. Remove world writable permission"
+    - name: "HIGH | RHEL-07-020710 | PATCH | The Red Hat Enterprise Linux operating system configured so local initialization files have mode 0740 or less permissive. Apply umask 7037"
       file:
         name: "{{ item }}"
-        mode: "o-w"
+        mode: u-s,g-wxs,o-rwx,-t
       with_items: "{{ rhel_07_020710_audit.stdout_lines }}"
   when: rhel_07_020710
   tags:
