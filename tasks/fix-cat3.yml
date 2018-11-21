@@ -114,13 +114,21 @@
       - mount
       - tmp
 
-- name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
-  command: "true"
-  changed_when: no
+- block:
+      - name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs).  Gather offending lines"
+        shell: |
+          /usr/bin/awk '/^[^#]+=/ { split($0, p, "="); gsub(/ /, "", p[1]); gsub(/ /, "", p[2]); r[p[1]] = p[2]; } /^[^#=!@]/ && !/=/ { x=$2; for (v in r) { c = sprintf("(^|+| )%s(+| |$)", v); gsub(c, r[v], x); } if ($0) { if (x !~ /acl/) { print $1; f++ } } }' /etc/aide.conf
+        register: rhel_07_021600_audit
+
+      - name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs).  Change to acl verify"
+        replace:
+          path: /etc/aide.conf
+          regexp: ^({{ item | regex_escape() }})(\s+)(.*)
+          replace: '\1\2\3+acl'
+        with_items: "{{ rhel_07_021600_audit.stdout_lines }}"
   when: rhel_07_021600
   tags:
       - RHEL-07-021600
-      - notimplemented
 
 - name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes."
   command: "true"
