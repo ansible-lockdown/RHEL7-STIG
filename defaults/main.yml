@@ -149,6 +149,7 @@ rhel_07_021300: true
 rhel_07_021620: true
 rhel_07_021700: true
 rhel_07_030010: true
+rhel_07_030211: true
 # if you set 030300 to 'true' ensure you define rhel7stig_audisp_remote_server
 rhel_07_030300: false # Addressed by infrastructure
 rhel_07_030310: true
