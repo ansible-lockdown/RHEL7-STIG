@@ -1394,10 +1394,7 @@
             group: root
             mode: 0600
             line: "-a always,exit -F path={{ item }} -F auid>=1000 -F auid!=4294967295 -k setuid/setgid"
-            line: "-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k setuid" 
-            line: "-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid"
-            line: "-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k setgid"
-            line: "-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid"
+            
             state: present
         with_items: "{{ rhel_07_030360_audit.stdout_lines }}"
   when: rhel_07_030360
