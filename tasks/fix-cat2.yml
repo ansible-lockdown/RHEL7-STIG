@@ -283,7 +283,8 @@
 - name: "MEDIUM | RHEL-07-010240 | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
   block:
       - name: "MEDIUM | RHEL-07-010240 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-        command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $4 < 1 {print $1}' /etc/shadow"
+        shell: |
+          v1=$(/usr/bin/awk '/^UID_MIN/ {print $2}' /etc/login.defs);/usr/bin/awk -v "uidmin=${v1}" -F: 'FILENAME == "/etc/passwd" { if ($3 >= uidmin) users[$1] } FILENAME == "/etc/shadow" { if ($1 in users && $4 < 1) badusers[$1]; } END { if (length(badusers) > 0){ for (user in badusers) {print user} } else { print "No users found" } }' /etc/passwd /etc/shadow
         check_mode: no
         changed_when: no
         register: rhel_07_010240_audit
