@@ -56,7 +56,6 @@ rhel_07_020230: true
 # Not an automated task
 rhel_07_020250: true
 rhel_07_020310: true
-rhel_07_020710: true
 rhel_07_021350: true
 rhel_07_021710: true
 rhel_07_030000: true
@@ -133,6 +132,7 @@ rhel_07_020670: true
 rhel_07_020680: true
 rhel_07_020690: true
 rhel_07_020700: true
+rhel_07_020710: true
 rhel_07_020720: true
 rhel_07_020730: true
 rhel_07_020900: true
@@ -149,6 +149,7 @@ rhel_07_021300: true
 rhel_07_021620: true
 rhel_07_021700: true
 rhel_07_030010: true
+rhel_07_030211: true
 # if you set 030300 to 'true' ensure you define rhel7stig_audisp_remote_server
 rhel_07_030300: false # Addressed by infrastructure
 rhel_07_030310: true
@@ -363,7 +364,7 @@ rhel7stig_boot_password_config:
       line: 'set superusers="{{rhel7stig_boot_superuser}}"'
 
     - regexp: ^password_pbkdf2 {{rhel7stig_boot_superuser}}
-      line: GRUB2_PASSWORD=password_pbkdf2 {{rhel7stig_boot_superuser}} {{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
+      line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}
 
 # AIDE settings
 # Set to false for fire and forget mode
