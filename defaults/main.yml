@@ -248,7 +248,7 @@ rhel_07_040500: false #Addressed by infrastructure
 rhel_07_040510: true
 rhel_07_040520: false #Addressed by infrastructure
 rhel_07_040610: false #Exception
-rhel_07_040620: false #Exception
+rhel_07_040620: true
 rhel_07_040630: true
 rhel_07_040640: false #Exception
 rhel_07_040641: true
