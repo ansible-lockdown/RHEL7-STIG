@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010010
+vuln_id: V-71849
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values.

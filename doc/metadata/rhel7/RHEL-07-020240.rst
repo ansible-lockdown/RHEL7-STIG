@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020240
+vuln_id: V-71995
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files.

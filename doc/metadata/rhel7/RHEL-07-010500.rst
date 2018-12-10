@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010500
+vuln_id: V-71965
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.

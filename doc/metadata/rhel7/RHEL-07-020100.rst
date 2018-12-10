@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020100
+vuln_id: V-71983
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured to disable USB mass storage.

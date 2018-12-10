@@ -1,0 +1,7 @@
+---
+id: RHEL-07-021310
+vuln_id: V-72059
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that a separate file system is used for user home directories (such as /home or an equivalent).

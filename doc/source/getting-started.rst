@@ -65,8 +65,6 @@ an example of a ``ansible.cfg`` file that uses a custom path for roles:
 With this configuration, Ansible looks for roles in ``/etc/ansible/roles`` and
 ``~/custom/roles``.
 
-.. _Role Repo: https://github.com/mindpointgroup/rhel7-stig
-
 Usage
 -----
 

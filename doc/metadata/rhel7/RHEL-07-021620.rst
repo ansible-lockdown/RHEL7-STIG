@@ -1,0 +1,7 @@
+---
+id: RHEL-07-021620
+vuln_id: V-72073
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must use a file integrity tool that is configured to use FIPS 140-2 approved cryptographic hashes for validating file contents and directories.

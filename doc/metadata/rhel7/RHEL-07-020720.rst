@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020720
+vuln_id: V-72035
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory.

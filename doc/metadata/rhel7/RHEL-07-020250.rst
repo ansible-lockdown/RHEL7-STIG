@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020250
+vuln_id: V-71997
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be a vendor supported release.

@@ -1,0 +1,7 @@
+---
+id: RHEL-07-021330
+vuln_id: V-72063
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must use a separate file system for the system audit data path.

@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020210
+vuln_id: V-71989
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must enable SELinux.

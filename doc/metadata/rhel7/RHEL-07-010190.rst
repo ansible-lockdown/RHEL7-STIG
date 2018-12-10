@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010190
+vuln_id: V-71917
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed the number of repeating characters of the same character class must not be more than four characters.

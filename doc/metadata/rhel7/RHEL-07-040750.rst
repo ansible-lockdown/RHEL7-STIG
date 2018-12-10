@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040750
+vuln_id: V-72311
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS.

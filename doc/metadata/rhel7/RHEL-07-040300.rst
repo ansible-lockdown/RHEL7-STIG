@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040300
+vuln_id: V-72233
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all networked systems have SSH installed.

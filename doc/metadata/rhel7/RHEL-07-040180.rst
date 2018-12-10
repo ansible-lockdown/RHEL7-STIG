@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040180
+vuln_id: V-72227
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications.

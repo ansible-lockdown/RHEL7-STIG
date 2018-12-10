@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040630
+vuln_id: V-72287
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must not respond to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) echoes sent to a broadcast address.

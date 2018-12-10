@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010020
+vuln_id: V-71855
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values.

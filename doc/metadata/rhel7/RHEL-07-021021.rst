@@ -1,0 +1,7 @@
+---
+id: RHEL-07-021021
+vuln_id: V-73161
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must prevent binary files from being executed on file systems that are being imported via Network File System (NFS).

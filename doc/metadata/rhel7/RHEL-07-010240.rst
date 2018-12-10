@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010240
+vuln_id: V-71927
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that passwords are restricted to a 24 hours/1 day minimum lifetime.

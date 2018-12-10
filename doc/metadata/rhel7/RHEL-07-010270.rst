@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010270
+vuln_id: V-71933
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that passwords are prohibited from reuse for a minimum of five generations.

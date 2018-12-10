@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040460
+vuln_id: V-72265
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon uses privilege separation.

@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020700
+vuln_id: V-72031
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for local interactive users are be group-owned by the users primary group or root.

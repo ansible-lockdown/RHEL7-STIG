@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020110
+vuln_id: V-71985
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must disable the file system automounter unless required.

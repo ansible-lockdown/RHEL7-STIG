@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040640
+vuln_id: V-72289
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must prevent Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages from being accepted.

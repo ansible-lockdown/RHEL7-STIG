@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020320
+vuln_id: V-72007
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner.

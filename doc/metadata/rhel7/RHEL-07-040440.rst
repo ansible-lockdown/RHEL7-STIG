@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040440
+vuln_id: V-72261
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Kerberos authentication unless needed.

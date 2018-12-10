@@ -1,0 +1,7 @@
+---
+id: RHEL-07-021710
+vuln_id: V-72077
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must not have the telnet-server package installed.

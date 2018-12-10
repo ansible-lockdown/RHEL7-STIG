@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020650
+vuln_id: V-72021
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are group-owned by the home directory owners primary group.

@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020010
+vuln_id: V-71969
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must not have the ypserv package installed.

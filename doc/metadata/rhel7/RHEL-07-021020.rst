@@ -1,0 +1,7 @@
+---
+id: RHEL-07-021020
+vuln_id: V-72045
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are being imported via Network File System (NFS).

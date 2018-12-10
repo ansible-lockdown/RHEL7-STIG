@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010440
+vuln_id: V-71953
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must not allow an unattended or automatic logon to the system via a graphical user interface.

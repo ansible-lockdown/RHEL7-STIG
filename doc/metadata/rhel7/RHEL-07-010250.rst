@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010250
+vuln_id: V-71929
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that passwords for new users are restricted to a 60-day maximum lifetime.

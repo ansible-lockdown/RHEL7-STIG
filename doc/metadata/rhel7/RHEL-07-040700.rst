@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040700
+vuln_id: V-72301
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must not have the Trivial File Transfer Protocol (TFTP) server package installed if not required for operational support.

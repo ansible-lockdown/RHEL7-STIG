@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010220
+vuln_id: V-71923
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that user and group account administration utilities are configured to store only encrypted representations of passwords.

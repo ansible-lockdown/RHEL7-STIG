@@ -1,0 +1,7 @@
+---
+id: RHEL-07-030819
+vuln_id: V-78999
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must audit all uses of the create_module syscall.

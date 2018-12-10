@@ -39,8 +39,8 @@ def main():
 
         # Build a dictionary with all of our rule data.
         rule = {
-            'id': group_element.attrib['id'],
-            'version': rule_element.find("{}version".format(XCCDF_NAMESPACE)).text,
+            'id': rule_element.find("{}version".format(XCCDF_NAMESPACE)).text,
+            'vuln_id': group_element.attrib['id'],
             'title': rule_element.find("{}title".format(XCCDF_NAMESPACE)).text,
         }
 
@@ -50,7 +50,7 @@ def main():
         if os.path.isfile(file_path):
             continue
 
-        front_matter = "---\nid: {0}\nstig_id: {1}\nstatus: {2}\ntag: {3}\n---\n".format(rule['id'], rule['version'], "none", "misc")
+        front_matter = "---\nid: {0}\nvuln_id: {1}\nstatus: {2}\n---\n".format(rule['id'], rule['vuln_id'], "Not Implemented")
         body_content = "\n{}\n".format(rule['title'])
 
         with open(file_path, 'wb') as f:

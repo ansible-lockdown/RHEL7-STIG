@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010100
+vuln_id: V-71899
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must initiate a session lock for the screensaver after a period of inactivity for graphical user interfaces.

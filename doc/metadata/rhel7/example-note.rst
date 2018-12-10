@@ -1,8 +1,7 @@
 ---
-id: V-71989
-stig_id: RHEL-07-020210
+id: RHEL-07-020210
+vuln_id: V-71989
 status: implemented
-tag: lsm
 ---
 
 The tasks in the security role enable the appropriate Linux Security Module

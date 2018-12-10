@@ -1,0 +1,7 @@
+---
+id: RHEL-07-021100
+vuln_id: V-72051
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must have cron logging implemented.

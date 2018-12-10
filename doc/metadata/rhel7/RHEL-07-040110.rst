@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040110
+vuln_id: V-72221
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must use a FIPS 140-2 approved cryptographic algorithm for SSH communications.

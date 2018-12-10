@@ -1,4 +1,4 @@
-{% set page_title = "STIG Controls by " + toc_type | title %}
+{% set page_title = "Controls by " + toc_type | title %}
 {{ "=" * page_title | length }}
 {{ page_title }}
 {{ "=" * page_title | length }}
@@ -9,11 +9,8 @@
 
 {% for section_header, stig_id_list in stig_dict.items() %}
 
-{% if toc_type == 'tag' %}
-{% set section_title = section_header + " (" + stig_id_list | length | string + " controls)" %}
-{% else %}
 {% set section_title = section_header | title + " (" + stig_id_list | length | string + " controls)" %}
-{% endif %}
+
 .. _{{ toc_type | replace(' ', '-') }}-{{ section_header | replace(' ', '-') }}:
 
 {{ section_title }}

@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010300
+vuln_id: V-71939
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using an empty password.

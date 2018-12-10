@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010070
+vuln_id: V-71893
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces.

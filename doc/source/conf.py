@@ -73,6 +73,12 @@ role_name = 'RHEL7-STIG'
 target_name = 'RHEL7-STIG'
 title = 'Ansible Lockdown RHEL 7 STIG Documentation:'
 
+rst_prolog = """
+.. |stig_name| replace:: Red Hat Enterprise Linux 7
+.. |stig_name_short| replace:: RHEL 7
+.. |stig_version| replace:: Version 2, Release 1
+.. |stig_release_date| replace:: 2018-09-26
+"""
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

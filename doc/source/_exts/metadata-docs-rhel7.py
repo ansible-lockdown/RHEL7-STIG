@@ -161,17 +161,6 @@ def render_toc(toc_type, stig_dict, all_deployer_notes):
         all_deployer_notes=all_deployer_notes,
     )
 
-
-def render_toc_partial(toc_type, stig_dict, all_deployer_notes):
-    """Generate documentation RST for each STIG configuration."""
-    template = JINJA_ENV.get_template('template_toc_partial_rhel7.j2')
-    return template.render(
-        toc_type=toc_type,
-        stig_dict=stig_dict,
-        all_deployer_notes=all_deployer_notes,
-    )
-
-
 def write_file(filename, content):
     """Write contents to files."""
     file_path = "{0}/{1}".format(DOC_SOURCE_DIR, filename)
@@ -196,7 +185,6 @@ def generate_docs():
     # contents files for sphinx.
     all_deployer_notes = defaultdict(list)
     severity = defaultdict(list)
-    tag = defaultdict(list)
     status = defaultdict(list)
 
     # Loop through the groups and extract rules
@@ -206,7 +194,8 @@ def generate_docs():
 
         # Build a dictionary with all of our rule data.
         rule = {
-            'id': group_element.attrib['id'],
+            'id': rule_element.find("{}version".format(XCCDF_NAMESPACE)).text,
+            'vuln_id': group_element.attrib['id'],
             'title': rule_element.find("{}title".format(XCCDF_NAMESPACE)).text,
             'severity': rule_element.attrib['severity'],
             'fix': rule_element.find("{}fixtext".format(XCCDF_NAMESPACE)).text,
@@ -240,7 +229,7 @@ def generate_docs():
     severity_toc = render_toc('severity',
                               severity,
                               all_deployer_notes)
-    status_toc = render_toc('implementation status',
+    status_toc = render_toc('status',
                             status,
                             all_deployer_notes)
 

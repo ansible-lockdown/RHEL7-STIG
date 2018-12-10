@@ -3,27 +3,26 @@
 STIG Controls
 ===================================================
 
-This role follows the Red Hat Enteprise Linux 7
-`Security Technical Implementation Guide (STIG)`_. The guide has over 200
-controls that apply to various parts of a Linux system, and it is updated
-regularly by the Defense Information Systems Agency (DISA). DISA is part of the
-United States Department of Defense. The current version of this role is based
-on Release 2, Version 1 of the Red Hat Enterprise Linux 7 STIG.
+This role follows the |stig_name| `Security Technical Implementation Guide (STIG)`_.
+The guide has over 200 controls that apply to various parts of a Linux system, and it
+is updated regularly by the Defense Information Systems Agency (DISA). DISA is part of the
+United States Department of Defense. The current version of this role follows |stig_version|
+of the |stig_name_short| STIG.
 
 Controls are divided into groups based on the following properties:
 
 * **Severity:**
 
-  * *High severity* controls have a large impact on the security of a
+  * *High severity* or **CAT I** controls have a large impact on the security of a
     system. They also have the largest operational impact to a system and
     deployers should test them thoroughly in non-production environments.
 
-  * *Medium severity* controls are the bulk of the items in the STIG and 
+  * *Medium severity* or **CAT II** controls are the bulk of the items in the STIG and 
     they have a moderate level of impact on the security of a system.
     Many controls in this category will have an operational impact on 
     a system and should be tested thoroughly before implementation.
 
-  * *Low severity* controls have a smaller impact on overall security, but they
+  * *Low severity* or **CAT III** controls have a smaller impact on overall security, but they
     are generally easier to implement with a much lower operational impact.
 
 * **Implementation Status:**
@@ -32,7 +31,7 @@ Controls are divided into groups based on the following properties:
     Deployers can often opt out of these controls by adjusting Ansible
     variables. These variables are documented with each control below.
 
-  * *Exceptions* denote controls that cannot be completed via automated tasks.
+  * *Exception* denote controls that cannot be completed via automated tasks.
     Some of these controls must be applied during the initial provisioning
     process for new servers while others require manual inspection of the
     system.

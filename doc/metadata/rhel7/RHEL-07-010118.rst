@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010118
+vuln_id: V-81003
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that /etc/pam.d/passwd implements /etc/pam.d/system-auth when changing passwords.

@@ -4,37 +4,34 @@ Automated security hardening for Linux hosts with Ansible
 
 What does the role do?
 ----------------------
+This role uses the |stig_name| `Security Technical Implementation Guide (STIG)`_ guidance 
+from the `Defense Information Systems Agency (DISA)`_. The STIG is released with a 
+public domain license and it is commonly used to secure systems at public and private
+organizations around the world.
 
-The ansible-hardening Ansible role uses industry-standard security
-hardening guides to secure Linux hosts. Although the role is designed to work
-well in OpenStack environments that are deployed with OpenStack-Ansible, it can
-be used with almost any Linux system.
+We analyze each configuration hardening item from the applicable STIG benchmark
+to determine what impact it has on a live production environment and how to
+best implement it using Ansible. Tasks are added to the role that configure a host
+to meet the configuration requirements. Each task is documented to explain what was
+changed, why it was changed, and what deployers need to understand about the change.
 
-It all starts with the `Security Technical Implementation Guide (STIG)`_ from
-the `Defense Information Systems Agency (DISA)`_, part of the United States
-Department of Defense. The guide is released with a public domain license and
-it is commonly used to secure systems at public and private organizations
-around the world.
+Deployers have the option to enable/disable STIG items that do not suit their environments
+needs. Each STIG item has an associated variable that can be used to switch it on or off.
+Additionally, the items that have configurable values, i.e. number of password attempts, will
+generally have a corresponding variable that allows for customization of the applied value.
+It is imperative for each deployer to understand the regulations and compliance requirements
+that their organization and specific environments are responsible for meeting in order to
+effeectively implement the controls in the |stig_name_short| STIG.
 
-Each configuration from the STIG is analyzed to determine what impact it could
-have on a live production environment and how to implement it in Ansible. Tasks
-are added to the role that configure a host to meet the configuration
-requirement. Each task is documented to explain what was changed, why it was
-changed, and what deployers need to understand about the change.
-
-Deployers have the option to pick and choose which configurations are applied
-using Ansible variables and tags. Some tasks allow deployers to provide custom
-configurations to tighten down or relax certain requirements.
-
-.. _Security Technical Implementation Guide (STIG): http://iase.disa.mil/stigs/Pages/index.aspx
+.. _Security Technical Implementation Guide (STIG): http://iase.disa.mil/stigs/os/unix-linux/Pages/red-hat.aspx
 .. _Defense Information Systems Agency (DISA): http://www.disa.mil/
 
 Documentation
 -------------
 
-The following documentation applies to the Queens release (currently under
-active development). Documentation for the latest stable and previous stable
-releases is found within the *Releases* section below.
+The following documentation applies to the devel branch and is currently under
+active development. Documentation for the latest stable and previous stable
+releases will be generated and available once the first stable release is cut.
 
 .. toctree::
    :maxdepth: 2
@@ -49,15 +46,13 @@ releases is found within the *Releases* section below.
 Releases
 --------
 
-Deployers should use the latest stable release for all production deployments.
-
 devel
 ~~~~~~
 
 * **Status:** Active development
 
 * **STIG Version:**
-  RHEL 7 STIG Version 2, Release 1 *(Published on 2018-09-26)*
+  |stig_name_short| |stig_version| *(Published on* |stig_release_date| *)*
 
 * **Supported Operating Systems:**
 
@@ -71,9 +66,3 @@ These are not yet supported but are on the target list.
   * Fedora 26
   * openSUSE Leap 42.2 and 42.3
   * SUSE Linux Enterprise 12 
-
-* **Documentation:**
-
-  * `ansible-hardening Queens Release Notes`_
-
-.. _ansible-hardening Queens Release Notes: http://docs.openstack.org/releasenotes/ansible-hardening/unreleased.html

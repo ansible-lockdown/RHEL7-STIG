@@ -1,0 +1,7 @@
+---
+id: RHEL-07-020200
+vuln_id: V-71987
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must remove all software components after updated versions have been installed.

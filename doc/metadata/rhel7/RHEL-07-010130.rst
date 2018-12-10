@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010130
+vuln_id: V-71905
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one lower-case character.

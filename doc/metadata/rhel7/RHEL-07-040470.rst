@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040470
+vuln_id: V-72267
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow compression or only allows compression after successful authentication.

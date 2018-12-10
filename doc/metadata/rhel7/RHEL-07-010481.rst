@@ -1,0 +1,7 @@
+---
+id: RHEL-07-010481
+vuln_id: V-77823
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must require authentication upon booting into single-user and maintenance modes.

@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040830
+vuln_id: V-72319
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must not forward IPv6 source-routed packets.

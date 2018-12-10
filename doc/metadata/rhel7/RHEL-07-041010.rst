@@ -1,0 +1,7 @@
+---
+id: RHEL-07-041010
+vuln_id: V-73177
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled.

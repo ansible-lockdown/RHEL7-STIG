@@ -1,0 +1,7 @@
+---
+id: RHEL-07-030210
+vuln_id: V-81019
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must take appropriate action when the audisp-remote buffer is full.

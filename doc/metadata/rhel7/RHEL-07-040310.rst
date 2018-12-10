@@ -1,0 +1,7 @@
+---
+id: RHEL-07-040310
+vuln_id: V-72235
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that all networked systems use SSH for confidentiality and integrity of transmitted and received information as well as information during preparation for transmission.

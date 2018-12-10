@@ -1,0 +1,7 @@
+---
+id: RHEL-07-021000
+vuln_id: V-72041
+status: Not Implemented
+---
+
+The Red Hat Enterprise Linux operating system must be configured so that file systems containing user home directories are mounted to prevent files with the setuid and setgid bit set from being executed.

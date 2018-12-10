@@ -18,10 +18,11 @@ be enabled by setting the following Ansible variable:
 
 .. code-block:: yaml
 
-    security_contrib_enabled: yes
+    rhel7stig_security_contrib_enabled: yes
 
 The individual tasks are controlled by Ansible variables in
-``defaults/main.yml`` that begin with ``security_contrib_``.
+``defaults/main.yml`` that are defined under the
+``rhel7stig_security_contrib:`` variable.
 
 Kernel
 ------
@@ -36,7 +37,8 @@ interfaces:
 
 .. code-block:: yaml
 
-    security_contrib_disable_ipv6: yes
+    rhel7_stig_security_contrib:
+        disable_ipv6: yes
 
 .. warning::
 
