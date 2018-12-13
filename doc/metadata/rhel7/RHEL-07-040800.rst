@@ -1,7 +1,0 @@
----
-id: RHEL-07-040800
-vuln_id: V-72313
-status: Not Implemented
----
-
-SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default.

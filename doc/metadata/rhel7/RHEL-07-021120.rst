@@ -1,7 +1,0 @@
----
-id: RHEL-07-021120
-vuln_id: V-72055
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the cron.allow file, if it exists, is group-owned by root.

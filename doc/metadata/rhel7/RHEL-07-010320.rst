@@ -1,7 +1,0 @@
----
-id: RHEL-07-010320
-vuln_id: V-71943
-status: Not Implemented
----
-
-Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period.

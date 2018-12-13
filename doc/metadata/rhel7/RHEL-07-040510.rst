@@ -1,7 +1,0 @@
----
-id: RHEL-07-040510
-vuln_id: V-72271
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces.

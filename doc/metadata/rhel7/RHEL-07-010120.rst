@@ -1,7 +1,0 @@
----
-id: RHEL-07-010120
-vuln_id: V-71903
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one upper-case character.

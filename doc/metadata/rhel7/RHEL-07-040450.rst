@@ -1,7 +1,0 @@
----
-id: RHEL-07-040450
-vuln_id: V-72263
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon performs strict mode checking of home directory configuration files.

@@ -1,7 +1,0 @@
----
-id: RHEL-07-010350
-vuln_id: V-71949
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that users must re-authenticate for privilege escalation.

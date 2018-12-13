@@ -1,7 +1,0 @@
----
-id: RHEL-07-010430
-vuln_id: V-71951
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the delay between logon prompts following a failed console logon attempt is at least four seconds.

@@ -1,7 +1,0 @@
----
-id: RHEL-07-040410
-vuln_id: V-72255
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the SSH public host key files have mode 0644 or less permissive.

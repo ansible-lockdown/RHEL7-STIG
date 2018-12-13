@@ -1,7 +1,0 @@
----
-id: RHEL-07-010090
-vuln_id: V-71897
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must have the screen package installed.

@@ -1,7 +1,0 @@
----
-id: RHEL-07-010200
-vuln_id: V-71919
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the PAM system service is configured to store only encrypted representations of passwords.

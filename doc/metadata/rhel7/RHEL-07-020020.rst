@@ -1,7 +1,0 @@
----
-id: RHEL-07-020020
-vuln_id: V-71971
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures.

@@ -1,7 +1,0 @@
----
-id: RHEL-07-040820
-vuln_id: V-72317
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not have unauthorized IP tunnels configured.

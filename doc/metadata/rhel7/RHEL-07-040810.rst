@@ -1,7 +1,0 @@
----
-id: RHEL-07-040810
-vuln_id: V-72315
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services.

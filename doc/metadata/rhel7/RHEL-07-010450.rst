@@ -1,7 +1,0 @@
----
-id: RHEL-07-010450
-vuln_id: V-71955
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not allow an unrestricted logon to the system.

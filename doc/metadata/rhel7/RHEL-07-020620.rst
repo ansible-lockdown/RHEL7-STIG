@@ -1,7 +1,0 @@
----
-id: RHEL-07-020620
-vuln_id: V-72015
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are defined in the /etc/passwd file.

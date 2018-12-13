@@ -1,19 +1,29 @@
-{% set rule = all_deployer_notes[stig_id] %}
-{% set page_title = rule['title'] | trim + ' (' + rule['id'] + ')'%}
+{% set rule = all_rules[stig_id] %}
+{% set page_title = rule['id'] + " (" + rule['vuln_id'] + ")" %}
 {{ page_title }}
-{{ "-" * page_title | length }}
+{{ "=" * page_title | length }}
 
-STIG Description
-~~~~~~~~~~~~~~~~
+{{ rule['title'] }}
 
 **Severity:** {{ rule['severity'] | title }}
 
-**Vuln ID:** {{ rule['vuln_id'] | title }}
+**Implementation Status:** {{ rule['status'] | default('Not Implemented') | title }}
+
+**Description:**
 
 {{ rule['description']['VulnDiscussion'] | addmonospace }}
 
-Deployer/Auditor notes
-~~~~~~~~~~~~~~~~~~~~~~
+**Variables:**
 
-**Implementation Status:** {{ rule['deployer_notes']['status'] | title }}
-{{ rule['deployer_notes']['content'] }}
+{% for var in rule['vars'] %}
+{% if loop.first %}
+.. code-block:: yaml
+{% endif %}
+
+    {{ var['key'] }}: {{ var['value'] }}
+
+{% endfor %}
+
+**Notes:**
+
+{{ rule['deployer_notes'] }}

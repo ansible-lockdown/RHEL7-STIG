@@ -1,7 +1,0 @@
----
-id: RHEL-07-040710
-vuln_id: V-72303
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that remote X connections for interactive users are encrypted.

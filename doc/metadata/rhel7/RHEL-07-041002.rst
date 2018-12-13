@@ -1,7 +1,0 @@
----
-id: RHEL-07-041002
-vuln_id: V-72427
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM).

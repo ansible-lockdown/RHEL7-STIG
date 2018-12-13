@@ -1,7 +1,0 @@
----
-id: RHEL-07-031010
-vuln_id: V-72211
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the rsyslog daemon does not accept log messages from other servers unless the server is being used for log aggregation.

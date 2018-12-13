@@ -50,11 +50,11 @@ def main():
         if os.path.isfile(file_path):
             continue
 
-        front_matter = "---\nid: {0}\nvuln_id: {1}\nstatus: {2}\n---\n".format(rule['id'], rule['vuln_id'], "Not Implemented")
+        # front_matter = "---\nid: {0}\nvuln_id: {1}\nstatus: {2}\n---\n".format(rule['id'], rule['vuln_id'], "Not Implemented")
         body_content = "\n{}\n".format(rule['title'])
 
         with open(file_path, 'wb') as f:
-            f.write(front_matter.encode('utf-8'))
+            # f.write(front_matter.encode('utf-8'))
             f.write(body_content.encode('utf-8'))
 
 if __name__ == '__main__':

@@ -1,7 +1,0 @@
----
-id: RHEL-07-020270
-vuln_id: V-72001
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not have unnecessary accounts.

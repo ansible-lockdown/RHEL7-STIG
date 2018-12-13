@@ -1,9 +1,3 @@
----
-id: RHEL-07-020210
-vuln_id: V-71989
-status: implemented
----
-
 The tasks in the security role enable the appropriate Linux Security Module
 (LSM) for the operating system.
 
@@ -26,4 +20,4 @@ Deployers can opt out of this change by setting the following Ansible variable:
 
 .. code-block:: yaml
 
-    security_rhel7_enable_linux_security_module: no
+    rhel7stig_disruption_high: no

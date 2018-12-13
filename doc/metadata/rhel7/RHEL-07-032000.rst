@@ -1,7 +1,0 @@
----
-id: RHEL-07-032000
-vuln_id: V-72213
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must use a virus scan program.

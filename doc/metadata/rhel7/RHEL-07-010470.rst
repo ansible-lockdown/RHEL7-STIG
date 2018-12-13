@@ -1,7 +1,0 @@
----
-id: RHEL-07-010470
-vuln_id: V-71959
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not allow a non-certificate trusted host SSH logon to the system.

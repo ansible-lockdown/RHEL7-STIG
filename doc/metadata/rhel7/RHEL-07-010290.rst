@@ -1,7 +1,0 @@
----
-id: RHEL-07-010290
-vuln_id: V-71937
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords.

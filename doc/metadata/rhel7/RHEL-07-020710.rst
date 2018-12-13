@@ -1,7 +1,0 @@
----
-id: RHEL-07-020710
-vuln_id: V-72033
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that all local initialization files have mode 0740 or less permissive.

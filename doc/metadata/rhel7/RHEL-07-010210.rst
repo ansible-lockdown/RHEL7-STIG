@@ -1,7 +1,0 @@
----
-id: RHEL-07-010210
-vuln_id: V-71921
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured to use the shadow file to store only encrypted representations of passwords.

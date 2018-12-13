@@ -1,7 +1,0 @@
----
-id: RHEL-07-021040
-vuln_id: V-72049
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must set the umask value to 077 for all local interactive user accounts.

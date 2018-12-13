@@ -37,6 +37,7 @@ releases will be generated and available once the first stable release is cut.
    :maxdepth: 2
 
    getting-started.rst
+   customization.rst
    faq.rst
    deviations.rst
    controls-rhel7.rst

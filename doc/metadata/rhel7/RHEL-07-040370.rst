@@ -1,7 +1,0 @@
----
-id: RHEL-07-040370
-vuln_id: V-72247
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not permit direct logons to the root account using remote access via SSH.

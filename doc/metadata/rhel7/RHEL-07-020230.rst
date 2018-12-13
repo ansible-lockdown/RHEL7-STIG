@@ -1,7 +1,0 @@
----
-id: RHEL-07-020230
-vuln_id: V-71993
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled.

@@ -1,7 +1,0 @@
----
-id: RHEL-07-010160
-vuln_id: V-71911
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed a minimum of eight of the total number of characters must be changed.

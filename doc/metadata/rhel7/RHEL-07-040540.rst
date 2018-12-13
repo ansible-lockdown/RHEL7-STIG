@@ -1,7 +1,0 @@
----
-id: RHEL-07-040540
-vuln_id: V-72277
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not contain .shosts files.

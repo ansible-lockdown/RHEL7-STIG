@@ -1,7 +1,0 @@
----
-id: RHEL-07-020330
-vuln_id: V-72009
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner.

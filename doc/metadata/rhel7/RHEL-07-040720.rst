@@ -1,7 +1,0 @@
----
-id: RHEL-07-040720
-vuln_id: V-72305
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that if the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon is configured to operate in secure mode.

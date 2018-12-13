@@ -1,7 +1,0 @@
----
-id: RHEL-07-021600
-vuln_id: V-72069
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs).

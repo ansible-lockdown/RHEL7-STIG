@@ -1,7 +1,0 @@
----
-id: RHEL-07-020101
-vuln_id: V-77821
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required.

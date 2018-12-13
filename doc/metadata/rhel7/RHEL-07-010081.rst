@@ -1,7 +1,0 @@
----
-id: RHEL-07-010081
-vuln_id: V-73155
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-delay setting for the graphical user interface.

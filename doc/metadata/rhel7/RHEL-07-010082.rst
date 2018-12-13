@@ -1,7 +1,0 @@
----
-id: RHEL-07-010082
-vuln_id: V-73157
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must prevent a user from overriding the session idle-delay setting for the graphical user interface.

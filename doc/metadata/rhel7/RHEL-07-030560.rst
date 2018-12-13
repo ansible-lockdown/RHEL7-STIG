@@ -1,7 +1,0 @@
----
-id: RHEL-07-030560
-vuln_id: V-72135
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must audit all uses of the semanage command.

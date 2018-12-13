@@ -1,7 +1,0 @@
----
-id: RHEL-07-020690
-vuln_id: V-72029
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for interactive users are owned by the home directory user or root.

@@ -1,7 +1,0 @@
----
-id: RHEL-07-040740
-vuln_id: V-72309
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not be performing packet forwarding unless the system is a router.

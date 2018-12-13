@@ -1,7 +1,0 @@
----
-id: RHEL-07-040670
-vuln_id: V-72295
-status: Not Implemented
----
-
-Network interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode.

@@ -1,7 +1,0 @@
----
-id: RHEL-07-010330
-vuln_id: V-71945
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period.

@@ -1,7 +1,0 @@
----
-id: RHEL-07-020030
-vuln_id: V-71973
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that a file integrity tool verifies the baseline operating system configuration at least weekly.

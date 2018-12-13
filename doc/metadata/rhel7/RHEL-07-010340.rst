@@ -1,7 +1,0 @@
----
-id: RHEL-07-010340
-vuln_id: V-71947
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that users must provide a password for privilege escalation.

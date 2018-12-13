@@ -1,7 +1,0 @@
----
-id: RHEL-07-020260
-vuln_id: V-71999
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date.

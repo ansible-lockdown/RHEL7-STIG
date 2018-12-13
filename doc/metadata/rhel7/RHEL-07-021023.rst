@@ -1,7 +1,0 @@
----
-id: RHEL-07-021023
-vuln_id: V-81011
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must mount /dev/shm with the nosuid option.

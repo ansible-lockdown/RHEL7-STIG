@@ -1,7 +1,0 @@
----
-id: RHEL-07-040610
-vuln_id: V-72283
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not forward Internet Protocol version 4 (IPv4) source-routed packets.

@@ -1,7 +1,0 @@
----
-id: RHEL-07-010460
-vuln_id: V-71957
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not allow users to override SSH environment variables.

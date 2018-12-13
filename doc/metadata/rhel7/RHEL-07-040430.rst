@@ -1,7 +1,0 @@
----
-id: RHEL-07-040430
-vuln_id: V-72259
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Generic Security Service Application Program Interface (GSSAPI) authentication unless needed.

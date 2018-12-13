@@ -1,7 +1,0 @@
----
-id: RHEL-07-041001
-vuln_id: V-72417
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed.

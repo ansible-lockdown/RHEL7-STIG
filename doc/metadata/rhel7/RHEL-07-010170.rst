@@ -1,7 +1,0 @@
----
-id: RHEL-07-010170
-vuln_id: V-71913
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed a minimum of four character classes must be changed.

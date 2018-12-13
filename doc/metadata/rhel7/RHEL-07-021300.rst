@@ -1,7 +1,0 @@
----
-id: RHEL-07-021300
-vuln_id: V-72057
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must disable Kernel core dumps unless needed.

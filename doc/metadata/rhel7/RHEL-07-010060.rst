@@ -1,7 +1,0 @@
----
-id: RHEL-07-010060
-vuln_id: V-71891
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must enable a user session lock until that user re-establishes access using established identification and authentication procedures.

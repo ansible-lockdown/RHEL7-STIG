@@ -1,7 +1,0 @@
----
-id: RHEL-07-010040
-vuln_id: V-71861
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must display the approved Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon.

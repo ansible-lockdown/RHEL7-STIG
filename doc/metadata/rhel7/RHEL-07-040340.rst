@@ -1,7 +1,0 @@
----
-id: RHEL-07-040340
-vuln_id: V-72241
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with SSH traffic terminate after a period of inactivity.

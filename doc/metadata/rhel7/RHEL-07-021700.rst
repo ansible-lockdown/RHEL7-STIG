@@ -1,7 +1,0 @@
----
-id: RHEL-07-021700
-vuln_id: V-72075
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved.

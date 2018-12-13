@@ -37,9 +37,33 @@ XCCDF_FILE = 'U_Red_Hat_Enterprise_Linux_7_STIG_V2R1_Manual-xccdf.xml'
 XCCDF_NAMESPACE = "{http://checklists.nist.gov/xccdf/1.1}"
 
 
+def split_at_linelen(line, length):
+    """Split a line at specific length for code blocks or 
+       other formatted RST sections.
+    """
+    # Get number of splits we should have in line
+    i = int(len(line)/length)
+    p = 0
+
+    while i > 0:
+        p = p+length
+        # If position in string is not a space
+        # walk backwards until we hit a space
+        while line[p] != ' ':
+            p -= 1
+
+        # Split the line
+        line = line[:p] + '\n' + line[p+1:]
+        i -= 1
+
+    return line
+
+
 def add_monospace(text):
     """Add monospace formatting to RST."""
     paragraphs = text.split('\n\n')
+    # piter = enumerate(paragraphs)
+
     for key, value in enumerate(paragraphs):
 
         # Replace all quotes "" with backticks `` for monospacing
@@ -47,25 +71,48 @@ def add_monospace(text):
                                  r'``\1``',
                                  value)
 
+        # If our paragraph starts with a " and it wasn't handled
+        # by the backtick substitution it probably means it
+        # does not end with a " and is a special block of text
+        if value.startswith('"'):
+            paragraphs[key] = '.. code-block:: text\n\n    ' + '\n    '.join(split_at_linelen(value.lstrip('"'), 66).split('\n'))
+
+            i = key+1
+
+            # Loop through all the following paragraphs to format
+            # and look for the last one
+            while i < len(paragraphs):
+                last_line = paragraphs[i].endswith('"')
+                # Indent this paragraph
+                paragraphs[i] = '    ' + '\n    '.join(split_at_linelen(paragraphs[i].rstrip('"'), 66).split('\n'))
+
+                # Skip the line in outer loop since we are 
+                # processing in the while loop
+                # next(piter)
+                i += 1
+                # Break the loop if we found the last paragraph
+                if last_line:
+                    break
+
         # If our paragraph ends with a colon and the next line isn't a special
         # note, let's make sure the next paragraph is monospaced.
-        if value.endswith(":"):
+        # if value.endswith(":"):
 
-            if paragraphs[key + 1].startswith('Note:'):
+        #     if paragraphs[key + 1].startswith('Note:'):
 
-                # Indent the paragraph AFTER the note.
-                paragraphs[key + 2] = '::\n\n    ' + '\n    '.join(
-                    paragraphs[key + 2].split('\n')
-                )
+        #         # Indent the paragraph AFTER the note.
+        #         paragraphs[key + 2] = '::\n\n    ' + '\n    '.join(
+        #             paragraphs[key + 2].split('\n')
+        #         )
 
-            else:
-                # Ensure the paragraph ends with double colon (::).
-                paragraphs[key] = re.sub(r':$', '::', value)
+        #     else:
+        #         # Ensure the paragraph ends with double colon (::).
+        #         # paragraphs[key] = re.sub(r':$', '::', value)
 
-                # Indent the next paragraph.
-                paragraphs[key + 1] = '    ' + '\n    '.join(
-                    paragraphs[key + 1].split('\n')
-                )
+        #         # Indent the next paragraph.
+        #         paragraphs[key + 1] = '::\n\n    ' + '\n    '.join(
+        #             paragraphs[key + 1].split('\n')
+        #         )
 
         # If we found a note in the description, let's format it like a note.
         if value.startswith('Note:'):
@@ -108,7 +155,7 @@ def get_deployer_notes(stig_id):
 
     # Does this deployer note exist?
     if not os.path.isfile(filename):
-        return None
+        return 'Nothing to report\n'
 
     # Read the note and parse it with YAML
     with open(filename, 'r') as f:
@@ -117,14 +164,14 @@ def get_deployer_notes(stig_id):
     # Split the RST into frontmatter and text
     # NOTE(mhayden): Can't use the standard yaml.load_all() here at it will
     #                have scanner errors in documents that have colons (:).
-    yaml_boundary = re.compile(r'^-{3,}$', re.MULTILINE)
-    _, metadata, text = yaml_boundary.split(rst_file, 2)
+    # yaml_boundary = re.compile(r'^-{3,}$', re.MULTILINE)
+    # _, metadata, text = yaml_boundary.split(rst_file, 2)
 
     # Assemble the metadata and the text from the deployer note.
-    post = yaml.safe_load(metadata)
-    post['content'] = text
+    # post = yaml.safe_load(metadata)
+    # post['content'] = text
 
-    return post
+    return rst_file
 
 
 def read_xml():
@@ -134,12 +181,12 @@ def read_xml():
     return tree
 
 
-def render_all(stig_ids, all_deployer_notes):
+def render_all(stig_ids, all_rules):
     """Generate documentation RST for each STIG configuration."""
     template = JINJA_ENV.get_template('template_all_rhel7.j2')
     return template.render(
         stig_ids=stig_ids,
-        all_deployer_notes=all_deployer_notes,
+        all_rules=all_rules,
     )
 
 
@@ -152,13 +199,13 @@ def render_doc(stig_rule, deployer_notes):
     )
 
 
-def render_toc(toc_type, stig_dict, all_deployer_notes):
+def render_toc(toc_type, stig_dict, all_rules):
     """Generate documentation RST for each STIG configuration."""
     template = JINJA_ENV.get_template('template_toc_rhel7.j2')
     return template.render(
         toc_type=toc_type,
         stig_dict=stig_dict,
-        all_deployer_notes=all_deployer_notes,
+        all_rules=all_rules,
     )
 
 def write_file(filename, content):
@@ -183,7 +230,7 @@ def generate_docs():
 
     # Create defaultdicts to hold information to build our table of
     # contents files for sphinx.
-    all_deployer_notes = defaultdict(list)
+    all_rules = defaultdict(list)
     severity = defaultdict(list)
     status = defaultdict(list)
 
@@ -203,6 +250,13 @@ def generate_docs():
             'ident': [x.text for x in rule_element.findall("{}ident".format(XCCDF_NAMESPACE))],
         }
 
+        # Section where we parse Ansible tasks for data
+        # NOTE: Need to parse Ansible tasks and pull implementation status from 
+        # actual tasks. For now this allows doc generation.
+        rule['status'] = 'Not Implemented'
+        rule['vars'] = []
+        rule['vars'].append({'key': rule['id'].lower().replace('-','_'), 'value': 'true'})
+
         # The description has badly formed XML in it, so we need to hack it up
         # and turn those tags into a dictionary.
         description = rule_element.find("{}description".format(XCCDF_NAMESPACE)).text
@@ -210,28 +264,27 @@ def generate_docs():
         temp = fromstring("<root>{0}</root>".format(description), parser)
         rule['description'] = {x.tag: x.text for x in temp.iter()}
 
-        # Get the deployer notes from YAML
+        # Get the deployer notes
         deployer_notes = get_deployer_notes(rule['id'])
-        if deployer_notes:
-            rule['deployer_notes'] = deployer_notes
+        rule['deployer_notes'] = deployer_notes
 
-            all_deployer_notes[rule['id']] = rule
-            stig_ids.append(rule['id'])
-            severity[rule['severity']].append(rule['id'])
-            status[deployer_notes['status']].append(rule['id'])
+        all_rules[rule['id']] = rule
+        stig_ids.append(rule['id'])
+        severity[rule['severity']].append(rule['id'])
+        status[rule['status']].append(rule['id'])
 
     keyorder = ['high', 'medium', 'low']
     severity = OrderedDict(sorted(severity.items(),
                                   key=lambda x: keyorder.index(x[0])))
     status = OrderedDict(sorted(status.items(), key=lambda x: x[0]))
 
-    all_toc = render_all(stig_ids, all_deployer_notes)
+    all_toc = render_all(stig_ids, all_rules)
     severity_toc = render_toc('severity',
                               severity,
-                              all_deployer_notes)
+                              all_rules)
     status_toc = render_toc('status',
                             status,
-                            all_deployer_notes)
+                            all_rules)
 
     write_file("rhel7/auto_controls-all.rst", all_toc)
     write_file("rhel7/auto_controls-by-severity.rst", severity_toc)

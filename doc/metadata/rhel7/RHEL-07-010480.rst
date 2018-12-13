@@ -1,7 +1,0 @@
----
-id: RHEL-07-010480
-vuln_id: V-71961
-status: Not Implemented
----
-
-Red Hat Enterprise Linux operating systems prior to version 7.2 with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes.

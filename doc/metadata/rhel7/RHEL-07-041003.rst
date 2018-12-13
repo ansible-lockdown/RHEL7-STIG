@@ -1,7 +1,0 @@
----
-id: RHEL-07-041003
-vuln_id: V-72433
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must implement certificate status checking for PKI authentication.

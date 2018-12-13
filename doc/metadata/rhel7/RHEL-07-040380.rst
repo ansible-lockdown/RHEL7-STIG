@@ -1,7 +1,0 @@
----
-id: RHEL-07-040380
-vuln_id: V-72249
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using known hosts authentication.

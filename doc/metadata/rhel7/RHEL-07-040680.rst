@@ -1,7 +1,0 @@
----
-id: RHEL-07-040680
-vuln_id: V-72297
-status: Not Implemented
----
-
-The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying.
