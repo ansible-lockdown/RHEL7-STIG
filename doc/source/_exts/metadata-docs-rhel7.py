@@ -273,15 +273,10 @@ def generate_docs():
             'ident': [x.text for x in rule_element.findall("{}ident".format(XCCDF_NAMESPACE))],
         }
 
-        # Section where we parse Ansible tasks for data
-        # NOTE: Need to parse Ansible tasks and pull implementation status
-        # from actual tasks. For now this allows doc generation to continue.
         rule_tasks = tasks[rule['id']]
         rule['status'] = 'Implemented'
         rule['vars'] = []
-        # All controls have an on/off var named after the STIG ID in form
-        # rhel_07_###### so we add that here without relying on parser.
-        # rule['vars'].append({'key': rule['id'].lower().replace('-','_'), 'value': 'true'})
+
         if not rule_tasks:
             rule['status'] = 'Not Implemented'
 
@@ -300,6 +295,13 @@ def generate_docs():
 
                 for c in conditionals:
                     rule['vars'].append(c)
+            
+            # Implementation status parsing
+            if 'rhel7stig_complex' in str(item.get('when')):
+                rule['status'] = 'Complexity High'
+            
+            if 'rhel7stig_disruptive' in str(item.get('when')):
+                rule['status'] = 'Disruption High'
 
         # The description has badly formed XML in it, so we need to hack it up
         # and turn those tags into a dictionary.

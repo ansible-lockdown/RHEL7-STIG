@@ -22,7 +22,7 @@ Using ``group_vars``
 
 The easiest way to tailor this role to your environment is by using ``group_vars``:
 
-    insert example for group_vars tailoring
+    *insert example for group_vars tailoring*
 
 Variables
 ---------
