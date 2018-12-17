@@ -4,7 +4,7 @@ Developer Guide
 Building a development environment
 ----------------------------------
 
-Insert dev environment setup and test running instructions.
+*Insert dev environment setup and test running instructions.*
 
 
 Writing documentation

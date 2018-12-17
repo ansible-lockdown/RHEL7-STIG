@@ -19,10 +19,9 @@ import os
 import re
 import glob
 
-from collections import OrderedDict, defaultdict
+from collections import defaultdict
 
 import jinja2
-#from lxml import etree
 import yaml
 
 try:
@@ -35,7 +34,8 @@ METADATA_DIR = "{0}/../../metadata".format(SCRIPT_DIR)
 DOC_SOURCE_DIR = "{0}/..".format(SCRIPT_DIR)
 XCCDF_FILE = 'U_Red_Hat_Enterprise_Linux_7_STIG_V2R1_Manual-xccdf.xml'
 XCCDF_NAMESPACE = "{http://checklists.nist.gov/xccdf/1.1}"
-
+CONTROL_STATUSES = ['Implemented', 'Complexity High', 'Disruption High']
+CONTROL_SEVERITIES = ['high', 'medium', 'low']
 
 def split_at_linelen(line, length):
     """Split a line at specific length for code blocks or 
@@ -62,7 +62,6 @@ def split_at_linelen(line, length):
 def add_monospace(text):
     """Add monospace formatting to RST."""
     paragraphs = text.split('\n\n')
-    # piter = enumerate(paragraphs)
 
     for key, value in enumerate(paragraphs):
 
@@ -86,9 +85,6 @@ def add_monospace(text):
                 # Indent this paragraph
                 paragraphs[i] = '    ' + '\n    '.join(split_at_linelen(paragraphs[i].rstrip('"'), 66).split('\n'))
 
-                # Skip the line in outer loop since we are 
-                # processing in the while loop
-                # next(piter)
                 i += 1
                 # Break the loop if we found the last paragraph
                 if last_line:
@@ -161,16 +157,6 @@ def get_deployer_notes(stig_id):
     with open(filename, 'r') as f:
         rst_file = f.read()
 
-    # Split the RST into frontmatter and text
-    # NOTE(mhayden): Can't use the standard yaml.load_all() here at it will
-    #                have scanner errors in documents that have colons (:).
-    # yaml_boundary = re.compile(r'^-{3,}$', re.MULTILINE)
-    # _, metadata, text = yaml_boundary.split(rst_file, 2)
-
-    # Assemble the metadata and the text from the deployer note.
-    # post = yaml.safe_load(metadata)
-    # post['content'] = text
-
     return rst_file
 
 
@@ -231,8 +217,14 @@ def generate_docs():
     # Create defaultdicts to hold information to build our table of
     # contents files for sphinx.
     all_rules = defaultdict(list)
+
+    # Prepopulate with control severities
     severity = defaultdict(list)
+    [severity[s] for s in CONTROL_SEVERITIES]
+
+    # Prepopulate possible control statuses
     status = defaultdict(list)
+    [status[s] for s in CONTROL_STATUSES]
 
     # Loop through the groups and extract rules
     group_elements = tree.findall(".//{}Group".format(XCCDF_NAMESPACE))
@@ -251,10 +243,12 @@ def generate_docs():
         }
 
         # Section where we parse Ansible tasks for data
-        # NOTE: Need to parse Ansible tasks and pull implementation status from 
-        # actual tasks. For now this allows doc generation.
-        rule['status'] = 'Not Implemented'
+        # NOTE: Need to parse Ansible tasks and pull implementation status
+        # from actual tasks. For now this allows doc generation to continue.
+        rule['status'] = 'Implemented'
         rule['vars'] = []
+        # All controls have an on/off var named after the STIG ID in form
+        # rhel_07_###### so we add that here without relying on parser.
         rule['vars'].append({'key': rule['id'].lower().replace('-','_'), 'value': 'true'})
 
         # The description has badly formed XML in it, so we need to hack it up
@@ -272,11 +266,6 @@ def generate_docs():
         stig_ids.append(rule['id'])
         severity[rule['severity']].append(rule['id'])
         status[rule['status']].append(rule['id'])
-
-    keyorder = ['high', 'medium', 'low']
-    severity = OrderedDict(sorted(severity.items(),
-                                  key=lambda x: keyorder.index(x[0])))
-    status = OrderedDict(sorted(status.items(), key=lambda x: x[0]))
 
     all_toc = render_all(stig_ids, all_rules)
     severity_toc = render_toc('severity',

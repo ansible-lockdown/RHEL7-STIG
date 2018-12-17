@@ -38,11 +38,10 @@ releases will be generated and available once the first stable release is cut.
 
    getting-started.rst
    customization.rst
-   faq.rst
-   deviations.rst
    controls-rhel7.rst
    controls-contrib.rst
    developer-guide.rst
+   faq.rst
 
 Releases
 --------
