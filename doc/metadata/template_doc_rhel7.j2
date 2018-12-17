@@ -15,14 +15,13 @@
 
 **Variables:**
 
-{% for var in rule['vars'] %}
-{% if loop.first %}
 .. code-block:: yaml
-{% endif %}
+{% if rule['vars'] | length > 0 %}
+{% for var in rule['vars'] %}
 
-    {{ var['key'] }}: {{ var['value'] }}
-
+    {{ var }}
 {% endfor %}
+{% endif %}
 
 **Notes:**
 

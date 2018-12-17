@@ -11,8 +11,16 @@ of the |stig_name_short| STIG.
 
 Controls are divided into groups based on the following properties:
 
-Severity
-~~~~~~~~
+.. toctree::
+   :maxdepth: 1
+
+   rhel7/auto_controls-by-severity.rst
+   rhel7/auto_controls-by-status.rst
+   rhel7/auto_controls-all.rst
+
+
+Control Severities
+~~~~~~~~~~~~~~~~~~
 
 :ref:`High (CAT I) <severity-high>`
   These controls have a large impact on the security of a

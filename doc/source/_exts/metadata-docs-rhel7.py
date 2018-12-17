@@ -32,6 +32,8 @@ except ImportError:
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 METADATA_DIR = "{0}/../../metadata".format(SCRIPT_DIR)
 DOC_SOURCE_DIR = "{0}/..".format(SCRIPT_DIR)
+ANSIBLE_DIR = "{0}/../../..".format(SCRIPT_DIR)
+TASK_FILE_NAMES = ['fix-cat1.yml', 'fix-cat2.yml', 'fix-cat3.yml']
 XCCDF_FILE = 'U_Red_Hat_Enterprise_Linux_7_STIG_V2R1_Manual-xccdf.xml'
 XCCDF_NAMESPACE = "{http://checklists.nist.gov/xccdf/1.1}"
 CONTROL_STATUSES = ['Implemented', 'Complexity High', 'Disruption High']
@@ -206,10 +208,39 @@ def write_file(filename, content):
 
     return True
 
+def parse_ansible_tasks(filenames, with_items=[]):
+    """Read and parse Ansible task files"""
+    tasks = defaultdict(list)
+    yaml_content = list()
+
+    for fn in filenames:
+        with open("{0}/tasks/{1}".format(ANSIBLE_DIR, fn), 'r') as stream:
+            yaml_content += yaml.load(stream)
+
+    for item in yaml_content:
+        name_content = item['name'].rstrip('\n').lstrip('\n').split('\n')
+        for k in name_content:
+            item_id = k.split(' | ')[1]
+            # see if this tasks includes some other tasks
+            include = item.get('include_tasks')
+            if include:
+                inc_tasks = parse_ansible_tasks([include], with_items=item.get('with_items', []))
+                tasks.update(inc_tasks)
+            elif item_id.endswith("{{ item.id }}"):
+                for i in with_items:
+                    tasks[item_id.replace("{{ item.id }}", i['id'])].append(item)
+            else:
+                tasks[item_id].append(item)
+
+    return tasks
+
 
 def generate_docs():
     """The main function."""
     tree = read_xml()
+
+    # Read in control implementations from Ansible task files
+    tasks = parse_ansible_tasks(TASK_FILE_NAMES)
 
     # Create a simple list to capture all of the STIGs
     stig_ids = []
@@ -245,11 +276,30 @@ def generate_docs():
         # Section where we parse Ansible tasks for data
         # NOTE: Need to parse Ansible tasks and pull implementation status
         # from actual tasks. For now this allows doc generation to continue.
+        rule_tasks = tasks[rule['id']]
         rule['status'] = 'Implemented'
         rule['vars'] = []
         # All controls have an on/off var named after the STIG ID in form
         # rhel_07_###### so we add that here without relying on parser.
-        rule['vars'].append({'key': rule['id'].lower().replace('-','_'), 'value': 'true'})
+        # rule['vars'].append({'key': rule['id'].lower().replace('-','_'), 'value': 'true'})
+        if not rule_tasks:
+            rule['status'] = 'Not Implemented'
+
+        for item in rule_tasks:
+            conditionals = item.get('when')
+
+            # All controls have an on/off var named after the STIG ID in form
+            # rhel_07_###### so we add that here without relying on parser.
+            # rule['vars'].append({'key': rule['id'].lower().replace('-','_'), 'value': 'true'})
+            # rule['vars'].append({'key': rule['id'].lower().replace('-','_'), 'value': 'true'})
+            if conditionals is None:
+                rule['vars'].append(rule['id'].lower().replace('-','_'))
+            else:
+                if type(conditionals) is str:
+                    conditionals = [conditionals]
+
+                for c in conditionals:
+                    rule['vars'].append(c)
 
         # The description has badly formed XML in it, so we need to hack it up
         # and turn those tags into a dictionary.
