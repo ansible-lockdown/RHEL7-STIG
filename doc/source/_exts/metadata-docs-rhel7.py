@@ -218,19 +218,21 @@ def parse_ansible_tasks(filenames, with_items=[]):
             yaml_content += yaml.load(stream)
 
     for item in yaml_content:
-        name_content = item['name'].rstrip('\n').lstrip('\n').split('\n')
-        for k in name_content:
-            item_id = k.split(' | ')[1]
-            # see if this tasks includes some other tasks
-            include = item.get('include_tasks')
-            if include:
-                inc_tasks = parse_ansible_tasks([include], with_items=item.get('with_items', []))
-                tasks.update(inc_tasks)
-            elif item_id.endswith("{{ item.id }}"):
-                for i in with_items:
-                    tasks[item_id.replace("{{ item.id }}", i['id'])].append(item)
-            else:
-                tasks[item_id].append(item)
+        if item.get('name'):
+            name_content = item['name'].rstrip('\n').lstrip('\n').split('\n')
+
+            for k in name_content:
+                item_id = k.split(' | ')[1]
+                # see if this tasks includes some other tasks
+                include = item.get('include_tasks')
+                if include:
+                    inc_tasks = parse_ansible_tasks([include], with_items=item.get('with_items', []))
+                    tasks.update(inc_tasks)
+                elif item_id.endswith("{{ item.id }}"):
+                    for i in with_items:
+                        tasks[item_id.replace("{{ item.id }}", i['id'])].append(item)
+                else:
+                    tasks[item_id].append(item)
 
     return tasks
 
