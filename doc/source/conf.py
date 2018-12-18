@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Documentation configuration for the ansible-hardening role."""
+"""Documentation configuration for Ansible Lockdown roles."""
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -48,7 +48,7 @@ sys.setrecursionlimit(4000)
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'metadata-docs-rhel7',
+    'stig_ansible_docs',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -139,6 +139,22 @@ pygments_style = 'sphinx'
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 # keep_warnings = False
+
+# -- STIG Ansible Docs extension config items -----------------------------
+stig_metadata_dir = '../metadata' # relative path from the doc source dir
+stig_ansible_dir = '../../' # relative path from doc source
+stig_ansible_task_filenames = ['fix-cat1.yml', 'fix-cat2.yml', 'fix-cat3.yml']
+stig_xccdf_file = 'U_Red_Hat_Enterprise_Linux_7_STIG_V2R1_Manual-xccdf.xml' # filename only this should be placed in metadata dir
+stig_xccdf_namespace = "{http://checklists.nist.gov/xccdf/1.1}"
+stig_control_statuses = {
+    'default': 'Implemented',
+    'rhel7stig_complex': 'Complexity High',
+    'rhel7stig_disruptive': 'Disruption High',
+    'missing': 'Not Implemented',
+}
+stig_control_severities = ['high', 'medium', 'low']
+
+# -- STIG Ansible Docs extension config items -----------------------------
 
 # -- Options for HTML output ----------------------------------------------
 

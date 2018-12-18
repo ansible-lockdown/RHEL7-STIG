@@ -13,13 +13,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Build documentation from STIG and deployer notes."""
+"""Build documentation from Benchmark files and Ansible tasks."""
 from __future__ import print_function, unicode_literals
 import os
 import re
 import glob
 
-from collections import defaultdict
+from collections import OrderedDict, defaultdict
 
 import jinja2
 import yaml
@@ -29,15 +29,8 @@ try:
 except ImportError:
     from xml.etree.ElementTree import parse, XMLParser, fromstring
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-METADATA_DIR = "{0}/../../metadata".format(SCRIPT_DIR)
-DOC_SOURCE_DIR = "{0}/..".format(SCRIPT_DIR)
-ANSIBLE_DIR = "{0}/../../..".format(SCRIPT_DIR)
-TASK_FILE_NAMES = ['fix-cat1.yml', 'fix-cat2.yml', 'fix-cat3.yml']
-XCCDF_FILE = 'U_Red_Hat_Enterprise_Linux_7_STIG_V2R1_Manual-xccdf.xml'
-XCCDF_NAMESPACE = "{http://checklists.nist.gov/xccdf/1.1}"
-CONTROL_STATUSES = ['Implemented', 'Complexity High', 'Disruption High']
-CONTROL_SEVERITIES = ['high', 'medium', 'low']
+DOC_SOURCE_DIR = "{0}/..".format(os.path.dirname(os.path.abspath(__file__)))
+
 
 def split_at_linelen(line, length):
     """Split a line at specific length for code blocks or 
@@ -139,17 +132,10 @@ def add_monospace(text):
 
     return '\n\n'.join(paragraphs)
 
-JINJA_ENV = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(METADATA_DIR),
-    trim_blocks=True,
-    keep_trailing_newline=False,
-)
-JINJA_ENV.filters['addmonospace'] = add_monospace
 
-
-def get_deployer_notes(stig_id):
-    """Read deployer notes based on the STIG ID."""
-    filename = "{0}/rhel7/{1}.rst".format(METADATA_DIR, stig_id)
+def get_deployer_notes(path, stig_id):
+    """Read deployer notes based on the Benchmark ID."""
+    filename = "{0}/{1}.rst".format(path, stig_id)
 
     # Does this deployer note exist?
     if not os.path.isfile(filename):
@@ -162,34 +148,34 @@ def get_deployer_notes(stig_id):
     return rst_file
 
 
-def read_xml():
+def read_xml(path, filename):
     """Read XCCDF XML file and parse it into an etree."""
-    with open("{0}/{1}".format(METADATA_DIR, XCCDF_FILE), 'r') as f:
+    with open("{0}/{1}".format(path, filename), 'r') as f:
         tree = parse(f)
     return tree
 
 
-def render_all(stig_ids, all_rules):
+def render_all(jinja_env, stig_ids, all_rules):
     """Generate documentation RST for each STIG configuration."""
-    template = JINJA_ENV.get_template('template_all_rhel7.j2')
+    template = jinja_env.get_template('template_all.j2')
     return template.render(
         stig_ids=stig_ids,
         all_rules=all_rules,
     )
 
 
-def render_doc(stig_rule, deployer_notes):
+def render_doc(jinja_env, stig_rule, deployer_notes):
     """Generate documentation RST for each STIG configuration."""
-    template = JINJA_ENV.get_template('template_doc_rhel7.j2')
+    template = jinja_env.get_template('template_doc.j2')
     return template.render(
         rule=stig_rule,
         notes=deployer_notes
     )
 
 
-def render_toc(toc_type, stig_dict, all_rules):
+def render_toc(jinja_env, toc_type, stig_dict, all_rules):
     """Generate documentation RST for each STIG configuration."""
-    template = JINJA_ENV.get_template('template_toc_rhel7.j2')
+    template = jinja_env.get_template('template_toc.j2')
     return template.render(
         toc_type=toc_type,
         stig_dict=stig_dict,
@@ -208,13 +194,13 @@ def write_file(filename, content):
 
     return True
 
-def parse_ansible_tasks(filenames, with_items=[]):
+def parse_ansible_tasks(path, filenames, with_items=[]):
     """Read and parse Ansible task files"""
     tasks = defaultdict(list)
     yaml_content = list()
 
     for fn in filenames:
-        with open("{0}/tasks/{1}".format(ANSIBLE_DIR, fn), 'r') as stream:
+        with open("{0}/tasks/{1}".format(path, fn), 'r') as stream:
             yaml_content += yaml.load(stream)
 
     for item in yaml_content:
@@ -226,7 +212,7 @@ def parse_ansible_tasks(filenames, with_items=[]):
                 # see if this tasks includes some other tasks
                 include = item.get('include_tasks')
                 if include:
-                    inc_tasks = parse_ansible_tasks([include], with_items=item.get('with_items', []))
+                    inc_tasks = parse_ansible_tasks(path, [include], with_items=item.get('with_items', []))
                     tasks.update(inc_tasks)
                 elif item_id.endswith("{{ item.id }}"):
                     for i in with_items:
@@ -237,12 +223,27 @@ def parse_ansible_tasks(filenames, with_items=[]):
     return tasks
 
 
-def generate_docs():
+def generate_docs(app, config):
     """The main function."""
-    tree = read_xml()
+    metadata_dir = "{0}/{1}".format(DOC_SOURCE_DIR, config.stig_metadata_dir)
+    ansible_dir = "{0}/{1}".format(DOC_SOURCE_DIR, config.stig_ansible_dir)
+    ansible_task_filenames = config.stig_ansible_task_filenames
+    xccdf_file = config.stig_xccdf_file
+    xccdf_namespace = config.stig_xccdf_namespace
+    control_statuses = config.stig_control_statuses
+    control_severities = config.stig_control_severities
+
+    jinja_env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(metadata_dir),
+        trim_blocks=True,
+        keep_trailing_newline=False,
+    )
+    jinja_env.filters['addmonospace'] = add_monospace
+
+    tree = read_xml(metadata_dir, xccdf_file)
 
     # Read in control implementations from Ansible task files
-    tasks = parse_ansible_tasks(TASK_FILE_NAMES)
+    tasks = parse_ansible_tasks(ansible_dir, ansible_task_filenames)
 
     # Create a simple list to capture all of the STIGs
     stig_ids = []
@@ -253,41 +254,40 @@ def generate_docs():
 
     # Prepopulate with control severities
     severity = defaultdict(list)
-    [severity[s] for s in CONTROL_SEVERITIES]
+    [severity[s] for s in control_severities]
 
     # Prepopulate possible control statuses
     status = defaultdict(list)
-    [status[s] for s in CONTROL_STATUSES]
+    [status[v] for k, v in control_statuses.items() if k != 'missing']
 
     # Loop through the groups and extract rules
-    group_elements = tree.findall(".//{}Group".format(XCCDF_NAMESPACE))
+    group_elements = tree.findall(".//{}Group".format(xccdf_namespace))
     for group_element in group_elements:
-        rule_element = group_element.find("{}Rule".format(XCCDF_NAMESPACE))
+        rule_element = group_element.find("{}Rule".format(xccdf_namespace))
 
         # Build a dictionary with all of our rule data.
         rule = {
-            'id': rule_element.find("{}version".format(XCCDF_NAMESPACE)).text,
+            'id': rule_element.find("{}version".format(xccdf_namespace)).text,
             'vuln_id': group_element.attrib['id'],
-            'title': rule_element.find("{}title".format(XCCDF_NAMESPACE)).text,
+            'title': rule_element.find("{}title".format(xccdf_namespace)).text,
             'severity': rule_element.attrib['severity'],
-            'fix': rule_element.find("{}fixtext".format(XCCDF_NAMESPACE)).text,
-            'check': rule_element.find("{0}check/{0}check-content".format(XCCDF_NAMESPACE)).text,
-            'ident': [x.text for x in rule_element.findall("{}ident".format(XCCDF_NAMESPACE))],
+            'fix': rule_element.find("{}fixtext".format(xccdf_namespace)).text,
+            'check': rule_element.find("{0}check/{0}check-content".format(xccdf_namespace)).text,
+            'ident': [x.text for x in rule_element.findall("{}ident".format(xccdf_namespace))],
         }
 
         rule_tasks = tasks[rule['id']]
-        rule['status'] = 'Implemented'
+        rule['status'] = control_statuses['default']
         rule['vars'] = []
 
         if not rule_tasks:
-            rule['status'] = 'Not Implemented'
+            rule['status'] = control_statuses['missing']
 
         for item in rule_tasks:
             conditionals = item.get('when')
 
             # All controls have an on/off var named after the STIG ID in form
             # rhel_07_###### so we add that here without relying on parser.
-            # rule['vars'].append({'key': rule['id'].lower().replace('-','_'), 'value': 'true'})
             # rule['vars'].append({'key': rule['id'].lower().replace('-','_'), 'value': 'true'})
             if conditionals is None:
                 rule['vars'].append(rule['id'].lower().replace('-','_'))
@@ -299,21 +299,19 @@ def generate_docs():
                     rule['vars'].append(c)
             
             # Implementation status parsing
-            if 'rhel7stig_complex' in str(item.get('when')):
-                rule['status'] = 'Complexity High'
-            
-            if 'rhel7stig_disruptive' in str(item.get('when')):
-                rule['status'] = 'Disruption High'
+            for key, value in control_statuses.items():
+                if key in str(item.get('when')):
+                    rule['status'] = value
 
         # The description has badly formed XML in it, so we need to hack it up
         # and turn those tags into a dictionary.
-        description = rule_element.find("{}description".format(XCCDF_NAMESPACE)).text
+        description = rule_element.find("{}description".format(xccdf_namespace)).text
         parser = XMLParser()
         temp = fromstring("<root>{0}</root>".format(description), parser)
         rule['description'] = {x.tag: x.text for x in temp.iter()}
 
         # Get the deployer notes
-        deployer_notes = get_deployer_notes(rule['id'])
+        deployer_notes = get_deployer_notes(metadata_dir + '/notes', rule['id'])
         rule['deployer_notes'] = deployer_notes
 
         all_rules[rule['id']] = rule
@@ -321,24 +319,26 @@ def generate_docs():
         severity[rule['severity']].append(rule['id'])
         status[rule['status']].append(rule['id'])
 
-    all_toc = render_all(stig_ids, all_rules)
-    severity_toc = render_toc('severity',
-                              severity,
-                              all_rules)
-    status_toc = render_toc('status',
-                            status,
-                            all_rules)
+    all_toc = render_all(jinja_env, stig_ids, all_rules)
+    severity_toc = render_toc(jinja_env, 'severity', severity, all_rules)
+    status_toc = render_toc(jinja_env, 'status', status, all_rules)
 
-    write_file("rhel7/auto_controls-all.rst", all_toc)
-    write_file("rhel7/auto_controls-by-severity.rst", severity_toc)
-    write_file("rhel7/auto_controls-by-status.rst", status_toc)
+    write_file("auto_controls-all.rst", all_toc)
+    write_file("auto_controls-by-severity.rst", severity_toc)
+    write_file("auto_controls-by-status.rst", status_toc)
 
 
 def setup(app):
     """Set up the Sphinx extension."""
-    print("Generating RHEL7 STIG documentation...")
-    generate_docs()
+    app.add_config_value('stig_metadata_dir', 'metadata', 'html')
+    app.add_config_value('stig_ansible_dir', '../', 'html')
+    app.add_config_value('stig_ansible_task_filenames', list(), 'html')
+    app.add_config_value('stig_xccdf_file', '', 'html')
+    app.add_config_value('stig_xccdf_namespace', "", 'html')
+    app.add_config_value('stig_control_statuses', dict(), 'html')
+    app.add_config_value('stig_control_severities', list(), 'html')
 
+    print("Generating Role documentation...")
+    app.connect('config-inited', generate_docs)
 
-if __name__ == '__main__':
-    generate_docs()
+    return {'version': '0.1'}
