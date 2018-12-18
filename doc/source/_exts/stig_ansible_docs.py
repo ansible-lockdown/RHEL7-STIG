@@ -230,7 +230,7 @@ def generate_docs(app, config):
     ansible_task_filenames = config.stig_ansible_task_filenames
     xccdf_file = config.stig_xccdf_file
     xccdf_namespace = config.stig_xccdf_namespace
-    control_statuses = OrderedDict(config.stig_control_statuses)
+    control_statuses = config.stig_control_statuses
     control_severities = config.stig_control_severities
 
     jinja_env = jinja2.Environment(
@@ -335,7 +335,7 @@ def setup(app):
     app.add_config_value('stig_ansible_task_filenames', list(), 'html')
     app.add_config_value('stig_xccdf_file', '', 'html')
     app.add_config_value('stig_xccdf_namespace', "", 'html')
-    app.add_config_value('stig_control_statuses', dict(), 'html')
+    app.add_config_value('stig_control_statuses', OrderedDict(), 'html')
     app.add_config_value('stig_control_severities', list(), 'html')
 
     print("Generating Role documentation...")

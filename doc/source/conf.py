@@ -23,7 +23,7 @@
 # serve to show the default.
 import os
 import sys
-
+from collections import OrderedDict
 
 # import pbr.version
 
@@ -146,12 +146,12 @@ stig_ansible_dir = '../../' # relative path from doc source
 stig_ansible_task_filenames = ['fix-cat1.yml', 'fix-cat2.yml', 'fix-cat3.yml']
 stig_xccdf_file = 'U_Red_Hat_Enterprise_Linux_7_STIG_V2R1_Manual-xccdf.xml' # filename only this should be placed in metadata dir
 stig_xccdf_namespace = "{http://checklists.nist.gov/xccdf/1.1}"
-stig_control_statuses = {
+stig_control_statuses = OrderedDict({
     'default': 'Implemented',
     'rhel7stig_complex': 'Complexity High',
     'rhel7stig_disruptive': 'Disruption High',
     'missing': 'Not Implemented',
-}
+})
 stig_control_severities = ['high', 'medium', 'low']
 
 # -- STIG Ansible Docs extension config items -----------------------------
