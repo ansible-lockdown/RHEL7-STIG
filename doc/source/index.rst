@@ -2,6 +2,15 @@
 Automated security hardening for Linux hosts with Ansible
 =========================================================
 
+.. image:: https://secure.travis-ci.org/MindPointGroup/RHEL7-STIG.svg?branch=devel
+   :alt: Build Status Badge
+   :target: https://travis-ci.org/MindPointGroup/RHEL7-STIG
+
+.. raw:: html
+
+    <p><iframe src="https://ghbtns.com/github-btn.html?user=MindPointGroup&repo=RHEL7-STIG&type=watch&count=true&size=large&v=2"
+    allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe></p>
+
 What does the role do?
 ----------------------
 This role uses the |stig_name| `Security Technical Implementation Guide (STIG)`_ guidance 

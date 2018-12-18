@@ -11,14 +11,6 @@ of the |stig_name_short| STIG.
 
 Controls are divided into groups based on the following properties:
 
-.. toctree::
-   :maxdepth: 1
-
-   rhel7/auto_controls-by-severity.rst
-   rhel7/auto_controls-by-status.rst
-   rhel7/auto_controls-all.rst
-
-
 Control Severities
 ~~~~~~~~~~~~~~~~~~
 
@@ -107,8 +99,12 @@ Controls
 ~~~~~~~~
 
 .. toctree::
+   :maxdepth: 1
+
+   rhel7/auto_controls-all.rst
+
+.. toctree::
    :maxdepth: 2
 
    rhel7/auto_controls-by-severity.rst
    rhel7/auto_controls-by-status.rst
-   rhel7/auto_controls-all.rst

@@ -68,7 +68,7 @@ author = 'Ansible Lockdown Contributors'
 category = 'Security'
 copyright = '2018, Ansible Lockdown Contributors'
 description = 'Applies DISA STIG RHEL 7 Hardening Guidance to Systems'
-project = 'Ansible Lockdown RHEL 7 STIG'
+project = 'Ansible RHEL 7 STIG'
 role_name = 'RHEL7-STIG'
 target_name = 'RHEL7-STIG'
 title = 'Ansible Lockdown RHEL 7 STIG Documentation:'
@@ -144,26 +144,13 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'alabaster'
-
-html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation.html',
-        'searchbox.html',
-    ]
-}
+html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {
-    'description': description,
-    'fixed_sidebar': True,
-    'logo': 'ansiblelockdown-logo.png',
-    'logo_name': project,
-    'github_user': 'MindPointGroup',
-    'github_repo': 'RHEL7-STIG',
-    'badge_branch': 'devel',
-    'travis_button': True,
-    'show_relbars': True,
+    'display_version': True,
+    'prev_next_buttons_location': 'bottom',
+    'sticky_navigation': True,
+    'collapse_navigation': False,
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -178,7 +165,7 @@ html_theme_options = {
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-# html_logo = None
+html_logo = '_static/ansiblelockdown-logo.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
