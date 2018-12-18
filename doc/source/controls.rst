@@ -69,7 +69,7 @@ changes need to be made to meet the STIG control.
       rhel7stig_disruption_high: no
       rhel7stig_audit_disruptive: yes
 
-Not Implemented
+:ref:`Not Implemented <status-Not-Implemented>`
   These are controls that have not yet been implemented. The goal of this project
   is to have no controls in this status. This does not mean 100% of the controls
   will be fully implemented. Just that 100% of the controls will be in one of the
