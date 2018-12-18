@@ -173,12 +173,13 @@ def render_doc(jinja_env, stig_rule, deployer_notes):
     )
 
 
-def render_toc(jinja_env, toc_type, stig_dict, all_rules):
+def render_toc(jinja_env, toc_type, stig_dict, all_rules, sort_order):
     """Generate documentation RST for each STIG configuration."""
     template = jinja_env.get_template('template_toc.j2')
+    sorted_stig_items = sorted(stig_dict.items(), key=lambda t: sort_order.get(t[0]))
     return template.render(
         toc_type=toc_type,
-        stig_dict=stig_dict,
+        stig_items=sorted_stig_items,
         all_rules=all_rules,
     )
 
@@ -319,9 +320,12 @@ def generate_docs(app, config):
         severity[rule['severity']].append(rule['id'])
         status[rule['status']].append(rule['id'])
 
+    sev_sort_order = {s: i for i, s in enumerate(control_severities)}
+    status_sort_order = {s: i for i, s in enumerate(control_statuses.values())}
+
     all_toc = render_all(jinja_env, stig_ids, all_rules)
-    severity_toc = render_toc(jinja_env, 'severity', severity, all_rules)
-    status_toc = render_toc(jinja_env, 'status', status, all_rules)
+    severity_toc = render_toc(jinja_env, 'severity', severity, all_rules, sev_sort_order)
+    status_toc = render_toc(jinja_env, 'status', status, all_rules, status_sort_order)
 
     write_file("auto_controls-all.rst", all_toc)
     write_file("auto_controls-by-severity.rst", severity_toc)

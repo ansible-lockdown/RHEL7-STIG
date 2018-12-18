@@ -9,7 +9,7 @@
    :depth: 2
    :backlinks: none
 
-{% for section_header, stig_id_list in stig_dict.items() %}
+{% for section_header, stig_id_list in stig_items %}
 
 {% set section_title = section_header | title + " (" + stig_id_list | length | string + " controls)" %}
 
