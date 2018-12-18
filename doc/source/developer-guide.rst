@@ -24,9 +24,9 @@ more complex rST formatted text. The system matches deployer notes to STIG
 controls based on the note filename, which should follow the format
 ``RHEL-07-010010.rst``.
 
-All of the notes are found within ``doc/metadata/rhel7``. Here is an example:
+All of the notes are found within ``doc/metadata/notes``. Here is an example:
 
-.. literalinclude:: ../metadata/rhel7/example-note.rst
+.. literalinclude:: ../metadata/notes/example-note.rst
    :language: yaml
 
 The note should be brief, but it must answer a few critical questions:

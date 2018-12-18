@@ -101,10 +101,10 @@ Controls
 .. toctree::
    :maxdepth: 1
 
-   rhel7/auto_controls-all.rst
+   auto_controls-all.rst
 
 .. toctree::
    :maxdepth: 2
 
-   rhel7/auto_controls-by-severity.rst
-   rhel7/auto_controls-by-status.rst
+   auto_controls-by-severity.rst
+   auto_controls-by-status.rst
