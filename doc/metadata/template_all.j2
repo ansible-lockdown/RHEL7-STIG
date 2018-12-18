@@ -16,7 +16,7 @@ or for implementation statuses, like ``Not Implemented``.
 {% for stig_id in stig_ids | sort %}
 .. _stig-{{ stig_id }}:
 
-{% include "template_doc_rhel7.j2" %}
+{% include "template_doc.j2" %}
 
 {% if not loop.last %}
 ----
