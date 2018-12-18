@@ -230,7 +230,7 @@ def generate_docs(app, config):
     ansible_task_filenames = config.stig_ansible_task_filenames
     xccdf_file = config.stig_xccdf_file
     xccdf_namespace = config.stig_xccdf_namespace
-    control_statuses = config.stig_control_statuses
+    control_statuses = OrderedDict(config.stig_control_statuses)
     control_severities = config.stig_control_severities
 
     jinja_env = jinja2.Environment(
