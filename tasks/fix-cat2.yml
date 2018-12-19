@@ -2370,7 +2370,8 @@
       - RHEL-07-040830
       - ipv6
 
-- block:
+- name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
+  block:
       - name: "MEDIUM | RHEL-07-041001 | PATCH | The operating system must have the required packages for multifactor authentication installed."
         yum:
             name:
