@@ -432,7 +432,8 @@
       - RHEL-07-040540
       - shosts
 
-- block:
+- name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
+  block:
       - name: "HIGH | RHEL-07-040550 | AUDIT | There must be no shosts.equiv files on the system."
         command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name 'shosts.equiv'
         check_mode: no
