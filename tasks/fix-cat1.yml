@@ -222,7 +222,8 @@
       - RHEL-07-020250
       - complexity-high
 
-- block:
+- name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system"
+  block:
       # Currently just locks user account
       - name: "HIGH | RHEL-07-020310 | AUDIT | The root account must be the only account having unrestricted access to the system"
         shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
