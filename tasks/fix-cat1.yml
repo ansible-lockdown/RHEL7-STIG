@@ -489,8 +489,9 @@
       - RHEL-07-040710
       - ssh
 
-- block:
-      - name: "PRELIM | RHEL-07-040800 | AUDIT | SNMP community strings must be changed from the default."
+- name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings must be changed from the default."
+  block:
+      - name: "HIGH | RHEL-07-040800 | AUDIT | SNMP community strings must be changed from the default."
         command: grep {{ item }} /etc/snmp/snmpd.conf
         check_mode: no
         failed_when: no
