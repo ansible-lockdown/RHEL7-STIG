@@ -13,6 +13,11 @@ Ansible role.
 
 .. _Openstack Ansible Hardening: https://github.com/openstack/ansible-hardening
 
+**BELOW IS NOT YET IMPLEMENTED IN THIS ROLE**
+
+*The below configurations and variables are not yet implemented. This page and
+message are being kept until it is implemented.*
+
 The *contrib* hardening configurations are disabled by default, but they can
 be enabled by setting the following Ansible variable:
 
