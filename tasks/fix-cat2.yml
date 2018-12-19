@@ -441,10 +441,10 @@
       - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
         pamd:
             name: "{{ item }}"
-            state: after
+            state: before
             type: auth
-            control: sufficient
-            module_path: pam_unix.so
+            control: required
+            module_path: pam_deny.so
             new_type: auth
             new_control: "[default=die]"
             new_module_path: pam_faillock.so
