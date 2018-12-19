@@ -281,11 +281,13 @@ def generate_docs(app, config):
         rule_tasks = tasks[rule['id']]
         rule['status'] = control_statuses['default']
         rule['vars'] = []
+        rule['tags'] = []
 
         if not rule_tasks:
             rule['status'] = control_statuses['missing']
 
         for item in rule_tasks:
+            tags = item.get('tags')
             conditionals = item.get('when')
 
             # All controls have an on/off var named after the STIG ID in form
@@ -304,6 +306,13 @@ def generate_docs(app, config):
             for key, value in control_statuses.items():
                 if key in str(item.get('when')):
                     rule['status'] = value
+
+            # Grab the tags
+            if tags:
+                rule['tags'] = tags
+                # Check if notimplemented is in tags and update status
+                if 'notimplemented' in tags:
+                    rule['status'] = control_statuses['missing']
 
         # The description has badly formed XML in it, so we need to hack it up
         # and turn those tags into a dictionary.

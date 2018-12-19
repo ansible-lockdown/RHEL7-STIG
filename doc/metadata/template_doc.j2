@@ -15,13 +15,20 @@
 
 **Variables:**
 
-.. code-block:: yaml
-{% if rule['vars'] | length > 0 %}
-{% for var in rule['vars'] %}
+.. code-block:: text
 
+{% for var in rule['vars'] %}
     {{ var }}
 {% endfor %}
-{% endif %}
+
+
+**Tags:**
+
+.. code-block:: text
+
+{% for tag in rule['tags'] %}
+    {{ tag }}
+{% endfor %}
 
 **Notes:**
 
