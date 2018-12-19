@@ -2244,7 +2244,8 @@
       - RHEL-07-040660
       - ipv4
 
-- block:
+- name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
+  block:
       - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces must not be in promiscuous mode."
         shell: "ip link | grep -i promisc | cut -d ':' -f 2"
         check_mode: no
