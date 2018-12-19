@@ -317,14 +317,19 @@
 
       - name: "MEDIUM | RHEL-07-010260 | PATCH | Reset password timeout to prevent locking out user."
         command: chage -d '-1 day' {{ item }}
+        check_mode: "{{ rhel7stig_disruptive_check_mode }}"
         with_items: "{{ rhel_07_010260_audit.stdout_lines }}"
 
       - name: "MEDIUM | RHEL-07-010260 | PATCH | Existing passwords must be restricted to a 60-day maximum lifetime."
         command: chage -M 60 {{ item }}
+        check_mode: "{{ rhel7stig_disruptive_check_mode }}"
         with_items: "{{ rhel_07_010260_audit.stdout_lines }}"
-  when: rhel_07_010260
+  when:
+      - rhel_07_010260
+      - rhel7stig_disruptive
   tags:
       - RHEL-07-010260
+      - disruption-high
       - password
 
 - name: "MEDIUM | RHEL-07-010270 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are prohibited from reuse for a minimum of five generations."
