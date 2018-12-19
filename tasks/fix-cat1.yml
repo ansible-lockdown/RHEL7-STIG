@@ -414,7 +414,8 @@
       - RHEL-07-040390
       - ssh
 
-- block:
+- name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
+  block:
       - name: "HIGH | RHEL-07-040540 | AUDIT | There must be no .shosts files on the system."
         command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name '.shosts'
         check_mode: no
