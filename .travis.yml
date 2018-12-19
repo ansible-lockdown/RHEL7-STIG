@@ -12,6 +12,8 @@ jobs:
     env: TYPE=aws
   - name: "Docker Test"
     env: TYPE=docker
+  - name: "Docs Test"
+    env: TYPE=docs
 before_install:
   - |
     if [ "${TYPE}" == "docker" ]; then
@@ -24,6 +26,16 @@ before_install:
       fi
     fi
 install:
-  - pip3 install -r tests/ci-requirements.txt
+  - |
+    if [ "${TYPE}" == "docs" ]; then
+      (cd doc; pip3 install -r requirements.txt)
+    else
+      pip3 install -r tests/ci-requirements.txt
+    fi
 script:
-  - molecule --base-config base-molecule.yml test --scenario-name $TYPE
+  - |
+    if [ "${TYPE}" == "docs" ]; then
+      (cd doc; make clean; make html)
+    else
+      molecule --base-config base-molecule.yml test --scenario-name $TYPE
+    fi
