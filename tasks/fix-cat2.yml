@@ -1242,7 +1242,8 @@
       - RHEL-07-021120
       - cron
 
-- block:
+- name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
+  block:
       - name: "MEDIUM | RHEL-07-021300 | PATCH | Kernel core dumps must be disabled unless needed."
         shell: "systemctl show kdump | grep LoadState | cut -d = -f 2"
         register: rhel_07_021300_kdump_service_status
