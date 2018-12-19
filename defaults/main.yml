@@ -94,8 +94,7 @@ rhel_07_010220: true
 rhel_07_010230: true
 rhel_07_010240: true
 rhel_07_010250: true
-# Potential for locking out users
-rhel_07_010260: false
+rhel_07_010260: true
 rhel_07_010270: true
 rhel_07_010280: true
 rhel_07_010310: true
