@@ -124,7 +124,6 @@
 
 
 - name: |
-
       "HIGH | RHEL-07-010480 | PATCH | Systems with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
       "HIGH | RHEL-07-010490 | PATCH | Systems using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   lineinfile:
