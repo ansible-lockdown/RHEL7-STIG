@@ -379,7 +379,8 @@
       - RHEL-07-030000
       - auditd
 
-- block:
+- name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
+  block:
       - name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
         yum:
             name: "{{ rhel7stig_av_package.package }}"
