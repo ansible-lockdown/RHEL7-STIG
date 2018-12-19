@@ -2264,7 +2264,8 @@
   tags:
       - RHEL-07-040670
 
-- block:
+- name: "MEDIUM | RHEL-07-040680 | PATCH | The system must be configured to prevent unrestricted mail relaying."
+  block:
       - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
         command: rpm -q postfix
         failed_when: no
