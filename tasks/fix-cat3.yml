@@ -9,7 +9,7 @@
   tags:
       - RHEL-07-020200
 
-- name: "LOW | RHEL-07-020300 | PATCH | All Group Identifiers (GIDs) referenced in the /etc/passwd file must be defined in the /etc/group file."
+- name: "LOW | RHEL-07-020300 | All Group Identifiers (GIDs) referenced in the /etc/passwd file must be defined in the /etc/group file."
   block:
       - name: "LOW | RHEL-07-020300 | PATCH | Check /etc/passwd entries"
         shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'

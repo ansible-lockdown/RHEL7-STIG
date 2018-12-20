@@ -1,5 +1,5 @@
 ---
-- name: "HIGH | RHEL-07-010010 | PATCH | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
+- name: "HIGH | RHEL-07-010010 | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
   block:
       - name: "HIGH | RHEL-07-010010 | AUDIT | The file permissions, ownership, and group membership of system files and commands must match the vendor values."
         shell: |
@@ -42,7 +42,7 @@
   tags:
       - RHEL-07-010010
 
-- name: "HIGH | RHEL-07-010020 | PATCH | The cryptographic hash of system files and commands must match vendor values."
+- name: "HIGH | RHEL-07-010020 | The cryptographic hash of system files and commands must match vendor values."
   block:
       - name: "HIGH | RHEL-07-010020 | AUDIT | The cryptographic hash of system files and commands must match vendor values."
         shell: 'rpm -Va --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | grep -E ''/(.?bin|libexec)/'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
@@ -222,7 +222,7 @@
       - RHEL-07-020250
       - complexity-high
 
-- name: "HIGH | RHEL-07-020310 | PATCH | The root account must be the only account having unrestricted access to the system"
+- name: "HIGH | RHEL-07-020310 | The root account must be the only account having unrestricted access to the system"
   block:
       # Currently just locks user account
       - name: "HIGH | RHEL-07-020310 | AUDIT | The root account must be the only account having unrestricted access to the system"
@@ -240,7 +240,7 @@
   tags:
       - RHEL-07-020310
 
-- name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+- name: "HIGH | RHEL-07-021350 | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
   block:
       - name: "HIGH | RHEL-07-021350 | PATCH | The operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect unclassified information requiring confidentiality and cryptographic protection in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
         yum:
@@ -360,7 +360,7 @@
       - RHEL-07-021710
       - telnet
 
-- name: "HIGH | RHEL-07-030000 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+- name: "HIGH | RHEL-07-030000 | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
   block:
       - name: "HIGH | RHEL-07-030000 | PATCH | Auditing must be configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
         yum:
@@ -379,7 +379,7 @@
       - RHEL-07-030000
       - auditd
 
-- name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
+- name: "HIGH | RHEL-07-032000 | The system must use a DoD-approved virus scan program."
   block:
       - name: "HIGH | RHEL-07-032000 | PATCH | The system must use a DoD-approved virus scan program."
         yum:
@@ -414,7 +414,7 @@
       - RHEL-07-040390
       - ssh
 
-- name: "HIGH | RHEL-07-040540 | PATCH | There must be no .shosts files on the system."
+- name: "HIGH | RHEL-07-040540 | There must be no .shosts files on the system."
   block:
       - name: "HIGH | RHEL-07-040540 | AUDIT | There must be no .shosts files on the system."
         command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name '.shosts'
@@ -432,7 +432,7 @@
       - RHEL-07-040540
       - shosts
 
-- name: "HIGH | RHEL-07-040550 | PATCH | There must be no shosts.equiv files on the system."
+- name: "HIGH | RHEL-07-040550 | There must be no shosts.equiv files on the system."
   block:
       - name: "HIGH | RHEL-07-040550 | AUDIT | There must be no shosts.equiv files on the system."
         command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name 'shosts.equiv'
@@ -489,7 +489,7 @@
       - RHEL-07-040710
       - ssh
 
-- name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings must be changed from the default."
+- name: "HIGH | RHEL-07-040800 | SNMP community strings must be changed from the default."
   block:
       - name: "HIGH | RHEL-07-040800 | AUDIT | SNMP community strings must be changed from the default."
         command: grep {{ item }} /etc/snmp/snmpd.conf
