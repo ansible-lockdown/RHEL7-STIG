@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/rhel7:latest
+FROM registry.redhat.io/rhel7:latest
 
 # Build Arguments
 ARG rhn_user
