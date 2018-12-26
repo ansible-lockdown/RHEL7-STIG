@@ -1,0 +1,35 @@
+{% set rule = all_rules[stig_id] %}
+{% set page_title = rule['id'] + " (" + rule['vuln_id'] + ")" %}
+{{ page_title }}
+{{ "=" * page_title | length }}
+
+{{ rule['title'] }}
+
+**Severity:** {{ rule['severity'] | title }}
+
+**Implementation Status:** {{ rule['status'] | default('Not Implemented') | title }}
+
+**Description:**
+
+{{ rule['description']['VulnDiscussion'] | addmonospace }}
+
+**Variables:**
+
+.. code-block:: text
+
+{% for var in rule['vars'] %}
+    {{ var }}
+{% endfor %}
+
+
+**Tags:**
+
+.. code-block:: text
+
+{% for tag in rule['tags'] %}
+    {{ tag }}
+{% endfor %}
+
+**Notes:**
+
+{{ rule['deployer_notes'] }}
