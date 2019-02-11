@@ -1,5 +1,5 @@
 ---
-- name: "LOW | RHEL-07-020200 | PATCH | The operating system must remove all software components after updated versions have been installed."
+- name: "LOW | RHEL-07-020200 | PATCH | The Red Hat Enterprise Linux operating system must remove all software components after updated versions have been installed."
   lineinfile:
       dest: /etc/yum.conf
       regexp: ^#?clean_requirements_on_remove
@@ -9,7 +9,7 @@
   tags:
       - RHEL-07-020200
 
-- name: "LOW | RHEL-07-020300 | All Group Identifiers (GIDs) referenced in the /etc/passwd file must be defined in the /etc/group file."
+- name: "LOW | RHEL-07-020300 | The Red Hat Enterprise Linux operating system must be configured so that all Group Identifiers (GIDs) referenced in the /etc/passwd file are defined in the /etc/group file."
   block:
       - name: "LOW | RHEL-07-020300 | PATCH | Check /etc/passwd entries"
         shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
@@ -51,7 +51,7 @@
       - RHEL-07-021023
       - RHEL-07-021024
 
-- name: "LOW | RHEL-07-021310 | PATCH | A separate file system must be used for user home directories (such as /home or an equivalent)."
+- name: "LOW | RHEL-07-021310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that a separate file system is used for user home directories (such as /home or an equivalent)."
   debug:
       msg: "WARNING: /home is not mounted on a separate partition"
   changed_when:
@@ -67,7 +67,7 @@
       - mount
       - home
 
-- name: "LOW | RHEL-07-021320 | PATCH | The system must use a separate file system for /var."
+- name: "LOW | RHEL-07-021320 | PATCH | The Red Hat Enterprise Linux operating system must use a separate file system for /var."
   debug:
       msg: "WARNING: /var is not mounted on a separate partition"
   changed_when:
@@ -83,7 +83,7 @@
       - mount
       - var
 
-- name: "LOW | RHEL-07-021330 | PATCH | The system must use a separate file system for the system audit data path."
+- name: "LOW | RHEL-07-021330 | PATCH | The Red Hat Enterprise Linux operating system must use a separate file system for the system audit data path."
   debug:
       msg: "WARNING: /var/log/audit is not mounted on a separate partition"
   changed_when:
@@ -99,7 +99,7 @@
       - mount
       - auditd
 
-- name: "LOW | RHEL-07-021340 | PATCH | The system must use a separate file system for /tmp (or equivalent)."
+- name: "LOW | RHEL-07-021340 | PATCH | The Red Hat Enterprise Linux operating system must use a separate file system for /tmp (or equivalent)."
   systemd:
       name: tmp.mount
       daemon_reload: "{{ rhel7stig_systemd_daemon_reload }}"
@@ -114,7 +114,7 @@
       - mount
       - tmp
 
-- name: "LOW | RHEL-07-021600 | PATCH | The file integrity tool must be configured to verify Access Control Lists (ACLs)."
+- name: "LOW | RHEL-07-021600 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs)."
   command: "true"
   changed_when: no
   when: rhel_07_021600
@@ -122,7 +122,7 @@
       - RHEL-07-021600
       - notimplemented
 
-- name: "LOW | RHEL-07-021610 | PATCH | The file integrity tool must be configured to verify extended attributes."
+- name: "LOW | RHEL-07-021610 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify extended attributes."
   command: "true"
   changed_when: no
   when: rhel_07_021610
@@ -130,7 +130,7 @@
       - RHEL-07-021610
       - notimplemented
 
-- name: "LOW | RHEL-07-040000 | PATCH | The operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
+- name: "LOW | RHEL-07-040000 | PATCH | The Red Hat Enterprise Linux operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
   lineinfile:
       state: present
       dest: /etc/security/limits.conf
@@ -141,7 +141,7 @@
   tags:
       - RHEL-07-040000
 
-- name: "LOW | RHEL-07-040530 | PATCH | The system must display the date and time of the last successful account logon upon logon."
+- name: "LOW | RHEL-07-040530 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
   blockinfile:
       state: present
       path: /etc/pam.d/postlogin
@@ -153,7 +153,7 @@
   tags:
       - RHEL-07-040530
 
-- name: "LOW | RHEL-07-040600 | PATCH | For systems using DNS resolution, at least two name servers must be configured."
+- name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
   command: "true"
   changed_when: no
   when: rhel_07_040600

@@ -1,7 +1,7 @@
 ---
 # tasks/audit_system_call.yml
 
-- name: "MEDIUM | RHEL-07-{{ item.id }} | {{ audit_present | ternary('PATCH', 'REVERT') }} | All uses of the {{ item.call }} command must be audited."
+- name: "MEDIUM | RHEL-07-{{ item.id }} | {{ audit_present | ternary('PATCH', 'REVERT') }} | The Red Hat Enterprise Linux operating system must audit all uses of the {{ item.call }} syscall."
   lineinfile:
       path: "/etc/audit/rules.d/rhel7stig_system_calls.rules"
       create: yes
