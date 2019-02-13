@@ -2008,7 +2008,7 @@
       - name: "MEDIUM | RHEL-07-040420 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
         file:
             dest: "{{ item.path }}"
-            mode: u-x,go-rwx
+            mode: a-stx,go-w,o-r
             state: file
         with_items: "{{ rhel_07_040420_audit.files | default([]) }}"
   when:
