@@ -1535,21 +1535,26 @@
       - id: "030560"
         path: "/usr/sbin/semanage"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030570"
         path: "/usr/sbin/setsebool"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030580"
         path: "/usr/bin/chcon"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030590"
         path: "/usr/sbin/setfiles"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030630"
         path: "/usr/bin/passwd"
         key: "privileged-passwd"
       - id: "030640"
         path: "/usr/sbin/unix_chkpwd"
         key: "privileged-passwd"
+        no_perm_x_filter: true
       - id: "030650"
         path: "/usr/bin/gpasswd"
         key: "privileged-passwd"
@@ -1562,15 +1567,19 @@
       - id: "030680"
         path: "/usr/bin/su"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030690"
         path: "/usr/bin/sudo"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030710"
         path: "/usr/bin/newgrp"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030720"
         path: "/usr/bin/chsh"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030740"
         path: "/usr/bin/mount"
         key: "privileged-mount"
@@ -1578,25 +1587,32 @@
       - id: "030750"
         path: "/usr/bin/umount"
         key: "privileged-mount"
+        no_perm_x_filter: true
       - id: "030760"
         path: "/usr/sbin/postdrop"
         key: "privileged-postfix"
+        no_perm_x_filter: true
       - id: "030770"
         path: "/usr/sbin/postqueue"
         key: "privileged-postfix"
+        no_perm_x_filter: true
       - id: "030780"
         path: "/usr/libexec/openssh/ssh-keysign"
         key: "privileged-ssh"
+        no_perm_x_filter: true
       - id: "030800"
         path: "/usr/bin/crontab"
         key: "privileged-cron"
+        no_perm_x_filter: true
       - id: "030810"
         path: "/usr/sbin/pam_timestamp_check"
         key: "privileged-pam"
+        no_perm_x_filter: true
       - id: "030840"
         path: "/usr/bin/kmod"
         trivial: yes
         key: "module-change"
+        no_perm_x_filter: true
   tags:
       - audit-rules
 
