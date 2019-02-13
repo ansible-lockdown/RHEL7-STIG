@@ -1961,7 +1961,7 @@
       - name: "MEDIUM | RHEL-07-040410 | PATCH | The SSH public host key files must have mode 0644 or less permissive."
         file:
             dest: "{{ item.path }}"
-            mode: u-x,go-wx
+            mode: a-stx,go-w
             state: file
         with_items: "{{ rhel_07_040410_audit.files | default([]) }}"
   when:
