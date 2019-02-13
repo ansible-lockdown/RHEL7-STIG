@@ -1382,22 +1382,27 @@
 
 - name: "MEDIUM | RHEL-07-030360 | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions."
   block:
-      - name: "MEDIUM | RHEL-07-030360 | AUDIT | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions. (find suid/sgid programs)"
-        command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -type f ( -perm -4000 -o -perm -2000 )
-        check_mode: no
-        changed_when: no
-        register: rhel_07_030360_audit
-
-      - name: "MEDIUM | RHEL-07-030360 | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions."
-        lineinfile:
+      - name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions. (Delete obsolete suid/sgid rules)"
+        file:
             path: "/etc/audit/rules.d/rhel7stig_suid_sgid_commands.rules"
+            state: absent
+
+      - name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions. (Audit rules for execve calls)"
+        lineinfile:
+            path: "/etc/audit/rules.d/rhel7stig_execve_calls.rules"
             create: yes
             owner: root
             group: root
             mode: 0600
-            line: "-a always,exit -F path={{ item }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k setuid/setgid"
+            line: "{{ item }}"
             state: present
-        with_items: "{{ rhel_07_030360_audit.stdout_lines }}"
+        with_items:
+            - "-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k setuid"
+            - "-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid"
+            - "-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k setgid"
+            - "-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid"
+        notify: restart auditd
+
   when: rhel_07_030360
   tags:
       - RHEL-07-030360
