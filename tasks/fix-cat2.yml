@@ -130,7 +130,7 @@
 - name: "MEDIUM | RHEL-07-010119 | PATCH | When passwords are changed or new passwords are established, pwquality must be used"
   lineinfile:
       create: yes
-      dest: /etc/pam.d/passwd
+      dest: /etc/pam.d/system-auth
       regexp: '^#?password required pam_pwquality.so retry'
       line: password required pam_pwquality.so retry=3
   when: rhel_07_010119
