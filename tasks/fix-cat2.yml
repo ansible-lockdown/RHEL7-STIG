@@ -1093,6 +1093,19 @@
       - RHEL-07-020730
       - notimplemented
 
+
+- name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
+  setup:
+      gather_subset: selinux,!min,!all
+      filter: ansible_selinux
+  when:
+      - rhel_07_020900
+      - rhel7stig_complex
+      - ansible_selinux is not defined
+  tags:
+      - RHEL-07-020900
+      - complexity-high
+
 - name: "MEDIUM | RHEL-07-020900 | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
   block:
       - name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
