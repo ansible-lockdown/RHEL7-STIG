@@ -716,16 +716,23 @@
               yum:
                   name: yum-cron
                   state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
-                  enablerepo: "{{ (ansible_distribution == 'RedHat') | ternary('rhel-7-' +
-                          (rhel_07_020260_rhel_type.rc == 0) | ternary('workstation', 'server') +
-                          '-optional-rpms', omit) }}"
         rescue:
-            # Might be an AWS RHEL instance, try it...
             - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
-              yum:
-                  name: yum-cron
-                  state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
-                  enablerepo: rhui-REGION-rhel-server-optional
+              block:
+                  - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
+                    yum:
+                        name: yum-cron
+                        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
+                        enablerepo: "{{ 'rhel-7-' ~ (rhel_07_020260_rhel_type.rc == 0) |
+                                ternary('workstation', 'server') ~ '-optional-rpms' }}"
+
+              rescue:
+                  # Might be an AWS RHEL instance, try it...
+                  - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
+                    yum:
+                        name: yum-cron
+                        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
+                        enablerepo: rhui-REGION-rhel-server-optional
 
       - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Verify yum-cron config file exists"
         stat:
