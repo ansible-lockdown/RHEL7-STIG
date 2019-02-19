@@ -1,4 +1,12 @@
 ---
+- name: Gather distribution info
+  setup:
+      gather_subset: distribution,!all,!min
+  when:
+      - ansible_distribution is not defined
+  tags:
+      - always
+
 - name: Check OS version and family
   assert:
       that: ansible_os_family == 'RedHat' and ansible_distribution_major_version is version_compare('7', '==')
