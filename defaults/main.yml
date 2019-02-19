@@ -457,8 +457,9 @@ rhel7stig_ssh_session_timeout: 600
 # minimal                            = yum --bugfix upgrade-minimal
 # minimal-security                   = yum --security upgrade-minimal
 # minimal-security-severity:Critical =  --sec-severity=Critical upgrade-minimal
+rhel7stig_auto_package_updates_enabled: no
 rhel7stig_auto_package_updates:
-    enabled: yes
+    enabled: "{{ rhel7stig_auto_package_updates_enabled }}"
     update_cmd: "minimal-security"
     frequency: daily
 
