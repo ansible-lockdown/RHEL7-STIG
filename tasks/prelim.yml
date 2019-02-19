@@ -207,7 +207,19 @@
   when:
       - rhel_07_020210 or rhel_07_020220
 
-- name: "PRELIM | Install SSH"
-  yum:
-      name: openssh-server
+- name: "PRELIM | Bare bones SSH Server"
+  block:
+      - name: "PRELIM | Install SSH"
+        yum:
+            name: openssh-server
+
+      - name: PRELIM | check if ssh host key exists
+        stat:
+            path: /etc/ssh/ssh_host_rsa_key
+        register: rhel7stig_ssh_host_rsa_key_stat
+
+      - name: PRELIM | create ssh host key to allow 'sshd -t -f %s' to succeed
+        command: ssh-keygen -N '' -f /etc/ssh/ssh_host_rsa_key -t rsa -b 4096
+        when: not rhel7stig_ssh_host_rsa_key_stat.stat.exists
+        notify: clean up ssh host key
   when: rhel7stig_ssh_required

@@ -50,6 +50,14 @@
   command: auditctl -f {{ rhel7stig_auditd_failure_flag }}
   failed_when: no
 
+- name: clean up ssh host key
+  file:
+      path: "{{ item }}"
+      state: absent
+  with_items:
+      - /etc/ssh/ssh_host_rsa_key
+      - /etc/ssh/ssh_host_rsa_key.pub
+
 - name: init aide and wait
   command: /usr/sbin/aide --init -B 'database_out=file:{{ rhel7stig_aide_temp_db_file }}'
   notify: move aide db
