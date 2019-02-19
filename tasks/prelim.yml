@@ -213,6 +213,12 @@
         yum:
             name: openssh-server
 
+      - name: PRELIM | Start SSH
+        service:
+            name: sshd
+            state: "{{ rhel7stig_service_started }}"
+            enabled: yes
+
       - name: PRELIM | check if ssh host key exists
         stat:
             path: /etc/ssh/ssh_host_rsa_key
