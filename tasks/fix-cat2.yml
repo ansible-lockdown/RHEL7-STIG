@@ -718,6 +718,10 @@
   args:
       warn: no
   register: rhel_07_020260_yum_cron_installed
+  when: rhel_07_020260
+  tags:
+      - RHEL-07-020260
+      - packaging
 
 - name: "MEDIUM | RHEL-07-020260 | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date."
   block:
