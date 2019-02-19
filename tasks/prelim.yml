@@ -203,7 +203,6 @@
       name:
           - libselinux-python
           - selinux-policy-targeted
-          - selinux-policy-mls
   when:
       - rhel_07_020210 or rhel_07_020220
 
