@@ -700,6 +700,25 @@
       - login
       - umask
 
+
+- name: "MEDIUM | RHEL-07-020260 | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date."
+  yum:
+      name: '*'
+      state: latest
+  when: rhel_07_020260
+  tags:
+      - RHEL-07-020260
+      - packaging
+
+- name: "MEDIUM | RHEL-07-020260 | AUDIT | Check if yum-cron is installed"
+  command: rpm -q yum-cron
+  check_mode: no
+  changed_when: no
+  failed_when: no
+  args:
+      warn: no
+  register: rhel_07_020260_yum_cron_installed
+
 - name: "MEDIUM | RHEL-07-020260 | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date."
   block:
       - name: "MEDIUM | RHEL-07-020260 | AUDIT | Check RHEL type"
@@ -769,7 +788,10 @@
             state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary(rhel7stig_service_started, 'stopped')}}"
         when: rhel_07_020260_yumcron_service_status.stdout == "loaded"
 
-  when: rhel_07_020260
+  when:
+      - rhel_07_020260
+      - rhel7stig_auto_package_updates_enabled or
+        rhel_07_020260_yum_cron_installed.rc == 0
   tags:
       - RHEL-07-020260
       - packaging
