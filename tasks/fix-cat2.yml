@@ -1451,6 +1451,7 @@
 
   when: rhel_07_030360
   tags:
+      - audit-rules
       - RHEL-07-030360
 
 - name: "MEDIUM | Auditing system calls"
