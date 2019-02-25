@@ -141,14 +141,28 @@
   tags:
       - RHEL-07-040000
 
-- name: "LOW | RHEL-07-040530 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
-  blockinfile:
-      state: present
-      path: /etc/pam.d/postlogin
-      insertafter: '^# User changes will be destroyed'
-      block: |
-          ### RHEL-07-040530 ###
-          session required pam_lastlog.so showfailed
+- name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
+  block:
+      - name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
+        pamd:
+            name: postlogin
+            state: args_absent
+            type: session
+            control: "{{ item }}"
+            module_path: pam_lastlog.so
+            module_arguments: silent
+        with_items:
+            - '[default=1]'
+            - optional
+
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Remove old remediation"
+        blockinfile:
+            state: absent
+            path: /etc/pam.d/postlogin
+            insertafter: '^# User changes will be destroyed'
+            block: |
+                ### RHEL-07-040530 ###
+                session required pam_lastlog.so showfailed
   when: rhel_07_040530
   tags:
       - RHEL-07-040530
