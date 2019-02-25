@@ -1352,6 +1352,7 @@
   notify: update running audit failure mode
   when: rhel_07_030010
   tags:
+      - auditd
       - RHEL-07-030010
 
 - name: "MEDIUM | RHEL-07-030300 | PATCH | The Red Hat Enterprise Linux operating system must off-load audit records onto a different system or media from the system being audited."
@@ -1361,6 +1362,7 @@
       line: remote_server = {{ rhel7stig_audisp_remote_server }}
   when: rhel_07_030300 and rhel7stig_audisp_remote_server
   tags:
+      - auditd
       - RHEL-07-030300
 
 - name: "MEDIUM | RHEL-07-030310 | PATCH | The Red Hat Enterprise Linux operating system must encrypt the transfer of audit records off-loaded onto a different system or media from the system being audited."
@@ -1370,6 +1372,7 @@
       line: enable_krb5 = yes
   when: rhel_07_030310
   tags:
+      - auditd
       - RHEL-07-030310
 
 - name: "MEDIUM | RHEL-07-030320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when the audit storage volume is full."
@@ -1379,6 +1382,7 @@
       line: "disk_full_action = {{ rhel7stig_audisp_disk_full_action }}"
   when: rhel_07_030320
   tags:
+      - auditd
       - RHEL-07-030320
 
 - name: "MEDIUM | RHEL-07-030321 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when there is an error sending audit records to a remote system."
@@ -1388,6 +1392,7 @@
       line: "network_failure_action = {{ rhel7stig_audisp_network_failure_action }}"
   when: rhel_07_030321
   tags:
+      - auditd
       - RHEL-07-030321
 
 - name: "MEDIUM | RHEL-07-030330 | PATCH | The Red Hat Enterprise Linux operating system must initiate an action to notify the System Administrator (SA) and Information System Security Officer ISSO, at a minimum, when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity."
@@ -1411,6 +1416,7 @@
       - rhel7stig_auditd_space_left_action_result.rc != 257
   when: rhel_07_030340
   tags:
+      - auditd
       - RHEL-07-030340
 
 - name: "MEDIUM | RHEL-07-030350 | PATCH | The Red Hat Enterprise Linux operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) when the threshold for the repository maximum audit record storage capacity is reached."
@@ -1424,6 +1430,7 @@
       - rhel7stig_auditd_action_mail_acct_result.rc != 257
   when: rhel_07_030350
   tags:
+      - auditd
       - RHEL-07-030350
 
 - name: "MEDIUM | RHEL-07-030360 | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions."
