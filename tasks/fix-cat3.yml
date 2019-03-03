@@ -143,6 +143,15 @@
 
 - name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
   block:
+      - name: "LOW | RHEL-07-040530 | Update pam_lastlog control to satisfy benchmark."
+        pamd:
+            name: postlogin
+            type: session
+            control: "{{ old_control }}"
+            new_control: "{{ default_control }}"
+            module_path: pam_lastlog.so
+            state: updated
+
       - name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
         pamd:
             name: postlogin
@@ -153,7 +162,7 @@
             module_arguments: silent
         with_items:
             - '[default=1]'
-            - optional
+            - "{{ default_control }}"
 
       - name: "MEDIUM | RHEL-07-010270 | PATCH | Remove old remediation"
         blockinfile:
@@ -163,6 +172,9 @@
             block: |
                 ### RHEL-07-040530 ###
                 session required pam_lastlog.so showfailed
+  vars:
+      default_control: "{{ rhel7stig_workaround_for_disa_benchmark | ternary('required', 'optional') }}"
+      old_control: "{{ rhel7stig_workaround_for_disa_benchmark | ternary('optional', 'required') }}"
   when: rhel_07_040530
   tags:
       - RHEL-07-040530
