@@ -395,7 +395,10 @@ rhel7stig_aide_conf:
 # Set maximum number of simultaneous system logins (RHEL-07-040000)
 rhel7stig_maxlogins: 10
 
-rhel7stig_logon_banner: |
+rhel7stig_logon_banner: "{{ rhel7stig_workaround_for_disa_benchmark | ternary(
+        rhel7stig_logon_banner_nice | regex_replace('(?s)(?<!\\n)\\n(?!(\n|$))', ' '),
+        rhel7stig_logon_banner_nice) }}"
+rhel7stig_logon_banner_nice: |
     You are accessing a U.S. Government (USG) Information System (IS) that is
     provided for USG-authorized use only.
 
