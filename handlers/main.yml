@@ -33,7 +33,10 @@
   with_items:
       - grub.cfg
       - user.cfg
-  when: rhel7stig_workaround_for_disa_benchmark
+  when:
+      - rhel7stig_workaround_for_disa_benchmark
+      - not rhel7stig_skip_for_travis
+      - not rhel7stig_system_is_container
 
 - name: "restart {{ rhel7stig_time_service }}"
   service:
