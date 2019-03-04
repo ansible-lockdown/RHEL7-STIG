@@ -560,7 +560,8 @@ rhel7stig_audit_part: "{{ rhel_07_audit_part.stdout }}"
 rhel7stig_boot_part: "{{ rhel_07_boot_part.stdout }}"
 
 rhel7stig_machine_uses_uefi: "{{ rhel_07_sys_firmware_efi.stat.exists }}"
-rhel7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/{{ ansible_distribution | lower }}/grub.cfg', '/boot/grub2/grub.cfg') }}"
+rhel7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
+rhel7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
 
 rhel7stig_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
 
