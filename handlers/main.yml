@@ -24,6 +24,17 @@
       - not rhel7stig_skip_for_travis
       - not rhel7stig_system_is_container
 
+- name: copy grub2 config to BIOS/UEFI to satisfy benchmark
+  listen: make grub2 config
+  copy:
+      src: "{{ rhel7stig_grub_cfg_path | dirname }}/{{ item }}"
+      dest: "{{ rhel7stig_grub_cfg_path_invalid | dirname }}/{{ item }}"
+      remote_src: yes
+  with_items:
+      - grub.cfg
+      - user.cfg
+  when: rhel7stig_workaround_for_disa_benchmark
+
 - name: "restart {{ rhel7stig_time_service }}"
   service:
       name: "{{ rhel7stig_time_service }}"
