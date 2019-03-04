@@ -2444,13 +2444,14 @@
       - complexity-high
       - sssd
 
-- name: "MEDIUM | RHEL-07-041003 | PATCH | The Red Hat Enterprise Linux operating system must implement certificate status checking for PKI authentication."
-  command: "true"
-  changed_when: no
+- name: "MEDIUM | RHEL-07-041003 | The Red Hat Enterprise Linux operating system must implement certificate status checking for PKI authentication."
+  replace:
+      path: /etc/pam_pkcs11/pam_pkcs11.conf
+      regexp: (?im)^([ \t]*cert_policy[ \t]*=(?:[^ \t\n]|[ \t](?!ocsp_on,))*?)(?:[ \t]ocsp_on,[ \t]*)?[ \t]*((?:[^,\n]|,(?![ \t]*ocsp_on,))*?)(?:,[ \t]*ocsp_on)?;$
+      replace: '\1 ocsp_on, \2;'
   when: rhel_07_041003
   tags:
       - RHEL-07-041003
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
   block:
