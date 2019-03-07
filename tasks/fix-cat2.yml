@@ -1937,6 +1937,7 @@
   when:
       - rhel_07_040330
       - rhel7stig_ssh_required
+      - ansible_distribution_version is not version_compare('7.4', '>=')
   tags:
       - RHEL-07-040330
       - ssh
