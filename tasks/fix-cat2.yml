@@ -1684,7 +1684,6 @@
         path: "/usr/bin/kmod"
         trivial: yes
         key: "module-change"
-        no_perm_x_filter: true
   tags:
       - audit-rules
 
