@@ -28,7 +28,7 @@ rhel7stig_workaround_for_disa_benchmark: true
 rhel7stig_workaround_for_ssg_benchmark: true
 
 # tweak role to run in a chroot, such as in kickstart %post script
-rhel7stig_system_is_chroot: no
+rhel7stig_system_is_chroot: "{{ ansible_is_chroot | default(False) }}"
 
 # tweak role to run in a non-privileged container
 rhel7stig_system_is_container: no
