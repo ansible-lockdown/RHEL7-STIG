@@ -55,7 +55,7 @@ python-dateutil==2.7.3
 python-gilt==1.2.1
 python-vagrant==0.5.15
 PyYAML==3.13
-requests==2.19.1
+requests==2.20.0
 s3transfer==0.1.13
 sh==1.12.14
 six==1.11.0
