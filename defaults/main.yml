@@ -25,7 +25,8 @@ rhel7stig_audit_disruptive: yes
 rhel7stig_skip_for_travis: false
 
 rhel7stig_workaround_for_disa_benchmark: true
-rhel7stig_workaround_for_ssg_benchmark: true
+# ACS: setting to false for /usr/bin/kmod compatibility to add the "-F auid!=4294967295" parameter (RHEL-07-030840)
+rhel7stig_workaround_for_ssg_benchmark: false
 
 # tweak role to run in a chroot, such as in kickstart %post script
 rhel7stig_system_is_chroot: "{{ ansible_is_chroot | default(False) }}"
