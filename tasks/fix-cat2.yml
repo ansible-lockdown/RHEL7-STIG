@@ -2376,7 +2376,7 @@
         when:
             - rhel_07_040680_rpm_audit.rc == 0
             - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
-
+  when: rhel_07_040680
   tags:
       - RHEL-07-040680
 
