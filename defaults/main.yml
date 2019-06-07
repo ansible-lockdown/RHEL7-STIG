@@ -36,31 +36,47 @@ rhel7stig_system_is_container: no
 # These variables correspond with the STIG IDs defined in the STIG and allows you to enable/disable specific rules.
 # PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
 # in order for the variables below to take effect.
+#
+# ACS: For each item that is turned off, a comment will be inserted with rationale
+#
 # CAT 1 rules
-rhel_07_010010: true
-rhel_07_010020: true
+# ACS: (??)
+rhel_07_010010: false
+# ACS: (??)
+rhel_07_010020: false
 rhel_07_010290: true
 rhel_07_010300: true
-rhel_07_010440: true
+# ACS: GNOME not used
+rhel_07_010440: false
+# ACS: (??)
 rhel_07_010450: true
-rhel_07_010480: true
-rhel_07_010482: true
-rhel_07_010490: true
-rhel_07_010491: true
+# ACS: Not applicable for RHEL 7.2+
+rhel_07_010480: false
+# ACS: (??)
+rhel_07_010482: false
+# ACS: (??)
+rhel_07_010490: false
+# ACS: (??)
+rhel_07_010491: false
 rhel_07_020000: true
 rhel_07_020010: true
 rhel_07_020050: true
 rhel_07_020060: true
-rhel_07_020210: true
-rhel_07_020220: true
-rhel_07_020230: true
+# ACS: (??)
+rhel_07_020210: false
+# ACS: (??)
+rhel_07_020220: false
+# ACS: N/A as ACS does not allow Ctrl-Alt-Del and the fix in the STIG playbook is not correct
+rhel_07_020230: false
 # Not an automated task
 rhel_07_020250: true
 rhel_07_020310: true
-rhel_07_021350: true
+# ACS: (??)
+rhel_07_021350: false
 rhel_07_021710: true
 rhel_07_030000: true
-rhel_07_032000: true
+# ACS: (??)
+rhel_07_032000: false
 rhel_07_040390: true
 rhel_07_040540: true
 rhel_07_040550: true
@@ -112,12 +128,14 @@ rhel_07_010500: true
 rhel_07_020020: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
-rhel_07_020040: "{{ rhel7stig_disruption_high }}"
+# ACS: set to true
+rhel_07_020040: true
 rhel_07_020100: true
 rhel_07_020101: true
 rhel_07_020110: true
 rhel_07_020240: true
-rhel_07_020260: true
+# ACS: (??)
+rhel_07_020260: false
 rhel_07_020270: true
 rhel_07_020320: true
 rhel_07_020330: true
@@ -140,7 +158,8 @@ rhel_07_021000: true
 rhel_07_021010: true
 rhel_07_021020: true
 rhel_07_021021: true
-rhel_07_021030: true
+# ACS: (??)
+rhel_07_021030: false
 rhel_07_021040: true
 rhel_07_021100: true
 rhel_07_021110: true
@@ -169,9 +188,12 @@ rhel_07_030430: true
 rhel_07_030440: true
 rhel_07_030450: true
 rhel_07_030460: true
-rhel_07_030470: true
-rhel_07_030480: true
-rhel_07_030490: true
+# ACS: (??)
+rhel_07_030470: false
+# ACS: (??)
+rhel_07_030480: false
+# ACS: (??)
+rhel_07_030490: false
 rhel_07_030500: true
 rhel_07_030510: true
 rhel_07_030520: true
@@ -223,18 +245,23 @@ rhel_07_040100: true
 rhel_07_040110: true
 rhel_07_040160: true
 rhel_07_040170: true
-rhel_07_040180: true
+# ACS: (??)
+rhel_07_040180: false
 rhel_07_040190: true
 rhel_07_040200: true
 rhel_07_040201: true
 rhel_07_040300: true
 rhel_07_040310: true
-rhel_07_040320: true
-rhel_07_040330: true
-rhel_07_040340: true
+# ACS: (??)
+rhel_07_040320: false
+# ACS: Not applicable for RHEL 7.4+
+rhel_07_040330: false
+# ACS: (??)
+rhel_07_040340: false
 rhel_07_040350: true
 rhel_07_040360: true
-rhel_07_040370: true
+# ACS: (??)
+rhel_07_040370: false
 rhel_07_040380: true
 rhel_07_040400: true
 rhel_07_040410: true
@@ -255,10 +282,12 @@ rhel_07_040641: true
 rhel_07_040650: true
 rhel_07_040660: true
 rhel_07_040670: true
-rhel_07_040680: true
+# ACS: (??)
+rhel_07_040680: false
 rhel_07_040720: true
 rhel_07_040730: true
-rhel_07_040740: true
+# ACS: (??)
+rhel_07_040740: false
 rhel_07_040750: true
 rhel_07_040810: true
 rhel_07_040820: true
@@ -274,9 +303,12 @@ rhel_07_021022: true
 rhel_07_021023: true
 rhel_07_021024: true
 rhel_07_021310: true
-rhel_07_021320: true
-rhel_07_021330: true
-rhel_07_021340: true
+# ACS: (??)
+rhel_07_021320: false
+# ACS: (??)
+rhel_07_021330: false
+# ACS: (??)
+rhel_07_021340: false
 rhel_07_021600: true
 rhel_07_021610: true
 rhel_07_040000: true
@@ -314,7 +346,8 @@ rhel7stig_av_package:
         - clamav-server
     service: clamav-daemon
 
-rhel7stig_time_service: chronyd
+# ACS: changed from chronyd -> ntpd (??)
+rhel7stig_time_service: ntpd
 rhel7stig_time_service_configs:
     chronyd:
         conf: /etc/chrony.conf
