@@ -67,8 +67,7 @@ rhel_07_020060: true
 rhel_07_020210: false
 # ACS: (??)
 rhel_07_020220: false
-# ACS: N/A as ACS does not allow Ctrl-Alt-Del and the fix in the STIG playbook is not correct
-rhel_07_020230: false
+rhel_07_020230: true
 # Not an automated task
 rhel_07_020250: true
 rhel_07_020310: true

@@ -236,7 +236,7 @@
       - RHEL-07-020220
       - selinux
 
-# The fix in the STIG for this is incorrect. Symlinking this unit file to /dev/null obtains the required result
+# Symlinking this unit file to /dev/null obtains the required result
 # which is to disable this function and log when the keystroke is issued.
 # https://access.redhat.com/solutions/1123873
 - name: "HIGH | RHEL-07-020230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled."
