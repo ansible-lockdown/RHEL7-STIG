@@ -1,0 +1,4 @@
+[org/gnome/login-screen] 
+banner-message-enable=true
+
+banner-message-text='{{ rhel7stig_logon_banner }}'
