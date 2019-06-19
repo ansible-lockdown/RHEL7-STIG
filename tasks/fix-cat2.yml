@@ -1,25 +1,30 @@
 ---
 - name: "MEDIUM | RHEL-07-010030 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
-  command: "true"
-  changed_when: no
+  template:
+      src: 01-banner-message
+      dest: /etc/dconf/db/local.d/01-banner-message
+      owner: root
+      group: root
+      mode: '0644'
   when:
       - rhel7stig_gui
       - rhel_07_010030
   tags:
       - RHEL-07-010030
-      - dod_logon_banner
-      - notimplemented
+      - dod_logon_banner 
 
+# NOTE: This should probably be the dconf module, but I am not sure that can just update without a key, and we already placed the key above.
 - name: "MEDIUM | RHEL-07-010040 | PATCH | The Red Hat Enterprise Linux operating system must display the approved Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
-  command: "true"
-  changed_when: no
+  command: dconf update
+  register: rhel_07_010040dconfout
+  changed_when: rhel_07_010040dconfout.rc <= 1
+  failed_when: rhel_07_010040dconfout.rc > 1
   when:
       - rhel7stig_gui
       - rhel_07_010040
   tags:
       - RHEL-07-010040
       - dod_logon_banner
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-010050 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon."
   copy:
@@ -2376,7 +2381,7 @@
         when:
             - rhel_07_040680_rpm_audit.rc == 0
             - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
-  when: rhel_07_040680
+
   tags:
       - RHEL-07-040680
 
