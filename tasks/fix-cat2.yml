@@ -21,6 +21,7 @@
       - rhel_07_010040
   tags:
       - RHEL-07-010030
+      - RHEL_07_010040
       - dod_logon_banner
 
 - name: "MEDIUM | RHEL-07-010050 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon."
