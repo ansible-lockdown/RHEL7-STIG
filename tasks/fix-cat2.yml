@@ -45,24 +45,38 @@
       - dod_logon_banner
 
 - name: "MEDIUM | RHEL-07-010060 | PATCH | The Red Hat Enterprise Linux operating system must enable a user session lock until that user re-establishes access using established identification and authentication procedures."
-  command: "true"
-  changed_when: no
+  block:
+      - name: place the setting in dconf config
+        lineinfile:
+            create: yes
+            dest: /etc/dconf/db/local.d/00-screensaver
+            regexp: '^#?enable-smartcard-authentication'
+            line: enable-smartcard-authentication=true
+
+      - name: update dconf
+        command: dconf update
+        register: rhel_07_010060dconfout
+        changed_when: rhel_07_010060dconfout.rc <= 1
+        failed_when: rhel_07_010060dconfout.rc > 1
+
   when:
       - rhel7stig_gui
       - rhel_07_010060
   tags:
       - RHEL-07-010060
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-010061 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate users using multifactor authentication via a graphical user logon."
   command: "true"
-  changed_when: no
+  lineinfile:
+      create: yes
+      dest: /etc/dconf/db/local.d/00-defaults
+      regexp: '^#?enable-smartcard-authentication'
+      line: enable-smartcard-authentication=true
   when:
       - rhel7stig_gui
       - rhel_07_010061
   tags:
       - RHEL-07-010061
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The Red Hat Enterprise Linux operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   command: "true"
