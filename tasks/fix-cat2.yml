@@ -9,9 +9,11 @@
             owner: root
             group: root
             mode: '0644'
+        register: rhel_07_010040template
 
       - name: "MEDIUM | RHEL-07-010030 | RHEL-07-010040 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
         command: dconf update
+        when: rhel_07_010040template.changed == true
         register: rhel_07_010040dconfout
         changed_when: rhel_07_010040dconfout.rc <= 1
         failed_when: rhel_07_010040dconfout.rc > 1
@@ -51,9 +53,11 @@
             block: |
               [org/gnome/desktop/screensaver]
               lock-enabled=true
+        register: rhel_07_010060blocktask
 
       - name: "MEDIUM | RHEL-07-010060 | PATCH | The Red Hat Enterprise Linux operating system must enable a user session lock until that user re-establishes access using established identification and authentication procedures."
         command: dconf update
+        when: rhel_07_010060blocktask.changed == true
         register: rhel_07_010060dconfout
         changed_when: rhel_07_010060dconfout.rc <= 1
         failed_when: rhel_07_010060dconfout.rc > 1
@@ -72,9 +76,11 @@
             insertafter: '^#[org/gnome/login-screen]'
             regexp: '^#?enable-smartcard-authentication'
             line: enable-smartcard-authentication=true
+        register: rhel_07_010061
 
       - name: "MEDIUM | RHEL-07-010061 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate users using multifactor authentication via a graphical user logon."
         command: dconf update
+        when: rhel_07_010061.changed == true
         register: rhel_07_010061dconfout
         changed_when: rhel_07_010061dconfout.rc <= 1
         failed_when: rhel_07_010061dconfout.rc > 1
@@ -93,9 +99,11 @@
             insertafter: '^#[org/gnome/desktop/screensaver]'
             regexp: '^#?idle-delay'
             line: idle-delay=uint32 900
+        register: rhel_07_010070linetask
 
       - name: "MEDIUM | RHEL-07-010070 | PATCH | The Red Hat Enterprise Linux operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
         command: dconf update
+        when: rhel_07_010070linetask.changed == true
         register: rhel_07_010070dconfout
         changed_when: rhel_07_010070dconfout.rc <= 1
         failed_when: rhel_07_010070dconfout.rc > 1
@@ -113,9 +121,11 @@
             dest: /etc/dconf/db/local.d/locks/session
             regexp: '^#?lock-delay'
             line: /org/gnome/desktop/screensaver/lock-delay
+        register: rhel_07_010081linetask
 
       - name: "MEDIUM | RHEL-07-010081 | PATCH | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-delay setting for the graphical user interface."
         command: dconf update
+        when: rhel_07_010081linetask.changed == true
         register: rhel_07_010081dconfout
         changed_when: rhel_07_010081dconfout.rc <= 1
         failed_when: rhel_07_010081dconfout.rc > 1
@@ -133,9 +143,11 @@
             dest: /etc/dconf/db/local.d/locks/session
             regexp: '^#?idle-delay'
             line: /org/gnome/desktop/screensaver/idle-delay
+        register: rhel_07_010082
 
       - name: "MEDIUM | RHEL-07-010082 | PATCH | The Red Hat Enterprise Linux operating system must prevent a user from overriding the session idle-delay setting for the graphical user interface."
         command: dconf update
+        when: rhel_07_010082.changed == true
         register: rhel_07_010082dconfout
         changed_when: rhel_07_010082dconfout.rc <= 1
         failed_when: rhel_07_01002dconfout.rc > 1
@@ -162,9 +174,11 @@
             insertafter: '^#?[org/gnome/desktop/screensaver]'
             regexp: '^#?idle-activation-enabled'
             line: idle-activation-enabled=true
+        register: rhel_07_010100
 
       - name: "MEDIUM | RHEL-07-010100 | PATCH | The Red Hat Enterprise Linux operating system must initiate a session lock for the screensaver after a period of inactivity for graphical user interfaces."
         command: dconf update
+        when: rhel_07_010100.changed == true
         register: rhel_07_010100dconfout
         changed_when: rhel_07_010100dconfout.rc <= 1
         failed_when: rhel_07_010100dconfout.rc > 1
@@ -182,9 +196,11 @@
             dest: /etc/dconf/db/local.d/locks/session
             regexp: '^#?idle-activation-enabled'
             line: /org/gnome/desktop/screensaver/idle-activation-enabled
+        register: rhel_07_010101
 
       - name: "MEDIUM | RHEL-07-010101 | PATCH | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver idle-activation-enabled setting for the graphical user interface."
         command: dconf update
+        when: rhel_07_010101.changed == true
         register: rhel_07_010101dconfout
         changed_when: rhel_07_010101dconfout.rc <= 1
         failed_when: rhel_07_010101dconfout.rc > 1
@@ -204,9 +220,11 @@
             insertafter: '^#?[org/gnome/desktop/screensaver]'
             regexp: '^#?lock-delay'
             line: lock-delay=uint32 900
+        register: rhel_07_010110
 
       - name: "MEDIUM | RHEL-07-010110 | PATCH | The Red Hat Enterprise Linux operating system must initiate a session lock for graphical user interfaces when the screensaver is activated."
         command: dconf update
+        when: rhel_07_010110.changed == true
         register: rhel_07_010110dconfout
         changed_when: rhel_07_010110dconfout.rc <= 1
         failed_when: rhel_07_01001100dconfout.rc > 1
