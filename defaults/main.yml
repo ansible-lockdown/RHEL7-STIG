@@ -256,8 +256,7 @@ rhel_07_040310: true
 rhel_07_040320: false
 # ACS: Not applicable for RHEL 7.4+
 rhel_07_040330: false
-# ACS: (??)
-rhel_07_040340: false
+rhel_07_040340: true
 rhel_07_040350: true
 rhel_07_040360: true
 # ACS: (??)
