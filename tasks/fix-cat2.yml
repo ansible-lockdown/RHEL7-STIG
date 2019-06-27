@@ -2274,6 +2274,32 @@
       - RHEL-07-040610
       - ipv4
 
+- name: "MEDIUM | RHEL-07-040611 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible on all interfaces."
+  sysctl:
+      name: net.ipv4.conf.all.rp_filter
+      state: present
+      value: 1
+      sysctl_set: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when: rhel_07_040611
+  tags:
+    - RHEL-07-040611
+    - ipv4
+
+- name: "MEDIUM | RHEL-07-040612 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible by default."
+  sysctl:
+      name: net.ipv4.conf.default.rp_filter
+      state: present
+      value: 1
+      sysctl_set: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when: rhel_07_040612
+  tags:
+    - RHEL-07-040612
+    - ipv4
+
 - name: "MEDIUM | RHEL-07-040620 | PATCH | The Red Hat Enterprise Linux operating system must not forward Internet Protocol version 4 (IPv4) source-routed packets by default."
   sysctl:
       name: net.ipv4.conf.default.accept_source_route
@@ -2565,27 +2591,3 @@
   when: rhel_07_041010
   tags:
       - RHEL-07-041010
-
-- name: "MEDIUM | RHEL-07-040611 | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible on all interfaces."
-  block:
-    - name: "MEDIUM | RHEL-07-040611 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible on all interfaces."
-      sysctl:
-        name: net.ipv4.conf.all.rp_filter
-        value: 1
-        state: present
-        reload: yes
-  when: rhel_07_040611
-  tags:
-    - RHEL-07-040611
-
-- name: "MEDIUM | RHEL-07-040612 | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible by default."
-  block:
-    - name: "MEDIUM | RHEL-07-040612 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible by default."
-      sysctl:
-        name: net.ipv4.conf.default.rp_filter
-        value: 1
-        state: present
-        reload: yes
-  when: rhel_07_040612
-  tags:
-    - RHEL-07-040612
