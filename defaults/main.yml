@@ -41,37 +41,40 @@ rhel7stig_system_is_container: no
 # ACS: For each item that is turned off, a comment will be inserted with rationale
 #
 # CAT 1 rules
-# ACS: (??)
+# ACS: ACS3-6674 states that this Mindpoint task will reset all permissions of files owned by root:root to the default,
+# which will result in loss of functionality since ACS changed the permission of these files during acs-install
 rhel_07_010010: false
-# ACS: (??)
+# ACS: ACS3-6349 says this won't work for ACS packages
 rhel_07_010020: false
 rhel_07_010290: true
 rhel_07_010300: true
 # ACS: GNOME not used
 rhel_07_010440: false
-# ACS: (??)
-rhel_07_010450: true
+# ACS: GNOME not used
+rhel_07_010450: false
 # ACS: Not applicable for RHEL 7.2+
 rhel_07_010480: false
 rhel_07_010482: true
-# ACS: (??)
+# ACS: Not applicable for RHEL 7.2+
 rhel_07_010490: false
 rhel_07_010491: true
 rhel_07_020000: true
 rhel_07_020010: true
 rhel_07_020050: true
 rhel_07_020060: true
-rhel_07_020210: true
-rhel_07_020220: true
+# ACS: ACS enables SELinux in a separate playbook
+rhel_07_020210: false
+# ACS: ACS enables SELinux targeted policy in a separate playbook
+rhel_07_020220: false
 rhel_07_020230: true
 # Not an automated task
 rhel_07_020250: true
 rhel_07_020310: true
-# ACS: (??)
+# ACS: ACS enables FIPS in a separate playbook
 rhel_07_021350: false
 rhel_07_021710: true
 rhel_07_030000: true
-# ACS: (??)
+# ACS: HBSS will provide virus scan program
 rhel_07_032000: false
 rhel_07_040390: true
 rhel_07_040540: true
@@ -86,6 +89,9 @@ rhel_07_010040: true
 rhel_07_010050: true
 rhel_07_010060: true
 rhel_07_010061: true
+# ACS: New STIG in Red Hat Enterprise Linux 7 - Ver 2, Rel 3 STIG
+# GNOME not used
+rhel_07_010062: false
 rhel_07_010070: true
 rhel_07_010081: true
 rhel_07_010082: true
@@ -121,6 +127,9 @@ rhel_07_010460: true
 rhel_07_010470: true
 rhel_07_010481: true
 rhel_07_010500: true
+# ACS: New STIG in Red Hat Enterprise Linux 7 - Ver 2, Rel 3 STIG
+# HBSS will be installed
+rhel_07_020019: false
 rhel_07_020020: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
@@ -130,7 +139,7 @@ rhel_07_020100: true
 rhel_07_020101: true
 rhel_07_020110: true
 rhel_07_020240: true
-# ACS: (??)
+# ACS: Manually patch and update system packages. Mindpoint task updates all RPMs on the system, which could break ACS.
 rhel_07_020260: false
 rhel_07_020270: true
 rhel_07_020320: true
@@ -154,7 +163,9 @@ rhel_07_021000: true
 rhel_07_021010: true
 rhel_07_021020: true
 rhel_07_021021: true
-rhel_07_021030: true
+# ACS: ACS3-6353 states Mindpoint task changes all world-writable directories to be owned by root,
+# which could break things. This will be remediated manually.
+rhel_07_021030: false
 rhel_07_021040: true
 rhel_07_021100: true
 rhel_07_021110: true
@@ -183,11 +194,11 @@ rhel_07_030430: true
 rhel_07_030440: true
 rhel_07_030450: true
 rhel_07_030460: true
-# ACS: (??)
+# ACS: Not a finding in cybersecurity assessment
 rhel_07_030470: false
-# ACS: (??)
+# ACS: Not a finding in cybersecurity assessment
 rhel_07_030480: false
-# ACS: (??)
+# ACS: Not a finding in cybersecurity assessment
 rhel_07_030490: false
 rhel_07_030500: true
 rhel_07_030510: true
@@ -267,6 +278,10 @@ rhel_07_040500: true
 rhel_07_040510: true
 rhel_07_040520: true
 rhel_07_040610: true
+# ACS: New STIG in Red Hat Enterprise Linux 7 - Ver 2, Rel 3 STIG
+rhel_07_040611: true
+# ACS: New STIG in Red Hat Enterprise Linux 7 - Ver 2, Rel 3 STIG
+rhel_07_040612: true
 rhel_07_040620: true
 rhel_07_040630: true
 rhel_07_040640: true
@@ -277,7 +292,7 @@ rhel_07_040670: true
 rhel_07_040680: true
 rhel_07_040720: true
 rhel_07_040730: true
-# ACS: (??)
+# ACS: Not compatible with OpenShift. See https://access.redhat.com/solutions/4056101
 rhel_07_040740: false
 rhel_07_040750: true
 rhel_07_040810: true
@@ -302,6 +317,7 @@ rhel_07_021330: false
 rhel_07_021340: false
 rhel_07_021600: true
 rhel_07_021610: true
+# ACS: relax maxlogins to 100
 rhel_07_040000: true
 rhel_07_040530: true
 rhel_07_040600: true
