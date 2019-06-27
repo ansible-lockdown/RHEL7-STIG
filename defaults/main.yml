@@ -317,7 +317,6 @@ rhel_07_021330: false
 rhel_07_021340: false
 rhel_07_021600: true
 rhel_07_021610: true
-# ACS: relax maxlogins to 100
 rhel_07_040000: true
 rhel_07_040530: true
 rhel_07_040600: true
@@ -437,7 +436,7 @@ rhel7stig_aide_conf:
     file: /etc/aide.conf
 
 # Set maximum number of simultaneous system logins (RHEL-07-040000)
-rhel7stig_maxlogins: 100
+rhel7stig_maxlogins: 10
 
 rhel7stig_logon_banner: "{{ rhel7stig_workaround_for_disa_benchmark | ternary(
         rhel7stig_logon_banner_nice | regex_replace('(?s)(?<!\\n)\\n(?!(\n|$))', ' '),
