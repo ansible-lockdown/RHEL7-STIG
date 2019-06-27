@@ -283,7 +283,7 @@
 - name: "MEDIUM | RHEL-07-010240 | The Red Hat Enterprise Linux operating system must be configured so that passwords are restricted to a 24 hours/1 day minimum lifetime."
   block:
       - name: "MEDIUM | RHEL-07-010240 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-        command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $4 < 1 {print $1}' /etc/shadow"
+        command: "awk -F: '$4 < 1 {print $1}' /etc/shadow"
         check_mode: no
         changed_when: no
         register: rhel_07_010240_audit
@@ -310,7 +310,7 @@
 - name: "MEDIUM | RHEL-07-010260 | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
   block:
       - name: "MEDIUM | RHEL-07-010260 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
-        command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $5 > 60 {print $1}' /etc/shadow"
+        command: "awk -F: '$5 > 60 {print $1}' /etc/shadow"
         check_mode: no
         changed_when: rhel_07_010260_audit.stdout != ""
         register: rhel_07_010260_audit
@@ -2166,6 +2166,12 @@
             name: ntp
             state: present
 
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | Remove duplicate maxpoll lines."
+        replace:
+          path: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
+          regexp: "{{ item.line }}"
+        with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
+
       - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
         lineinfile:
             create: yes
@@ -2174,6 +2180,12 @@
             line: "{{ item.line }}"
         notify: restart {{ rhel7stig_time_service }}
         with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
+
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | restart {{ rhel7stig_time_service }}"
+        service:
+          name: "{{ rhel7stig_time_service }}"
+          state: restarted
+          enabled: yes
   when:
       - rhel7stig_time_service == 'ntpd'
       - rhel_07_040500
@@ -2261,6 +2273,32 @@
   tags:
       - RHEL-07-040610
       - ipv4
+
+- name: "MEDIUM | RHEL-07-040611 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible on all interfaces."
+  sysctl:
+      name: net.ipv4.conf.all.rp_filter
+      state: present
+      value: 1
+      sysctl_set: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when: rhel_07_040611
+  tags:
+    - RHEL-07-040611
+    - ipv4
+
+- name: "MEDIUM | RHEL-07-040612 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible by default."
+  sysctl:
+      name: net.ipv4.conf.default.rp_filter
+      state: present
+      value: 1
+      sysctl_set: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when: rhel_07_040612
+  tags:
+    - RHEL-07-040612
+    - ipv4
 
 - name: "MEDIUM | RHEL-07-040620 | PATCH | The Red Hat Enterprise Linux operating system must not forward Internet Protocol version 4 (IPv4) source-routed packets by default."
   sysctl:
@@ -2363,6 +2401,15 @@
         check_mode: no
         changed_when: no
         register: rhel_07_040680_rpm_audit
+
+      - name: "MEDIUM | RHEL-07-040680 | AUDIT | Set inet_protocol = ipv4 so postfix can start"
+        replace:
+          path: /etc/postfix/main.cf
+          regexp: '^inet_protocols = all$'
+          replace: 'inet_protocols = ipv4'
+        check_mode: no
+        changed_when: no
+        when: rhel_07_040680_rpm_audit.rc == 0
 
       - name: "MEDIUM | RHEL-07-040680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
         command: "/usr/sbin/postconf -n smtpd_client_restrictions"

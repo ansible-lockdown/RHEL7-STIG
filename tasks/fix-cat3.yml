@@ -164,9 +164,14 @@
             - '[default=1]'
             - "{{ default_control }}"
 
-      - name: "MEDIUM | RHEL-07-010270 | PATCH | Remove old remediation"
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Remove silent option"
+        replace:
+          path: /etc/pam.d/postlogin
+          regexp: 'silent'
+
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Add session required pam_lastlog.so showfailed"
         blockinfile:
-            state: absent
+            state: present
             path: /etc/pam.d/postlogin
             insertafter: '^# User changes will be destroyed'
             block: |
