@@ -505,7 +505,6 @@
 - name: "HIGH | RHEL-07-040700 | PATCH | The Red Hat Enterprise Linux operating system must not have the Trivial File Transfer Protocol (TFTP) server package installed if not required for operational support."
   yum:
       name:
-          - tftp
           - tftp-server
       state: absent
   when:
