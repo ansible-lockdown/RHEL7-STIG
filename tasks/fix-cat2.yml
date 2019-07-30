@@ -1890,7 +1890,6 @@
 - name: "MEDIUM | RHEL-07-040300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all networked systems have SSH installed."
   yum:
       name:
-          - openssh-clients
           - openssh-server
       state: present
   when:
