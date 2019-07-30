@@ -2403,11 +2403,14 @@
           - "@x11"
           - xorg-x11-server-common
       state: absent
+  check_mode: "{{ rhel7stig_disruptive_check_mode }}"
   when:
       - not rhel7stig_gui
       - rhel_07_040730
+      - rhel7stig_disruptive
   tags:
       - RHEL-07-040730
+      - disruption-high
       - x11
 
 - name: "MEDIUM | RHEL-07-040740 | PATCH | The Red Hat Enterprise Linux operating system must not be performing packet forwarding unless the system is a router."
@@ -2445,9 +2448,13 @@
       name:
           - libreswan
       state: absent
-  when: rhel_07_040820
+  check_mode: "{{ rhel7stig_disruptive_check_mode }}"
+  when:
+      - rhel_07_040820
+      - rhel7stig_disruptive
   tags:
       - RHEL-07-040820
+      - disruption-high
 
 - name: "MEDIUM | RHEL-07-040830 | PATCH | The Red Hat Enterprise Linux operating system must not forward IPv6 source-routed packets."
   sysctl:
