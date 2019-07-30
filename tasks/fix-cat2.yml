@@ -910,6 +910,7 @@
   when:
       - rhel_07_020620
       - item.uid >= 1000
+      - item.uid != 65534
   tags:
       - RHEL-07-020620
 
@@ -924,6 +925,7 @@
   when:
       - rhel_07_020630
       - item.uid >= 1000
+      - item.uid != 65534
   tags:
       - RHEL-07-020630
 
@@ -938,6 +940,7 @@
   when:
       - rhel_07_020640
       - item.uid >= 1000
+      - item.uid != 65534
   tags:
       - RHEL-07-020640
 
@@ -952,6 +955,7 @@
   when:
       - rhel_07_020650
       - item.uid >= 1000
+      - item.uid != 65534
   tags:
       - RHEL-07-020650
 
@@ -967,6 +971,7 @@
             label: "{{ rhel7stig_passwd_label }}"
         when:
             - this_item.uid >= 1000
+            - this_item.uid != 65534
         vars:
             this_item: "{{ item }}"
 
@@ -1008,6 +1013,7 @@
             label: "{{ rhel7stig_passwd_label }}"
         when:
             - this_item.uid >= 1000
+            - this_item.uid != 65534
         vars:
             this_item: "{{ item.item }}"
             this_result: "{{ item }}"
@@ -1050,6 +1056,7 @@
             label: "{{ rhel7stig_passwd_label }}"
         when:
             - this_item.uid >= 1000
+            - this_item.uid != 65534
         vars:
             this_item: "{{ item }}"
 
@@ -1082,6 +1089,7 @@
             label: "{{ rhel7stig_passwd_label }}"
         when:
             - this_item.uid >= 1000
+            - this_item.uid != 65534
         vars:
             this_item: "{{ item }}"
 
