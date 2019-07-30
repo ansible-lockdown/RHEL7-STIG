@@ -2467,7 +2467,6 @@
         yum:
             name:
                 - esc
-                - authconfig-gtk
             state: present
         when: rhel7stig_gui
 
