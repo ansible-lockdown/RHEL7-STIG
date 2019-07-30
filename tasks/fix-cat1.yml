@@ -495,11 +495,14 @@
   yum:
       name: vsftpd
       state: absent
+  check_mode: "{{ rhel7stig_disruptive_check_mode }}"
   when:
       - not rhel7stig_vsftpd_required
       - rhel_07_040690
+      - rhel7stig_disruptive
   tags:
       - RHEL-07-040690
+      - disruption-high
       - ftp
 
 - name: "HIGH | RHEL-07-040700 | PATCH | The Red Hat Enterprise Linux operating system must not have the Trivial File Transfer Protocol (TFTP) server package installed if not required for operational support."
@@ -507,11 +510,14 @@
       name:
           - tftp-server
       state: absent
+  check_mode: "{{ rhel7stig_disruptive_check_mode }}"
   when:
       - not rhel7stig_tftp_required
       - rhel_07_040700
+      - rhel7stig_disruptive
   tags:
       - RHEL-07-040700
+      - disruption-high
       - tftp
 
 - name: "HIGH | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections for interactive users are encrypted."
