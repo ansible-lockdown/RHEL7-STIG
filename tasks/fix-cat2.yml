@@ -91,7 +91,7 @@
 
 - name: "MEDIUM | RHEL-07-010090 | PATCH | The Red Hat Enterprise Linux operating system must have the screen package installed."
   yum:
-      name: screen
+      name: "{{ rhel7stig_screen_package }}"
       state: present
   when: rhel_07_010090
   tags:
