@@ -1631,6 +1631,7 @@
       - id: "030630"
         path: "/usr/bin/passwd"
         key: "privileged-passwd"
+        no_perm_x_filter: true
       - id: "030640"
         path: "/usr/sbin/unix_chkpwd"
         key: "privileged-passwd"
@@ -1638,12 +1639,15 @@
       - id: "030650"
         path: "/usr/bin/gpasswd"
         key: "privileged-passwd"
+        no_perm_x_filter: true
       - id: "030660"
         path: "/usr/bin/chage"
         key: "privileged-passwd"
+        no_perm_x_filter: true
       - id: "030670"
         path: "/usr/sbin/userhelper"
         key: "privileged-passwd"
+        no_perm_x_filter: true
       - id: "030680"
         path: "/usr/bin/su"
         key: "privileged-priv_change"
