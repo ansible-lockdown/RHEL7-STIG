@@ -286,6 +286,10 @@ rhel_07_040600: true
 # Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: no
 
+# Whether to configure dconf rules unconditionally (ignoring presence of dconf
+# or rhel7stig_gui)
+rhel7stig_always_configure_dconf: no
+
 # RHEL-07-020250
 # This is a check for a "supported release"
 # These are the minimum supported releases.

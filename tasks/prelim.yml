@@ -22,6 +22,8 @@
             path: /etc/dconf/db/local.d/locks
             state: directory
             mode: '0755'
+        when:
+            - rhel7stig_always_configure_dconf
   when:
       - rhel_07_010030 or
         rhel_07_010040 or
