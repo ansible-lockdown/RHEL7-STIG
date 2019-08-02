@@ -16,6 +16,12 @@
         when:
             - rhel7stig_dconf_audit.rc == 1
             - rhel7stig_gui
+
+      - name: dconf directory structure
+        file:
+            path: /etc/dconf/db/local.d/locks
+            state: directory
+            mode: '0755'
   when:
       - rhel_07_010030 or
         rhel_07_010040 or
