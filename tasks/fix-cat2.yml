@@ -66,6 +66,19 @@
   tags:
       - RHEL-07-010061
 
+- name: "MEDIUM | RHEL-07-010062 | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-enabled setting for the graphical user interface."
+  copy:
+      dest: /etc/dconf/db/local.d/locks/session_rhel_07_010062
+      content: |
+          /org/gnome/desktop/screensaver/lock-enabled
+      mode: '0644'
+  notify: dconf update
+  when:
+      - rhel7stig_dconf_available
+      - rhel_07_010062
+  tags:
+      - RHEL-07-010062
+
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The Red Hat Enterprise Linux operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   copy:
       dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010070
