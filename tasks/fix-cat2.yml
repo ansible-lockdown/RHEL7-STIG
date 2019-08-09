@@ -104,7 +104,7 @@
             state: present
         when:
             - rhel_07_010090_audit is changed or
-              rhel7stig_force_screen_package
+              rhel7stig_force_exact_packages
   when: rhel_07_010090
   tags:
       - RHEL-07-010090

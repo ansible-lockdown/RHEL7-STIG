@@ -357,9 +357,10 @@ rhel7stig_snmp_community: Endgam3Ladyb0g
 
 # RHEL-07-010090 acceptable values: screen, tmux
 rhel7stig_screen_package: screen
-# whether to force screen_package to be installed regardless of the presence of
-# a compliant equivalent
-rhel7stig_force_screen_package: no
+
+# whether to force role-specified packages to be installed regardless of the
+# presence of another compliant equivalent
+rhel7stig_force_exact_packages: "{{ rhel7stig_disruption_high }}"
 
 # RHEL-07-010480 and RHEL-07-010490
 # Password protect the boot loader
