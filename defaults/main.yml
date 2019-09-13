@@ -290,6 +290,11 @@ rhel7stig_gui: no
 # or rhel7stig_gui)
 rhel7stig_always_configure_dconf: no
 
+# Whether or not to run tasks related to smart card authentication enforcement
+rhel7stig_smartcard: false
+# Configure your smartcard driver
+rhel7stig_smartcarddriver: cackey
+
 # RHEL-07-020250
 # This is a check for a "supported release"
 # These are the minimum supported releases.

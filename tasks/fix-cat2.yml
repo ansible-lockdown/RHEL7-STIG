@@ -643,12 +643,68 @@
       - rescue
 
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
-  command: "true"
-  changed_when: no
-  when: rhel_07_010500
+  block:
+      # This task checks to test if pamd is enabled for pkcs11
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --test | grep "pam_pkcs11 is enabled"
+        register: rhel_07_010500pkcs11output
+
+      # This task gathers output so we can test if smartcard removal action is enabled
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --test | grep "smartcard removal action"
+        register: rhel_07_010500scremovaloutput
+
+      # This task gathers output so we can test if smartcard module is enabled
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --test | grep "smartcard module"
+        register: rhel_07_010500scenabledoutput
+
+      # This is to remediate if pam_pkcs11 is not installed.
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        yum:
+            name: "{{ item }}"
+            state: present
+            with_items:
+                - pam_pkcs11
+                - pcsc-lite-libs
+        register: rhel_07_010500pkcs11install
+        when: rhel_07_010500pkcs11output.stdout != 'pam_pkcs11 is enabled'
+
+      # This task will remediate the smartcard login setting
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --enablesmartcard --smartcardaction=0 --update
+        when: rhel_07_010500scenabledoutput.stdout == ' smartcard module = \"\"' or rhel_07_010500scremovaloutput.stdout == ' smartcard removal action = \"\"'
+
+      # This task will remediate the smartcard login setting
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --enablerequiresmartcard --update
+        when: rhel_07_010500scenabledoutput.stdout == ' smartcard module = \"\"' or rhel_07_010500scremovaloutput.stdout == ' smartcard removal action = \"\"'
+
+      # This remediates the screensaver settings for smartcard authentication
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        lineinfile:
+            create: yes
+            dest: /etc/pam_pkcs11/pkcs11_eventmgr.conf
+            regexp: '^#?/usr/X11R6/bin/xscreensaver-command -lock'
+            line: "/usr/X11R6/bin/xscreensaver-command -lock"
+
+      # This remediates the pam_pkcs11.conf file to enforce the cackey usage for smartcard authentication
+      ### NOTE:  If you have custom rules for /etc/pam_pkcs11/pam_pkcs11.conf then change the template pam_pkcs11.conf.j2
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        template:
+            src: pam_pkcs11.conf.j2
+            dest: /etc/pam_pkcs11/pam_pkcs11.conf
+            owner: root
+            group: root
+            mode: 0644
+        when: rhel_07_010500pkcs11install is changed
+  when:
+      - rhel_07_010500
+      - rhel7stig_gui
+      - rhel7stig_smartcard
+
   tags:
       - RHEL-07-010500
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-020020 | PATCH | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
   command: "true"
