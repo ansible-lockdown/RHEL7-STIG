@@ -27,13 +27,14 @@ pam_pkcs11 {
   use_authtok = false;
 
   # Filename of the PKCS #11 module. The default value is "default"
-  use_pkcs11_module = coolkey;
+  use_pkcs11_module = {{ rhel07stig_smartcarddriver }};
 
   screen_savers = gnome-screensaver,xscreensaver,kscreensaver
 
-  pkcs11_module coolkey {
-    module = libcoolkeypk11.so;
-    description = "Cool Key"
+  pkcs11_module {{ rhel07stig_smartcarddriver }} {
+    {% if rhel07stig_smartcarddriver == 'cackey' %}module = /usr/lib64/libcackey.so;{% elif rhel07stig_smartcarddriver == 'coolkey' %}module = libcoolkeypk11.so;{% endif %}
+    module = /usr/lib64/libcackey.so;
+    description = "{{ rhel07stig_smartcarddriver }}";
     # Slot-number to use. One for the first, two for the second and so
     # on. The default value is zero which means to use the first slot
     # with an available token.
@@ -42,7 +43,7 @@ pam_pkcs11 {
     # Path to the directory where the NSS CA certificate database is stored.
     # you can mange the certs in this database with the certutil command in
     # the package nss-tools
-    nss_dir = /etc/pki/nssdb;
+    #nss_dir = /etc/pki/nssdb;
 
     # Sets the Certificate verification policy.
     # "none"        Performs no verification
@@ -59,7 +60,11 @@ pam_pkcs11 {
     #               and public key matches
     # You can use a combination of ca,crl, and signature flags, or just
     # use "none".
-    cert_policy = ca, signature;
+    #cert_policy = ca, signature;
+    support_threads = false;
+    ca_dir = /etc/pam_pkcs11/cacerts;
+    crl_dir = /etc/pam_pkcs11/crls;
+    cert_policy = signature;
   }
 
   pkcs11_module opensc {
