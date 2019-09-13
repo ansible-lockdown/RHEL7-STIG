@@ -50,7 +50,7 @@
   args:
       warn: no
   when:
-      - rhel7stig_skip_for_travis == false
+      - not rhel7stig_skip_for_travis
       - not rhel7stig_system_is_chroot
       - not rhel7stig_system_is_container
 
