@@ -647,7 +647,7 @@
       - regexp: "^(#)?blacklist usb-storage(\\s|$)"
         line: 'blacklist usb-storage'
       - regexp: "^(#)?install usb-storage"
-        line: 'install usb-storage /bin/false'
+        line: install usb-storage /bin/true
   when: rhel_07_020100
   tags:
       - RHEL-07-020100
