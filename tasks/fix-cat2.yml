@@ -159,7 +159,7 @@
       dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010110
       content: |
           [org/gnome/desktop/screensaver]
-          lock-delay=uint32 900
+          lock-delay=uint32 5
       mode: '0644'
   notify: dconf update
   when:
