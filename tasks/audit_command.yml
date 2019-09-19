@@ -11,7 +11,7 @@
       line: "{{ item.trivial | default(false) | ternary(trivial_audit, normal_audit) }}"
       state: "{{ audit_present | ternary('present', 'absent') }}"
   vars:
-      trivial_audit: "-w {{ item.path }} -p x {{ rhel7stig_workaround_for_ssg_benchmark | ternary('', '-F auid!=4294967295 ') }}-k {{ item.key }}"
+      trivial_audit: "-w {{ item.path }} -p x -F auid!=4294967295 -k {{ item.key }}"
       normal_audit: "-a always,exit -F path={{ item.path }} -F auid>=1000 -F auid!=4294967295 -k {{ item.key }}"
       audit_present: "{{ item.create | default(vars['rhel_07_' + item.id]) }}"
   notify: restart auditd
