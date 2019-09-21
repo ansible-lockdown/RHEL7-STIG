@@ -142,7 +142,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ucredit'
-      line: "ucredit = {{ rhel7stig_password_complexity.ucredit|default('-1') }}"
+      line: "ucredit = {{ rhel7stig_password_complexity.ucredit | default('-1') }}"
   when: rhel_07_010120
   tags:
       - RHEL-07-010120
@@ -153,7 +153,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*lcredit'
-      line: "lcredit = {{ rhel7stig_password_complexity.lcredit|default('-1') }}"
+      line: "lcredit = {{ rhel7stig_password_complexity.lcredit | default('-1') }}"
   when: rhel_07_010130
   tags:
       - RHEL-07-010130
@@ -164,7 +164,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*dcredit'
-      line: "dcredit = {{ rhel7stig_password_complexity.dcredit|default('-1') }}"
+      line: "dcredit = {{ rhel7stig_password_complexity.dcredit | default('-1') }}"
   when: rhel_07_010140
   tags:
       - RHEL-07-010140
@@ -175,7 +175,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ocredit'
-      line: "ocredit = {{ rhel7stig_password_complexity.ocredit|default('-1') }}"
+      line: "ocredit = {{ rhel7stig_password_complexity.ocredit | default('-1') }}"
   when: rhel_07_010150
   tags:
       - RHEL-07-010150
@@ -186,7 +186,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*difok'
-      line: "difok = {{ rhel7stig_password_complexity.difok|default('8') }}"
+      line: "difok = {{ rhel7stig_password_complexity.difok | default('8') }}"
   when: rhel_07_010160
   tags:
       - RHEL-07-010160
@@ -197,7 +197,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minclass'
-      line: "minclass = {{ rhel7stig_password_complexity.minclass|default('4') }}"
+      line: "minclass = {{ rhel7stig_password_complexity.minclass | default('4') }}"
   when: rhel_07_010170
   tags:
       - RHEL-07-010170
@@ -208,7 +208,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxrepeat'
-      line: "maxrepeat = {{ rhel7stig_password_complexity.maxrepeat|default('3') }}"
+      line: "maxrepeat = {{ rhel7stig_password_complexity.maxrepeat | default('3') }}"
   when: rhel_07_010180
   tags:
       - RHEL-07-010180
@@ -219,7 +219,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxclassrepeat'
-      line: "maxclassrepeat = {{ rhel7stig_password_complexity.maxclassrepeat|default('4') }}"
+      line: "maxclassrepeat = {{ rhel7stig_password_complexity.maxclassrepeat | default('4') }}"
   when: rhel_07_010190
   tags:
       - RHEL-07-010190
@@ -254,7 +254,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?ENCRYPT_METHOD
-      line: "ENCRYPT_METHOD {{ rhel7stig_login_defaults.encrypt_method|default('SHA512') }}"
+      line: "ENCRYPT_METHOD {{ rhel7stig_login_defaults.encrypt_method | default('SHA512') }}"
   when: rhel_07_010210
   tags:
       - RHEL-07-010210
@@ -274,7 +274,7 @@
       create: yes
       dest: /etc/login.defs
       regexp: ^#?PASS_MIN_DAYS
-      line: "PASS_MIN_DAYS {{ rhel7stig_login_defaults.pass_min_days|default('1') }}"
+      line: "PASS_MIN_DAYS {{ rhel7stig_login_defaults.pass_min_days | default('1') }}"
   when: rhel_07_010230
   tags:
       - RHEL-07-010230
@@ -301,7 +301,7 @@
       create: yes
       dest: /etc/login.defs
       regexp: ^#?PASS_MAX_DAYS
-      line: "PASS_MAX_DAYS {{ rhel7stig_login_defaults.pass_max_days|default('60') }}"
+      line: "PASS_MAX_DAYS {{ rhel7stig_login_defaults.pass_max_days | default('60') }}"
   when: rhel_07_010250
   tags:
       - RHEL-07-010250
@@ -350,7 +350,7 @@
 
       # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
       - name: "MEDIUM | RHEL-07-010270 | AUDIT | Check for existing password history reuse settings"
-        command: "grep -iE '^password\\s+requisite\\s+pam_pwhistory.so\\s+use_authtok\\s+remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}\\s+retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}$' /etc/pam.d/{{ item }}"
+        command: "grep -iE '^password\\s+requisite\\s+pam_pwhistory.so\\s+use_authtok\\s+remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}\\s+retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}$' /etc/pam.d/{{ item }}"
         check_mode: no
         changed_when: no
         failed_when: rhel_07_010270_audit.rc > 1
@@ -369,8 +369,8 @@
             module_path: pam_pwhistory.so
             module_arguments:
                 - use_authtok
-                - remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}
-                - retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}
+                - remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}
+                - retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}
         with_items: "{{ rhel_07_010270_audit.results }}"
         when: item.rc == 1
 
@@ -384,7 +384,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minlen'
-      line: "minlen = {{ rhel7stig_password_complexity.minlen|default('15') }}"
+      line: "minlen = {{ rhel7stig_password_complexity.minlen | default('15') }}"
   when: rhel_07_010280
   tags:
       - RHEL-07-010280
@@ -533,7 +533,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?FAIL_DELAY
-      line: "FAIL_DELAY {{ rhel7stig_login_defaults.fail_delay_secs|default('4') }}"
+      line: "FAIL_DELAY {{ rhel7stig_login_defaults.fail_delay_secs | default('4') }}"
   when: rhel_07_010430
   tags:
       - RHEL-07-010430
@@ -693,7 +693,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?UMASK
-      line: "UMASK {{ rhel7stig_login_defaults.umask|default('077') }}"
+      line: "UMASK {{ rhel7stig_login_defaults.umask | default('077') }}"
   when: rhel_07_020240
   tags:
       - RHEL-07-020240
@@ -775,7 +775,7 @@
         lineinfile:
             dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','') }}.conf"
             regexp: "^update_cmd"
-            line: "update_cmd = {{ rhel7stig_auto_package_updates.update_cmd|default('minimal-security') }}"
+            line: "update_cmd = {{ rhel7stig_auto_package_updates.update_cmd | default('minimal-security') }}"
             state: present
         when: yum_cron_config_file.stat.exists
 
@@ -893,7 +893,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?CREATE_HOME
-      line: "CREATE_HOME {{ rhel7stig_login_defaults.create_home|default('yes') }}"
+      line: "CREATE_HOME {{ rhel7stig_login_defaults.create_home | default('yes') }}"
   when: rhel_07_020610
   tags:
       - RHEL-07-020610
@@ -1420,7 +1420,7 @@
   lineinfile:
       path: /etc/audit/auditd.conf
       regexp: ^space_left +=
-      line: "space_left = {{ [rhel7stig_auditd_space_left|int, 51] | max }}"
+      line: "space_left = {{ [rhel7stig_auditd_space_left | int, 51] | max }}"
   when: rhel_07_030330
   tags:
       - auditd

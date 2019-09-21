@@ -20,7 +20,7 @@
 
       - name: "LOW | RHEL-07-020300 | PATCH | Print warning about users with invalid GIDs missing GID entries in /etc/group"
         debug:
-            msg: "WARNING: The following users have non-existent GIDs: {{ passwd_gid_check.stdout_lines | join (', ')}}"
+            msg: "WARNING: The following users have non-existent GIDs: {{ passwd_gid_check.stdout_lines | join (', ') }}"
         changed_when:
             - rhel7stig_audit_complex
         when: passwd_gid_check.stdout_lines
@@ -39,8 +39,8 @@
   mount:
       path: /dev/shm
       state: mounted
-      src: "{{ dev_shm_mount.device|default('tmpfs') }}"
-      fstype: "{{ dev_shm_mount.fstype|default('tmpfs') }}"
+      src: "{{ dev_shm_mount.device | default('tmpfs') }}"
+      fstype: "{{ dev_shm_mount.fstype | default('tmpfs') }}"
       opts: "{{ dev_shm_mount_opts }}"
   when: rhel_07_021022 or rhel_07_021023 or rhel_07_021024
   vars:
