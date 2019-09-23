@@ -947,7 +947,6 @@
       ### NOTE: due to https://github.com/ansible/ansible/issues/24862 This is a shell command, and is quite frankly less than ideal.
       - name: "MEDIUM | RHEL-07-020600 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         shell: "mkhomedir_helper {{ item }}"
-        check_mode: no
         loop: "{{ rhel7stig_users_missing_home.stdout_lines }}"
         when:
             - rhel7stig_users_missing_home is changed
@@ -970,7 +969,6 @@
 
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         debug: msg="You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
-        check_mode: no
         loop: "{{ rhel7stig_missing_home_dirs.stdout_lines }}"
         changed_when: rhel7stig_audit_complex
         when:
