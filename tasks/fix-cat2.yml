@@ -960,7 +960,7 @@
             set -o pipefail ; pwck -r | grep -oP "^user '.*': directory '\K.*(?=' does not exist$)"
         check_mode: no
         register: rhel7stig_missing_home_dirs
-        changed_when: rhel7stig_missing_home_dirs.stdout_lines
+        changed_when: rhel7stig_07_20600_backup_audit | length > 0
         # failed_when: 0: success, 1: no grep match, 2: pwck found something
         failed_when: rhel7stig_users_missing_home.rc not in [0,1,2]
         when:
@@ -970,7 +970,7 @@
 
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         debug: msg="You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
-        loop: "{{ rhel7stig_missing_home_dirs.stdout_lines }}"
+        loop: "{{ rhel7stig_07_20600_backup_audit }}"
         changed_when: rhel7stig_audit_complex
         when:
             - rhel7stig_complex
@@ -979,6 +979,7 @@
             - complexity-high
   vars:
       rhel7stig_07_20600_audit: "{{ rhel7stig_users_missing_home.stdout_lines | difference(rhel7stig_passwd | json_query('[?uid <= `1000`].id')) }}"
+      rhel7stig_07_20600_backup_audit: "{{ rhel7stig_missing_home_dirs.stdout_lines | difference(rhel7stig_passwd | json_query('[?uid <= `1000`].dir')) }}"
   when:
       - rhel_07_020600
   tags:
