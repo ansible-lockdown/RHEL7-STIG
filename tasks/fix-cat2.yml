@@ -938,8 +938,8 @@
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         shell: pwck -r | grep user | awk '{print $2}' | tr -d "'" | tr -d "\:"
         check_mode: no
-        register: missinghomedirusers
-        changed_when: missinghomedirusers.stdout_lines
+        register: rhel7stig_users_missing_home
+        changed_when: rhel7stig_users_missing_home.stdout_lines
         when:
             - rhel_07_020600
         tags:
@@ -948,10 +948,10 @@
       - name: "MEDIUM | RHEL-07-020600 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         shell: "mkhomedir_helper {{ item }}"
         check_mode: no
-        loop: "{{ missinghomedirusers.stdout_lines }}"
+        loop: "{{ rhel7stig_users_missing_home.stdout_lines }}"
         when:
             - rhel_07_020600
-            - missinghomedirusers is changed
+            - rhel7stig_users_missing_home is changed
             - rhel7stig_disruption_high
             - rhel7stig_audit_disruptive
         tags:
@@ -960,11 +960,11 @@
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         shell: pwck -r | grep user | awk '{print $4}' | tr -d "'"
         check_mode: no
-        register: missinghomedirs
-        changed_when: missinghomedirs.stdout_lines
+        register: rhel7stig_missing_home_dirs
+        changed_when: rhel7stig_missing_home_dirs.stdout_lines
         when:
             - rhel_07_020600
-            - missinghomedirusers is changed
+            - rhel7stig_users_missing_home is changed
             - rhel7stig_disruption_high
             - rhel7stig_audit_disruptive
         tags:
@@ -972,12 +972,12 @@
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         debug: msg="You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
         check_mode: no
-        loop: "{{ missinghomedirs.stdout_lines }}"
+        loop: "{{ rhel7stig_missing_home_dirs.stdout_lines }}"
         changed_when: rhel7stig_audit_complex
         when:
             - rhel_07_020600
             - rhel7stig_complex
-            - missinghomedirs is changed
+            - rhel7stig_missing_home_dirs is changed
         tags:
             - RHEL-07-020600
             - complexity-high
