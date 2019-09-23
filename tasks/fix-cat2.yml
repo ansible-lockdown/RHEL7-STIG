@@ -940,20 +940,21 @@
             set -o pipefail ; pwck -r | grep -oP "^user '\K.*(?=': directory)"
         check_mode: no
         register: rhel7stig_users_missing_home
-        changed_when: rhel7stig_users_missing_home.stdout_lines
+        changed_when: rhel7stig_07_20600_audit | length > 0
         # failed_when: 0: success, 1: no grep match, 2: pwck found something
         failed_when: rhel7stig_users_missing_home.rc not in [0,1,2]
 
       ### NOTE: due to https://github.com/ansible/ansible/issues/24862 This is a shell command, and is quite frankly less than ideal.
       - name: "MEDIUM | RHEL-07-020600 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
-        shell: "mkhomedir_helper {{ item }}"
-        loop: "{{ rhel7stig_users_missing_home.stdout_lines }}"
+        command: "mkhomedir_helper {{ item }}"
+        with_items: "{{ rhel7stig_07_20600_audit }}"
         when:
             - rhel7stig_users_missing_home is changed
             - rhel7stig_disruption_high
             - rhel7stig_audit_disruptive
 
       ### NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, as the ftp user is removed in rhel7stig_unnecessary_accounts. However these next two tasks won't make any changes if the system accounts are removed previously in RHEL-07-020270.
+      ### ^ Likely doesn't matter as 020620 defines "local interactive users" as those w/ uid 1000-4999
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         shell: >
             set -o pipefail ; pwck -r | grep -oP "^user '.*': directory '\K.*(?=' does not exist$)"
@@ -976,6 +977,8 @@
             - rhel7stig_missing_home_dirs is changed
         tags:
             - complexity-high
+  vars:
+      rhel7stig_07_20600_audit: "{{ rhel7stig_users_missing_home.stdout_lines | difference(rhel7stig_passwd | json_query('[?uid <= `1000`].id')) }}"
   when:
       - rhel_07_020600
   tags:
