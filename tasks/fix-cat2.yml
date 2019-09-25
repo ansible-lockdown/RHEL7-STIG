@@ -985,7 +985,7 @@
       ld_regex: >-
           ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
       ld_users: "{{ rhel7stig_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<user>') | list }}"
-      rhel7stig_07_20600_audit: "{{ rhel7stig_passwd | selectattr('id', 'in', ld_users) | list | json_query('[?uid >= `1000`]') }}"
+      rhel7stig_07_20600_audit: "{{ rhel7stig_passwd | selectattr('uid', '>=', 1000) | selectattr('id', 'in', ld_users) | list }}"
   when:
       - rhel_07_020600
   tags:
