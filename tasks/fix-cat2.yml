@@ -937,7 +937,7 @@
   block:
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         shell: >
-            set -o pipefail ; pwck -r | grep -oP "^user '\K.*(?=': directory)"
+            set -o pipefail ; pwck -r | grep -P "^user '.*': directory '.*' does not exist$"
         check_mode: no
         register: rhel7stig_users_missing_home
         changed_when: rhel7stig_07_20600_audit | length > 0
@@ -957,10 +957,10 @@
       ### ^ Likely doesn't matter as 020620 defines "local interactive users" as those w/ uid 1000-4999
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         shell: >
-            set -o pipefail ; pwck -r | grep -oP "^user '.*': directory '\K.*(?=' does not exist$)"
+            set -o pipefail ; pwck -r | grep -P "^user '.*': directory '.*' does not exist$"
         check_mode: no
-        register: rhel7stig_missing_home_dirs
-        changed_when: rhel7stig_07_20600_backup_audit | length > 0
+        register: rhel7stig_users_missing_home
+        changed_when: rhel7stig_07_20600_audit | length > 0
         # failed_when: 0: success, 1: no grep match, 2: pwck found something
         failed_when: rhel7stig_users_missing_home.rc not in [0,1,2]
         when:
@@ -974,12 +974,16 @@
         changed_when: rhel7stig_audit_complex
         when:
             - rhel7stig_complex
-            - rhel7stig_missing_home_dirs is changed
+            - rhel7stig_users_missing_home is changed
         tags:
             - complexity-high
   vars:
-      rhel7stig_07_20600_audit: "{{ rhel7stig_users_missing_home.stdout_lines | difference(rhel7stig_passwd | json_query('[?uid <= `1000`].id')) }}"
-      rhel7stig_07_20600_backup_audit: "{{ rhel7stig_missing_home_dirs.stdout_lines | difference(rhel7stig_passwd | json_query('[?uid <= `1000`].dir')) }}"
+      ld_regex: >-
+          ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
+      ld_users: "{{ rhel7stig_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<user>') | list }}"
+      ld_dirs: "{{ rhel7stig_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<dir>') | list }}"
+      rhel7stig_07_20600_audit: "{{ ld_users | difference(rhel7stig_passwd | json_query('[?uid < `1000`].id')) }}"
+      rhel7stig_07_20600_backup_audit: "{{ ld_dirs | difference(rhel7stig_passwd | json_query('[?uid < `1000`].dir')) }}"
   when:
       - rhel_07_020600
   tags:
