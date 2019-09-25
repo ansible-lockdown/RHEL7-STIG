@@ -947,7 +947,7 @@
       ### NOTE: due to https://github.com/ansible/ansible/issues/24862 This is a shell command, and is quite frankly less than ideal.
       - name: "MEDIUM | RHEL-07-020600 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         command: "mkhomedir_helper {{ item }}"
-        with_items: "{{ rhel7stig_07_20600_audit }}"
+        with_items: "{{ rhel7stig_07_20600_audit | map(attribute='id') | list }}"
         when:
             - rhel7stig_users_missing_home is changed
             - rhel7stig_disruption_high
@@ -970,7 +970,7 @@
 
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
         debug: msg="You will need to mkdir -p {{ item }} and chown properly to the correct owner and group."
-        loop: "{{ rhel7stig_07_20600_backup_audit }}"
+        with_items: "{{ rhel7stig_07_20600_audit | map(attribute='dir') | list }}"
         changed_when: rhel7stig_audit_complex
         when:
             - rhel7stig_complex
@@ -981,9 +981,7 @@
       ld_regex: >-
           ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
       ld_users: "{{ rhel7stig_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<user>') | list }}"
-      ld_dirs: "{{ rhel7stig_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<dir>') | list }}"
-      rhel7stig_07_20600_audit: "{{ ld_users | difference(rhel7stig_passwd | json_query('[?uid < `1000`].id')) }}"
-      rhel7stig_07_20600_backup_audit: "{{ ld_dirs | difference(rhel7stig_passwd | json_query('[?uid < `1000`].dir')) }}"
+      rhel7stig_07_20600_audit: "{{ rhel7stig_passwd | selectattr('id', 'in', ld_users) | list | json_query('[?uid >= `1000`]') }}"
   when:
       - rhel_07_020600
   tags:
