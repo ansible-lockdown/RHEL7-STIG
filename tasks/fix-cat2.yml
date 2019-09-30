@@ -644,7 +644,7 @@
       group: root
       mode: "0644"
   with_items:
-      - regexp: "^(#)?blacklist usb-storage(\\s|$)"
+      - regexp: "^(#)?blacklist usb-storage(\\s+|$)"
         line: 'blacklist usb-storage'
       - regexp: "^(#)?install usb-storage"
         line: install usb-storage /bin/true
