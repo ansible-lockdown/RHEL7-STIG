@@ -45,7 +45,7 @@
 - name: "HIGH | RHEL-07-010020 | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
   block:
       - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-        shell: 'rpm -Va --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | grep -E ''/(.?bin|libexec)/'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
+        shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
         args:
             warn: no
         check_mode: no
