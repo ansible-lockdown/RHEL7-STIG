@@ -83,3 +83,7 @@
 - name: move aide db
   command: "mv {{ rhel7stig_aide_temp_db_file }} {{ rhel7stig_aide_db_file }}"
   when: not rhel7stig_aide_db_status.stat.exists or rhel7stig_overwrite_aide_db
+
+- name: dconf update
+  command: dconf update
+  when: rhel7stig_has_dconf_command

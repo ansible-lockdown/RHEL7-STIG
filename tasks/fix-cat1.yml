@@ -248,6 +248,20 @@
   tags:
       - RHEL-07-020230
 
+- name: "HIGH | RHEL-07-020231 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled in the GUI."
+  copy:
+      dest: /etc/dconf/db/local.d/00-disable-ctrl-alt-del
+      content: |
+          [org/gnome/settings-daemon/plugins/media-keys]
+          logout=''
+      mode: '0644'
+  notify: dconf update
+  when:
+      - rhel7stig_dconf_available
+      - rhel_07_020231
+  tags:
+      - RHEL-07-020231
+
 # RHEL-07-020250 | PATCH | The operating system must be a supported release."
 # Not automated since current end of life for RHEL 7 is 2024-06-30
 - name: "HIGH | RHEL-07-020250 | PATCH | The Red Hat Enterprise Linux operating system must be a vendor supported release."

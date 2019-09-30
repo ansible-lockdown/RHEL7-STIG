@@ -1,4 +1,59 @@
 ---
+- name: "PRELIM | dconf"
+  block:
+      - name: "PRELIM | Check for dconf availability"
+        command: rpm -q dconf
+        args:
+            warn: no
+        changed_when: no
+        check_mode: no
+        failed_when: rhel7stig_dconf_audit.rc >= 2
+        register: rhel7stig_dconf_audit
+
+      - name: "PRELIM | Install dconf"
+        yum:
+            name: dconf
+        when:
+            - rhel7stig_dconf_audit.rc == 1
+            - rhel7stig_gui
+
+      - name: dconf directory structure
+        file:
+            path: /etc/dconf/db/local.d/locks
+            state: directory
+            mode: '0755'
+        when:
+            - rhel7stig_always_configure_dconf
+  when:
+      - rhel_07_010030 or
+        rhel_07_010040 or
+        rhel_07_010060 or
+        rhel_07_010061 or
+        rhel_07_010062 or
+        rhel_07_010070 or
+        rhel_07_010081 or
+        rhel_07_010082 or
+        rhel_07_010100 or
+        rhel_07_010101 or
+        rhel_07_010110 or
+        rhel_07_020230 or
+        rhel_07_020231 or
+        false
+  tags:
+      - RHEL-07-010030
+      - RHEL-07-010040
+      - RHEL-07-010060
+      - RHEL-07-010061
+      - RHEL-07-010062
+      - RHEL-07-010070
+      - RHEL-07-010081
+      - RHEL-07-010082
+      - RHEL-07-010100
+      - RHEL-07-010101
+      - RHEL-07-010110
+      - RHEL-07-020230
+      - RHEL-07-020231
+
 - name: "PRELIM | Find all sudoers files."
   command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
   check_mode: no

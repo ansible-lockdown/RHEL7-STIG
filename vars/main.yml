@@ -1,6 +1,10 @@
 ---
 rhel7stig_min_ansible_version: 2.4
 
+rhel7stig_dconf_available: "{{ rhel7stig_gui or rhel7stig_dconf_audit.rc == 0 or
+       rhel7stig_always_configure_dconf }}"
+rhel7stig_has_dconf_command: "{{ rhel7stig_gui or rhel7stig_dconf_audit.rc == 0 }}"
+
 rhel7stig_service_started: "{{ rhel7stig_system_is_chroot | ternary(omit, 'started') }}"
 rhel7stig_systemd_daemon_reload: "{{ not rhel7stig_system_is_chroot }}"
 rhel7stig_sysctl_reload: "{{ not rhel7stig_system_is_container }}"
