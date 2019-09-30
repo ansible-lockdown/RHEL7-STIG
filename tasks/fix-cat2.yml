@@ -2255,15 +2255,6 @@
       - RHEL-07-040500
       - chronyd
 
-- name: "MEDIUM | RHEL-07-040510 | PATCH | The operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040510
-  tags:
-      - RHEL-07-040510
-      - firewall
-      - notimplemented
-
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
   yum:
       name: "{{ rhel7stig_firewall_service }}"
