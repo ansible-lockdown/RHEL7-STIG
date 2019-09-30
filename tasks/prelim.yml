@@ -37,6 +37,7 @@
         rhel_07_010101 or
         rhel_07_010110 or
         rhel_07_020230 or
+        rhel_07_020231 or
         false
   tags:
       - RHEL-07-010030
@@ -51,6 +52,7 @@
       - RHEL-07-010101
       - RHEL-07-010110
       - RHEL-07-020230
+      - RHEL-07-020231
 
 - name: "PRELIM | Find all sudoers files."
   command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
