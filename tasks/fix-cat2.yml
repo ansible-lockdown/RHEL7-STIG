@@ -700,12 +700,20 @@
 - name: "MEDIUM | RHEL-07-020101 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required."
   lineinfile:
       dest: /etc/modprobe.d/nodccp.conf
-      regexp: "^(#)?install dccp /bin/true(\\s|$)"
-      line: 'install dccp /bin/true'
+      insertafter: "{{ item.insertafter }}"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
       create: yes
       owner: root
       group: root
       mode: "0644"
+  with_items:
+      - insertafter: ^#blacklist dccp
+        regexp: ^blacklist dccp(\s+|$)
+        line: blacklist dccp
+      - insertafter: ^#install dccp
+        regexp: "^install dccp "
+        line: install dccp /bin/true
   when: rhel_07_020101
   tags:
       - RHEL-07-020101
