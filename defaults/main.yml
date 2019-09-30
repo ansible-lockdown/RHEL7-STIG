@@ -362,10 +362,10 @@ rhel7stig_bootloader_password_hash: "{{ rhel7stig_bootloader_password | grub2_ha
 rhel7stig_boot_superuser: root
 rhel7stig_boot_password_config:
     - regexp: ^set superusers
-      line: 'set superusers="{{rhel7stig_boot_superuser}}"'
+      line: 'set superusers="{{ rhel7stig_boot_superuser }}"'
 
-    - regexp: ^password_pbkdf2 {{rhel7stig_boot_superuser}}
-      line: password_pbkdf2 {{rhel7stig_boot_superuser}} {{ rhel7stig_bootloader_password_hash }}
+    - regexp: ^password_pbkdf2 {{ rhel7stig_boot_superuser }}
+      line: password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}
 
 # AIDE settings
 # Set to false for fire and forget mode
@@ -385,7 +385,7 @@ rhel7stig_aide_cron:
     job: '/usr/sbin/aide --check'
     special_time: daily
     # Disable the notification check rule to disable mailing notifications
-    notify_by_mail: "{{rhel_07_020040}}"
+    notify_by_mail: "{{ rhel_07_020040 }}"
     notify_cmd: ' | /bin/mail -s "$HOSTNAME - Daily aide integrity check run" root'
 
 rhel7stig_cron_special_disable: "{{

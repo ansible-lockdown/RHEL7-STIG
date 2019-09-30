@@ -142,7 +142,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ucredit'
-      line: "ucredit = {{rhel7stig_password_complexity.ucredit|default('-1')}}"
+      line: "ucredit = {{ rhel7stig_password_complexity.ucredit | default('-1') }}"
   when: rhel_07_010120
   tags:
       - RHEL-07-010120
@@ -153,7 +153,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*lcredit'
-      line: "lcredit = {{rhel7stig_password_complexity.lcredit|default('-1')}}"
+      line: "lcredit = {{ rhel7stig_password_complexity.lcredit | default('-1') }}"
   when: rhel_07_010130
   tags:
       - RHEL-07-010130
@@ -164,7 +164,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*dcredit'
-      line: "dcredit = {{rhel7stig_password_complexity.dcredit|default('-1')}}"
+      line: "dcredit = {{ rhel7stig_password_complexity.dcredit | default('-1') }}"
   when: rhel_07_010140
   tags:
       - RHEL-07-010140
@@ -175,7 +175,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ocredit'
-      line: "ocredit = {{rhel7stig_password_complexity.ocredit|default('-1')}}"
+      line: "ocredit = {{ rhel7stig_password_complexity.ocredit | default('-1') }}"
   when: rhel_07_010150
   tags:
       - RHEL-07-010150
@@ -186,7 +186,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*difok'
-      line: "difok = {{rhel7stig_password_complexity.difok|default('8')}}"
+      line: "difok = {{ rhel7stig_password_complexity.difok | default('8') }}"
   when: rhel_07_010160
   tags:
       - RHEL-07-010160
@@ -197,7 +197,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minclass'
-      line: "minclass = {{rhel7stig_password_complexity.minclass|default('4')}}"
+      line: "minclass = {{ rhel7stig_password_complexity.minclass | default('4') }}"
   when: rhel_07_010170
   tags:
       - RHEL-07-010170
@@ -208,7 +208,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxrepeat'
-      line: "maxrepeat = {{rhel7stig_password_complexity.maxrepeat|default('3')}}"
+      line: "maxrepeat = {{ rhel7stig_password_complexity.maxrepeat | default('3') }}"
   when: rhel_07_010180
   tags:
       - RHEL-07-010180
@@ -219,7 +219,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxclassrepeat'
-      line: "maxclassrepeat = {{rhel7stig_password_complexity.maxclassrepeat|default('4')}}"
+      line: "maxclassrepeat = {{ rhel7stig_password_complexity.maxclassrepeat | default('4') }}"
   when: rhel_07_010190
   tags:
       - RHEL-07-010190
@@ -254,7 +254,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?ENCRYPT_METHOD
-      line: "ENCRYPT_METHOD {{rhel7stig_login_defaults.encrypt_method|default('SHA512')}}"
+      line: "ENCRYPT_METHOD {{ rhel7stig_login_defaults.encrypt_method | default('SHA512') }}"
   when: rhel_07_010210
   tags:
       - RHEL-07-010210
@@ -274,7 +274,7 @@
       create: yes
       dest: /etc/login.defs
       regexp: ^#?PASS_MIN_DAYS
-      line: "PASS_MIN_DAYS {{rhel7stig_login_defaults.pass_min_days|default('1')}}"
+      line: "PASS_MIN_DAYS {{ rhel7stig_login_defaults.pass_min_days | default('1') }}"
   when: rhel_07_010230
   tags:
       - RHEL-07-010230
@@ -301,7 +301,7 @@
       create: yes
       dest: /etc/login.defs
       regexp: ^#?PASS_MAX_DAYS
-      line: "PASS_MAX_DAYS {{rhel7stig_login_defaults.pass_max_days|default('60')}}"
+      line: "PASS_MAX_DAYS {{ rhel7stig_login_defaults.pass_max_days | default('60') }}"
   when: rhel_07_010250
   tags:
       - RHEL-07-010250
@@ -350,7 +350,7 @@
 
       # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
       - name: "MEDIUM | RHEL-07-010270 | AUDIT | Check for existing password history reuse settings"
-        command: "grep -iE '^password\\s+requisite\\s+pam_pwhistory.so\\s+use_authtok\\s+remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}\\s+retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}$' /etc/pam.d/{{ item }}"
+        command: "grep -iE '^password\\s+requisite\\s+pam_pwhistory.so\\s+use_authtok\\s+remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}\\s+retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}$' /etc/pam.d/{{ item }}"
         check_mode: no
         changed_when: no
         failed_when: rhel_07_010270_audit.rc > 1
@@ -369,9 +369,9 @@
             module_path: pam_pwhistory.so
             module_arguments:
                 - use_authtok
-                - remember={{ rhel7stig_pam_pwhistory.remember|default(5) }}
-                - retry={{ rhel7stig_pam_pwhistory.retries|default(3) }}
-        with_items: "{{rhel_07_010270_audit.results}}"
+                - remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}
+                - retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}
+        with_items: "{{ rhel_07_010270_audit.results }}"
         when: item.rc == 1
 
   when: rhel_07_010270
@@ -384,7 +384,7 @@
       create: yes
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minlen'
-      line: "minlen = {{rhel7stig_password_complexity.minlen|default('15')}}"
+      line: "minlen = {{ rhel7stig_password_complexity.minlen | default('15') }}"
   when: rhel_07_010280
   tags:
       - RHEL-07-010280
@@ -443,7 +443,7 @@
             control: required
             module_path: pam_faillock.so
             module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
-        with_items: "{{rhel_07_010320_010330_preauth_audit.results}}"
+        with_items: "{{ rhel_07_010320_010330_preauth_audit.results }}"
         when: item.rc == 1
 
       - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
@@ -480,7 +480,7 @@
             control: "[default=die]"
             module_path: pam_faillock.so
             module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
-        with_items: "{{rhel_07_010330_authfail_audit.results}}"
+        with_items: "{{ rhel_07_010330_authfail_audit.results }}"
         when: item.rc == 1
 
       - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
@@ -533,7 +533,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?FAIL_DELAY
-      line: "FAIL_DELAY {{rhel7stig_login_defaults.fail_delay_secs|default('4')}}"
+      line: "FAIL_DELAY {{ rhel7stig_login_defaults.fail_delay_secs | default('4') }}"
   when: rhel_07_010430
   tags:
       - RHEL-07-010430
@@ -693,7 +693,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?UMASK
-      line: "UMASK {{rhel7stig_login_defaults.umask|default('077')}}"
+      line: "UMASK {{ rhel7stig_login_defaults.umask | default('077') }}"
   when: rhel_07_020240
   tags:
       - RHEL-07-020240
@@ -738,14 +738,14 @@
             - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
               yum:
                   name: yum-cron
-                  state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
+                  state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent') }}"
         rescue:
             - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
               block:
                   - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
                     yum:
                         name: yum-cron
-                        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
+                        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent') }}"
                         enablerepo: "{{ 'rhel-7-' ~ (rhel_07_020260_rhel_type.rc == 0) |
                                 ternary('workstation', 'server') ~ '-optional-rpms' }}"
 
@@ -754,28 +754,28 @@
                   - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
                     yum:
                         name: yum-cron
-                        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent')}}"
+                        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent') }}"
                         enablerepo: rhui-REGION-rhel-server-optional
 
       - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Verify yum-cron config file exists"
         stat:
-            path: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+            path: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','') }}.conf"
         check_mode: no
         register: yum_cron_config_file
 
       - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Enable/disable automatic updates in the appropriate yum-cron.conf file."
         lineinfile:
-            dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+            dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','') }}.conf"
             regexp: "^apply_updates"
-            line: "apply_updates = {{ (rhel7stig_auto_package_updates.enabled) | ternary('yes','no')}}"
+            line: "apply_updates = {{ (rhel7stig_auto_package_updates.enabled) | ternary('yes','no') }}"
             state: present
         when: yum_cron_config_file.stat.exists
 
       - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Set update command to configured setting."
         lineinfile:
-            dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','')}}.conf"
+            dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','') }}.conf"
             regexp: "^update_cmd"
-            line: "update_cmd = {{rhel7stig_auto_package_updates.update_cmd|default('minimal-security')}}"
+            line: "update_cmd = {{ rhel7stig_auto_package_updates.update_cmd | default('minimal-security') }}"
             state: present
         when: yum_cron_config_file.stat.exists
 
@@ -789,7 +789,7 @@
         service:
             name: yum-cron
             enabled: "{{ rhel7stig_auto_package_updates.enabled }}"
-            state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary(rhel7stig_service_started, 'stopped')}}"
+            state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary(rhel7stig_service_started, 'stopped') }}"
         when: rhel_07_020260_yumcron_service_status.stdout == "loaded"
 
   when:
@@ -893,7 +893,7 @@
   lineinfile:
       dest: /etc/login.defs
       regexp: ^#?CREATE_HOME
-      line: "CREATE_HOME {{rhel7stig_login_defaults.create_home|default('yes')}}"
+      line: "CREATE_HOME {{ rhel7stig_login_defaults.create_home | default('yes') }}"
   when: rhel_07_020610
   tags:
       - RHEL-07-020610
@@ -1420,7 +1420,7 @@
   lineinfile:
       path: /etc/audit/auditd.conf
       regexp: ^space_left +=
-      line: "space_left = {{ [rhel7stig_auditd_space_left|int, 51] | max }}"
+      line: "space_left = {{ [rhel7stig_auditd_space_left | int, 51] | max }}"
   when: rhel_07_030330
   tags:
       - auditd
@@ -1798,7 +1798,7 @@
       marker: "# {mark} ANSIBLE MANAGED"
       block: |
         # Set session timeout - STIG ID RHEL-07-040160
-        TMOUT={{rhel7stig_shell_session_timeout.timeout}}
+        TMOUT={{ rhel7stig_shell_session_timeout.timeout }}
         readonly TMOUT
         export TMOUT
   with_items:
