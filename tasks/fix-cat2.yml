@@ -119,10 +119,22 @@
   tags:
       - RHEL-07-010082
 
-- name: "MEDIUM | RHEL-07-010090 | PATCH | The Red Hat Enterprise Linux operating system must have the screen package installed."
-  yum:
-      name: screen
-      state: present
+- name: "MEDIUM | RHEL-07-010090 | The Red Hat Enterprise Linux operating system must have the screen package installed."
+  block:
+      - name: "MEDIUM | RHEL-07-010090 | AUDIT | The Red Hat Enterprise Linux operating system must have the screen package installed. Check for screen or tmux"
+        command: rpm -q screen tmux
+        check_mode: no
+        register: rhel_07_010090_audit
+        changed_when: rhel_07_010090_audit.rc > 1
+        failed_when: no
+
+      - name: "MEDIUM | RHEL-07-010090 | PATCH | The Red Hat Enterprise Linux operating system must have the screen package installed."
+        yum:
+            name: "{{ rhel7stig_screen_package }}"
+            state: present
+        when:
+            - rhel_07_010090_audit is changed or
+              rhel7stig_force_exact_packages
   when: rhel_07_010090
   tags:
       - RHEL-07-010090
