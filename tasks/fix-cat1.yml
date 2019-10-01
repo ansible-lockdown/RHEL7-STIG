@@ -150,6 +150,22 @@
       - name: |
             "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
             "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+            explicitly create user.cfg file to work around ansible bug https://github.com/ansible/ansible/pull/59823
+        shell: test -f {{ file_q }} && echo exists || {{ create_cmd }}
+        check_mode: ansible_check_mode is not defined
+        register: rhel7stig_create_grub_user_cfg
+        changed_when:
+            - rhel7stig_create_grub_user_cfg.stdout == "created"
+        failed_when:
+            - rhel7stig_create_grub_user_cfg.stdout != "created"
+            - rhel7stig_create_grub_user_cfg.stdout != "exists"
+        vars:
+            file_q: "{{ (rhel7stig_grub_cfg_path | dirname ~ '/user.cfg') | quote }}"
+            create_cmd: "({{ ansible_check_mode | ternary('', 'touch ' ~ file_q ~ ' && ') }}echo created)"
+
+      - name: |
+            "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+            "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
         lineinfile:
             path: "{{ rhel7stig_grub_cfg_path | dirname }}/user.cfg"
             create: yes
