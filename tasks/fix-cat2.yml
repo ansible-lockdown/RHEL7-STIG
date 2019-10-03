@@ -1150,13 +1150,26 @@
   tags:
       - RHEL-07-020670
 
-- name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-  command: "true"
-  changed_when: no
+- name: "MEDIUM | RHEL-07-020680 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+  block:
+      - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+        stat:
+            path: "{{ item }}"
+        with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', 1000) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
+        register: rhel_07_020680_audit
+
+      - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+        file:
+            path: "{{ item.0 }}"
+            recurse: yes
+            mode: a-st,g-w,o-rwx
+        when: item.1.exists
+        with_together:
+            - "{{ rhel_07_020680_audit.results | map(attribute='item') | list }}"
+            - "{{ rhel_07_020680_audit.results | map(attribute='stat') | list }}"
   when: rhel_07_020680
   tags:
       - RHEL-07-020680
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-020690 | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for interactive users are owned by the home directory user or root."
   block:
