@@ -1158,13 +1158,27 @@
         with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', 1000) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
         register: rhel_07_020680_audit
 
+      - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+        command: find -H {{ item.0 | quote }} -not -type l -perm /027
+        check_mode: no
+        register: rhel_07_020680_patch_audit
+        changed_when: rhel_07_020680_patch_audit.stdout != ""
+        when:
+            - ansible_check_mode
+            - item.1.exists
+        with_together:
+            - "{{ rhel_07_020680_audit.results | map(attribute='item') | list }}"
+            - "{{ rhel_07_020680_audit.results | map(attribute='stat') | list }}"
+
       - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
         file:
             path: "{{ item.0 }}"
             recurse: yes
             mode: a-st,g-w,o-rwx
         register: rhel_07_020680_patch
-        when: item.1.exists
+        when:
+            - not ansible_check_mode
+            - item.1.exists
         with_together:
             - "{{ rhel_07_020680_audit.results | map(attribute='item') | list }}"
             - "{{ rhel_07_020680_audit.results | map(attribute='stat') | list }}"
@@ -1180,7 +1194,8 @@
             permissions: "{{ item.1.mode }}"
         when: not rhel7stig_system_is_container
         with_nested:
-            - "{{ rhel_07_020680_patch.results | rejectattr('skipped', 'defined') | map(attribute='item') | map('first') | list }}"
+            - "{{ (ansible_check_mode | ternary(rhel_07_020680_patch_audit, rhel_07_020680_patch)).results |
+              rejectattr('skipped', 'defined') | map(attribute='item') | map('first') | list }}"
             -
                 - etype: group
                   mode: rx
