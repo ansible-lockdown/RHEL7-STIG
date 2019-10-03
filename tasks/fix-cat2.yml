@@ -1163,10 +1163,29 @@
             path: "{{ item.0 }}"
             recurse: yes
             mode: a-st,g-w,o-rwx
+        register: rhel_07_020680_patch
         when: item.1.exists
         with_together:
             - "{{ rhel_07_020680_audit.results | map(attribute='item') | list }}"
             - "{{ rhel_07_020680_audit.results | map(attribute='stat') | list }}"
+
+      # set default ACLs so the homedir has an effective umask of 0027
+      - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+        acl:
+            path: "{{ item.0 }}"
+            default: yes
+            state: present
+            recursive: yes
+            etype: "{{ item.1.etype }}"
+            permissions: "{{ item.1.mode }}"
+        when: not rhel7stig_system_is_container
+        with_nested:
+            - "{{ rhel_07_020680_patch.results | rejectattr('skipped', 'defined') | map(attribute='item') | map('first') | list }}"
+            -
+                - etype: group
+                  mode: rx
+                - etype: other
+                  mode: '0'
   when: rhel_07_020680
   tags:
       - RHEL-07-020680
