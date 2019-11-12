@@ -2723,7 +2723,9 @@
       path: /etc/pam_pkcs11/pam_pkcs11.conf
       regexp: (?im)^([ \t]*cert_policy[ \t]*=(?:[^ \t\n]|[ \t](?!ocsp_on,))*?)(?:[ \t]ocsp_on,[ \t]*)?[ \t]*((?:[^,\n]|,(?![ \t]*ocsp_on,))*?)(?:,[ \t]*ocsp_on)?;$
       replace: '\1 ocsp_on, \2;'
-  when: rhel_07_041003
+  when:
+      - rhel_07_041003
+      - ansible_distribution_major_version is version_compare('8', '<')
   tags:
       - RHEL-07-041003
 
