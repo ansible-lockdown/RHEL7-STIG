@@ -563,6 +563,9 @@ rhel7stig_auth_settings:
 # RHEL-07-040820
 rhel7stig_ipsec_required: no
 
+# RHEL-07-041001
+rhel7stig_mfa_package: "{{ ansible_distribution_major_version is version_compare('8', '<') | ternary('pam_pkcs11', 'sssd-common') }}"
+
 # RHEL-07-010340
 # Setting to enable or disable fixes that depend on password-based authentication
 # i.e. if users authenticate with a means other than passwords (pubkey)
