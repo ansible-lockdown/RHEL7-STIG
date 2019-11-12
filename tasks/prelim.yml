@@ -275,13 +275,19 @@
       - ansible_host | default(inventory_hostname) in ['localhost', '127.0.0.1']
       - rhel_07_020030 or rhel_07_010480
 
-- name: "PRELIM | RHEL-07-020210 | RHEL-07-020220| Install SELinux related dependencies"
+- name: "PRELIM | RHEL-07-020210 | RHEL-07-020220 | Install SELinux related dependencies"
   yum:
       name:
-          - libselinux-python
+          - "{{ ansible_distribution_major_version is version_compare('8', '<') | ternary('libselinux-python', 'python3-libselinux') }}"
           - selinux-policy-targeted
   when:
       - rhel_07_020210 or rhel_07_020220
+  tags:
+      - cat1
+      - high
+      - patch
+      - RHEL-07-020210
+      - RHEL-07-020220
 
 - name: "PRELIM | Bare bones SSH Server"
   block:
