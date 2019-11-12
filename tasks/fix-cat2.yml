@@ -2683,7 +2683,7 @@
 
 - name: "MEDIUM | RHEL-07-041001 | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
   yum:
-      name: pam_pkcs11
+      name: "{{ rhel7stig_mfa_package }}"
       state: present
   when: rhel_07_041001
   tags:
