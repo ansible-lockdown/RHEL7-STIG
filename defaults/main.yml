@@ -361,7 +361,7 @@ rhel7stig_kdump_required: false
 rhel7stig_snmp_community: Endgam3Ladyb0g
 
 # RHEL-07-010090 acceptable values: screen, tmux
-rhel7stig_screen_package: screen
+rhel7stig_screen_package: "{{ ansible_distribution_major_version is version_compare('8', '<') | ternary('screen', 'tmux') }}"
 
 # whether to force role-specified packages to be installed regardless of the
 # presence of another compliant equivalent
