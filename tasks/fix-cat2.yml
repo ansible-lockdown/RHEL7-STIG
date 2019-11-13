@@ -123,6 +123,8 @@
   block:
       - name: "MEDIUM | RHEL-07-010090 | AUDIT | The Red Hat Enterprise Linux operating system must have the screen package installed. Check for screen or tmux"
         command: rpm -q screen tmux
+        args:
+            warn: no
         check_mode: no
         register: rhel_07_010090_audit
         changed_when: rhel_07_010090_audit.rc > 1
