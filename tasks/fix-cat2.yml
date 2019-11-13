@@ -750,7 +750,7 @@
       state: stopped
   when:
       - rhel_07_020110
-      - rhel_07_020110_autofs_service_status == "loaded"
+      - rhel_07_020110_autofs_service_status.stdout == "loaded"
       - not rhel7stig_autofs_required
   tags:
       - RHEL-07-020110
