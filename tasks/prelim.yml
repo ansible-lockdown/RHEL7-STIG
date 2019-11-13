@@ -277,6 +277,7 @@
       name: python-passlib
   when:
       - ansible_host | default(inventory_hostname) in ['localhost', '127.0.0.1']
+      - ansible_distribution_major_version is version_compare('8', '<')  # python passlib not available on RHEL 8
       - rhel_07_020030 or rhel_07_010480
 
 - name: "PRELIM | RHEL-07-020210 | RHEL-07-020220 | Install SELinux related dependencies"
