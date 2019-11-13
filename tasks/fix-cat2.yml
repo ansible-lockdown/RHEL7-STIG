@@ -2015,6 +2015,7 @@
   when:
       - rhel_07_040310
       - rhel7stig_ssh_required
+      - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
   tags:
       - RHEL-07-040310
       - ssh
