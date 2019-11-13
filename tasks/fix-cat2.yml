@@ -2496,7 +2496,7 @@
 - name: "MEDIUM | RHEL-07-040730 | PATCH | The Red Hat Enterprise Linux operating system must not have an X Windows display manager installed unless approved."
   yum:
       name:
-          - "@x11"
+          - "{{ ansible_distribution_major_version is version_compare('8', '<') | ternary('@x11', '@base-x') }}"
           - xorg-x11-server-common
       state: absent
   check_mode: "{{ rhel7stig_disruptive_check_mode }}"
