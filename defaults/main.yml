@@ -352,16 +352,21 @@ rhel7stig_av_package:
         - clamav-server
     service: clamav-daemon
 
-# ACS: changed from chronyd -> ntpd (??)
-rhel7stig_time_service: ntpd
+rhel7stig_time_service: chronyd
 rhel7stig_time_service_configs:
     chronyd:
         conf: /etc/chrony.conf
         block: |
+          {% if time_servers is defined and time_servers is not none and time_servers|length > 0 %}
+          {% for server in time_servers %}
+          server {{ server }} iburst maxpoll 10
+          {% endfor %}
+          {% else %}
           server 0.rhel.pool.ntp.org iburst maxpoll 10
           server 1.rhel.pool.ntp.org iburst maxpoll 10
           server 2.rhel.pool.ntp.org iburst maxpoll 10
           server 3.rhel.pool.ntp.org iburst maxpoll 10
+          {% endif %}
     ntpd:
         conf: /etc/ntp.conf
         lines:
