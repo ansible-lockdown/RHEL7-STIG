@@ -77,8 +77,8 @@ rhel_07_030000: true
 # ACS: HBSS will provide virus scan program
 rhel_07_032000: false
 rhel_07_040390: true
-rhel_07_040540: true
-rhel_07_040550: true
+rhel_07_040540: false
+rhel_07_040550: false
 rhel_07_040690: true
 rhel_07_040700: true
 rhel_07_040710: true
