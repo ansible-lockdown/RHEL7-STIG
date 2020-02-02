@@ -2458,6 +2458,8 @@
   block:
       - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
         command: rpm -q postfix
+        args:
+            warn: no
         failed_when: no
         check_mode: no
         changed_when: no
