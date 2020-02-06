@@ -314,8 +314,16 @@
         register: rhel7stig_etc_machine_id_stat
 
       - name: "PRELIM | RHEL-07-010482 | RHEL-07-010491 | Gather machine ID from /etc/machine-id"
-        set_fact: rhel7stig_machine_id="{{ lookup('file', '/etc/machine-id').splitlines()[0] }}"
+        slurp:
+          src: /etc/machine-id
+        register: rhel7stig_raw_etc_machine_id
         when: rhel7stig_etc_machine_id_stat.stat.exists
+
+      - name: "PRELIM | RHEL-07-010482 | RHEL-07-010491 | Assign machine ID to fact"
+        set_fact: rhel7stig_machine_id="{{ rhel7stig_raw_etc_machine_id['content'] | b64decode | regex_search('([a-f0-9]+)') }}"
+        when:
+          - rhel7stig_etc_machine_id_stat.stat.exists
+          - rhel7stig_raw_etc_machine_id is defined
 
       - name: "PRELIM | RHEL-07-010482 | RHEL-07-010491 | Check for /var/lib/dbus/machine-id"
         stat:
@@ -323,8 +331,16 @@
         register: rhel7stig_var_lib_dbus_machine_id_stat
 
       - name: "PRELIM | RHEL-07-010482 | RHEL-07-010491 | Gather machine ID from /var/lib/dbus/machine-id"
-        set_fact: rhel7stig_machine_id="{{ lookup('file', '/var/lib/dbus/machine-id').splitlines()[0] }}"
+        slurp:
+          src: /var/lib/dbus/machine-id
+        register: rhel7stig_raw_var_lib_dbus_machine_id
         when: rhel7stig_var_lib_dbus_machine_id_stat.stat.exists
+
+      - name: "PRELIM | RHEL-07-010482 | RHEL-07-010491 | Assign machine ID to fact"
+        set_fact: rhel7stig_machine_id="{{ rhel7stig_raw_var_lib_dbus_machine_id['content'] | b64decode | regex_search('([a-f0-9]+)') }}"
+        when:
+          - rhel7stig_var_lib_dbus_machine_id_stat.stat.exists
+          - rhel7stig_raw_var_lib_dbus_machine_id is defined
   when:
       - rhel_07_010482 or
         rhel_07_010491
