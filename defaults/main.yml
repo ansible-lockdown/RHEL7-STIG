@@ -348,7 +348,7 @@ rhel7stig_ssh_required: yes
 # If not required, remove vsftpd.
 rhel7stig_vsftpd_required: no
 
-# RHEL-07-040500
+# RHEL-07-040700 & RHEL-07-040720
 # If not required, remove tftp
 rhel7stig_tftp_required: no
 
