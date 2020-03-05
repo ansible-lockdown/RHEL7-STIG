@@ -294,6 +294,7 @@
             name: sshd
             state: "{{ rhel7stig_service_started }}"
             enabled: yes
+        when: not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
 
       - name: PRELIM | check if ssh host key exists
         stat:

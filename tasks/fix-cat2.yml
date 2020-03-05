@@ -123,6 +123,8 @@
   block:
       - name: "MEDIUM | RHEL-07-010090 | AUDIT | The Red Hat Enterprise Linux operating system must have the screen package installed. Check for screen or tmux"
         command: rpm -q screen tmux
+        args:
+            warn: no
         check_mode: no
         register: rhel_07_010090_audit
         changed_when: rhel_07_010090_audit.rc > 1
@@ -749,7 +751,7 @@
       state: stopped
   when:
       - rhel_07_020110
-      - rhel_07_020110_autofs_service_status == "loaded"
+      - rhel_07_020110_autofs_service_status.stdout == "loaded"
       - not rhel7stig_autofs_required
   tags:
       - RHEL-07-020110
@@ -2014,6 +2016,7 @@
   when:
       - rhel_07_040310
       - rhel7stig_ssh_required
+      - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
   tags:
       - RHEL-07-040310
       - ssh
@@ -2456,6 +2459,8 @@
   block:
       - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
         command: rpm -q postfix
+        args:
+            warn: no
         failed_when: no
         check_mode: no
         changed_when: no
