@@ -312,7 +312,6 @@
       filter: ansible_machine_id
   when:
       - ansible_machine_id is not defined
-  when:
       - rhel_07_010482 or
         rhel_07_010491
   tags:
