@@ -296,8 +296,8 @@ rhel7stig_always_configure_dconf: no
 # These are the minimum supported releases.
 # (Red Hat has support for older versions if you pay extra for it.)
 rhel7stig_min_supported_os_ver:
-    RedHat: "7.6"
-    CentOS: "7.6.1810"
+    RedHat: "7.7"
+    CentOS: "7.7.1908"
 
 # RHEL-07-040740
 # If system is not router, run tasks that disable router functions.
