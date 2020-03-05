@@ -319,6 +319,21 @@
             state: present
         notify: rebuild initramfs
 
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Check if CPU support aes-ni instruction"
+        command: grep -w aes /proc/cpuinfo
+        args:
+            warn: no
+        changed_when: no
+        failed_when: no
+        check_mode: no
+        register: rhel_07_021350_aesni_enabled
+
+      - name: "HIGH | RHEL-07-021350 | PATCH | Install dracut-fips-aesni Linux package on Intel CPU that integrate AES instruction."
+        yum:
+            name: dracut-fips-aesni
+            state: present
+        when: rhel_07_021350_aesni_enabled.rc == 0
+
       - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
         command: rpm -q prelink
         args:
