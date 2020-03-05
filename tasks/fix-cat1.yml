@@ -81,6 +81,7 @@
       - /etc/pam.d/password-auth
   tags:
       - RHEL-07-010290
+      - pamd
 
 - name: "HIGH | RHEL-07-010300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using an empty password."
   lineinfile:

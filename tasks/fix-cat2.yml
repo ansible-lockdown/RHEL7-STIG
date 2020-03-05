@@ -189,6 +189,7 @@
   when: rhel_07_010119
   tags:
       - RHEL-07-010119
+      - pamd
 
 - name: "MEDIUM | RHEL-07-010120 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one upper-case character."
   lineinfile:
