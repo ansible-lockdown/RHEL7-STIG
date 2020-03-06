@@ -122,6 +122,7 @@
       - rhel_07_010450
   tags:
       - RHEL-07-010450
+      - gui
 
 
 - name: |
@@ -278,6 +279,8 @@
       - rhel_07_020231
   tags:
       - RHEL-07-020231
+      - dconf
+      - gui
 
 # RHEL-07-020250 | PATCH | The operating system must be a supported release."
 # Not automated since current end of life for RHEL 7 is 2024-06-30
