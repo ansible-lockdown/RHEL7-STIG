@@ -566,6 +566,11 @@ rhel7stig_ipsec_required: no
 rhel7stig_using_password_auth: yes
 
 rhel7stig_availability_override: false
+
+# RHEL-07-021000
+# Setting to enable use of UUID for fstab entries instead of device
+rhel7stig_using_uuid_fstab: false
+
 # auditd_failure_flag
 # 2    Tells your system to perform an immediate shutdown without
 #      flushing any pending data to disk when the limits of your
