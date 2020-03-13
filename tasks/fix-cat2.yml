@@ -1363,7 +1363,7 @@
   mount:
       path: /home
       state: mounted
-      src: "{{ home_mount.device }}"
+      src: "{{ \"UUID={}\".format(home_mount.uuid) if rhel7stig_using_uuid_fstab else home_mount.device }}"
       fstype: "{{ home_mount.fstype }}"
       opts: "{{ home_mount.options }},nosuid"
   when:
