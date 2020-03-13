@@ -308,3 +308,17 @@
         when: not rhel7stig_ssh_host_rsa_key_stat.stat.exists
         notify: clean up ssh host key
   when: rhel7stig_ssh_required
+
+- name: "PRELIM | RHEL-07-010482 | RHEL-07-010491 | Gather machine ID"
+  setup:
+      gather_subset: machine_id,!all,!min
+      filter: ansible_machine_id
+  when:
+      - ansible_machine_id is not defined
+      - rhel_07_010482 or
+        rhel_07_010491
+  tags:
+      - cat1
+      - high
+      - RHEL-07-010482
+      - RHEL-07-010491
