@@ -38,7 +38,7 @@
       - not rhel7stig_skip_for_travis
       - not rhel7stig_system_is_container
 
-- name: "restart {{ rhel7stig_time_service }}"
+- name: "restart time service"
   service:
       name: "{{ rhel7stig_time_service }}"
       state: restarted
