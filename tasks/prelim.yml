@@ -53,6 +53,8 @@
       - RHEL-07-010110
       - RHEL-07-020230
       - RHEL-07-020231
+      - dconf
+      - gui
 
 - name: "PRELIM | Find all sudoers files."
   command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
