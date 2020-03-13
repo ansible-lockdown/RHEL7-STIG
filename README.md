@@ -72,7 +72,7 @@ Example Playbook
         - role: rhel7-stig
           when:
             - ansible_os_family == 'RedHat'
-            - ansible_distribution_major_version is version('7', '==')
+            - ansible_distribution_major_version is version_compare('7', '==')
 
 License
 -------
