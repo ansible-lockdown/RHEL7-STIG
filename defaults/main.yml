@@ -370,7 +370,7 @@ rhel7stig_force_exact_packages: "{{ rhel7stig_disruption_high }}"
 # RHEL-07-010480 and RHEL-07-010490
 # Password protect the boot loader
 rhel7stig_bootloader_password: 'Boot1tUp!'
-rhel7stig_bootloader_password_hash: "{{ rhel7stig_bootloader_password | grub2_hash(salt=ansible_machine_id) }}"
+rhel7stig_bootloader_password_hash: "{{ rhel7stig_bootloader_password | password_hash('grub_pbkdf2_sha512', ansible_machine_id) }}"
 rhel7stig_boot_superuser: root
 rhel7stig_boot_password_config:
     - regexp: ^set superusers
