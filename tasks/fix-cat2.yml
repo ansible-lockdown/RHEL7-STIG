@@ -646,8 +646,23 @@
   with_items:
       - regexp: "^(#)?blacklist usb-storage(\\s|$)"
         line: 'blacklist usb-storage'
-      - regexp: "^(#)?install usb-storage"
-        line: 'install usb-storage /bin/false'
+  when: rhel_07_020100
+  tags:
+    - RHEL-07-020100
+    - usb_devices
+
+  - name: "MEDIUM | RHEL-07-020100 | PATCH | The Red Hat Enterprise Linux operating system must be configured to disable USB mass storage."
+  lineinfile:
+      dest: /etc/modprobe.d/usb-storage.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      create: yes
+      owner: root
+      group: root
+      mode: "0644"
+  with_items:
+      - regexp: "^install usb-storage"
+        line: 'install usb-storage /bin/true'
   when: rhel_07_020100
   tags:
       - RHEL-07-020100
