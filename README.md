@@ -31,8 +31,8 @@ Role Variables
 | `rhel_07_######` | [see defaults/main.yml](./defaults/main.yml)  | Individual variables to enable/disable each STIG ID. |
 | `rhel7stig_gui` | `no` | Whether or not to run tasks related to auditing/patching the desktop environment |
 | `rhel7stig_system_is_router` | `no` | Run tasks that disable router functions. |
-| `rhel7stig_antivirus_required` | `no` | Run tasks related to Anit-Virus package installation. |
-| `rhel7stig_av_package` | [see defaults/main.yml](./defaults/main.yml) | Anti-virus package(s) to install and service to start and enable. |
+| `rhel7stig_antivirus_required` | `no` | Run tasks related to Anti-Virus package installation. |
+| `rhel7stig_av_package` | [see defaults/main.yml](./defaults/main.yml) | Anti-Virus package(s) to install and service to start and enable. |
 | `rhel7stig_time_service` | `chronyd` | Set to `ntpd` or `chronyd`. |
 | `rhel7stig_time_service_configs` | [see defaults/main.yml](./defaults/main.yml) | Time service packages and service configs. |
 | `rhel7stig_firewall_service` | `firewalld` | Set to `firewalld` or `iptables`. |
@@ -72,7 +72,7 @@ Example Playbook
         - role: rhel7-stig
           when:
             - ansible_os_family == 'RedHat'
-            - ansible_distribution_major_version | version_compare('7', '=')
+            - ansible_distribution_major_version is version_compare('7', '==')
 
 License
 -------
