@@ -776,6 +776,45 @@
   tags:
       - RHEL-07-020110
 
+
+- name: "MEDIUM | RHEL-07-020111 | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
+  block:
+      - name: "MEDIUM | RHEL-07-020111 | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
+        copy:
+            dest: /etc/dconf/db/local.d/00-no-automount_rhel_07_010111
+            content: |
+                [org/gnome/desktop/media-handling]
+                automount=false
+                automount-open=false
+                autorun-never=true
+            mode: '0644'
+        notify: dconf update
+
+      - name: "MEDIUM | RHEL-07-020111 | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
+        copy:
+            dest: /etc/dconf/db/local.d/locks/00-no-automount_rhel_07_010111
+            # not sure if comments are allowed in the files, so here:
+            # /org/gnome/desktop/media-handling/automount-open
+            # Whether to automatically open a folder for automounted media
+            # /org/gnome/desktop/media-handling/automount
+            # Whether to automatically mount media
+            # /org/gnome/desktop/media-handling/autorun-never
+            # Never prompt or autorun/autostart programs when media are inserted
+            content: |
+                /org/gnome/desktop/media-handling/automount
+                /org/gnome/desktop/media-handling/automount-open
+                /org/gnome/desktop/media-handling/autorun-never
+            mode: '0644'
+        notify: dconf update
+  when:
+      - rhel7stig_dconf_available
+      - rhel_07_010111
+  tags:
+      - RHEL-07-020111
+      - dconf
+      - gui
+
+
 - name: "MEDIUM | RHEL-07-020240 | PATCH | The Red Hat Enterprise Linux operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
   lineinfile:
       dest: /etc/login.defs
