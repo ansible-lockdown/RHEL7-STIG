@@ -2643,21 +2643,9 @@
       - ipv6
 
 - name: "MEDIUM | RHEL-07-041001 | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
-  block:
-      - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
-        yum:
-            name:
-                - esc
-            state: present
-        when: rhel7stig_gui
-        tags:
-            - gui
-
-      - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
-        yum:
-            name: pam_pkcs11
-            state: present
-
+  yum:
+      name: pam_pkcs11
+      state: present
   when: rhel_07_041001
   tags:
       - RHEL-07-041001
