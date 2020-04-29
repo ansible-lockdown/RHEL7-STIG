@@ -2352,7 +2352,7 @@
             dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
-        notify: restart {{ rhel7stig_time_service }}
+        notify: restart time service
         with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
   when:
       - rhel7stig_time_service == 'ntpd'
@@ -2378,7 +2378,7 @@
         replace:
             dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
             regexp: '^server \S+( \w+)?$'
-        notify: restart {{ rhel7stig_time_service }}
+        notify: restart time service
   when:
       - rhel7stig_time_service == 'chronyd'
       - rhel_07_040500
@@ -2392,7 +2392,7 @@
       dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
       block: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].block }}"
       state: present
-  notify: restart {{ rhel7stig_time_service }}
+  notify: restart time service
   when:
       - rhel7stig_time_service == 'chronyd'
       - rhel_07_040500
