@@ -1238,6 +1238,7 @@
         file:
             path: "{{ item.0 }}"
             recurse: yes
+            follow: False
             mode: a-st,g-w,o-rwx
         register: rhel_07_020680_patch
         when:
