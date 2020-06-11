@@ -9,8 +9,11 @@
 
 - name: Check OS version and family
   assert:
-      that: ansible_os_family == 'RedHat' and ansible_distribution_major_version is version_compare('7', '==')
-      msg: "This role can only be run against RHEL/CENTOS 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+      that:
+          - ansible_os_family == 'RedHat'
+          - ansible_distribution_major_version is version_compare('7', '==') or
+            ansible_distribution_major_version is version_compare('8', '==')
+      msg: "This role can only be run against RHEL/CENTOS 7/8. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   tags:
       - always
 

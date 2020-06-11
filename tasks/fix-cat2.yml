@@ -651,7 +651,7 @@
 - name: "MEDIUM | RHEL-07-010481 | The Red Hat Enterprise Linux operating system must require authentication upon booting into single-user and maintenance modes."
   block:
       - name: "MEDIUM | RHEL-07-010481 | PATCH | Check if the packaged rescue.service file was edited directly"
-        shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*/usr/sbin/sulogin'"
+        shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*sulogin'"
         changed_when: no
         failed_when: no
         check_mode: no
@@ -1596,7 +1596,7 @@
       regexp: (?i)^ *active *=
       line: active = yes
   with_items:
-      - /etc/audisp/plugins.d/au-remote.conf
+      - "{{ rhel7stig_audisp_config_path }}/plugins.d/au-remote.conf"
   when:
       - rhel_07_030200
   tags:
@@ -1605,7 +1605,7 @@
 
 - name: "MEDIUM | RHEL-07-030300 | PATCH | The Red Hat Enterprise Linux operating system must off-load audit records onto a different system or media from the system being audited."
   lineinfile:
-      path: /etc/audisp/audisp-remote.conf
+      path: "{{ rhel7stig_audisp_config_path }}/audisp-remote.conf"
       regexp: ^remote_server *=
       line: remote_server = {{ rhel7stig_audisp_remote_server }}
   when: rhel_07_030300 and rhel7stig_audisp_remote_server
@@ -1615,7 +1615,7 @@
 
 - name: "MEDIUM | RHEL-07-030310 | PATCH | The Red Hat Enterprise Linux operating system must encrypt the transfer of audit records off-loaded onto a different system or media from the system being audited."
   lineinfile:
-      path: /etc/audisp/audisp-remote.conf
+      path: "{{ rhel7stig_audisp_config_path }}/audisp-remote.conf"
       regexp: ^enable_krb5 +=
       line: enable_krb5 = yes
   when: rhel_07_030310
@@ -1625,7 +1625,7 @@
 
 - name: "MEDIUM | RHEL-07-030320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when the audit storage volume is full."
   lineinfile:
-      path: /etc/audisp/audisp-remote.conf
+      path: "{{ rhel7stig_audisp_config_path }}/audisp-remote.conf"
       regexp: ^disk_full_action +=
       line: "disk_full_action = {{ rhel7stig_audisp_disk_full_action }}"
   when: rhel_07_030320
@@ -1635,7 +1635,7 @@
 
 - name: "MEDIUM | RHEL-07-030321 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when there is an error sending audit records to a remote system."
   lineinfile:
-      path: /etc/audisp/audisp-remote.conf
+      path: "{{ rhel7stig_audisp_config_path }}/audisp-remote.conf"
       regexp: ^network_failure_action +=
       line: "network_failure_action = {{ rhel7stig_audisp_network_failure_action }}"
   when: rhel_07_030321
@@ -2612,7 +2612,7 @@
 - name: "MEDIUM | RHEL-07-040730 | PATCH | The Red Hat Enterprise Linux operating system must not have an X Windows display manager installed unless approved."
   yum:
       name:
-          - "@x11"
+          - "{{ ansible_distribution_major_version is version_compare('8', '<') | ternary('@x11', '@base-x') }}"
           - xorg-x11-server-common
       state: absent
   check_mode: "{{ rhel7stig_disruptive_check_mode }}"
@@ -2683,7 +2683,7 @@
 
 - name: "MEDIUM | RHEL-07-041001 | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
   yum:
-      name: pam_pkcs11
+      name: "{{ rhel7stig_mfa_package }}"
       state: present
   when: rhel_07_041001
   tags:
@@ -2723,7 +2723,9 @@
       path: /etc/pam_pkcs11/pam_pkcs11.conf
       regexp: (?im)^([ \t]*cert_policy[ \t]*=(?:[^ \t\n]|[ \t](?!ocsp_on,))*?)(?:[ \t]ocsp_on,[ \t]*)?[ \t]*((?:[^,\n]|,(?![ \t]*ocsp_on,))*?)(?:,[ \t]*ocsp_on)?;$
       replace: '\1 ocsp_on, \2;'
-  when: rhel_07_041003
+  when:
+      - rhel_07_041003
+      - ansible_distribution_major_version is version_compare('8', '<')
   tags:
       - RHEL-07-041003
 

@@ -437,7 +437,9 @@
             - rhel_07_021350_audit is failed
             - not ansible_check_mode or
               rhel_07_021350_audit.rc > 1
-  when: rhel_07_021350
+  when:
+      - rhel_07_021350
+      - ansible_distribution_major_version == '7'
   tags:
       - RHEL-07-021350
 
