@@ -808,7 +808,7 @@
         notify: dconf update
   when:
       - rhel7stig_dconf_available
-      - rhel_07_010111
+      - rhel_07_020111
   tags:
       - RHEL-07-020111
       - dconf
