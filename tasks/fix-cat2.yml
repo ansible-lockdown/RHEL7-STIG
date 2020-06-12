@@ -781,7 +781,7 @@
   block:
       - name: "MEDIUM | RHEL-07-020111 | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
         copy:
-            dest: /etc/dconf/db/local.d/00-no-automount_rhel_07_010111
+            dest: /etc/dconf/db/local.d/00-no-automount_rhel_07_020111
             content: |
                 [org/gnome/desktop/media-handling]
                 automount=false
@@ -792,7 +792,7 @@
 
       - name: "MEDIUM | RHEL-07-020111 | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
         copy:
-            dest: /etc/dconf/db/local.d/locks/00-no-automount_rhel_07_010111
+            dest: /etc/dconf/db/local.d/locks/00-no-automount_rhel_07_020111
             # not sure if comments are allowed in the files, so here:
             # /org/gnome/desktop/media-handling/automount-open
             # Whether to automatically open a folder for automounted media
