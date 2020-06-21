@@ -70,6 +70,7 @@
       - medium
       - RHEL-07-010340
       - RHEL-07-010350
+      - sudoers
 
 - name: "PRELIM | RHEL-07-010480 | RHEL-07-010490 | RHEL-07-021350 | Install grub2-tools."
   yum:
