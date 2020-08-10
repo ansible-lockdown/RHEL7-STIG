@@ -19,7 +19,7 @@
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
         shell: >
-                ( rpm --setugids {{ item | quote }}; rpm --setperms {{ item | quote }} )
+                ( rpm --setugids {{ item }}; rpm --setperms {{ item }} )
                 2>&1 1>&2 | grep -v ': No such file or directory$'
         args:
             warn: no
@@ -81,7 +81,6 @@
       - /etc/pam.d/password-auth
   tags:
       - RHEL-07-010290
-      - pamd
 
 - name: "HIGH | RHEL-07-010300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using an empty password."
   lineinfile:
@@ -122,7 +121,6 @@
       - rhel_07_010450
   tags:
       - RHEL-07-010450
-      - gui
 
 
 - name: |
@@ -134,7 +132,7 @@
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
   with_items: "{{ rhel7stig_boot_password_config }}"
-  notify: make grub2 config
+  notify: confirm grub2 user cfg
   when:
       - rhel_07_010480 or
         rhel_07_010490
@@ -150,9 +148,9 @@
       "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   block:
       - name: |
-            "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-            "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-            explicitly create user.cfg file to work around ansible bug https://github.com/ansible/ansible/pull/59823
+          "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+          "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+          explicitly create user.cfg file to work around ansible bug https://github.com/ansible/ansible/pull/59823
         shell: test -f {{ file_q }} && echo exists || {{ create_cmd }}
         check_mode: ansible_check_mode is not defined
         register: rhel7stig_create_grub_user_cfg
@@ -173,7 +171,7 @@
             create: yes
             regexp: ^GRUB2_PASSWORD=
             line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-        notify: make grub2 config
+        notify: confirm grub2 user cfg
 
       - name: |
             "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
@@ -183,7 +181,7 @@
             insertafter: EOF
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
-        notify: make grub2 config
+        notify: confirm grub2 user cfg
         with_items:
             - regexp: ^\s*set superusers=
               line: '    set superusers="root"'
@@ -222,6 +220,17 @@
       dest: /etc/yum.conf
       regexp: ^gpgcheck
       line: gpgcheck=1
+      insertafter: '\[main\]'
+  when: rhel_07_020050
+  tags:
+      - RHEL-07-020050
+      - yum
+
+- name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+  lineinfile:
+      dest: /etc/yum.conf
+      regexp: ^repo_gpgcheck
+      line: repo_gpgcheck=1
       insertafter: '\[main\]'
   when: rhel_07_020050
   tags:
@@ -279,8 +288,6 @@
       - rhel_07_020231
   tags:
       - RHEL-07-020231
-      - dconf
-      - gui
 
 # RHEL-07-020250 | PATCH | The operating system must be a supported release."
 # Not automated since current end of life for RHEL 7 is 2024-06-30
@@ -322,21 +329,6 @@
             name: dracut-fips
             state: present
         notify: rebuild initramfs
-
-      - name: "HIGH | RHEL-07-021350 | AUDIT | Check if CPU support aes-ni instruction"
-        command: grep -w aes /proc/cpuinfo
-        args:
-            warn: no
-        changed_when: no
-        failed_when: no
-        check_mode: no
-        register: rhel_07_021350_aesni_enabled
-
-      - name: "HIGH | RHEL-07-021350 | PATCH | Install dracut-fips-aesni Linux package on Intel CPU that integrate AES instruction."
-        yum:
-            name: dracut-fips-aesni
-            state: present
-        when: rhel_07_021350_aesni_enabled.rc == 0
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
         command: rpm -q prelink
@@ -394,7 +386,7 @@
         when:
             - not ansible_check_mode or
               rhel_07_021350_default_grub_missing_audit is not changed
-        notify: make grub2 config
+        notify: confirm grub2 user cfg
 
       - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
         replace:
@@ -413,7 +405,7 @@
             - rhel7stig_boot_part not in ['/', '']
             - not ansible_check_mode or
               rhel_07_021350_default_grub_missing_audit is not changed
-        notify: make grub2 config
+        notify: confirm grub2 user cfg
         register: result
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
@@ -437,9 +429,7 @@
             - rhel_07_021350_audit is failed
             - not ansible_check_mode or
               rhel_07_021350_audit.rc > 1
-  when:
-      - rhel_07_021350
-      - ansible_distribution_major_version == '7'
+  when: rhel_07_021350
   tags:
       - RHEL-07-021350
 
@@ -546,29 +536,24 @@
   yum:
       name: vsftpd
       state: absent
-  check_mode: "{{ rhel7stig_disruptive_check_mode }}"
   when:
       - not rhel7stig_vsftpd_required
       - rhel_07_040690
-      - rhel7stig_disruptive
   tags:
       - RHEL-07-040690
-      - disruption-high
       - ftp
 
 - name: "HIGH | RHEL-07-040700 | PATCH | The Red Hat Enterprise Linux operating system must not have the Trivial File Transfer Protocol (TFTP) server package installed if not required for operational support."
   yum:
       name:
+          - tftp
           - tftp-server
       state: absent
-  check_mode: "{{ rhel7stig_disruptive_check_mode }}"
   when:
       - not rhel7stig_tftp_required
       - rhel_07_040700
-      - rhel7stig_disruptive
   tags:
       - RHEL-07-040700
-      - disruption-high
       - tftp
 
 - name: "HIGH | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections for interactive users are encrypted."

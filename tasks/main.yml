@@ -9,11 +9,8 @@
 
 - name: Check OS version and family
   assert:
-      that:
-          - ansible_os_family == 'RedHat'
-          - ansible_distribution_major_version is version_compare('7', '==') or
-            ansible_distribution_major_version is version_compare('8', '==')
-      msg: "This role can only be run against RHEL/CENTOS 7/8. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+      that: ansible_os_family == 'RedHat' and ansible_distribution_major_version is version_compare('7', '==')
+      msg: "This role can only be run against RHEL/CENTOS 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   tags:
       - always
 
@@ -23,6 +20,12 @@
       msg: You must use Ansible {{ rhel7stig_min_ansible_version }} or greater
   tags:
       - always
+
+- name: Install OpenSCAP and run a report
+  import_tasks: audit_oscap_scan_before.yml
+  when: rhel7stig_oscap_scan
+  tags:
+      - oscapreport
 
 - import_tasks: prelim.yml
   become: yes
@@ -49,3 +52,9 @@
   tags:
       - cat3
       - low
+
+- name: run the OpenSCAP reporting tool again
+  import_tasks: audit_oscap_scan_after.yml
+  when: rhel7stig_oscap_scan
+  tags:
+      - oscapreport
