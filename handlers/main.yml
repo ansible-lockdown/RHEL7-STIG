@@ -18,9 +18,16 @@
   when:
       - not rhel7stig_system_is_chroot
 
+- name: confirm grub2 user cfg
+  stat:
+      path: /boot/grub2/user.cfg
+  register: rhel7stig_grub2_user_cfg
+  notify: make grub2 config
+
 - name: make grub2 config
   command: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
   when:
+      - rhel7stig_grub2_user_cfg.stat.exists
       - not rhel7stig_skip_for_travis
       - not rhel7stig_system_is_container
 
@@ -34,16 +41,19 @@
       - grub.cfg
       - user.cfg
   when:
+      - rhel7stig_grub2_user_cfg.stat.exists
       - rhel7stig_workaround_for_disa_benchmark
       - not rhel7stig_skip_for_travis
       - not rhel7stig_system_is_container
 
-- name: "restart time service"
+- name: "restart {{ rhel7stig_time_service }}"
   service:
       name: "{{ rhel7stig_time_service }}"
       state: restarted
   when:
+      - not rhel7stig_skip_for_travis
       - not rhel7stig_system_is_chroot
+      - not rhel7stig_system_is_container
 
 - name: restart auditd
   command: /usr/sbin/service auditd restart
@@ -87,3 +97,13 @@
 - name: dconf update
   command: dconf update
   when: rhel7stig_has_dconf_command
+
+- name: prereport score
+  debug:
+      msg: "Pre-run OpenSCAP score is {{ rhel7stig_prescanresults.Benchmark.TestResult.score['#text'] }}"
+  when: rhel7stig_oscap_scan
+
+- name: postreport score
+  debug:
+      msg: "Post-run OpenSCAP score is {{ rhel7stig_postscanresults.Benchmark.TestResult.score['#text'] }}"
+  when: rhel7stig_oscap_scan

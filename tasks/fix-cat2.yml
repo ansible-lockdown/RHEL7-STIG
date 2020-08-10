@@ -19,8 +19,6 @@
       - RHEL-07-010030
       - RHEL_07_010040
       - dod_logon_banner
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010050 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon."
   copy:
@@ -53,8 +51,6 @@
       - rhel_07_010060
   tags:
       - RHEL-07-010060
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010061 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate users using multifactor authentication via a graphical user logon."
   copy:
@@ -69,8 +65,6 @@
       - rhel_07_010061
   tags:
       - RHEL-07-010061
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010062 | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-enabled setting for the graphical user interface."
   copy:
@@ -84,8 +78,6 @@
       - rhel_07_010062
   tags:
       - RHEL-07-010062
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The Red Hat Enterprise Linux operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   copy:
@@ -100,8 +92,6 @@
       - rhel_07_010070
   tags:
       - RHEL-07-010070
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010081 | PATCH | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-delay setting for the graphical user interface."
   copy:
@@ -115,8 +105,6 @@
       - rhel_07_010081
   tags:
       - RHEL-07-010081
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010082 | PATCH | The Red Hat Enterprise Linux operating system must prevent a user from overriding the session idle-delay setting for the graphical user interface."
   copy:
@@ -130,15 +118,11 @@
       - rhel_07_010082
   tags:
       - RHEL-07-010082
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010090 | The Red Hat Enterprise Linux operating system must have the screen package installed."
   block:
       - name: "MEDIUM | RHEL-07-010090 | AUDIT | The Red Hat Enterprise Linux operating system must have the screen package installed. Check for screen or tmux"
         command: rpm -q screen tmux
-        args:
-            warn: no
         check_mode: no
         register: rhel_07_010090_audit
         changed_when: rhel_07_010090_audit.rc > 1
@@ -168,8 +152,6 @@
       - rhel_07_010100
   tags:
       - RHEL-07-010100
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010101 | PATCH | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver idle-activation-enabled setting for the graphical user interface."
   copy:
@@ -183,24 +165,21 @@
       - rhel_07_010101
   tags:
       - RHEL-07-010101
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010110 | PATCH | The Red Hat Enterprise Linux operating system must initiate a session lock for graphical user interfaces when the screensaver is activated."
   copy:
       dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010110
       content: |
           [org/gnome/desktop/screensaver]
-          lock-delay=uint32 5
+          lock-delay=uint32 900
       mode: '0644'
+  register: rhel_07_010110
   notify: dconf update
   when:
       - rhel7stig_dconf_available
       - rhel_07_010110
   tags:
       - RHEL-07-010110
-      - dconf
-      - gui
 
 - name: "MEDIUM | RHEL-07-010119 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used."
   lineinfile:
@@ -211,7 +190,6 @@
   when: rhel_07_010119
   tags:
       - RHEL-07-010119
-      - pamd
 
 - name: "MEDIUM | RHEL-07-010120 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one upper-case character."
   lineinfile:
@@ -651,7 +629,7 @@
 - name: "MEDIUM | RHEL-07-010481 | The Red Hat Enterprise Linux operating system must require authentication upon booting into single-user and maintenance modes."
   block:
       - name: "MEDIUM | RHEL-07-010481 | PATCH | Check if the packaged rescue.service file was edited directly"
-        shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*sulogin'"
+        shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*/usr/sbin/sulogin'"
         changed_when: no
         failed_when: no
         check_mode: no
@@ -666,20 +644,109 @@
       - rescue
 
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
-  command: "true"
-  changed_when: no
-  when: rhel_07_010500
+  block:
+      # This task checks to test if pamd is enabled for pkcs11
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --test | grep "pam_pkcs11 is enabled"
+        register: rhel_07_010500pkcs11output
+
+      # This task gathers output so we can test if smartcard removal action is enabled
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --test | grep "smartcard removal action"
+        register: rhel_07_010500scremovaloutput
+
+      # This task gathers output so we can test if smartcard module is enabled
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --test | grep "smartcard module"
+        register: rhel_07_010500scenabledoutput
+
+      # This is to remediate if pam_pkcs11 is not installed.
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        yum:
+            name: "{{ item }}"
+            state: present
+            with_items:
+                - pam_pkcs11
+                - pcsc-lite-libs
+        register: rhel_07_010500pkcs11install
+        when: rhel_07_010500pkcs11output.stdout != 'pam_pkcs11 is enabled'
+
+      # This task will remediate the smartcard login setting
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --enablesmartcard --smartcardaction=0 --update
+        when: rhel_07_010500scenabledoutput.stdout == ' smartcard module = \"\"' or rhel_07_010500scremovaloutput.stdout == ' smartcard removal action = \"\"'
+
+      # This task will remediate the smartcard login setting
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --enablerequiresmartcard --update
+        when: rhel_07_010500scenabledoutput.stdout == ' smartcard module = \"\"' or rhel_07_010500scremovaloutput.stdout == ' smartcard removal action = \"\"'
+
+      # This remediates the screensaver settings for smartcard authentication
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        lineinfile:
+            create: yes
+            dest: /etc/pam_pkcs11/pkcs11_eventmgr.conf
+            regexp: '^#?/usr/X11R6/bin/xscreensaver-command -lock'
+            line: "/usr/X11R6/bin/xscreensaver-command -lock"
+
+      # This remediates the pam_pkcs11.conf file to enforce the cackey usage for smartcard authentication
+      ### NOTE:  If you have custom rules for /etc/pam_pkcs11/pam_pkcs11.conf then change the template pam_pkcs11.conf.j2
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        template:
+            src: pam_pkcs11.conf.j2
+            dest: /etc/pam_pkcs11/pam_pkcs11.conf
+            owner: root
+            group: root
+            mode: 0644
+        when: rhel_07_010500pkcs11install is changed
+  when:
+      - rhel_07_010500
+      - rhel7stig_gui
+      - rhel7stig_smartcard
+
   tags:
       - RHEL-07-010500
-      - notimplemented
 
-- name: "MEDIUM | RHEL-07-020020 | PATCH | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-  command: "true"
-  changed_when: no
-  when: rhel_07_020020
+- name: "MEDIUM | RHEL-07-020020 | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+  block:
+      # is a HBSS installed?
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+        stat:
+            path: "{{ rhel_07_020020_HBSS_path }}"
+        register: rhel_07_020020_HBSS_check
+        when:
+            - rhel_07_020020
+            - rhel7stig_disruption_high
+            - rhel7stig_audit_disruptive
+        tags:
+            - RHEL-07-020020
+      # is a HIPS installed?
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+        stat:
+            path: "{{ rhel_07_020020_HIPS_path }}"
+        register: rhel_07_020020_HIPS_check
+        when:
+            - rhel_07_020020
+            - rhel7stig_disruption_high
+            - rhel7stig_audit_disruptive
+        tags:
+            - RHEL-07-020020
+      # This is an include to conditionally loop through users to selinux mappings
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+        include_tasks: audit_selinuxlocaluserdefs.yml
+        when:
+            - rhel_07_020020
+            - not rhel_07_020020_HBSS_check.stat.exists and not rhel_07_020020_HIPS_check.stat.exists
+            - rhel7stig_disruption_high
+            - rhel7stig_audit_disruptive
+        tags:
+            - RHEL-07-020020
+  when:
+      - rhel_07_020020
+      - rhel7stig_disruption_high
+      - rhel7stig_audit_disruptive
   tags:
       - RHEL-07-020020
-      - notimplemented
 
 - name: |
         "MEDIUM | RHEL-07-020030 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that a file integrity tool verifies the baseline operating system configuration at least weekly."
@@ -771,49 +838,10 @@
       state: stopped
   when:
       - rhel_07_020110
-      - rhel_07_020110_autofs_service_status.stdout == "loaded"
+      - rhel_07_020110_autofs_service_status == "loaded"
       - not rhel7stig_autofs_required
   tags:
       - RHEL-07-020110
-
-
-- name: "MEDIUM | RHEL-07-020111 | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
-  block:
-      - name: "MEDIUM | RHEL-07-020111 | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
-        copy:
-            dest: /etc/dconf/db/local.d/00-no-automount_rhel_07_010111
-            content: |
-                [org/gnome/desktop/media-handling]
-                automount=false
-                automount-open=false
-                autorun-never=true
-            mode: '0644'
-        notify: dconf update
-
-      - name: "MEDIUM | RHEL-07-020111 | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
-        copy:
-            dest: /etc/dconf/db/local.d/locks/00-no-automount_rhel_07_010111
-            # not sure if comments are allowed in the files, so here:
-            # /org/gnome/desktop/media-handling/automount-open
-            # Whether to automatically open a folder for automounted media
-            # /org/gnome/desktop/media-handling/automount
-            # Whether to automatically mount media
-            # /org/gnome/desktop/media-handling/autorun-never
-            # Never prompt or autorun/autostart programs when media are inserted
-            content: |
-                /org/gnome/desktop/media-handling/automount
-                /org/gnome/desktop/media-handling/automount-open
-                /org/gnome/desktop/media-handling/autorun-never
-            mode: '0644'
-        notify: dconf update
-  when:
-      - rhel7stig_dconf_available
-      - rhel_07_020111
-  tags:
-      - RHEL-07-020111
-      - dconf
-      - gui
-
 
 - name: "MEDIUM | RHEL-07-020240 | PATCH | The Red Hat Enterprise Linux operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
   lineinfile:
@@ -1033,7 +1061,6 @@
             - rhel7stig_disruptive  # not technically required
         tags:
             - disruption-high
-
       ### NOTE: Now we need to address that SELINUX will not let mkhomedir_helper create home directories for UUID < 500, so the ftp user will still show up in a pwck. Not sure this is needed, as the ftp user is removed in rhel7stig_unnecessary_accounts. However these next two tasks won't make any changes if the system accounts are removed previously in RHEL-07-020270.
       ### ^ Likely doesn't matter as 020620 defines "local interactive users" as those w/ uid 1000-4999
       - name: replay audit task
@@ -1042,7 +1069,6 @@
             - rhel7stig_complex
         tags:
             - complexity-high
-
       # CAUTION: debug loops don't show changed since 2.4:
       # Fix: https://github.com/ansible/ansible/pull/59958
       - name: "MEDIUM | RHEL-07-020600 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
@@ -1058,12 +1084,9 @@
       ld_regex: >-
           ^user '(?P<user>.*)': directory '(?P<dir>.*)' does not exist$
       ld_users: "{{ rhel7stig_users_missing_home.stdout_lines | map('regex_replace', ld_regex, '\\g<user>') | list }}"
-      rhel7stig_07_20600_audit: "{{ rhel7stig_passwd | selectattr('uid', '>=', 1000) | selectattr('id', 'in', ld_users) | list }}"
+      rhel7stig_07_20600_audit: "{{ rhel7stig_passwd | selectattr('uid', '>=', rhel7stig_int_gid) | selectattr('id', 'in', ld_users) | list }}"
   when:
       - rhel_07_020600
-  tags:
-      - RHEL-07-020600
-
 
 - name: "MEDIUM | RHEL-07-020610 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user accounts, upon creation, are assigned a home directory."
   lineinfile:
@@ -1085,8 +1108,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020620
-      - item.uid >= 1000
-      - item.uid != 65534
+      - item.uid >= rhel7stig_int_gid
   tags:
       - RHEL-07-020620
 
@@ -1100,8 +1122,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020630
-      - item.uid >= 1000
-      - item.uid != 65534
+      - item.uid >= rhel7stig_int_gid
   tags:
       - RHEL-07-020630
 
@@ -1115,8 +1136,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020640
-      - item.uid >= 1000
-      - item.uid != 65534
+      - item.uid >= rhel7stig_int_gid
   tags:
       - RHEL-07-020640
 
@@ -1130,8 +1150,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020650
-      - item.uid >= 1000
-      - item.uid != 65534
+      - item.uid >= rhel7stig_int_gid
   tags:
       - RHEL-07-020650
 
@@ -1146,8 +1165,7 @@
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
         when:
-            - this_item.uid >= 1000
-            - this_item.uid != 65534
+            - this_item.uid >= rhel7stig_int_gid
         vars:
             this_item: "{{ item }}"
 
@@ -1188,8 +1206,7 @@
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
         when:
-            - this_item.uid >= 1000
-            - this_item.uid != 65534
+            - this_item.uid >= rhel7stig_int_gid
         vars:
             this_item: "{{ item.item }}"
             this_result: "{{ item }}"
@@ -1217,7 +1234,7 @@
       - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
         stat:
             path: "{{ item }}"
-        with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', 1000) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
+        with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', rhel7stig_int_gid) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
         register: rhel_07_020680_audit
 
       - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
@@ -1238,7 +1255,6 @@
         file:
             path: "{{ item.0 }}"
             recurse: yes
-            follow: False
             mode: a-st,g-w,o-rwx
         register: rhel_07_020680_patch
         when:
@@ -1268,7 +1284,8 @@
                   mode: rx
                 - etype: other
                   mode: '0'
-  when: rhel_07_020680
+  when:
+      - rhel_07_020680
   tags:
       - RHEL-07-020680
 
@@ -1283,8 +1300,7 @@
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
         when:
-            - this_item.uid >= 1000
-            - this_item.uid != 65534
+            - this_item.uid >= rhel7stig_int_gid
         vars:
             this_item: "{{ item }}"
 
@@ -1316,8 +1332,7 @@
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
         when:
-            - this_item.uid >= 1000
-            - this_item.uid != 65534
+            - this_item.uid >= rhel7stig_int_gid
         vars:
             this_item: "{{ item }}"
 
@@ -1338,30 +1353,163 @@
   tags:
       - RHEL-07-020700
 
-- name: "MEDIUM | RHEL-07-020710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files have mode 0740 or less permissive."
-  command: "true"
+- name: "MEDIUM | RHEL-07-020710 | RHEL-07-020720 | RHEL-07-020730 | AUDIT | Find ini files for interactive users."
+  shell: find "{{ item }}" -maxdepth 1 -type f | awk -F"/" '$NF ~ /^\..*$/ {print $NF}' | grep -v history
+  with_items: "{{ rhel_07_stig_interactive_homedir_results }}"
+  register: rhel_07_020710_ini_file_list
   changed_when: no
-  when: rhel_07_020710
+  failed_when: false
+  when:
+      - rhel_07_stig_interactive_homedir_results is defined
+      - rhel_07_020710
+      - rhel_07_020720
+      - rhel_07_020730
+      - rhel7stig_disruption_high
   tags:
       - RHEL-07-020710
-      - notimplemented
+      - RHEL-07-020720
+      - RHEL-07-020730
+      - complexity-high
 
-- name: "MEDIUM | RHEL-07-020720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
-  command: "true"
-  changed_when: no
-  when: rhel_07_020720
+- name: "MEDIUM | RHEL-07-020710 | RHEL-07-020720 | RHEL-07-020730 | Set fact for home directory paths for interactive users"
+  set_fact:
+      rhel_07_stig_interactive_homedir_inifiles: "{{ rhel_07_020710_ini_file_list.results | map(attribute='stdout_lines') | list }}"
+  when:
+      - rhel_07_stig_interactive_homedir_results is defined
+      - rhel_07_020710
+      - rhel_07_020720
+      - rhel_07_020730
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-020680
+      - RHEL-07-020710
+      - RHEL-07-020720
+      - RHEL-07-020730
+      - complexity-high
+
+- name: "MEDIUM | RHEL-07-020710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files must have mode 0740 or less permissive."
+  file:
+      path: "{{ item }}"
+      mode: '0640'
+      state: touch
+  with_items: "{{ rhel_07_stig_interactive_homedir_inifiles }}"
+  when:
+      - rhel_07_stig_interactive_homedir_inifiles is defined
+      - rhel_07_020710
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-020710
+      - complexity-high
+
+- name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
+  block:
+      - name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
+        shell: find "{{ item }}" -maxdepth 1 -type f | xargs grep "PATH=" | cut -d':' -f1 | xargs realpath
+        with_items: "{{ rhel_07_stig_interactive_homedir_results }}"
+        register: rhel_07_020710_ini_path_grep_list
+        changed_when: no
+        failed_when: false
+        when:
+            - rhel_07_stig_interactive_homedir_results is defined
+            - rhel_07_020720
+            - rhel7stig_disruption_high
+            - rhel_07_stig_interactive_homedir_inifiles is defined
+        tags:
+            - RHEL-07-020720
+            - complexity-high
+      - name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
+        debug:
+            msg: You will need to audit and correct executable paths set in "{{ item }}" to contain only paths that resolve to the user's home directory.
+        with_items:
+            - "{{ rhel_07_020710_ini_path_grep_list.results | map(attribute='stdout_lines') | list }}"
+        when:
+            - rhel_07_020720
+            - rhel7stig_disruption_high
+        tags:
+            - RHEL-07-020720
+            - complexity-high
+      - name: "MEDIUM | RHEL-07-020720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
+        lineinfile:
+            path: "{{ item }}"
+            regexp: "^PATH="
+            line: "{{ rhel_07_020720_user_path }}"
+        with_items:
+            - "{{ rhel_07_020710_ini_path_grep_list.results | map(attribute='stdout_lines') | list }}"
+        when:
+            - rhel_07_020720
+            - rhel7stig_change_user_path
+            - rhel7stig_disruption_high
+        tags:
+            - RHEL-07-020720
+            - complexity-high
+  when:
+      - rhel_07_020720
+      - rhel7stig_disruption_high
   tags:
       - RHEL-07-020720
-      - notimplemented
+      - complexity-high
 
 - name: "MEDIUM | RHEL-07-020730 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-  command: "true"
-  changed_when: no
-  when: rhel_07_020730
+  block:
+      # Let's find any progerams with world-writable permissions.
+      - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+        shell: find / -xdev -perm -002 -type f -exec ls -ld {} \;
+        failed_when: false
+        changed_when: false
+        register: rhel_07_020730_perms_results
+        when:
+            - rhel7stig_disruption_high
+            - rhel_07_020730
+        tags:
+            - RHEL-07-020730
+            - complexity-high
+      # Now let's see if those come up in any interactive users' home directory ini files.
+      - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+        debug:
+            msg: "Good news! We have not found any world-writable exeutable programs on your system."
+        failed_when: false
+        changed_when: false
+        when:
+            - rhel7stig_disruption_high
+            - rhel_07_020730
+            - rhel_07_020730_perms_results.stdout_lines is not defined
+        tags:
+            - RHEL-07-020730
+            - complexity-high
+      - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+        include_tasks: audit_homedirinifiles.yml
+        loop:
+            - "{{ rhel_07_stig_interactive_homedir_inifiles }}"
+        loop_control:
+            loop_var: ini_item
+        when:
+            - rhel7stig_disruption_high
+            - rhel_07_020730
+            - rhel_07_020730_perms_results.stdout_lines is defined
+        tags:
+            - RHEL-07-020730
+            - complexity-high
+      - name: "MEDIUM | RHEL-07-020730 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+        file:
+            path: "{{ item }}"
+            mode: '0755'
+            state: touch
+        with_items: "{{ rhel_07_020730_perms_results.stdout_lines }}"
+        when:
+            - rhel7stig_disruption_high
+            - rhel_07_020730
+            - rhel_07_020730_perms_results.stdout_lines is defined
+            - rhel_07_020730_WWP_Change
+        tags:
+            - RHEL-07-020730
+            - complexity-high
+  when:
+      - rhel_07_020730
+      - rhel7stig_disruption_high
+      - rhel_07_stig_interactive_homedir_inifiles is defined
   tags:
       - RHEL-07-020730
-      - notimplemented
-
+      - complexity-high
 
 - name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
   setup:
@@ -1390,7 +1538,6 @@
             - rhel7stig_audit_complex
         when:
             - rhel_07_020900_audit.stdout_lines | length > 0
-
   when:
       - rhel_07_020900
       - rhel7stig_complex
@@ -1403,7 +1550,7 @@
   mount:
       path: /home
       state: mounted
-      src: "{{ \"UUID={}\".format(home_mount.uuid) if rhel7stig_using_uuid_fstab else home_mount.device }}"
+      src: "{{ home_mount.device }}"
       fstype: "{{ home_mount.fstype }}"
       opts: "{{ home_mount.options }},nosuid"
   when:
@@ -1415,13 +1562,45 @@
   tags:
       - RHEL-07-021000
 
-- name: "MEDIUM | RHEL-07-021010 | PATCH | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021010
+- name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
+  block:
+      - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
+        mount:
+            path: /media
+            state: mounted
+            src: "{{ removable_mount.device }}"
+            fstype: "{{ removable_mount.fstype }}"
+            opts: "{{ removable_mount.options }},nosuid"
+        when:
+            - rhel_07_021010
+            - ansible_mounts | selectattr('mount', 'match', '^/media$') | list | length != 0
+            - "'nosuid' not in home_mount.options"
+            - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
+        vars:
+            removable_mount: "{{ ansible_mounts | json_query('[?mount == `/media`] | [0]') }}"
+        tags:
+            - RHEL-07-021010
+      - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
+        mount:
+            path: /mnt
+            state: mounted
+            src: "{{ removable_mount2.device }}"
+            fstype: "{{ removable_mount2.fstype }}"
+            opts: "{{ removable_mount2.options }},nosuid"
+        when:
+            - rhel_07_021010
+            - ansible_mounts | selectattr('mount', 'match', '^/mnt$') | list | length != 0
+            - "'nosuid' not in home_mount.options"
+            - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
+        vars:
+            removable_mount2: "{{ ansible_mounts | json_query('[?mount == `/mnt`] | [0]') }}"
+        tags:
+            - RHEL-07-021010
+  when:
+      - rhel_07_021010
+      - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
   tags:
       - RHEL-07-021010
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-021020 | PATCH | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are being imported via Network File System (NFS)."
   mount:
@@ -1482,12 +1661,17 @@
       - disruption-high
 
 - name: "MEDIUM | RHEL-07-021040 | PATCH | The Red Hat Enterprise Linux operating system must set the umask value to 077 for all local interactive user accounts."
-  command: "true"
+  file:
+      path: "{{ item }}"
+      mode: '0700'
+      state: touch
+  with_items: "{{ rhel_07_stig_interactive_homedir_inifiles }}"
   changed_when: no
-  when: rhel_07_021040
+  when:
+      - rhel_07_021040
+      - rhel_07_stig_interactive_homedir_inifiles is defined
   tags:
       - RHEL-07-021040
-      - notimplemented
 
 - name: "MEDIUM | RHEL-07-021100 | PATCH | The Red Hat Enterprise Linux operating system must have cron logging implemented."
   lineinfile:
@@ -1572,13 +1756,35 @@
       - aide
       - RHEL-07-021620
 
-- name: "MEDIUM | RHEL-07-021700 | PATCH | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
-  command: "true"
-  changed_when: no
-  when: rhel_07_021700
+- name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
+  block:
+      # Let's see what is configured in grub.
+      - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
+        shell: grep "set root" "{{ rhel7stig_grub_cfg_path }}"
+        register: rhel7stig_grub_cfg_mediacheck
+        changed_when: false
+        failed_when: false
+      # Set the fact, even if the return was empty/nonexistant
+      - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
+        set_fact:
+            rhel7stig_grub_bootloader_checkorder: "{{ rhel7stig_grub_cfg_mediacheck.stdout_lines | default(rhel7stig_grub_bootloader_validorder | list) | unique }}"
+      # Report on the bootloader list
+      - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
+        debug:
+            msg: "The grub2 bootloader is configured to set root for menu entries as follows: {{ item }}. The configured expected entry is \"{{ rhel7stig_grub_bootloader_validorder }}\". If the system is using an alternate boot loader on removable media, and documentation does not exist approving the alternate configuration, this is a finding. You can set this comparison list in default vars as 'rhel7stig_grub_bootloader_validorder'"
+        changed_when: true
+        with_items:
+            - "{{ rhel7stig_grub_bootloader_checkorder }}"
+        when: rhel7stig_grub_bootloader_validorder != rhel7stig_grub_bootloader_checkorder
+
+  when:
+      - rhel_07_021700
+      - not rhel7stig_system_is_chroot
+      - not rhel7stig_system_is_container
   tags:
       - RHEL-07-021700
-      - notimplemented
+      - grub
+      - bootloader
 
 - name: "MEDIUM | RHEL-07-030010 | PATCH | The Red Hat Enterprise Linux operating system must shut down upon audit processing failure, unless availability is an overriding concern. If availability is a concern, the system must alert the designated staff (System Administrator [SA] and Information System Security Officer [ISSO] at a minimum) in the event of an audit processing failure."
   lineinfile:
@@ -1597,7 +1803,7 @@
       regexp: (?i)^ *active *=
       line: active = yes
   with_items:
-      - "{{ rhel7stig_audisp_config_path }}/plugins.d/au-remote.conf"
+      - /etc/audisp/plugins.d/au-remote.conf
   when:
       - rhel_07_030200
   tags:
@@ -1606,7 +1812,7 @@
 
 - name: "MEDIUM | RHEL-07-030300 | PATCH | The Red Hat Enterprise Linux operating system must off-load audit records onto a different system or media from the system being audited."
   lineinfile:
-      path: "{{ rhel7stig_audisp_config_path }}/audisp-remote.conf"
+      path: /etc/audisp/audisp-remote.conf
       regexp: ^remote_server *=
       line: remote_server = {{ rhel7stig_audisp_remote_server }}
   when: rhel_07_030300 and rhel7stig_audisp_remote_server
@@ -1616,7 +1822,7 @@
 
 - name: "MEDIUM | RHEL-07-030310 | PATCH | The Red Hat Enterprise Linux operating system must encrypt the transfer of audit records off-loaded onto a different system or media from the system being audited."
   lineinfile:
-      path: "{{ rhel7stig_audisp_config_path }}/audisp-remote.conf"
+      path: /etc/audisp/audisp-remote.conf
       regexp: ^enable_krb5 +=
       line: enable_krb5 = yes
   when: rhel_07_030310
@@ -1626,7 +1832,7 @@
 
 - name: "MEDIUM | RHEL-07-030320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when the audit storage volume is full."
   lineinfile:
-      path: "{{ rhel7stig_audisp_config_path }}/audisp-remote.conf"
+      path: /etc/audisp/audisp-remote.conf
       regexp: ^disk_full_action +=
       line: "disk_full_action = {{ rhel7stig_audisp_disk_full_action }}"
   when: rhel_07_030320
@@ -1636,7 +1842,7 @@
 
 - name: "MEDIUM | RHEL-07-030321 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when there is an error sending audit records to a remote system."
   lineinfile:
-      path: "{{ rhel7stig_audisp_config_path }}/audisp-remote.conf"
+      path: /etc/audisp/audisp-remote.conf
       regexp: ^network_failure_action +=
       line: "network_failure_action = {{ rhel7stig_audisp_network_failure_action }}"
   when: rhel_07_030321
@@ -1843,21 +2049,26 @@
       - id: "030560"
         path: "/usr/sbin/semanage"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030570"
         path: "/usr/sbin/setsebool"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030580"
         path: "/usr/bin/chcon"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030590"
         path: "/usr/sbin/setfiles"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030630"
         path: "/usr/bin/passwd"
         key: "privileged-passwd"
       - id: "030640"
         path: "/usr/sbin/unix_chkpwd"
         key: "privileged-passwd"
+        no_perm_x_filter: true
       - id: "030650"
         path: "/usr/bin/gpasswd"
         key: "privileged-passwd"
@@ -1870,36 +2081,47 @@
       - id: "030680"
         path: "/usr/bin/su"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030690"
         path: "/usr/bin/sudo"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030710"
         path: "/usr/bin/newgrp"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030720"
         path: "/usr/bin/chsh"
         key: "privileged-priv_change"
+        no_perm_x_filter: true
       - id: "030740"
         path: "/usr/bin/mount"
         key: "privileged-mount"
+        no_perm_x_filter: true
       - id: "030750"
         path: "/usr/bin/umount"
         key: "privileged-mount"
+        no_perm_x_filter: true
       - id: "030760"
         path: "/usr/sbin/postdrop"
         key: "privileged-postfix"
+        no_perm_x_filter: true
       - id: "030770"
         path: "/usr/sbin/postqueue"
         key: "privileged-postfix"
+        no_perm_x_filter: true
       - id: "030780"
         path: "/usr/libexec/openssh/ssh-keysign"
         key: "privileged-ssh"
+        no_perm_x_filter: true
       - id: "030800"
         path: "/usr/bin/crontab"
         key: "privileged-cron"
+        no_perm_x_filter: true
       - id: "030810"
         path: "/usr/sbin/pam_timestamp_check"
         key: "privileged-pam"
+        no_perm_x_filter: true
       - id: "030840"
         path: "/usr/bin/kmod"
         trivial: yes
@@ -1995,13 +2217,155 @@
       - RHEL-07-031010
       - rsyslog
 
-- name: "MEDIUM | RHEL-07-040100 | PATCH | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040100
+# NOTE: 040520 has to come before 040100 because the naming conventions of STIG do not lend themselves to ordered operations. IE: I need to start the service before I can audit incoming ports to what zones, etc.
+- name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
+  block:
+      - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
+        yum:
+            name: firewalld
+            state: present
+        when:
+            - rhel_07_040520
+            - rhel7stig_firewall_service == "firewalld"
+            - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
+        tags:
+            - RHEL-07-040520
+            - firewall
+      - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
+        yum:
+            name: iptables-services
+            state: present
+        when:
+            - rhel_07_040520
+            - rhel7stig_firewall_service == "iptables"
+            - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
+        tags:
+            - RHEL-07-040520
+            - firewall
+      - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
+        service:
+            name: "{{ rhel7stig_firewall_service }}"
+            state: "{{ rhel7stig_service_started }}"
+            enabled: yes
+        when:
+            - rhel_07_040520
+            - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
+            - rhel7stig_start_firewall_service
+        tags:
+            - RHEL-07-040520
+            - firewall
+  when:
+      - rhel_07_040520
+      - rhel7stig_firewall_service == 'firewalld' or rhel7stig_firewall_service == 'iptables'
+      - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
+      - rhel7stig_disruptive
+  tags:
+      - RHEL-07-040520
+      - firewall
+      - disruption-high
+
+- name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+  block:
+      - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+        block:
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              shell: firewall-cmd --list-all | grep services | cut -d ':' -f 2 | tr " " "\n" | sed '/^$/d' | sort -u
+              register: rhel7stig_PPSM_CLSA_check_firewalld
+              changed_when: false
+              failed_when: false
+              check_mode: no
+              when:
+                  - rhel_07_040100
+              tags:
+                  - RHEL-07-040100
+                  - firewall
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              debug:
+                  msg: "The following task output is what firewalld is accepting on service ports to {{ ansible_hostname }}."
+              changed_when: true
+              when:
+                  - rhel_07_040100
+                  - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
+              tags:
+                  - RHEL-07-040100
+                  - firewall
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              debug: var=rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines
+              changed_when: true
+              when:
+                  - rhel_07_040100
+                  - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
+              tags:
+                  - RHEL-07-040100
+                  - firewall
+        when:
+            - rhel_07_040100
+            - not rhel7stig_system_is_chroot
+            - not rhel7stig_system_is_container
+            - rhel7stig_firewall_service == "firewalld"
+            - rhel7stig_start_firewall_service
+        tags:
+            - RHEL-07-040100
+            - firewall
+      - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+        block:
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              shell: iptables-save | grep -i accept | grep -i input
+              register: rhel7stig_PPSM_CLSA_check_iptables
+              changed_when: false
+              failed_when: false
+              check_mode: no
+              when: rhel_07_040100
+              tags:
+                  - RHEL-07-040100
+                  - firewall
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              debug:
+                  msg: "The following task output is what iptabes is accepting on service ports to {{ ansible_hostname }}."
+              changed_when: true
+              when:
+                  - rhel_07_040100
+                  - rhel7stig_PPSM_CLSA_check_iptables.stdout_lines is defined
+              tags:
+                  - RHEL-07-040100
+                  - firewall
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              debug: var=rhel7stig_PPSM_CLSA_check_iptables.stdout_lines
+              changed_when: true
+              when:
+                  - rhel_07_040100
+                  - rhel7stig_PPSM_CLSA_check_iptables.stdout_lines is defined
+              tags:
+                  - RHEL-07-040100
+                  - firewall
+        when:
+            - rhel_07_040100
+            - not rhel7stig_system_is_chroot
+            - not rhel7stig_system_is_container
+            - rhel7stig_firewall_service == "iptables"
+            - rhel7stig_start_firewall_service
+        tags:
+            - RHEL-07-040100
+            - firewall
+      - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+        debug:
+            msg: "Your configured firewall service is {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false. We cannot audit control RHEL-07-040100 - The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+        changed_when: true
+        when:
+            - rhel_07_040100
+            - not rhel7stig_start_firewall_service
+        tags:
+            - RHEL-07-040100
+            - firewall
+  when:
+      - rhel_07_040100
+      - not rhel7stig_system_is_chroot
+      - not rhel7stig_system_is_container
+      - rhel7stig_disruptive
   tags:
       - RHEL-07-040100
-      - notimplemented
+      - firewall
+      - disruption-high
 
 - name: "MEDIUM | RHEL-07-040110 | PATCH | The Red Hat Enterprise Linux operating system must use a FIPS 140-2 approved cryptographic algorithm for SSH communications."
   lineinfile:
@@ -2054,45 +2418,66 @@
       - ssh
       - dod_logon_banner
 
-- name: "MEDIUM | RHEL-07-040180 | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+- name: "MEDIUM | RHEL-07-040180 | RHEL-07-040190 | RHEL-07-040200 | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
   block:
-      - name: "MEDIUM | RHEL-07-040180 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-        command: grep -i useldapauth /etc/sysconfig/authconfig
+      - name: "MEDIUM | RHEL-07-040180 | RHEL-07-040190 | RHEL-07-040200 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+        shell: systemctl status sssd.service | grep "Active" | cut -d ':' -f1 | tr " " "\n" | sed '/^$/d'
         check_mode: no
         register: rhel_07_040180_audit
         failed_when: no
-        # todo only run this if authconfig is installed, or the file exists
-        # do we want to create it?
-        # failed_when: rhel_07_040180_audit.rc > 1
-        changed_when:
-            - rhel_07_040180_audit.rc == 1
-            - not rhel7stig_skip_for_travis
-
-      - name: "MEDIUM | RHEL-07-040180 | PATCH | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-        command: "true"
+        changed_when: false
+        when:
+            - rhel_07_040180 or
+              rhel_07_040190 or
+              rhel_07_040200
+        tags:
+            - RHEL-07-040180
+            - RHEL-07-040190
+            - RHEL-07-040200
+            - ldap
+      - name: "MEDIUM | RHEL-07-040180 | RHEL-07-040190 | RHEL-07-040200 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+        stat:
+            path: /etc/sssd/sssd.conf
+        register: rhel_07_040180_LDAPconf_audit
         changed_when: no
-        when: "'yes' in rhel_07_040180_audit.stdout"
-  when: rhel_07_040180
+        when:
+            - rhel_07_040180 or
+              rhel_07_040190 or
+              rhel_07_040200
+            - rhel_07_040180_audit.stdout == "Active"
+        tags:
+            - RHEL-07-040180
+            - RHEL-07-040190
+            - RHEL-07-040200
+            - ldap
+      - name: "MEDIUM | RHEL-07-040180 | RHEL-07-040190 | RHEL-07-040200 | PATCH | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+        blockinfile:
+            block: |
+                ldap_id_use_start_tls = true
+                ldap_tls_reqcert = demand
+                ldap_tls_cacert = "{{ rhel_07_040200_cabundle_path }}"
+            path: /etc/sssd/sssd.conf
+            insertafter: "^ldap_search_base*"
+            create: yes
+        when:
+            - rhel_07_040180 or
+              rhel_07_040190 or
+              rhel_07_040200
+            - rhel_07_040180_audit.stdout == "Active"
+        tags:
+            - RHEL-07-040180
+            - RHEL-07-040190
+            - RHEL-07-040200
+            - ldap
+  when:
+      - rhel_07_040180 or
+        rhel_07_040190 or
+        rhel_07_040200
   tags:
       - RHEL-07-040180
-      - ldap
-      - notimplemented
-
-- name: "MEDIUM | RHEL-07-040190 | PATCH | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040190
-  tags:
       - RHEL-07-040190
-      - notimplemented
-
-- name: "MEDIUM | RHEL-07-040200 | PATCH | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040200
-  tags:
       - RHEL-07-040200
-      - notimplemented
+      - ldap
 
 - name: "MEDIUM | RHEL-07-040201 | PATCH | The Red Hat Enterprise Linux operating system must implement virtual address space randomization."
   sysctl:
@@ -2110,6 +2495,7 @@
 - name: "MEDIUM | RHEL-07-040300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all networked systems have SSH installed."
   yum:
       name:
+          - openssh-clients
           - openssh-server
       state: present
   when:
@@ -2127,7 +2513,6 @@
   when:
       - rhel_07_040310
       - rhel7stig_ssh_required
-      - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
   tags:
       - RHEL-07-040310
       - ssh
@@ -2241,7 +2626,7 @@
       create: yes
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?MACs"
-      line: MACs hmac-sha2-256,hmac-sha2-512
+      line: MACs hmac-sha2-512,hmac-sha2-256
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   when:
@@ -2392,7 +2777,7 @@
             dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
-        notify: restart time service
+        notify: restart {{ rhel7stig_time_service }}
         with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
   when:
       - rhel7stig_time_service == 'ntpd'
@@ -2418,7 +2803,7 @@
         replace:
             dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
             regexp: '^server \S+( \w+)?$'
-        notify: restart time service
+        notify: restart {{ rhel7stig_time_service }}
   when:
       - rhel7stig_time_service == 'chronyd'
       - rhel_07_040500
@@ -2432,7 +2817,7 @@
       dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
       block: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].block }}"
       state: present
-  notify: restart time service
+  notify: restart {{ rhel7stig_time_service }}
   when:
       - rhel7stig_time_service == 'chronyd'
       - rhel_07_040500
@@ -2445,18 +2830,6 @@
       name: "{{ rhel7stig_firewall_service }}"
       state: present
   when: rhel_07_040520
-  tags:
-      - RHEL-07-040520
-      - firewall
-
-- name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
-  service:
-      name: "{{ rhel7stig_firewall_service }}"
-      state: "{{ rhel7stig_service_started }}"
-      enabled: yes
-  when:
-      - rhel_07_040520
-      - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
   tags:
       - RHEL-07-040520
       - firewall
@@ -2570,8 +2943,6 @@
   block:
       - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
         command: rpm -q postfix
-        args:
-            warn: no
         failed_when: no
         check_mode: no
         changed_when: no
@@ -2613,19 +2984,15 @@
 - name: "MEDIUM | RHEL-07-040730 | PATCH | The Red Hat Enterprise Linux operating system must not have an X Windows display manager installed unless approved."
   yum:
       name:
-          - "{{ ansible_distribution_major_version is version_compare('8', '<') | ternary('@x11', '@base-x') }}"
+          - "@x11"
           - xorg-x11-server-common
       state: absent
-  check_mode: "{{ rhel7stig_disruptive_check_mode }}"
   when:
       - not rhel7stig_gui
       - rhel_07_040730
-      - rhel7stig_disruptive
   tags:
       - RHEL-07-040730
-      - disruption-high
       - x11
-      - gui
 
 - name: "MEDIUM | RHEL-07-040740 | PATCH | The Red Hat Enterprise Linux operating system must not be performing packet forwarding unless the system is a router."
   sysctl:
@@ -2642,33 +3009,86 @@
       - ipv4
 
 - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
-  command: "true"
-  changed_when: no
+  block:
+      - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
+        shell: cat /etc/fstab | grep nfs
+        register: rhel_07_040750_nfssec_check
+        changed_when: false
+        failed_when: false
+        check_mode: no
+        when: rhel_07_040750
+        tags:
+            - RHEL-07-040750
+
+      - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
+        debug:
+            msg: "There were no applicable NFS mounts found to audit per RHEL-07-040750."
+        changed_when: true
+        when:
+            - rhel_07_040750
+            - rhel_07_040750_nfssec_check.stdout_lines is not defined
+        tags:
+            - RHEL-07-040750
+
+      - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
+        debug:
+            msg: "The following NFS mount is required to be audited per RHEL-07-040750: {{ item }} - If the system is mounting file systems via NFS and has the sec option without the 'krb5:krb5i:krb5p' settings, the 'sec' option has the 'sys' setting, or the 'sec' option is missing, this is a finding."
+        with_items:
+            - "{{ rhel_07_040750_nfssec_check.stdout_lines }}"
+        changed_when: true
+        when:
+            - rhel_07_040750
+            - rhel_07_040750_nfssec_check.stdout_lines is defined
+        tags:
+            - RHEL-07-040750
+
   when: rhel_07_040750
   tags:
       - RHEL-07-040750
-      - notimplemented
 
-- name: "MEDIUM | RHEL-07-040810 | PATCH | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-  command: "true"
-  changed_when: no
-  when: rhel_07_040810
+- name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
+  block:
+      - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
+        include_tasks: audit_firewalld.yml
+        when:
+            - rhel_07_040810
+            - rhel7stig_firewall_service == "firewalld"
+        tags:
+            - RHEL-07-040810
+            - firewall
+      - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
+        include_tasks: audit_iptables.yml
+        when:
+            - rhel_07_040810
+            - rhel7stig_firewall_service != "firewalld"
+        tags:
+            - RHEL-07-040810
+            - firewall
+      - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
+        debug:
+            msg: "Your configured firewall service is {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false. We cannot audit control RHEL-07-040810. Please set the variable rhel7stig_start_firewall_service to true in the defaults file of this role and re-run the playbook."
+        changed_when: true
+        when:
+            - not rhel7stig_start_firewall_service
+        tags:
+            - RHEL-07-040810
+            - firewall
+  when:
+      - rhel_07_040810
+      - rhel7stig_disruptive
   tags:
       - RHEL-07-040810
-      - notimplemented
+      - firewall
+      - disruption-high
 
 - name: "MEDIUM | RHEL-07-040820 | PATCH | The Red Hat Enterprise Linux operating system must not have unauthorized IP tunnels configured."
   yum:
       name:
           - libreswan
       state: absent
-  check_mode: "{{ rhel7stig_disruptive_check_mode }}"
-  when:
-      - rhel_07_040820
-      - rhel7stig_disruptive
+  when: rhel_07_040820
   tags:
       - RHEL-07-040820
-      - disruption-high
 
 - name: "MEDIUM | RHEL-07-040830 | PATCH | The Red Hat Enterprise Linux operating system must not forward IPv6 source-routed packets."
   sysctl:
@@ -2683,9 +3103,20 @@
       - ipv6
 
 - name: "MEDIUM | RHEL-07-041001 | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
-  yum:
-      name: "{{ rhel7stig_mfa_package }}"
-      state: present
+  block:
+      - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
+        yum:
+            name:
+                - esc
+                - authconfig-gtk
+            state: present
+        when: rhel7stig_gui
+
+      - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
+        yum:
+            name: pam_pkcs11
+            state: present
+
   when: rhel_07_041001
   tags:
       - RHEL-07-041001
@@ -2724,9 +3155,7 @@
       path: /etc/pam_pkcs11/pam_pkcs11.conf
       regexp: (?im)^([ \t]*cert_policy[ \t]*=(?:[^ \t\n]|[ \t](?!ocsp_on,))*?)(?:[ \t]ocsp_on,[ \t]*)?[ \t]*((?:[^,\n]|,(?![ \t]*ocsp_on,))*?)(?:,[ \t]*ocsp_on)?;$
       replace: '\1 ocsp_on, \2;'
-  when:
-      - rhel_07_041003
-      - ansible_distribution_major_version is version_compare('8', '<')
+  when: rhel_07_041003
   tags:
       - RHEL-07-041003
 
