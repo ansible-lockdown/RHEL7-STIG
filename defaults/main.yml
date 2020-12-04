@@ -109,7 +109,8 @@ rhel_07_010280: true
 rhel_07_010310: true
 rhel_07_010320: true
 rhel_07_010330: true
-rhel_07_010340: true
+# -------------------- change back to true after troubleshooting. Requires pw to use sudo on the prelim task used in this control
+rhel_07_010340: false
 rhel_07_010350: true
 rhel_07_010430: true
 rhel_07_010460: true
@@ -331,6 +332,7 @@ rhel_07_020730_WWP_Change: true
 rhel7stig_min_supported_os_ver:
     RedHat: "7.6"
     CentOS: "7.6.1810"
+    OracleLinux: "7.9"
 
 # RHEL-07-040740
 # If system is not router, run tasks that disable router functions.
@@ -623,6 +625,9 @@ rhel7stig_boot_part: "{{ rhel_07_boot_part.stdout }}"
 rhel7stig_machine_uses_uefi: "{{ rhel_07_sys_firmware_efi.stat.exists }}"
 rhel7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
 rhel7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
+
+oracle7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
+oracle7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
 
 rhel7stig_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
 
