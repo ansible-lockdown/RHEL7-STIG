@@ -287,6 +287,7 @@
   when:
       - rhel_07_020210 or rhel_07_020220
       - not rhel7stig_system_is_container
+      - ansible_distribution_file_variety == "RedHat"
   tags:
       - RHEL-07-020210
       - RHEL-07-020220
