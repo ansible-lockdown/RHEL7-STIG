@@ -112,8 +112,7 @@ rhel_07_010280: true
 rhel_07_010310: true
 rhel_07_010320: true
 rhel_07_010330: true
-# -------------------- change back to true after troubleshooting. Requires pw to use sudo on the prelim task used in this control
-rhel_07_010340: false
+rhel_07_010340: true
 rhel_07_010350: true
 rhel_07_010430: true
 rhel_07_010460: true
