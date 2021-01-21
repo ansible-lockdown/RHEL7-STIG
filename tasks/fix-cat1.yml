@@ -234,7 +234,7 @@ tags:
     name: rsh-server
     state: absent
   vars:
-    ansible_python_interpreter: /bin/python
+    ansible_python_interpreter: "{{ python2_bin }}"
   when: rhel_07_020000
   tags:
   - RHEL-07-020000
@@ -245,7 +245,7 @@ tags:
     name: ypserv
     state: absent
   vars:
-    ansible_python_interpreter: /bin/python
+    ansible_python_interpreter: "{{ python2_bin }}"
   when: rhel_07_020010
   tags:
   - RHEL-07-020010
@@ -362,7 +362,7 @@ tags:
       name: dracut-fips
       state: present
     vars:
-      ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: "{{ python2_bin }}"
     notify: rebuild initramfs
 
   - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
@@ -474,7 +474,7 @@ tags:
     name: telnet-server
     state: absent
   vars:
-    ansible_python_interpreter: /bin/python
+    ansible_python_interpreter: "{{ python2_bin }}"
   when: 
   - rhel_07_021710
   tags:
@@ -488,7 +488,7 @@ tags:
 #      name: audit
 #      state: present
 #    vars:
-#      ansible_python_interpreter: /bin/python
+#      ansible_python_interpreter: "{{ python2_bin }}"
 
 #  - name: "HIGH | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
 #    service:
@@ -511,7 +511,7 @@ tags:
       name: "{{ rhel7stig_av_package.package }}"
       state: present
     vars:
-      ansible_python_interpreter: /bin/python
+      ansible_python_interpreter: "{{ python2_bin }}"
   - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
     service:
       name: "{{ rhel7stig_av_package.service }}"
@@ -583,7 +583,7 @@ tags:
     name: vsftpd
     state: absent
   vars:
-    ansible_python_interpreter: /bin/python
+    ansible_python_interpreter: "{{ python2_bin }}"
   when:
   - not rhel7stig_vsftpd_required
   - rhel_07_040690
@@ -598,7 +598,7 @@ tags:
     - tftp-server
     state: absent
   vars:
-    ansible_python_interpreter: /bin/python
+    ansible_python_interpreter: "{{ python2_bin }}"
   when:
   - not rhel7stig_tftp_required
   - rhel_07_040700
