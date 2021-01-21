@@ -1,10 +1,9 @@
 ---
-# If you would like a report at the end accordin to OpenSCAP as to the report results
-# then you should set rhel7stig_oscap_scan to true/yes.
-# NOTE: This requires the python_xmltojson package on the control host.
-rhel7stig_oscap_scan: no
-rhel7stig_report_dir: /tmp
+## Python Binary
+## This is used for python3 Installatoins where python2 OS modules are used in ansible
+python2_bin: /bin/python2.7
 
+## STIG category to run
 rhel7stig_cat1_patch: yes
 rhel7stig_cat2_patch: yes
 rhel7stig_cat3_patch: yes
