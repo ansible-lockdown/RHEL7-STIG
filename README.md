@@ -5,7 +5,7 @@ RHEL 7 DISA STIG
 
 Configure a RHEL 7 system to be DISA STIG compliant. All findings will be audited by default. Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default. Disruptive finding remediation can be enabled by setting `rhel7stig_disruption_high` to `yes`.
 
-This role is based on RHEL 7 DISA STIG: [Version 2, Rel 4 released on July 26, 2019](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_Red_Hat_Enterprise_Linux_7_V2R4_STIG.zip).
+This role is based on RHEL 7 DISA STIG: [Version 3, Rel 1 released on Oct 23, 2020](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R1_STIG.zip).
 
 Requirements
 ------------
@@ -15,15 +15,16 @@ RHEL 7 or CentOS 7 - Other versions are not supported.
 
 Dependencies
 ------------
+Python3
+Ansible 2.9+
 
 The following packages must be installed on the controlling host/host where ansible is executed:
 
 - python2-passlib (or just passlib, if using python3)
 - python-lxml
-- python-xmltodict
 - python-jmespath
 
-Package 'python-xmltodict' is required if you enable the OpenSCAP tool installation and run a report. Packages python(2)-passlib and python-jmespath are required for tasks with custom filters or modules. These are all required on the controller host that executes Ansible.
+Packages python(2)-passlib and python-jmespath are required for tasks with custom filters or modules. These are all required on the controller host that executes Ansible.
 
 
 Role Variables
