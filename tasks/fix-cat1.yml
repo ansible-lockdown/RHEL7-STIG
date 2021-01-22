@@ -47,8 +47,8 @@
   block:
   - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
     shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
-      args:
-        warn: no
+    args:
+      warn: no
     check_mode: no
     failed_when: no
     changed_when: rhel_07_010020_audit.stdout != ""
@@ -67,10 +67,10 @@
     with_items: "{{ rhel_07_010020_audit.stdout_lines }}"
     ignore_errors: yes
     when: rhel_07_010020_audit.stdout_lines | length > 0
-when: 
-- rhel_07_010020
-tags:
-- RHEL-07-010020
+  when: 
+  - rhel_07_010020
+  tags:
+  - RHEL-07-010020
 
 - name: "HIGH | RHEL-07-010290 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
   replace:
@@ -153,72 +153,72 @@ tags:
       "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
       "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
       explicitly create user.cfg file to work around ansible bug https://github.com/ansible/ansible/pull/59823
-      shell: test -f {{ file_q }} && echo exists || {{ create_cmd }}
-      check_mode: ansible_check_mode is not defined
-      register: rhel7stig_create_grub_user_cfg
-      changed_when:
-      - rhel7stig_create_grub_user_cfg.stdout == "created"
-      failed_when:
-      - rhel7stig_create_grub_user_cfg.stdout != "created"
-      - rhel7stig_create_grub_user_cfg.stdout != "exists"
-      vars:
-        file_q: "{{ (rhel7stig_grub_cfg_path | dirname ~ '/user.cfg') | quote }}"
-        create_cmd: "({{ ansible_check_mode | ternary('', 'touch ' ~ file_q ~ ' && ') }}echo created)"
-      when: ansible_distribution_file_variety == "RedHat"
+    shell: test -f {{ file_q }} && echo exists || {{ create_cmd }}
+    check_mode: ansible_check_mode is not defined
+    register: rhel7stig_create_grub_user_cfg
+    changed_when:
+    - rhel7stig_create_grub_user_cfg.stdout == "created"
+    failed_when:
+    - rhel7stig_create_grub_user_cfg.stdout != "created"
+    - rhel7stig_create_grub_user_cfg.stdout != "exists"
+    vars:
+      file_q: "{{ (rhel7stig_grub_cfg_path | dirname ~ '/user.cfg') | quote }}"
+      create_cmd: "({{ ansible_check_mode | ternary('', 'touch ' ~ file_q ~ ' && ') }}echo created)"
+    when: ansible_distribution_file_variety == "RedHat"
 
-    - name: |
+  - name: |
         "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
         "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
         explicitly create user.cfg file to work around ansible bug https://github.com/ansible/ansible/pull/59823
-      shell: test -f {{ file_q }} && echo exists || {{ create_cmd }}
-      check_mode: ansible_check_mode is not defined
-      register: rhel7stig_create_grub_user_cfg
-      changed_when:
-      - rhel7stig_create_grub_user_cfg.stdout == "created"
-      failed_when:
-      - rhel7stig_create_grub_user_cfg.stdout != "created"
-      - rhel7stig_create_grub_user_cfg.stdout != "exists"
-      vars:
-        file_q: "{{ (oracle7stig_grub_cfg_path | dirname ~ '/user.cfg') | quote }}"
-        create_cmd: "({{ ansible_check_mode | ternary('', 'touch ' ~ file_q ~ ' && ') }}echo created)"
-      when: ansible_distribution_file_variety == "OracleLinux"
+    shell: test -f {{ file_q }} && echo exists || {{ create_cmd }}
+    check_mode: ansible_check_mode is not defined
+    register: rhel7stig_create_grub_user_cfg
+    changed_when:
+    - rhel7stig_create_grub_user_cfg.stdout == "created"
+    failed_when:
+    - rhel7stig_create_grub_user_cfg.stdout != "created"
+    - rhel7stig_create_grub_user_cfg.stdout != "exists"
+    vars:
+      file_q: "{{ (oracle7stig_grub_cfg_path | dirname ~ '/user.cfg') | quote }}"
+      create_cmd: "({{ ansible_check_mode | ternary('', 'touch ' ~ file_q ~ ' && ') }}echo created)"
+    when: ansible_distribution_file_variety == "OracleLinux"
 
-    - name: |
-        "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-        "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-      lineinfile:
-        path: "{{ rhel7stig_grub_cfg_path | dirname }}/user.cfg"
-        create: yes
-        regexp: ^GRUB2_PASSWORD=
-        line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-      notify: confirm grub2 user cfg
-      when: ansible_distribution_file_variety == "RedHat"
+  - name: |
+      "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+      "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+    lineinfile:
+      path: "{{ rhel7stig_grub_cfg_path | dirname }}/user.cfg"
+      create: yes
+      regexp: ^GRUB2_PASSWORD=
+      line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+    notify: confirm grub2 user cfg
+    when: ansible_distribution_file_variety == "RedHat"
 
-    - name: |
-        "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-        "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-      lineinfile:
-        path: "{{ rhel7stig_grub_cfg_path | dirname }}/user.cfg"
-        create: yes
-        regexp: ^GRUB2_PASSWORD=
-        line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-      notify: confirm grub2 user cfg
-      when: ansible_distribution_file_variety == "OracleLinux"
+  - name: |
+      "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+      "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+    lineinfile:
+      path: "{{ rhel7stig_grub_cfg_path | dirname }}/user.cfg"
+      create: yes
+      regexp: ^GRUB2_PASSWORD=
+      line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+    notify: confirm grub2 user cfg
+    when: ansible_distribution_file_variety == "OracleLinux"
 
-    - name: |
-        "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-        "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-      lineinfile:
-        dest: /etc/grub.d/01_users
-        insertafter: EOF
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      notify: confirm grub2 user cfg
-      with_items:
-      - regexp: ^\s*set superusers=
-        line: '    set superusers="root"'
-      - regexp: ^\s*export superusers
-        line: '    export superusers'
+  - name: |
+      "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+      "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+    lineinfile:
+      dest: /etc/grub.d/01_users
+      insertafter: EOF
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    notify: confirm grub2 user cfg
+    with_items:
+    - regexp: ^\s*set superusers=
+      line: '    set superusers="root"'
+    - regexp: ^\s*export superusers
+      line: '    export superusers'
   when:
   - rhel_07_010482 or
     rhel_07_010491
@@ -251,16 +251,19 @@ tags:
   - RHEL-07-020010
   - ypserv
 
-- name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+- name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have bee
+n digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   block:
-  - name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+  - name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have b
+een digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
     lineinfile:
       dest: /etc/yum.conf
       regexp: ^gpgcheck
       line: gpgcheck=1
       insertafter: '\[main\]'
 
-  - name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+  - name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have b
+een digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
     lineinfile:
       dest: /etc/yum.conf
       regexp: ^gpgcheck
@@ -271,7 +274,8 @@ tags:
   - RHEL-07-020050
   - yum
 
-- name: "HIGH | RHEL-07-020060 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+- name: "HIGH | RHEL-07-020060 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have bee
+n digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   lineinfile:
     dest: /etc/yum.conf
     regexp: ^localpkg_gpgcheck
@@ -355,9 +359,11 @@ tags:
   tags:
   - RHEL-07-020310
 
-- name: "HIGH | RHEL-07-021350 | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+- name: "HIGH | RHEL-07-021350 | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-re
+st protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
   block:
-  - name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+  - name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring 
+data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
     package:
       name: dracut-fips
       state: present
@@ -481,16 +487,19 @@ tags:
   - RHEL-07-021710
   - telnet
 
-#- name: "HIGH | RHEL-07-030000 | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+#- name: "HIGH | RHEL-07-030000 | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source 
+of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
 #  block:
-#  - name: "HIGH | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+#  - name: "HIGH | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, t
+he source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
 #    package:
 #      name: audit
 #      state: present
 #    vars:
 #      ansible_python_interpreter: "{{ python2_bin }}"
 
-#  - name: "HIGH | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+#  - name: "HIGH | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, t
+he source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
 #    service:
 #      name: auditd
 #      state: "{{ rhel7stig_service_started }}"
