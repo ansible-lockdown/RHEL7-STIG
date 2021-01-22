@@ -204,7 +204,7 @@
 - name: "PRELIM | RHEL-07-020680 | RHEL-07-020710 | RHEL-07-020720 | RHEL-07-020730 | Gather local interactive user directories"
   shell: "getent passwd { {{ rhel7stig_int_gid }}..65535} | cut -d: -f6 | sort -u | grep -v '/var/' | grep -v '/nonexistent/*' | grep -v '/run/*'"
   register: rhel_07_020680_getent
-  changed_when: rhel_07_020680_getent.stdout_lines is defined
+  changed_when: false #rhel_07_020680_getent.stdout_lines is defined
   failed_when: false
   tags:
   - RHEL-07-020680
