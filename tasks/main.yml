@@ -34,27 +34,21 @@
 
 - name: Include CAT I patches
   import_tasks: fix-cat1.yml
-  when: rhel7stig_cat1_patch | bool
+  when: rhel7stig_cat1_patch
   tags:
   - cat1
   - high
 
 - name: Include CAT II patches
   import_tasks: fix-cat2.yml
-  when: rhel7stig_cat2_patch | bool
+  when: rhel7stig_cat2_patch
   tags:
   - cat2
   - medium
 
 - name: Include CAT III patches
   import_tasks: fix-cat3.yml
-  when: rhel7stig_cat3_patch | bool
+  when: rhel7stig_cat3_patch 
   tags:
   - cat3
   - low
-
-- name: run the OpenSCAP reporting tool again
-  import_tasks: audit_oscap_scan_after.yml
-  when: rhel7stig_oscap_scan
-  tags:
-  - oscapreport
