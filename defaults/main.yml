@@ -1,6 +1,6 @@
 ---
 ## Python Binary
-## This is used for python3 Installatoins where python2 OS modules are used in ansible
+## This is used for python3 Installations where python2 OS modules are used in ansible
 python2_bin: /bin/python2.7
 
 ## STIG category to run
