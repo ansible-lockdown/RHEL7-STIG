@@ -1,255 +1,262 @@
 ---
 - name: "LOW | RHEL-07-020200 | PATCH | The Red Hat Enterprise Linux operating system must remove all software components after updated versions have been installed."
   lineinfile:
-      dest: /etc/yum.conf
-      regexp: ^#?clean_requirements_on_remove
-      line: clean_requirements_on_remove=1
-      insertafter: '\[main\]'
-  when: rhel_07_020200
+    dest: /etc/yum.conf
+    regexp: ^#?clean_requirements_on_remove
+    line: clean_requirements_on_remove=1
+    insertafter: '\[main\]'
+  when: 
+  - rhel_07_020200
   tags:
-      - RHEL-07-020200
+  - RHEL-07-020200
 
 - name: "LOW | RHEL-07-020300 | The Red Hat Enterprise Linux operating system must be configured so that all Group Identifiers (GIDs) referenced in the /etc/passwd file are defined in the /etc/group file."
   block:
-      - name: "LOW | RHEL-07-020300 | PATCH | Check /etc/passwd entries"
-        shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
-        changed_when: no
-        failed_when: no
-        check_mode: no
-        register: passwd_gid_check
+  - name: "LOW | RHEL-07-020300 | PATCH | Check /etc/passwd entries"
+    shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
+    changed_when: no
+    failed_when: no
+    check_mode: no
+    register: passwd_gid_check
 
-      - name: "LOW | RHEL-07-020300 | PATCH | Print warning about users with invalid GIDs missing GID entries in /etc/group"
-        debug:
-            msg: "WARNING: The following users have non-existent GIDs: {{ passwd_gid_check.stdout_lines | join (', ') }}"
-        changed_when:
-            - rhel7stig_audit_complex
-        when: passwd_gid_check.stdout_lines
+  - name: "LOW | RHEL-07-020300 | PATCH | Print warning about users with invalid GIDs missing GID entries in /etc/group"
+    debug:
+      msg: "WARNING: The following users have non-existent GIDs: {{ passwd_gid_check.stdout_lines | join (', ') }}"
+    changed_when:
+    - rhel7stig_audit_complex
+    when: passwd_gid_check.stdout_lines
   when:
-      - rhel_07_020300
-      - rhel7stig_complex
+  - rhel_07_020300
+  - rhel7stig_complex
   tags:
-      - RHEL-07-020300
-      - complexity-high
-      - passwd
+  - RHEL-07-020300
+  - complexity-high
+  - passwd
 
 - name: |
-      "LOW | RHEL-07-021022 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nodev option."
-      "LOW | RHEL-07-021023 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nosuid option."
-      "LOW | RHEL-07-021024 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the noexec option."
+    "LOW | RHEL-07-021022 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nodev option."
+    "LOW | RHEL-07-021023 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nosuid option."
+    "LOW | RHEL-07-021024 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the noexec option."
   mount:
-      path: /dev/shm
-      state: mounted
-      src: "{{ dev_shm_mount.device | default('tmpfs') }}"
-      fstype: "{{ dev_shm_mount.fstype | default('tmpfs') }}"
-      opts: "{{ dev_shm_mount_opts }}"
+    path: /dev/shm
+    state: mounted
+    src: "{{ dev_shm_mount.device | default('tmpfs') }}"
+    fstype: "{{ dev_shm_mount.fstype | default('tmpfs') }}"
+    opts: "{{ dev_shm_mount_opts }}"
   when: rhel_07_021022 or rhel_07_021023 or rhel_07_021024
   vars:
-      dev_shm_mount: "{{ ansible_mounts | json_query('[?mount == `/dev/shm`] | [0]') }}"
-      dev_shm_mount_opts: "{{ dev_shm_mount.options | default('defaults') }},nodev,nosuid{{ (rhel_07_021024) | ternary(',noexec', '') }}"
+    dev_shm_mount: "{{ ansible_mounts | json_query('[?mount == `/dev/shm`] | [0]') }}"
+    dev_shm_mount_opts: "{{ dev_shm_mount.options | default('defaults') }},nodev,nosuid{{ (rhel_07_021024) | ternary(',noexec', '') }}"
   tags:
-      - RHEL-07-021022
-      - RHEL-07-021023
-      - RHEL-07-021024
+  - RHEL-07-021022
+  - RHEL-07-021023
+  - RHEL-07-021024
 
 - name: "LOW | RHEL-07-021310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that a separate file system is used for user home directories (such as /home or an equivalent)."
   debug:
-      msg: "WARNING: /home is not mounted on a separate partition"
+    msg: "WARNING: /home is not mounted on a separate partition"
   changed_when:
-      - rhel7stig_audit_complex
+  - rhel7stig_audit_complex
   when:
-      - not rhel7stig_system_is_container
-      - rhel_07_021310
-      - rhel7stig_complex
-      - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length == 0
+  - not rhel7stig_system_is_container
+  - rhel_07_021310
+  - rhel7stig_complex
+  - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length == 0
   tags:
-      - RHEL-07-021310
-      - complexity-high
-      - mount
-      - home
+  - RHEL-07-021310
+  - complexity-high
+  - mount
+  - home
 
 - name: "LOW | RHEL-07-021320 | PATCH | The Red Hat Enterprise Linux operating system must use a separate file system for /var."
   debug:
-      msg: "WARNING: /var is not mounted on a separate partition"
+    msg: "WARNING: /var is not mounted on a separate partition"
   changed_when:
-      - rhel7stig_audit_complex
+  - rhel7stig_audit_complex
   when:
-      - not rhel7stig_system_is_container
-      - rhel_07_021320
-      - rhel7stig_complex
-      - ansible_mounts | selectattr('mount', 'match', '^/var$') | list | length == 0
+  - not rhel7stig_system_is_container
+  - rhel_07_021320
+  - rhel7stig_complex
+  - ansible_mounts | selectattr('mount', 'match', '^/var$') | list | length == 0
   tags:
-      - RHEL-07-021320
-      - complexity-high
-      - mount
-      - var
+  - RHEL-07-021320
+  - complexity-high
+  - mount
+  - var
 
 - name: "LOW | RHEL-07-021330 | PATCH | The Red Hat Enterprise Linux operating system must use a separate file system for the system audit data path."
   debug:
-      msg: "WARNING: /var/log/audit is not mounted on a separate partition"
+    msg: "WARNING: /var/log/audit is not mounted on a separate partition"
   changed_when:
-      - rhel7stig_audit_complex
+  - rhel7stig_audit_complex
   when:
-      - not rhel7stig_system_is_container
-      - rhel_07_021330
-      - rhel7stig_complex
-      - ansible_mounts | selectattr('mount', 'match', '^/var/log/audit$') | list | length == 0
+  - not rhel7stig_system_is_container
+  - rhel_07_021330
+  - rhel7stig_complex
+  - ansible_mounts | selectattr('mount', 'match', '^/var/log/audit$') | list | length == 0
   tags:
-      - RHEL-07-021330
-      - complexity-high
-      - mount
-      - auditd
+  - RHEL-07-021330
+  - complexity-high
+  - mount
+  - auditd
 
 - name: "LOW | RHEL-07-021340 | PATCH | The Red Hat Enterprise Linux operating system must use a separate file system for /tmp (or equivalent)."
   systemd:
-      name: tmp.mount
-      daemon_reload: "{{ rhel7stig_systemd_daemon_reload }}"
-      enabled: yes
-      masked: no
-      state: "{{ rhel7stig_service_started }}"
+    name: tmp.mount
+    daemon_reload: "{{ rhel7stig_systemd_daemon_reload }}"
+    enabled: yes
+    masked: no
+    state: "{{ rhel7stig_service_started }}"
   when:
-      - rhel_07_021340
-      - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
+  - rhel_07_021340
+  - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
   tags:
-      - RHEL-07-021340
-      - mount
-      - tmp
+  - RHEL-07-021340
+  - mount
+  - tmp
 
 - name: |
-      "LOW | RHEL-07-021600 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs)."
-      "LOW | RHEL-07-021610 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify extended attributes."
+    "LOW | RHEL-07-021600 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs)."
+    "LOW | RHEL-07-021610 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify extended attributes."
   template:
-      src: aide.conf.j2
-      dest: /etc/aide.conf
-      owner: root
-      group: root
-      mode: '0600'
+    src: aide.conf.j2
+    dest: /etc/aide.conf
+    owner: root
+    group: root
+    mode: '0600'
   when:
-      - rhel_07_021600 or
-        rhel_07_021610
+    - rhel_07_021600 or
+      rhel_07_021610
   tags:
-      - RHEL-07-021600
-      - RHEL-07-021610
-      - aide
+    - RHEL-07-021600
+    - RHEL-07-021610
+    - aide
 
 - name: "LOW | RHEL-07-040000 | PATCH | The Red Hat Enterprise Linux operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
   lineinfile:
-      state: present
-      dest: /etc/security/limits.conf
-      insertbefore: '^# End of file'
-      regexp: '^\*.*maxlogins'
-      line: '*               hard    maxlogins       {{ rhel7stig_maxlogins }}'
-  when: rhel_07_040000
+    state: present
+    dest: /etc/security/limits.conf
+    insertbefore: '^# End of file'
+    regexp: '^\*.*maxlogins'
+    line: '*               hard    maxlogins       {{ rhel7stig_maxlogins }}'
+  when: 
+  - rhel_07_040000
   tags:
-      - RHEL-07-040000
+  - RHEL-07-040000
 
 - name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
   block:
-      - name: "LOW | RHEL-07-040530 | Update pam_lastlog control to satisfy benchmark."
-        pamd:
-            name: postlogin
-            type: session
-            control: "{{ old_control }}"
-            new_control: "{{ default_control }}"
-            module_path: pam_lastlog.so
-            state: updated
+  - name: "LOW | RHEL-07-040530 | Update pam_lastlog control to satisfy benchmark."
+    pamd:
+      name: postlogin
+      type: session
+      control: "{{ old_control }}"
+      new_control: "{{ default_control }}"
+      module_path: pam_lastlog.so
+      state: updated
 
-      - name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
-        pamd:
-            name: postlogin
-            state: args_absent
-            type: session
-            control: "{{ item }}"
-            module_path: pam_lastlog.so
-            module_arguments: silent
-        with_items:
-            - '[default=1]'
-            - "{{ default_control }}"
+  - name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
+    pamd:
+      name: postlogin
+      state: args_absent
+      type: session
+      control: "{{ item }}"
+      module_path: pam_lastlog.so
+      module_arguments: silent
+    with_items:
+    - '[default=1]'
+    - "{{ default_control }}"
 
-      - name: "MEDIUM | RHEL-07-010270 | PATCH | Remove old remediation"
-        blockinfile:
-            state: absent
-            path: /etc/pam.d/postlogin
-            insertafter: '^# User changes will be destroyed'
-            block: |
-                ### RHEL-07-040530 ###
-                session required pam_lastlog.so showfailed
+  - name: "MEDIUM | RHEL-07-010270 | PATCH | Remove old remediation"
+    blockinfile:
+      state: absent
+      path: /etc/pam.d/postlogin
+      insertafter: '^# User changes will be destroyed'
+      block: |
+        ### RHEL-07-040530 ###
+        session required pam_lastlog.so showfailed
   vars:
-      default_control: "{{ rhel7stig_workaround_for_disa_benchmark | ternary('required', 'optional') }}"
-      old_control: "{{ rhel7stig_workaround_for_disa_benchmark | ternary('optional', 'required') }}"
-  when: rhel_07_040530
+    default_control: "{{ rhel7stig_workaround_for_disa_benchmark | ternary('required', 'optional') }}"
+    old_control: "{{ rhel7stig_workaround_for_disa_benchmark | ternary('optional', 'required') }}"
+  when: 
+  - rhel_07_040530
   tags:
-      - RHEL-07-040530
+  - RHEL-07-040530
 
 # NOTE: The following does not address that /etc/resolv.conf can be modified by DHCP when running networkmanager, and thus having two DNS servers may be a config setting not on the hosts, but on the DHCP service.
 - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
   block:
-      # Audit the /etc/nsswitch.conf config
-      - name: "LOW | RHEL-07-040600 | AUDIT | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        shell: grep "dns" /etc/nsswitch.conf | grep -v "#"
-        changed_when: no
-        failed_when: false
-        check_mode: no
-        register: rhel_07_040600_nsswitch_check
-        when: rhel_07_040600
-        tags:
-            - RHEL-07-040600
-      # Determine if networkmanager is setting /etc/resolv.conf
-      - name: "LOW | RHEL-07-040600 | AUDIT | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        command: grep "# Generated by NetworkManager" /etc/resolv.conf
-        changed_when: no
-        failed_when: false
-        check_mode: no
-        register: rhel_07_040600_networkmanager_check
-        when: rhel_07_040600
-        tags:
-            - RHEL-07-040600
-      # Determine number of nameserver lines in /etc/resolv.conf
-      - name: "LOW | RHEL-07-040600 | AUDIT | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        shell: grep -i "nameserver" /etc/resolv.conf | grep -v "#" | wc -l
-        changed_when: no
-        failed_when: false
-        check_mode: no
-        register: rhel_07_040600_nameserver_count
-        when: rhel_07_040600
-        tags:
-            - RHEL-07-040600
-      # Change resolv.conf if dns is not present in nsswitch.conf
-      - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        shell: echo -n > /etc/resolv.conf && chattr +i /etc/resolv.conf
-        when:
-            - rhel_07_040600
-            - "'dns' not in rhel_07_040600_nsswitch_check.stdout"
-        tags:
-            - RHEL-07-040600
-      # Set resolv.conf if dns is set in nsswitch.conf
-      - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        lineinfile:
-            dest: /etc/resolv.conf
-            regexp: '^nameserver'
-            line: namserver "{{ item }}"
-            insertafter: '^search'
-        with_items:
-            - "{{ rhel_07_040600_dns_servers }}"
-        when:
-            - rhel_07_040600
-            - rhel_07_040600_networkmanager_check != '# Generated by NetworkManager'
-            - rhel_07_040600_nameserver_count.stdout|int < 2
-        tags:
-            - RHEL-07-040600
-      # If networkmanager is setting resolv.conf, debug msg to audit/change DNS settings in dhcp.
-      - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        debug:
-            msg: "The file /etc/resolv.conf is managed by network manager and shows less than two DNS servers configured. Please correct this in your DHCP configurations."
-        changed_when: true
-        when:
-            - rhel_07_040600
-            - rhel_07_040600_networkmanager_check == '# Generated by NetworkManager'
-            - rhel_07_040600_nameserver_count.stdout|int < 2
-        tags:
-            - RHEL-07-040600
-  when:
+  # Audit the /etc/nsswitch.conf config
+  - name: "LOW | RHEL-07-040600 | AUDIT | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
+      shell: grep "dns" /etc/nsswitch.conf | grep -v "#"
+      changed_when: no
+      failed_when: false
+      check_mode: no
+      register: rhel_07_040600_nsswitch_check
+      when: 
       - rhel_07_040600
-      - not rhel7stig_system_is_chroot
-      - not rhel7stig_system_is_container
-  tags:
+      tags:
       - RHEL-07-040600
+  # Determine if networkmanager is setting /etc/resolv.conf
+  - name: "LOW | RHEL-07-040600 | AUDIT | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
+      command: grep "# Generated by NetworkManager" /etc/resolv.conf
+      changed_when: no
+      failed_when: false
+      check_mode: no
+      register: rhel_07_040600_networkmanager_check
+    when: 
+    - rhel_07_040600
+    tags:
+    - RHEL-07-040600
+  # Determine number of nameserver lines in /etc/resolv.conf
+  - name: "LOW | RHEL-07-040600 | AUDIT | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
+      shell: grep -i "nameserver" /etc/resolv.conf | grep -v "#" | wc -l
+      changed_when: no
+      failed_when: false
+      check_mode: no
+      register: rhel_07_040600_nameserver_count
+    when: 
+    - rhel_07_040600
+    tags:
+    - RHEL-07-040600
+    
+  # Change resolv.conf if dns is not present in nsswitch.conf
+  - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
+    shell: echo -n > /etc/resolv.conf && chattr +i /etc/resolv.conf
+    when:
+    - rhel_07_040600
+    - "'dns' not in rhel_07_040600_nsswitch_check.stdout"
+    tags:
+    - RHEL-07-040600
+  # Set resolv.conf if dns is set in nsswitch.conf
+  - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
+    lineinfile:
+      dest: /etc/resolv.conf
+      regexp: '^nameserver'
+      line: namserver "{{ item }}"
+      insertafter: '^search'
+    with_items:
+    - "{{ rhel_07_040600_dns_servers }}"
+    when:
+    - rhel_07_040600
+    - rhel_07_040600_networkmanager_check != '# Generated by NetworkManager'
+    - rhel_07_040600_nameserver_count.stdout|int < 2
+    tags:
+    - RHEL-07-040600
+  # If networkmanager is setting resolv.conf, debug msg to audit/change DNS settings in dhcp.
+  - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
+    debug:
+      msg: "The file /etc/resolv.conf is managed by network manager and shows less than two DNS servers configured. Please correct this in your DHCP configurations."
+    changed_when: true
+    when:
+    - rhel_07_040600
+    - rhel_07_040600_networkmanager_check == '# Generated by NetworkManager'
+    - rhel_07_040600_nameserver_count.stdout|int < 2
+    tags:
+    - RHEL-07-040600
+  when:
+  - rhel_07_040600
+  - not rhel7stig_system_is_chroot
+  - not rhel7stig_system_is_container
+  tags:
+  - RHEL-07-040600
