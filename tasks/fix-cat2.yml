@@ -1963,7 +1963,7 @@
   lineinfile:
     path: /etc/audisp/audispd.conf
     regexp: '^name_format ='
-     line: name_format = hostname
+    line: name_format = hostname
   notify: restart auditd
   when:
   - rhel_07_030211
@@ -2410,7 +2410,7 @@
   - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
     yum:
       name: iptables-services
-       state: present
+      state: present
     args:
       ansible_python_interpreter: "{{ python2_bin }}"
     when:
@@ -2759,7 +2759,7 @@
     dest: /etc/ssh/sshd_config
     regexp: "(?i)^#?IgnoreRhosts"
     line: IgnoreRhosts yes
-     validate: /usr/sbin/sshd -t -f %s
+    validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   when:
   - rhel_07_040350
@@ -3362,9 +3362,9 @@
   yum:
     name:
     - libreswan
-  state: absent
-  args:
-    ansible_python_interpreter: "{{ python2_bin }}"
+    state: absent
+    args:
+      ansible_python_interpreter: "{{ python2_bin }}"
   when: 
   - rhel_07_040820
   tags:
