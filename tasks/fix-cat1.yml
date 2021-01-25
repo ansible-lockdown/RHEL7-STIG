@@ -487,19 +487,16 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
   - RHEL-07-021710
   - telnet
 
-#- name: "HIGH | RHEL-07-030000 | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source 
-of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+#- name: "HIGH | RHEL-07-030000 | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
 #  block:
-#  - name: "HIGH | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, t
-he source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+#  - name: "HIGH | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
 #    package:
 #      name: audit
 #      state: present
 #    vars:
 #      ansible_python_interpreter: "{{ python2_bin }}"
 
-#  - name: "HIGH | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, t
-he source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
+#  - name: "HIGH | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
 #    service:
 #      name: auditd
 #      state: "{{ rhel7stig_service_started }}"
