@@ -88,7 +88,7 @@ rhel_07_010090: true
 rhel_07_010100: true
 rhel_07_010101: true
 rhel_07_010110: true
-ol_07_010118: true
+rhel_07_010118: true
 rhel_07_010119: true
 rhel_07_010120: true
 rhel_07_010130: true
@@ -100,8 +100,6 @@ rhel_07_010180: true
 rhel_07_010190: true
 rhel_07_010200: true
 rhel_07_010210: true
-ol_07_020210: true
-ol_07_020019: true
 rhel_07_010220: true
 rhel_07_010230: true
 rhel_07_010240: true
@@ -119,6 +117,7 @@ rhel_07_010460: true
 rhel_07_010470: true
 rhel_07_010481: true
 rhel_07_010500: true
+rhel_07_020019: true
 rhel_07_020020: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
@@ -126,6 +125,7 @@ rhel_07_020040: "{{ rhel7stig_disruption_high }}"
 rhel_07_020100: true
 rhel_07_020101: true
 rhel_07_020110: true
+rhel_07_020210: true
 rhel_07_020231: true
 rhel_07_020240: true
 rhel_07_020260: true
@@ -152,6 +152,7 @@ rhel_07_021010: true
 rhel_07_021020: true
 rhel_07_021021: true
 rhel_07_021030: true
+rhel_07_021031: true
 rhel_07_021040: true
 rhel_07_021100: true
 rhel_07_021110: true
@@ -159,12 +160,12 @@ rhel_07_021120: true
 rhel_07_021300: true
 rhel_07_021620: true
 rhel_07_021700: true
-ol_07_030000: true
+rhel_07_030000: true
 rhel_07_030010: true
 rhel_07_030200: true
-ol_07_030201: true
-ol_07_030210: true
-ol_07_030211: true
+rhel_07_030201: true
+rhel_07_030210: true
+rhel_07_030211: true
 # if you set 030300 to 'true' ensure you define rhel7stig_audisp_remote_server
 rhel_07_030300: "{{ rhel7stig_audisp_remote_server is defined }}"
 rhel_07_030310: true
@@ -264,8 +265,8 @@ rhel_07_040500: true
 ol_07_040510: true
 rhel_07_040520: true
 rhel_07_040610: true
-ol_07_040611: true
-ol_07_040612: true
+rhel_07_040611: true
+rhel_07_040612: true
 rhel_07_040620: true
 rhel_07_040630: true
 rhel_07_040640: true
@@ -285,8 +286,7 @@ rhel_07_041001: true
 rhel_07_041002: true
 rhel_07_041003: true
 rhel_07_041010: true
-ol_07_910055: true
-ol_07_021031: true
+rhel_07_910055: true
 # CAT 3 rules
 rhel_07_020200: true
 rhel_07_020300: true
