@@ -53,10 +53,9 @@ rhel_07_010482: true
 rhel_07_010490: true
 rhel_07_010491: true
 rhel_07_020000: true
+rhel_07_020010: true
 rhel_07_020050: true
 rhel_07_020060: true
-rhel_07_020210: true
-#rhel_07_020220: true
 rhel_07_020230: true
 rhel_07_020231: true
 # Not an automated task
@@ -64,7 +63,6 @@ rhel_07_020250: true
 rhel_07_020310: true
 rhel_07_021350: true
 rhel_07_021710: true
-#rhel_07_030000: true
 rhel_07_032000: true
 rhel_07_040390: true
 rhel_07_040540: true
@@ -84,9 +82,9 @@ rhel_07_010070: "{{ rhel7stig_gui }}"
 rhel_07_010081: "{{ rhel7stig_gui }}"
 rhel_07_010082: "{{ rhel7stig_gui }}"
 rhel_07_010090: true
-rhel_07_010100: true
-rhel_07_010101: true
-rhel_07_010110: true
+rhel_07_010100: "{{ rhel7stig_gui }}"
+rhel_07_010101: "{{ rhel7stig_gui }}"
+rhel_07_010110: "{{ rhel7stig_gui }}"
 rhel_07_010118: true
 rhel_07_010119: true
 rhel_07_010120: true
@@ -124,7 +122,9 @@ rhel_07_020040: "{{ rhel7stig_disruption_high }}"
 rhel_07_020100: true
 rhel_07_020101: true
 rhel_07_020110: true
+rhel_07_020111: true
 rhel_07_020210: true
+rhel_07_020220: true
 rhel_07_020240: true
 rhel_07_020260: true
 rhel_07_020270: true
@@ -160,7 +160,7 @@ rhel_07_021620: true
 rhel_07_021700: true
 rhel_07_030000: true
 rhel_07_030010: true
-rhel_07_030200: true
+#rhel_07_030200: true
 rhel_07_030201: true
 rhel_07_030210: true
 rhel_07_030211: true
@@ -213,7 +213,7 @@ rhel_07_030750: true
 rhel_07_030760: true
 rhel_07_030770: true
 rhel_07_030780: true
-rhel_07_030790: true
+#rhel_07_030790: true
 rhel_07_030800: true
 rhel_07_030810: true
 rhel_07_030819: true
@@ -288,8 +288,6 @@ rhel_07_910055: true
 # CAT 3 rules
 rhel_07_020200: true
 rhel_07_020300: true
-rhel_07_021022: true
-rhel_07_021023: true
 rhel_07_021024: true
 rhel_07_021310: true
 rhel_07_021320: true
