@@ -33,10 +33,7 @@
   - complexity-high
   - passwd
 
-- name: |
-    "LOW | RHEL-07-021022 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nodev option."
-    "LOW | RHEL-07-021023 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the nosuid option."
-    "LOW | RHEL-07-021024 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with the noexec option."
+- name: "LOW | RHEL-07-021022 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with secure options."
   mount:
     path: /dev/shm
     state: mounted
@@ -49,8 +46,6 @@
     dev_shm_mount_opts: "{{ dev_shm_mount.options | default('defaults') }},nodev,nosuid{{ (rhel_07_021024) | ternary(',noexec', '') }}"
   tags:
   - RHEL-07-021022
-  - RHEL-07-021023
-  - RHEL-07-021024
 
 - name: "LOW | RHEL-07-021310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that a separate file system is used for user home directories (such as /home or an equivalent)."
   debug:
