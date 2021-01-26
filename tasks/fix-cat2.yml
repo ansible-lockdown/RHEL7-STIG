@@ -1807,19 +1807,6 @@
   - auditd
   - RHEL-07-030010
 
-#- name: "MEDIUM | RHEL-07-030200 | The Red Hat Enterprise Linux operating system must be configured to use the au-remote plugin."
-#  lineinfile:
-#    path: "{{ item }}"
-#    regexp: (?i)^ *active *=
-#    line: active = yes
-#  with_items:
-#  - /etc/audisp/plugins.d/au-remote.conf
-#  when:
-#  - rhel_07_030200
-#  tags:
-#  - auditd
-#  - RHEL-07-030200
-
 - name: "MEDIUM | OL-07-030201 | PATCH | The Red Hat Enterprise Linux operating system must be configured to off-load audit logs onto a different system or storage media from the system being audited."
   lineinfile:
     path: /etc/audisp/plugins.d/au-remote.conf
