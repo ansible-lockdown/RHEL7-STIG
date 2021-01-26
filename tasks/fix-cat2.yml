@@ -167,8 +167,7 @@
     regexp: '^password   substack     system-auth'
     line: 'password   substack     system-auth'
   when:
-  - rh_07_010118
-  - ansible_distribution == "OracleLinux"
+  - rhel_07_010118
   tags:
   - RHEL-07-010118
   - pamd
@@ -443,7 +442,8 @@
     dest: /etc/default/useradd
     regexp: ^#?INACTIVE
     line: INACTIVE=0
-  when: rhel_07_010310
+  when: 
+  - rhel_07_010310
   tags:
   - RHEL-07-010310
 
@@ -468,82 +468,90 @@
     - "password-auth"
 
     # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
-    - name: |
-        "MEDIUM | RHEL-07-010320 | AUDIT | Check for existing account lockout settings"
-        "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
-      command: "grep -iE '^auth\\s+required\\s+pam_faillock.so\\s+preauth\\s+silent\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
-      check_mode: no
-      changed_when: no
-      failed_when: rhel_07_010320_010330_preauth_audit.rc > 1
-      register: rhel_07_010320_010330_preauth_audit
-      with_items:
-      - "system-auth"
-      - "password-auth"
+#  - name: |
+#      "MEDIUM | RHEL-07-010320 | AUDIT | Check for existing account lockout settings"
+#      "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
+#    command: "grep -iE '^auth\\s+required\\s+pam_faillock.so\\s+preauth\\s+silent\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
+#    check_mode: no
+#    changed_when: no
+#    failed_when: rhel_07_010320_010330_preauth_audit.rc > 1
+#    register: rhel_07_010320_010330_preauth_audit
+#    with_items:
+#    - "system-auth"
+#    - "password-auth"
 
-    # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
-    - name: |
-        "MEDIUM | RHEL-07-010320 | PATCH | Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period."
-        "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-      pamd:
-        name: "{{ item.item }}"
-        state: updated
-        type: auth
-        control: required
-        module_path: pam_faillock.so
-        module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
-      with_items: "{{ rhel_07_010320_010330_preauth_audit.results }}"
-      when: item.rc == 1
+  # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
+  - name: |
+      "MEDIUM | RHEL-07-010320 | PATCH | Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period."
+      "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+    pamd:
+#      name: "{{ item.item }}"
+      name: "{{ item }}"
+      state: updated
+      type: auth
+      control: required
+      module_path: pam_faillock.so
+      module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+#     with_items: "{{ rhel_07_010320_010330_preauth_audit.results }}"
+    with_items:
+    - "system-auth"
+    - "password-auth"    
+#     when: item.rc == 1
 
-    - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-      pamd:
-        name: "{{ item }}"
-        state: before
-        type: auth
-        control: required
-        module_path: pam_deny.so
-        new_type: auth
-        new_control: "[default=die]"
-        new_module_path: pam_faillock.so
-      with_items:
-      - "system-auth"
-      - "password-auth"
+  - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+    pamd:
+      name: "{{ item }}"
+      state: before
+      type: auth
+      control: required
+      module_path: pam_deny.so
+      new_type: auth
+      new_control: "[default=die]"
+      new_module_path: pam_faillock.so
+    with_items:
+    - "system-auth"
+    - "password-auth"
 
-    # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
-    - name: "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
-      command: "grep -iE '^auth\\s+\\[default=die\\]\\s+pam_faillock.so\\s+authfail\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
-      check_mode: no
-      changed_when: no
-      failed_when: rhel_07_010330_authfail_audit.rc > 1
-      register: rhel_07_010330_authfail_audit
-      with_items:
-      - "system-auth"
-      - "password-auth"
+  # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+  #- name: "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
+  #  command: "grep -iE '^auth\\s+\\[default=die\\]\\s+pam_faillock.so\\s+authfail\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
+  #  check_mode: no
+  #  changed_when: no
+  #  failed_when: rhel_07_010330_authfail_audit.rc > 1
+  #  register: rhel_07_010330_authfail_audit
+  #  with_items:
+  #  - "system-auth"
+  #  - "password-auth"
 
-    # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
-    - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-      pamd:
-        name: "{{ item.item }}"
-        state: updated
-        type: auth
-        control: "[default=die]"
-        module_path: pam_faillock.so
-        module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
-      with_items: "{{ rhel_07_010330_authfail_audit.results }}"
-      when: item.rc == 1
+  # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
+  - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+    pamd:
+#      name: "{{ item.item }}"
+      name: "{{ item }}"
+      state: updated
+      type: auth
+      control: "[default=die]"
+      module_path: pam_faillock.so
+      module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+#    with_items: "{{ rhel_07_010330_authfail_audit.results }}"
+    with_items:
+    - "system-auth"
+    - "password-auth"
+#    when: item.rc == 1
 
-    - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-      pamd:
-        name: "{{ item }}"
-        state: before
-        type: account
-        control: required
-        module_path: pam_unix.so
-        new_type: account
-        new_control: required
-        new_module_path: pam_faillock.so
-      with_items:
-      - "system-auth"
-      - "password-auth"
+  - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+    pamd:
+      name: "{{ item }}"
+      state: before
+      type: account
+      control: required
+      module_path: pam_unix.so
+      new_type: account
+      new_control: required
+      new_module_path: pam_faillock.so
+    with_items:
+    - "system-auth"
+    - "password-auth"
 
   when: 
   - rhel_07_010320 or rhel_07_010330
@@ -666,7 +674,7 @@
       with_items:
       - pam_pkcs11
       - pcsc-lite-libs
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
     register: rhel_07_010500pkcs11install
     when: 
@@ -909,10 +917,10 @@
   - umask
 
 - name: "MEDIUM | RHEL-07-020260 | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date."
-  yum:
+  package:
     name: '*'
     state: latest
-  args:
+  vars:
     ansible_python_interpreter: "{{ python2_bin }}"
   when: rhel_07_020260
   tags:
@@ -1606,7 +1614,7 @@
       
   - name: "MEDIUM | RHEL-07-021031 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Flatten results"
     set_fact:
-      rhel_07_021031_world_writable_files_flat: "{{ ol_07_021031_world_writable_files.results | map(attribute='stdout_lines') | flatten }}"
+      rhel_07_021031_world_writable_files_flat: "{{ rhel_07_021031_world_writable_files.results | map(attribute='stdout_lines') | flatten }}"
 
   - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | List world-writable files"
     debug:
@@ -1776,10 +1784,10 @@
 - name: "MEDIUM | RHEL-07-030000 | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
   block:
   - name: "MEDIUM | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
-    yum:
+    package:
       name: audit
       state: present
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"  
 
   - name: "MEDIUM | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
@@ -2270,10 +2278,10 @@
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
   block:
   - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
-    yum:
+    package:
       name: firewalld
       state: present
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
     when:
     - rhel_07_040520
@@ -2284,10 +2292,10 @@
     - firewall
     
   - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
-    yum:
+    package:
       name: iptables-services
       state: present
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
     when:
     - rhel_07_040520
@@ -2348,7 +2356,8 @@
       - firewall
   
     - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-      debug: var=rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines
+      debug: 
+        var: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines
       changed_when: true
       when:
       - rhel_07_040100
@@ -2382,7 +2391,7 @@
     
     - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
       debug:
-        msg: "The following task output is what iptabes is accepting on service ports to {{ ansible_hostname }}."
+        msg: "The following task output is what iptables is accepting on service ports to {{ ansible_hostname }}."
       changed_when: true
       when:
       - rhel_07_040100
@@ -2392,7 +2401,8 @@
       - firewall
     
     - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-      debug: var=rhel7stig_PPSM_CLSA_check_iptables.stdout_lines
+      debug: 
+        var: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines
       changed_when: true
       when:
       - rhel_07_040100
@@ -2413,13 +2423,13 @@
   - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
     debug:
       msg: "Your configured firewall service is {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false. We cannot audit control RHEL-07-040100 - The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-      changed_when: true
-      when:
-      - rhel_07_040100
-      - not rhel7stig_start_firewall_service
-      tags:
-      - RHEL-07-040100
-      - firewall
+    changed_when: true
+    when:
+    - rhel_07_040100
+    - not rhel7stig_start_firewall_service
+    tags:
+    - RHEL-07-040100
+    - firewall
   when:
   - rhel_07_040100
   - not rhel7stig_system_is_chroot
@@ -2559,12 +2569,12 @@
   - sysctl
 
 - name: "MEDIUM | RHEL-07-040300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all networked systems have SSH installed."
-  yum:
+  package:
     name:
     - openssh-clients
     - openssh-server
     state: present
-  args:
+  vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
   - rhel_07_040300
@@ -2830,7 +2840,7 @@
 - name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources."
   block:
   - name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources. | Install unbound"
-    yum:
+    package:
       name: unbound
       state: present
 
@@ -2849,17 +2859,17 @@
 - name: "MEDIUM | RHEL-07-040500 | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
   block:
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-    yum:
+    package:
       name: chrony
       state: absent
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
     
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-    yum:
+    package:
       name: ntp
       state: present
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
 
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
@@ -2881,17 +2891,17 @@
 - name: "MEDIUM | RHEL-07-040500 | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
   block:
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-    yum:
+    package:
       name: ntp
       state: absent
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
 
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-    yum:
+    package:
       name: chrony
       state: present
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
 
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
@@ -2936,10 +2946,10 @@
   - ipv4
 
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
-  yum:
+  package:
     name: "{{ rhel7stig_firewall_service }}"
     state: present
-  args:
+  vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when: 
   - rhel_07_040520
@@ -3129,12 +3139,12 @@
   - RHEL-07-040720
 
 - name: "MEDIUM | RHEL-07-040730 | PATCH | The Red Hat Enterprise Linux operating system must not have an X Windows display manager installed unless approved."
-  yum:
+  package:
     name:
     - "@x11"
     - xorg-x11-server-common
     state: absent
-  args:
+  vars:
     ansible_python_interpreter: "{{ python2_bin }}" 
   when:
   - not rhel7stig_gui
@@ -3235,11 +3245,11 @@
   - disruption-high
 
 - name: "MEDIUM | RHEL-07-040820 | PATCH | The Red Hat Enterprise Linux operating system must not have unauthorized IP tunnels configured."
-  yum:
+  package:
     name:
     - libreswan
     state: absent
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when: 
   - rhel_07_040820
@@ -3262,21 +3272,21 @@
 - name: "MEDIUM | RHEL-07-041001 | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
   block:
   - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
-    yum:
+    package:
       name:
       - esc
       - authconfig-gtk
       state: present
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
     when: 
     - rhel7stig_gui
 
   - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
-    yum:
+    package:
       name: pam_pkcs11
       state: present
-    args:
+    vars:
       ansible_python_interpreter: "{{ python2_bin }}"
 
   when: 
