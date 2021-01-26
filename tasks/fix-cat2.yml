@@ -119,27 +119,6 @@
   tags:
   - RHEL-07-010082
 
-#- name: "MEDIUM | RHEL-07-010090 | The Red Hat Enterprise Linux operating system must have the screen package installed."
-#  block:
-#      - name: "MEDIUM | RHEL-07-010090 | AUDIT | The Red Hat Enterprise Linux operating system must have the screen package installed. Check for screen or tmux"
-#        command: rpm -q screen tmux
-#        check_mode: no
-#        register: rhel_07_010090_audit
-#        changed_when: rhel_07_010090_audit.rc > 1
-#        failed_when: no
-
-#      - name: "MEDIUM | RHEL-07-010090 | PATCH | The Red Hat Enterprise Linux operating system must have the screen package installed."
-#        yum:
-#            name: "{{ rhel7stig_screen_package }}"
-#            state: present
-#        when:
-#            - rhel_07_010090_audit is changed or
-#              rhel7stig_force_exact_packages
-#            - not ansible_distribution == "OracleLinux"
-#  when: rhel_07_010090
-#  tags:
-#      - RHEL-07-010090
-
 - name: "MEDIUM | RHEL-07-010100 | PATCH | The Red Hat Enterprise Linux operating system must initiate a session lock for the screensaver after a period of inactivity for graphical user interfaces."
   copy:
     dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010100
@@ -900,9 +879,9 @@
   notify: dconf update
   when:
   - rhel7stig_dconf_available
-  - rhel_07_010060
+  - rhel_07_020111
   tags:
-  - RHEL-07-010060
+  - RHEL-07-020111
 
 - name: "MEDIUM | RHEL-07-020210 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux.|
          MEDIUM | RHEL-07-020220 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux targeted policy."
@@ -939,96 +918,6 @@
   tags:
   - RHEL-07-020260
   - packaging
-
-#- name: "MEDIUM | RHEL-07-020260 | AUDIT | Check if yum-cron is installed"
-#  command: rpm -q yum-cron
-#  check_mode: no
-#  changed_when: no
-#  failed_when: no
-#  args:
-#      warn: no
-#  register: rhel_07_020260_yum_cron_installed
-#  when: rhel_07_020260
-#  tags:
-#      - RHEL-07-020260
-#      - packaging
-
-#- name: "MEDIUM | RHEL-07-020260 | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date."
-#  block:
-#      - name: "MEDIUM | RHEL-07-020260 | AUDIT | Check RHEL type"
-#        command: rpm -q redhat-release-workstation
-#        check_mode: no
-#        changed_when: no
-#        failed_when: no
-#        args:
-#            warn: false
-#        register: rhel_07_020260_rhel_type
-
-#      - block:
-#            - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
-#              yum:
-#                  name: yum-cron
-#                  state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent') }}"
-#        rescue:
-#            - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
-#              block:
-#                  - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
-#                    yum:
-#                        name: yum-cron
-#                        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent') }}"
-#                        enablerepo: "{{ 'rhel-7-' ~ (rhel_07_020260_rhel_type.rc == 0) |
-#                                ternary('workstation', 'server') ~ '-optional-rpms' }}"
-
-#              rescue:
-#                  # Might be an AWS RHEL instance, try it...
-#                  - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Install yum-cron"
-#                    yum:
-#                        name: yum-cron
-#                        state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary('present','absent') }}"
-#                        enablerepo: rhui-REGION-rhel-server-optional
-
-#      - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Verify yum-cron config file exists"
-#        stat:
-#            path: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','') }}.conf"
-#        check_mode: no
-#        register: yum_cron_config_file
-
-#      - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Enable/disable automatic updates in the appropriate yum-cron.conf file."
-#        lineinfile:
-#            dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','') }}.conf"
-#            regexp: "^apply_updates"
-#            line: "apply_updates = {{ (rhel7stig_auto_package_updates.enabled) | ternary('yes','no') }}"
-#            state: present
-#        when: yum_cron_config_file.stat.exists
-
-#      - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Set update command to configured setting."
-#        lineinfile:
-#            dest: "/etc/yum/yum-cron{{ (rhel7stig_auto_package_updates.frequency == 'hourly') | ternary('-hourly','') }}.conf"
-#            regexp: "^update_cmd"
-#            line: "update_cmd = {{ rhel7stig_auto_package_updates.update_cmd | default('minimal-security') }}"
-#            state: present
-#        when: yum_cron_config_file.stat.exists
-
-#      - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Verify the yum-cron service exists"
-#        shell: "systemctl show yum-cron | grep LoadState | cut -d = -f 2"
-#        register: rhel_07_020260_yumcron_service_status
-#        changed_when: no
-#        check_mode: no
-
-#      - name: "MEDIUM | RHEL-07-020260 | PATCH | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date. | Set the yum-cron service state"
-#        service:
-#            name: yum-cron
-#            enabled: "{{ rhel7stig_auto_package_updates.enabled }}"
-#            state: "{{ (rhel7stig_auto_package_updates.enabled) | ternary(rhel7stig_service_started, 'stopped') }}"
-#        when: rhel_07_020260_yumcron_service_status.stdout == "loaded"
-
-#  when:
-#      - rhel_07_020260
-#      - rhel7stig_auto_package_updates_enabled or
-#        rhel_07_020260_yum_cron_installed.rc == 0
-#  tags:
-#      - RHEL-07-020260
-#      - packaging
 
 - name: "MEDIUM | RHEL-07-020270 | AUDIT | The Red Hat Enterprise Linux operating system must not have unnecessary accounts."
   block:
@@ -2951,24 +2840,24 @@
   - RHEL-07-040470
   - ssh
 
-#- name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources."
-#  block:
-#      - name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources. | Install unbound"
-#        yum:
-#            name: unbound
-#            state: present
+- name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources."
+  block:
+  - name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources. | Install unbound"
+    yum:
+      name: unbound
+      state: present
 
-#      - name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources. | Start service"
-#        service:
-#            name: unbound
-#            enabled: true
-#  when:
-#      - ol_07_040480
-#      - ansible_distribution == "OracleLinux"
-#  tags:
-#      - OL-07-040480
-#      - OracleLinux
-#      - unbound
+  - name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources. | Start service"
+    service:
+      name: unbound
+      enabled: true
+when:
+- ol_07_040480
+- ansible_distribution == "OracleLinux"
+tags:
+- OL-07-040480
+- OracleLinux
+- unbound
 
 - name: "MEDIUM | RHEL-07-040500 | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
   block:
@@ -3044,20 +2933,20 @@
   - RHEL-07-040500
   - chronyd
 
-#- name: "MEDIUM | OL-07-040510 | PATCH | The Oracle Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
-#  sysctl:
-#      name: net.ipv4.tcp_invalid_ratelimit
-#      value: "{{ ol7stig_ipv4_tcp_invalid_ratelimit }}"
-#      state: present
-#      reload: "{{ rhel7stig_sysctl_reload }}"
-#  when:
-#      - ol_07_040510
-#      - ansible_distribution == "OracleLinux"
-#  tags:
-#      - OL-07-040510
-#      - OracleLinux
-#      - sysctl
-#      - ipv4
+- name: "MEDIUM | OL-07-040510 | PATCH | The Oracle Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
+  sysctl:
+    name: net.ipv4.tcp_invalid_ratelimit
+    value: "{{ ol7stig_ipv4_tcp_invalid_ratelimit }}"
+    state: present
+    reload: "{{ rhel7stig_sysctl_reload }}"
+  when:
+  - ol_07_040510
+  - ansible_distribution == "OracleLinux"
+  tags:
+  - OL-07-040510
+  - OracleLinux
+  - sysctl
+  - ipv4
 
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
   yum:
