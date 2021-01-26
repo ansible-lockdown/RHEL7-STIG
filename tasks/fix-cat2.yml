@@ -1788,7 +1788,9 @@
       name: audit
       state: present
     vars:
-      ansible_python_interpreter: "{{ python2_bin }}"  
+      ansible_python_interpreter: "{{ python2_bin }}"
+    when:
+    - "'audit' not in ansible_facts.packages"
 
   - name: "MEDIUM | RHEL-07-030000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users."
     service:
@@ -2284,6 +2286,7 @@
     vars:
       ansible_python_interpreter: "{{ python2_bin }}"
     when:
+    - "'firewalld' not in ansible_facts.packages"
     - rhel_07_040520
     - rhel7stig_firewall_service == "firewalld"
     - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
@@ -2298,6 +2301,7 @@
     vars:
       ansible_python_interpreter: "{{ python2_bin }}"
     when:
+    - "'iptables-services' not in ansible_facts.packages"
     - rhel_07_040520
     - rhel7stig_firewall_service == "iptables"
     - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
@@ -2558,7 +2562,7 @@
 - name: "MEDIUM | RHEL-07-040201 | PATCH | The Red Hat Enterprise Linux operating system must implement virtual address space randomization."
   sysctl:
     name: kernel.randomize_va_space
-    value: 2
+    value: '2'
     state: present
     reload: "{{ rhel7stig_sysctl_reload }}"
     sysctl_set: yes
@@ -2575,7 +2579,7 @@
     - openssh-server
     state: present
   vars:
-      ansible_python_interpreter: "{{ python2_bin }}"
+    ansible_python_interpreter: "{{ python2_bin }}"
   when:
   - rhel_07_040300
   - rhel7stig_ssh_required
@@ -2864,6 +2868,8 @@
       state: absent
     vars:
       ansible_python_interpreter: "{{ python2_bin }}"
+    when:
+    - "'chrony' in ansible_facts.packages"
     
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
     package:
@@ -2871,6 +2877,8 @@
       state: present
     vars:
       ansible_python_interpreter: "{{ python2_bin }}"
+    when:
+    - "'ntp' not in ansible_facts.packages"
 
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
     lineinfile:
@@ -2896,6 +2904,8 @@
       state: absent
     vars:
       ansible_python_interpreter: "{{ python2_bin }}"
+    when:
+    - "'ntp' in ansible_facts.packages"
 
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
     package:
@@ -2903,6 +2913,8 @@
       state: present
     vars:
       ansible_python_interpreter: "{{ python2_bin }}"
+    when:
+    - "'chrony' not in ansible_facts.packages"
 
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
     replace:
@@ -2961,7 +2973,7 @@
   sysctl:
     name: net.ipv4.conf.all.accept_source_route
     state: present
-    value: 0
+    value: '0'
     reload: "{{ rhel7stig_sysctl_reload }}"
     ignoreerrors: yes
   when: 
@@ -2973,7 +2985,7 @@
 - name: "MEDIUM | RHEL-07-040611 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible on all interfaces."
   sysctl:
     name: net.ipv4.conf.all.rp_filter
-    value: 1
+    value: '1'
     state: present
     reload: "{{ ol7stig_sysctl_reload }}"
   when:
@@ -2987,7 +2999,7 @@
   sysctl:
     name: net.ipv4.conf.default.rp_filter
     state: present
-    value: 1
+    value: '1'
     reload: "{{ ol7stig_sysctl_reload }}"
   when:
   - rhel_07_040612
@@ -3013,7 +3025,7 @@
   sysctl:
     name: net.ipv4.icmp_echo_ignore_broadcasts
     state: present
-    value: 1
+    value: '1'
     sysctl_set: yes
     reload: "{{ rhel7stig_sysctl_reload }}"
     ignoreerrors: yes
@@ -3027,7 +3039,7 @@
   sysctl:
     name: net.ipv4.conf.default.accept_redirects
     state: present
-    value: 0
+    value: '0'
     reload: "{{ rhel7stig_sysctl_reload }}"
     ignoreerrors: yes
   when: 
@@ -3040,7 +3052,7 @@
   sysctl:
     name: net.ipv4.conf.all.accept_redirects
     state: present
-    value: 0
+    value: '0'
     reload: "{{ rhel7stig_sysctl_reload }}"
     ignoreerrors: yes
   when: 
@@ -3053,7 +3065,7 @@
   sysctl:
     name: net.ipv4.conf.default.send_redirects
     state: present
-    value: 0
+    value: '0'
     reload: "{{ rhel7stig_sysctl_reload }}"
     ignoreerrors: yes
   when: 
@@ -3066,7 +3078,7 @@
   sysctl:
     name: net.ipv4.conf.all.send_redirects
     state: present
-    value: 0
+    value: '0'
     reload: "{{ rhel7stig_sysctl_reload }}"
     ignoreerrors: yes
   when: 
@@ -3249,9 +3261,10 @@
     name:
     - libreswan
     state: absent
-    vars:
-      ansible_python_interpreter: "{{ python2_bin }}"
+  vars:
+    ansible_python_interpreter: "{{ python2_bin }}"
   when: 
+  - "'libreswan' not in ansible_facts.packages"
   - rhel_07_040820
   tags:
   - RHEL-07-040820
@@ -3288,6 +3301,8 @@
       state: present
     vars:
       ansible_python_interpreter: "{{ python2_bin }}"
+    when:
+    - "'pam_pkcs11' not in ansible_facts.packages"
 
   when: 
   - rhel_07_041001
