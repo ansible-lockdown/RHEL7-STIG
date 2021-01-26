@@ -258,8 +258,7 @@
   vars:
     ansible_python_interpreter: "{{ python2_bin }}"
   when:
-  - rhel_07_030200 or
-    rhel_07_030300 or
+  - rhel_07_030300 or
     rhel_07_030310 or
     rhel_07_030320 or
     rhel_07_030321
@@ -267,7 +266,6 @@
   - cat2
   - medium
   - auditd
-  - RHEL-07-030200
   - RHEL-07-030300
   - RHEL-07-030310
   - RHEL-07-030320
