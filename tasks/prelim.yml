@@ -24,7 +24,6 @@
   when:
   - ( ansible_python.version.major == 3  and ansible_python.version.minor == 6 )
 
-
 - name: "PRELIM | dconf"
   block:
   - name: "PRELIM | Check for dconf availability"
