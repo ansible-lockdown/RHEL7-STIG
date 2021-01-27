@@ -124,7 +124,7 @@
   tags:
   - RHEL-07-010450
 
--- name: |
+- name: |
     "HIGH | RHEL-07-010480 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
     "HIGH | RHEL-07-010490 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   lineinfile:
