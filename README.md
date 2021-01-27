@@ -7,33 +7,31 @@ Configure a RHEL 7 system to be DISA STIG compliant. All findings will be audite
 
 This role is based on RHEL 7 DISA STIG: [Version 3, Rel 1 released on Oct 23, 2020](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R1_STIG.zip).
 
+As with all releases and updates, this contains rewrites and ID reference changes.
+
+Please test
+-----------
+
 Requirements
 ------------
 
 RHEL 7 or CentOS 7 - Other versions are not supported.
 
-
 Dependencies
 ------------
+
 Python3
 Ansible 2.9+
 
-The following packages must be installed on the controlling host/host where ansible is executed:
+Ansible is set to run in a python3 environment.
 
-- python2-passlib (or just passlib, if using python3)
-- python-lxml
-- python-jmespath
-
-Packages python(2)-passlib and python-jmespath are required for tasks with custom filters or modules. These are all required on the controller host that executes Ansible.
-
+Dependencies required for the playbook are installed on the endpoint if required.
 
 Role Variables
 --------------
 
 | Name              | Default Value       | Description          |
 |-------------------|---------------------|----------------------|
-| `rhel7stig_oscap_scan` | `no` | Install and run an OpenSCAP report before and after the application of this role        |
-| `rhel7stig_report_installfrominternet` | `no` | Whether to install xmltojson from Fedora's Repositories, needed if epel is not configured on CentOS. |
 | `rhel7stig_cat1_patch` | `yes` | Correct CAT I findings        |
 | `rhel7stig_cat2_patch` | `yes`  | Correct CAT II findings       |
 | `rhel7stig_cat3_patch` | `yes`  | Correct CAT III findings      |
@@ -50,9 +48,8 @@ Role Variables
 | `rhel7stig_autofs_required` | `no` | If set to `no`, disable `autofs` service. |
 | `rhel7stig_kdump_required` | `no` | If set to `no`, disable `kdump` service. |
 | `rhel7stig_snmp_community` | `Endgam3Ladyb0g` | SNMP community string that will replace `public` and `private` in `snmpd.conf`. |
-| `rhel7stig_bootloader_password` | `Boot1tUp!` | GRUB2 bootloader password. This should be stored in an Ansible Vault. |
+| `rhel7stig_bootloader_password_hash` | `changethispassword` | GRUB2 bootloader password hash. This should be stored in an Ansible Vault |
 | `rhel7stig_boot_superuser` | `root` | Used to set the boot superuser in the GRUB2 config. |
-| `rhel7stig_boot_password_config` | [see defaults/main.yml](./defaults/main.yml) | GRUB2 bootloader password configuration. |
 | `rhel7stig_aide_cron` | [see defaults/main.yml](./defaults/main.yml) | AIDE Cron settings |
 | `rhel7stig_maxlogins` | `10` | Set maximum number of simultaneous system logins (RHEL-07-040000) |
 | `rhel7stig_logon_banner` | [see defaults/main.yml](./defaults/main.yml) | Logon banner displayed when logging in to the system. Defaults to nicely formatted standard logon banner. |
@@ -77,4 +74,3 @@ Example Playbook
             when:
                 - ansible_os_family == 'RedHat'
                 - ansible_distribution_major_version | version_compare('7', '=')
-
