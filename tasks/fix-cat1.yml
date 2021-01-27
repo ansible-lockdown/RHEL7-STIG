@@ -313,7 +313,7 @@ n digitally signed using a certificate that is issued by a Certificate Authority
 
 # RHEL-07-020250 | PATCH | The operating system must be a supported release."
 # Not automated since current end of life for RHEL 7 is 2024-06-30
-# EUS RHEL7.7 31st August 20201
+# EUS RHEL7.7 31st August 2021
 # Maintainance RHEL7.9 30th April 2021
 - name: "HIGH | RHEL-07-020250 | PATCH | The Red Hat Enterprise Linux operating system must be a vendor supported release."
   debug:
