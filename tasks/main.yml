@@ -29,12 +29,13 @@
   - rhel_07_010480 or
     rhel_07_010490 or
     rhel_07_010482 or
-    rhel_07_010491 
+    rhel_07_010491
   tags:
   - RHEL-07-010480
   - RHEL-07-010482
   - RHEL-07-010490
   - RHEL-07-010491
+  - always
 
 - import_tasks: prelim.yml
   become: yes
