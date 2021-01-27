@@ -124,16 +124,22 @@
   tags:
   - RHEL-07-010450
 
-- name: |
+-- name: |
     "HIGH | RHEL-07-010480 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
     "HIGH | RHEL-07-010490 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   lineinfile:
     dest: /etc/grub.d/40_custom
     insertafter: EOF
-    regexp: "{{ item.regexp }}"
+    regexp: "{{ item.regex }}"
     line: "{{ item.line }}"
-  with_items: "{{ rhel7stig_boot_password_config }}"
-  notify: confirm grub2 user cfg
+  with_items:
+  - regexp: ^\s*set superusers=
+    line: '    set superusers="root"'
+  - regexp: ^password_pbkdf2
+    line: "^password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}"
+  no_log: true
+  notify: 
+  - make grub2 config
   when:
   - rhel_07_010480 or
     rhel_07_010490
@@ -148,74 +154,52 @@
     "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
     "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   block:
-  - name: |
-      "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-      "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-      explicitly create user.cfg file to work around ansible bug https://github.com/ansible/ansible/pull/59823
-    shell: test -f {{ file_q }} && echo exists || {{ create_cmd }}
-    check_mode: ansible_check_mode is not defined
-    register: rhel7stig_create_grub_user_cfg
-    changed_when:
-    - rhel7stig_create_grub_user_cfg.stdout == "created"
-    failed_when:
-    - rhel7stig_create_grub_user_cfg.stdout != "created"
-    - rhel7stig_create_grub_user_cfg.stdout != "exists"
-    vars:
-      file_q: "{{ (rhel7stig_grub_cfg_path | dirname ~ '/user.cfg') | quote }}"
-      create_cmd: "({{ ansible_check_mode | ternary('', 'touch ' ~ file_q ~ ' && ') }}echo created)"
-    when: ansible_distribution_file_variety == "RedHat"
-
-  - name: |
-        "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-        "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-        explicitly create user.cfg file to work around ansible bug https://github.com/ansible/ansible/pull/59823
-    shell: test -f {{ file_q }} && echo exists || {{ create_cmd }}
-    check_mode: ansible_check_mode is not defined
-    register: rhel7stig_create_grub_user_cfg
-    changed_when:
-    - rhel7stig_create_grub_user_cfg.stdout == "created"
-    failed_when:
-    - rhel7stig_create_grub_user_cfg.stdout != "created"
-    - rhel7stig_create_grub_user_cfg.stdout != "exists"
-    vars:
-      file_q: "{{ (oracle7stig_grub_cfg_path | dirname ~ '/user.cfg') | quote }}"
-      create_cmd: "({{ ansible_check_mode | ternary('', 'touch ' ~ file_q ~ ' && ') }}echo created)"
-    when: ansible_distribution_file_variety == "OracleLinux"
-
-  - name: |
-      "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-      "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+  - name: "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
     lineinfile:
-      path: "{{ rhel7stig_grub_cfg_path | dirname }}/user.cfg"
+      path: /boot/grub2/user.cfg
       create: yes
-      regexp: ^GRUB2_PASSWORD=
-      line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-    notify: confirm grub2 user cfg
-    when: ansible_distribution_file_variety == "RedHat"
-
-  - name: |
-      "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-      "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-    lineinfile:
-      path: "{{ rhel7stig_grub_cfg_path | dirname }}/user.cfg"
-      create: yes
-      regexp: ^GRUB2_PASSWORD=
-      line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-    notify: confirm grub2 user cfg
-    when: ansible_distribution_file_variety == "OracleLinux"
-
-  - name: |
-      "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-      "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-    lineinfile:
-      dest: /etc/grub.d/01_users
-      insertafter: EOF
+      mode: '0644'
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
-    notify: confirm grub2 user cfg
+    notify: 
+    - confirm grub2 user cfg
+    - make grub2 config
+    with_items:
+    - regexp: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }}
+      line: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}
+    no_log: true
+    when:
+    - not rhel7stig_machine_uses_uefi
+
+  - name: "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+    lineinfile:
+      path: /boot/efi/EFI/redhat/user.cfg
+      create: yes
+      mode: '0644'
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    with_items:
+    - regexp: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }}
+      line: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}
+    no_log: true
+    notify:
+    - confirm grub2 user cfg
+    - make grub2 config
+    when:
+    - rhel7stig_machine_uses_uefi
+
+  - name: |
+      "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+      "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+    lineinfile:
+      path: /boot/grub2/grub.cfg
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    notify: 
+    - make grub2 config
     with_items:
     - regexp: ^\s*set superusers=
-      line: '    set superusers="root"'
+      line: '    set superusers="{{ rhel7stig_boot_superuser }}"'
     - regexp: ^\s*export superusers
       line: '    export superusers'
   when:
@@ -234,7 +218,9 @@
     state: absent
   vars:
     ansible_python_interpreter: "{{ python2_bin }}"
-  when: rhel_07_020000
+  when: 
+  - "'rsh-server' in ansible_facts.packages"
+  - rhel_07_020000
   tags:
   - RHEL-07-020000
   - rsh
@@ -245,7 +231,9 @@
     state: absent
   vars:
     ansible_python_interpreter: "{{ python2_bin }}"
-  when: rhel_07_020010
+  when: 
+  - "'ypserv' in ansible_facts.packages"
+  - rhel_07_020010
   tags:
   - RHEL-07-020010
   - ypserv
@@ -368,6 +356,8 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
       state: present
     vars:
       ansible_python_interpreter: "{{ python2_bin }}"
+    when:
+    - "'dracut-fips' not in ansible_facts.packages"
     notify: rebuild initramfs
 
   - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
