@@ -35,7 +35,7 @@
   - RHEL-07-010482
   - RHEL-07-010490
   - RHEL-07-010491
-  - always
+  - cat1
 
 - import_tasks: prelim.yml
   become: yes
