@@ -414,15 +414,10 @@ rhel7stig_force_exact_packages: "{{ rhel7stig_disruption_high }}"
 
 # RHEL-07-010480 and RHEL-07-010490
 # Password protect the boot loader
-rhel7stig_bootloader_password: 'Boot1tUp!'
-rhel7stig_bootloader_password_hash: "{{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}"
+#rhel7stig_bootloader_password: 'Boot1tUp!'
+#rhel7stig_bootloader_password_hash: "{{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}"
+rhel7stig_bootloader_password_hash: 'changethispassword'
 rhel7stig_boot_superuser: root
-rhel7stig_boot_password_config:
-    - regexp: ^set superusers
-      line: 'set superusers="{{ rhel7stig_boot_superuser }}"'
-
-    - regexp: ^password_pbkdf2 {{ rhel7stig_boot_superuser }}
-      line: password_pbkdf2 {{rhel7stig_boot_superuser}} {{ rhel7stig_bootloader_password_hash }}
 
 # RHEL-07-021700 set the value for correctly configured grub bootloader sequence
 rhel7stig_grub_bootloader_validorder: " set root='hd0,msdos1'"
