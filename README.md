@@ -7,10 +7,14 @@ Configure a RHEL 7 system to be DISA STIG compliant. All findings will be audite
 
 This role is based on RHEL 7 DISA STIG: [Version 3, Rel 1 released on Oct 23, 2020](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R1_STIG.zip).
 
-As with all releases and updates, this contains rewrites and ID reference changes.
+Updating
+--------
 
-Please test
------------
+Coming from a previous release.
+
+As with all releases and updates, this contains rewrites and ID reference changes as per STIG documentation.
+
+The password hash if adopting grub now has to be supplied and variables updated. It no longer tries to create the hash.
 
 Requirements
 ------------
@@ -20,8 +24,8 @@ RHEL 7 or CentOS 7 - Other versions are not supported.
 Dependencies
 ------------
 
-Python3
-Ansible 2.9+
+- Python3
+- Ansible 2.9+
 
 Ansible is set to run in a python3 environment.
 
