@@ -1825,9 +1825,11 @@
     create: yes
   notify: restart auditd
   with_items:
+  - { regexp: '^active =', line: 'active = yes'}
   - { regexp: '^direction =', line: 'direction = out' }
   - { regexp: '^path =', line: 'path = /sbin/audisp-remote' }
   - { regexp: '^type =', line: 'type = always' }
+  - { regexp: '^format =', line: 'format = string' }
   when:
   - rhel_07_030201
   tags:
