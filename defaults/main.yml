@@ -383,10 +383,16 @@ rhel7stig_start_firewall_service: true
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
 
+rhel7stig_FIPS_ciphers: aes128-ctr,aes192-ctr,aes256-ctr
+rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
 # RHEL-07-040300
 # RHEL-07-040310
 # Install and enable ssh on networked systems
 rhel7stig_ssh_required: yes
+rhel7stig_ssh_ciphers: {{ rhel7stig_FIPS_ciphers }}
+rhel7stig_ssh_macs: {{ rhel7stig_FIPS_MACs }}
+
+
 
 # RHEL-07-040490
 # If not required, remove vsftpd.
