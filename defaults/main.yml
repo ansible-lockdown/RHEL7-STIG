@@ -383,6 +383,7 @@ rhel7stig_start_firewall_service: true
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
 
+rhel7_use_FIPS: true
 rhel7stig_FIPS_ciphers: aes128-ctr,aes192-ctr,aes256-ctr
 rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
 # RHEL-07-040300
