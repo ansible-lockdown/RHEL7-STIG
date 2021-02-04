@@ -3,6 +3,9 @@
 ## This is used for python3 Installations where python2 OS modules are used in ansible
 python2_bin: /bin/python2.7
 
+## Benchmark name used by audting control role
+benchmark: RHEL7-STIG
+
 ## STIG category to run
 rhel7stig_cat1_patch: yes
 rhel7stig_cat2_patch: yes
