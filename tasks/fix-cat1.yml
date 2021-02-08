@@ -358,23 +358,16 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
       ansible_python_interpreter: "{{ python2_bin }}"
     when:
     - "'dracut-fips' not in ansible_facts.packages"
+    - rhel7stig_use_FIPS
     notify: rebuild initramfs
-
-  - name: "HIGH | RHEL-07-021350 | AUDIT | Check if prelink package is installed"
-    command: rpm -q prelink
-    args:
-      warn: no
-    changed_when: no
-    failed_when: no
-    check_mode: no
-    register: rhel_07_021350_prelink_installed
 
   - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
     lineinfile:
       dest: /etc/sysconfig/prelink
       regexp: ^#?PRELINKING
       line: PRELINKING=no
-    when: rhel_07_021350_prelink_installed.rc == 0
+    when:
+    - "'prelink' in ansible_facts.packages"
     notify: undo existing prelinking
 
   - name: "HIGH | RHEL-07-021350 | AUDIT | Check for GRUB_CMDLINE_LINUX in /etc/default/grub"
@@ -416,6 +409,7 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
     when:
     - not ansible_check_mode or
       rhel_07_021350_default_grub_missing_audit is not changed
+    - rhel7stig_use_FIPS
     notify: confirm grub2 user cfg
 
   - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
@@ -472,6 +466,8 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
     ansible_python_interpreter: "{{ python2_bin }}"
   when: 
   - rhel_07_021710
+  when:
+  - "'telnet-server' in ansible_facts.packages"
   tags:
   - RHEL-07-021710
   - telnet
@@ -560,6 +556,7 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
   when:
   - not rhel7stig_vsftpd_required
   - rhel_07_040690
+  - "'vsftpd' not in ansible_facts.packages"
   tags:
   - RHEL-07-040690
   - ftp
@@ -573,6 +570,7 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
   vars:
     ansible_python_interpreter: "{{ python2_bin }}"
   when:
+  - "('tftp' in ansible_facts.packages or 'tftp-server' in ansible_facts.packages)"
   - not rhel7stig_tftp_required
   - rhel_07_040700
   tags:
