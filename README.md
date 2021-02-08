@@ -72,9 +72,9 @@ Role Variables
 Example Playbook
 ----------------
 
-    - hosts: servers
-      roles:
-          - role: rhel-7-stig
-            when:
-                - ansible_os_family == 'RedHat'
-                - ansible_distribution_major_version | version_compare('7', '=')
+- hosts: servers
+  roles:
+  - role: rhel-7-stig
+  when:
+  - ansible_os_family == 'RedHat'
+  - ansible_distribution_major_version | version_compare('7', '=')
