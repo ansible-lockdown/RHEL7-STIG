@@ -4,7 +4,14 @@
 python2_bin: /bin/python2.7
 
 ## Benchmark name used by audting control role
+# audit variable found at the base
 benchmark: RHEL7-STIG
+
+# Enable goss binary download
+rhel7stig_setup_audit: false
+
+# enable audits to run
+rhel7stig_run_audit: true
 
 ## STIG category to run
 rhel7stig_cat1_patch: yes
