@@ -456,7 +456,7 @@ rhel7stig_aide_cron:
     cron_file: aide
     job: '/usr/sbin/aide --check'
     hour: '5'
-    minute: '*'
+    minute: '0'
     special_time: daily
     # Disable the notification check rule to disable mailing notifications
     notify_by_mail: "{{ rhel_07_020040 }}"
