@@ -40,7 +40,7 @@ rhel7stig_audit_disruptive: yes
 
 rhel7stig_skip_for_travis: false
 
-rhel7stig_workaround_for_disa_benchmark: false
+rhel7stig_workaround_for_disa_benchmark: true
 rhel7stig_workaround_for_ssg_benchmark: true
 
 # tweak role to run in a chroot, such as in kickstart %post script
