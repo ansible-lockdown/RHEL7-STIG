@@ -21,6 +21,12 @@
   tags:
   - always
 
+- name: FIPS turned off
+  set_fact:
+    fips_value: fips=0
+  when:
+  - not rhel7stig_use_FIPS
+
 - name: Check rhel7stig_bootloader_password_hash variable has been changed
   assert:
     that: rhel7stig_bootloader_password_hash != 'changethispassword'
@@ -36,6 +42,27 @@
   - RHEL-07-010490
   - RHEL-07-010491
   - cat1
+
+- name: Setup and run the LE audit
+  block:
+  - name: Setup the LE audit
+    include_tasks: LE_audit_setup.yml
+    when:
+    - rhel7stig_setup_audit
+    tags:
+    - setup_audit
+
+  - name: Download audit content
+    git:
+      url: "{{ rhel7stig_audit_content }}"
+      dest: "{{ rhel7stig_audit_files }}"
+      version: main
+  when:
+  - rhel7stig_setup_audit
+
+- import_tasks: pre_LE_audit.yml
+  when:
+  - rhel7stig_run_audit
 
 - import_tasks: prelim.yml
   become: yes
@@ -68,3 +95,19 @@
   tags:
   - cat3
   - low
+
+- import_tasks: post_LE_audit.yml
+  when:
+  - rhel7stig_run_audit
+
+- name: flush handlers
+  meta: flush_handlers
+
+- name: Compare the audits
+  debug:
+    msg:
+      pre remediation audit summary: "{{ pre_audit_summary }}"
+      post remediation audit summary: "{{ post_audit_summary }}"
+  when:
+  - rhel7stig_run_audit
+  
