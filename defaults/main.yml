@@ -386,7 +386,7 @@ rhel7stig_start_firewall_service: true
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
 
-rhel7_use_FIPS: true
+rhel7stig_use_FIPS: true
 rhel7stig_FIPS_ciphers: aes128-ctr,aes192-ctr,aes256-ctr
 rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
 # RHEL-07-040300
@@ -663,3 +663,26 @@ ol7stig_ipv4_tcp_invalid_ratelimit: 500
 # This control sets all world writable files to be owned by root. To conform to STIG standard all world-writable files must be owned by root or another system account
 # With this toggle off it will list all world-writable files not woned by system accounts
 ol7stig_world_write_files_owner_root: false
+
+
+rhel7stig_audit_content: "git@github.com:uk-bolly/{{ benchmark }}-AUDIT.git"
+rhel7stig_audit_files: "/vagrant/{{ benchmark }}-Audit/"
+
+## audit controls
+goss_version:
+  release: v0.3.16
+  checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+
+### Audit Settings ###
+#goss_checksum: "checksum_{{ goss_version }}"
+goss_path: /usr/local/bin/
+goss_bin: "{{ goss_path }}goss"
+goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
+
+## Goss tests information
+goss_tests_path: /vagrant/RHEL7-STIG-Audit/
+goss_test_file: "{{ goss_tests_path }}goss.yml"
+goss_vars_path: "{{ goss_tests_path }}/vars/stig.yml"
+goss_out_dir: '/var/tmp'
+pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
+post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"
