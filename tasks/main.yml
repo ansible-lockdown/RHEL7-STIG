@@ -21,12 +21,6 @@
   tags:
   - always
 
-- name: FIPS turned off
-  set_fact:
-    fips_value: fips=0
-  when:
-  - not rhel7stig_use_FIPS
-
 - name: FIPS turned on
   set_fact:
     fips_value: fips=1
