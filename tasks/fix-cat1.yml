@@ -442,7 +442,7 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
     command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
     check_mode: no
     with_items:
-    - {{ % if rhel7_use_FIPS % }}fips=1{{ % endif % }}
+    - "{{ fips_value | default('fips=1')}}" 
     - boot=UUID={{ ansible_mounts | json_query(query) }}
     vars:
       query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
@@ -619,3 +619,4 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
   tags:
   - RHEL-07-040800
   - snmp
+  
