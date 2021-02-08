@@ -39,7 +39,7 @@ rhel7stig_audit_disruptive: yes
 
 rhel7stig_skip_for_travis: false
 
-rhel7stig_workaround_for_disa_benchmark: true
+rhel7stig_workaround_for_disa_benchmark: false
 rhel7stig_workaround_for_ssg_benchmark: true
 
 # tweak role to run in a chroot, such as in kickstart %post script
@@ -671,8 +671,19 @@ ol7stig_ipv4_tcp_invalid_ratelimit: 500
 # With this toggle off it will list all world-writable files not woned by system accounts
 ol7stig_world_write_files_owner_root: false
 
+# how to get audit files onto host options
+# options are git/copy/get_url
+rhel7stig_audit_content: git
+rhel7stig_audit_file_git: "git@github.com:uk-bolly/{{ benchmark }}-AUDIT.git"
 
-rhel7stig_audit_content: "git@github.com:uk-bolly/{{ benchmark }}-AUDIT.git"
+# copy:
+#rhel7stig_audit_content: copy
+#rhel7stig_audit_local_copy: "/goss/audit/{{ benchmark }}-AUDIT"
+
+# get_url:
+#rhel7stig_audit_content: get_url
+#rhel7stig_audit_files_url: "/goss/audit/{{ benchmark }}-AUDIT"
+
 rhel7stig_audit_files: "/vagrant/{{ benchmark }}-Audit/"
 
 ## audit controls
