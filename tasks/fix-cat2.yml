@@ -3275,7 +3275,7 @@
   sysctl:
     name: net.ipv6.conf.all.accept_source_route
     state: present
-    value: 0
+    value: '0'
     reload: "{{ rhel7stig_sysctl_reload }}"
     ignoreerrors: yes
   when: 
@@ -3392,6 +3392,8 @@
       mode: 0600
     with_items:
     - "{{ rhel_07_910055_audit_log_files.files }}"
+    when:
+    - item.mode is not search '(0[4,6]00)'
   when:
   - rhel_07_910055
   tags:
