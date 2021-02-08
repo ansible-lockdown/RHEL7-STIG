@@ -1,4 +1,10 @@
 ---
+
+## STIG category to run
+rhel7stig_cat1_patch: yes
+rhel7stig_cat2_patch: yes
+rhel7stig_cat3_patch: yes
+
 ## Python Binary
 ## This is used for python3 Installations where python2 OS modules are used in ansible
 python2_bin: /bin/python2.7
@@ -12,11 +18,6 @@ rhel7stig_setup_audit: false
 
 # enable audits to run
 rhel7stig_run_audit: true
-
-## STIG category to run
-rhel7stig_cat1_patch: yes
-rhel7stig_cat2_patch: yes
-rhel7stig_cat3_patch: yes
 
 # We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation
