@@ -466,7 +466,6 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
     ansible_python_interpreter: "{{ python2_bin }}"
   when: 
   - rhel_07_021710
-  when:
   - "'telnet-server' in ansible_facts.packages"
   tags:
   - RHEL-07-021710
