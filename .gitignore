@@ -39,3 +39,4 @@ travis.env
 benchparse/
 *xccdf.xml
 *.retry
+test_inv
