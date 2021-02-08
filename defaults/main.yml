@@ -393,8 +393,8 @@ rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
 # RHEL-07-040310
 # Install and enable ssh on networked systems
 rhel7stig_ssh_required: yes
-rhel7stig_ssh_ciphers: {{ rhel7stig_FIPS_ciphers }}
-rhel7stig_ssh_macs: {{ rhel7stig_FIPS_MACs }}
+rhel7stig_ssh_ciphers: "{{ rhel7stig_FIPS_ciphers }}"
+rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
 
 
 
