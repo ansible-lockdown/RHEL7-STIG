@@ -9,6 +9,7 @@
 - reorder of rules inline with DOSA changes
 - Amalgamation of OEL rules into RHEL
 - reboot is possible after changes - optional
+- Ability to turn FIPS on and off in defaults/main.yml - runs in prelim with set_fact
 
 refer to STIG documentation for specific changes
 
