@@ -3171,7 +3171,7 @@
   sysctl:
     name: net.ipv4.ip_forward
     state: present
-    value: 0
+    value: '0'
     reload: "{{ rhel7stig_sysctl_reload }}"
     ignoreerrors: yes
   when:
