@@ -27,6 +27,12 @@
   when:
   - not rhel7stig_use_FIPS
 
+- name: FIPS turned on
+  set_fact:
+    fips_value: fips=1
+  when:
+  - rhel7stig_use_FIPS
+
 - name: Check rhel7stig_bootloader_password_hash variable has been changed
   assert:
     that: rhel7stig_bootloader_password_hash != 'changethispassword'
