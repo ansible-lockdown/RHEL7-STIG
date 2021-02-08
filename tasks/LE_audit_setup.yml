@@ -1,0 +1,10 @@
+---
+
+- name: Download goss binary
+  get_url:
+    url: "{{ goss_url }}"
+    dest: "{{ goss_bin }}"
+    owner: root
+    group: root
+    checksum: "{{ goss_version.checksum }}"
+    mode: 0755
