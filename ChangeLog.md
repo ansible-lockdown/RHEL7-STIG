@@ -6,9 +6,8 @@
 
 - New auditing tool all controlled via defaults main. run on host using [goss](https://github.com/aelsabbahy/goss)
 - Seperate role required (use ansible galaxy with requirements.yml)
-- reorder of rules inline with DOSA changes
+- reorder of rules inline with DISA changes
 - Amalgamation of OEL rules into RHEL
-- reboot is possible after changes - optional
 - Ability to turn FIPS on and off in defaults/main.yml - runs in prelim with set_fact
 
 refer to STIG documentation for specific changes
