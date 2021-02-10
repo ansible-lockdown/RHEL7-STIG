@@ -15,9 +15,12 @@ benchmark: RHEL7-STIG
 
 # Enable goss binary download
 rhel7stig_setup_audit: false
+# options are downoad from github or copy from pre downloaded location
+# copy or download
+get_goss_file: download
 
 # enable audits to run
-rhel7stig_run_audit: true
+rhel7stig_run_audit: false
 
 # We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation

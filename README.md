@@ -16,10 +16,21 @@ As with all releases and updates, this contains rewrites and ID reference change
 
 The password hash if adopting grub now has to be supplied and variables updated. It no longer tries to create the hash.
 
+Auditing
+--------
+
+This can be turned on or off within the defaults/main.yml file. False by default refer to wiki for more details.
+
+A new form of auditing has been added using a small (12MB) go binary called [goss](https://github.com/aelsabbahy/goss) along with the relevant configurations to check. Without the need for infrastructure or other tooling.
+This audit will not only check the config has the correct setting but aims to capture if it is running with that configuration also trying to remove [false positives](https://www.mindpointgroup.com/blog/is-compliance-scanning-still-relevant/) in the process.
+
+Refer to [RHEL7-STIG-Audit](for more details).
+
 Requirements
 ------------
 
 RHEL 7 or CentOS 7 - Other versions are not supported.
+Access to download or add the goss binary and content to the system if using auditing. options are available on how to get the content to the system.
 
 Dependencies
 ------------
