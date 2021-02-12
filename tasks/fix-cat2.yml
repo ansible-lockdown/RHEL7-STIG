@@ -3150,7 +3150,7 @@
   - RHEL-07-040710
   - ssh
 
-- name: "MEDIUM | RHEL-07-040711 | PATCH | The Red Hat Enterprise Linux operating system must prevent remote hosts from connecting to the proxy display.
+- name: "MEDIUM | RHEL-07-040711 | PATCH | The Red Hat Enterprise Linux operating system must prevent remote hosts from connecting to the proxy display."
   lineinfile:
     create: yes
     dest: /etc/ssh/sshd_config
