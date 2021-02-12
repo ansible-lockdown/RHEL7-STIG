@@ -3150,6 +3150,21 @@
   - RHEL-07-040710
   - ssh
 
+- name: "MEDIUM | RHEL-07-040711 | PATCH | The Red Hat Enterprise Linux operating system must prevent remote hosts from connecting to the proxy display.
+  lineinfile:
+    create: yes
+    dest: /etc/ssh/sshd_config
+    regexp: "(?i)^#?X11UseLocalhost"
+    line: X11UseLocalhost yes
+    validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+  - rhel_07_040711
+  - rhel7stig_ssh_required
+  tags:
+  - RHEL-07-040711
+  - ssh
+
 - name: "MEDIUM | RHEL-07-040720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that if the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon is configured to operate in secure mode."
   lineinfile:
     path: /etc/xinetd.d/tftp
