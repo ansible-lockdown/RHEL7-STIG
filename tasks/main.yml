@@ -79,12 +79,12 @@
   - cat3
   - low
 
+- name: flush handlers
+  meta: flush_handlers
+
 - import_tasks: post_LE_audit.yml
   when:
   - rhel7stig_run_audit
-
-- name: flush handlers
-  meta: flush_handlers
 
 - name: Compare the audits
   debug:
