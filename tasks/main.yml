@@ -86,11 +86,8 @@
   when:
   - rhel7stig_run_audit
 
-- name: Compare the audits
+- name: Show Audit Summary
   debug:
-    msg:
-      pre remediation audit summary: "{{ pre_audit_summary }}"
-      post remediation audit summary: "{{ post_audit_summary }}"
+    msg: "{{ Audit_results.split('\n') }}"
   when:
   - rhel7stig_run_audit
-  
