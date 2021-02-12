@@ -709,3 +709,8 @@ goss_vars_path: "{{ goss_tests_path }}/vars/stig.yml"
 goss_out_dir: '/var/tmp'
 pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
 post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"
+
+Audit_results: |
+      The pre remediation results are: {{ pre_audit_summary }}.
+      The post remediation results are: {{ post_audit_summary }}.
+      Full breakdown can be found in {{ goss_out_dir }}
