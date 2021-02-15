@@ -704,9 +704,9 @@ goss_bin: "{{ goss_path }}goss"
 goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
 
 ## Goss tests information
-goss_tests_path: /vagrant/RHEL7-STIG-Audit/
-goss_test_file: "{{ goss_tests_path }}goss.yml"
-goss_vars_path: "{{ goss_tests_path }}/vars/stig.yml"
+goss_audit_dir: "/vagrant/{{ benchmark }}-Audit/"
+goss_file: "{{ goss_audit_dir }}goss.yml"
+goss_vars_path: "{{ goss_audit_dir }}/vars/stig.yml"
 goss_out_dir: '/var/tmp'
 pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
 post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"

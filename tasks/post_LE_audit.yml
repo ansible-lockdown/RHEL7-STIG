@@ -3,7 +3,7 @@
 - name: "Run post_remediation {{ benchmark }} audit"
   goss:
     goss_path: "{{ goss_bin }}"
-    path: "{{ goss_test_file }}"
+    path: "{{ goss_file }}"
     vars_path: "{{ goss_vars_path }}"
     format: "{{ goss_format | default('json') }}"
     output_file: "{{ post_audit_outfile }}"
