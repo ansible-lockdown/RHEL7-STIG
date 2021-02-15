@@ -12,19 +12,26 @@ Updating
 
 Coming from a previous release.
 
-As with all releases and updates, this contains rewrites and ID reference changes as per STIG documentation.
+As with all releases and updates, It is suggested to test and align controls.
+This contains rewrites and ID reference changes as per STIG documentation.
 
-The password hash if adopting grub now has to be supplied and variables updated. It no longer tries to create the hash.
+- The password hash
+  - If adopting grub password has to be supplied and variables updated.
+  - It no longer tries to create the hash.
 
-Auditing
---------
+More information can be found in the [ChangeLog](./ChangeLog.md)
+
+Auditing (new)
+--------------
 
 This can be turned on or off within the defaults/main.yml file. False by default refer to wiki for more details.
 
-A new form of auditing has been added using a small (12MB) go binary called [goss](https://github.com/aelsabbahy/goss) along with the relevant configurations to check. Without the need for infrastructure or other tooling.
+This is much quicker, very lightweight, checking (where possible) config compliance and live/running settings.
+
+A new form of auditing has been develeoped, by using a small (12MB) go binary called [goss](https://github.com/aelsabbahy/goss) along with the relevant configurations to check. Without the need for infrastructure or other tooling.
 This audit will not only check the config has the correct setting but aims to capture if it is running with that configuration also trying to remove [false positives](https://www.mindpointgroup.com/blog/is-compliance-scanning-still-relevant/) in the process.
 
-Refer to [RHEL7-STIG-Audit](for more details).
+Refer to [RHEL7-STIG-Audit](http://https://github.com/ansible-lockdown/RHEL7-STIG-Audit).
 
 Requirements
 ------------
@@ -63,7 +70,7 @@ Role Variables
 | `rhel7stig_autofs_required` | `no` | If set to `no`, disable `autofs` service. |
 | `rhel7stig_kdump_required` | `no` | If set to `no`, disable `kdump` service. |
 | `rhel7stig_snmp_community` | `Endgam3Ladyb0g` | SNMP community string that will replace `public` and `private` in `snmpd.conf`. |
-| `rhel7stig_bootloader_password_hash` | `changethispassword` | GRUB2 bootloader password hash. This should be stored in an Ansible Vault |
+| `rhel7stig_bootloader_password_hash` | `grub.pbkdf2.sha512.changethispassword` | GRUB2 bootloader password hash. This should be the hash and stored in an Ansible Vault |
 | `rhel7stig_boot_superuser` | `root` | Used to set the boot superuser in the GRUB2 config. |
 | `rhel7stig_aide_cron` | [see defaults/main.yml](./defaults/main.yml) | AIDE Cron settings |
 | `rhel7stig_maxlogins` | `10` | Set maximum number of simultaneous system logins (RHEL-07-040000) |
@@ -89,3 +96,22 @@ Example Playbook
   when:
   - ansible_os_family == 'RedHat'
   - ansible_distribution_major_version | version_compare('7', '=')
+
+Example Audit Summary
+---------------------
+
+This is based on a vagrant image with selections enabled. e.g. No Gui or firewall.
+Note: More tests are run during audit as we check config and running state.
+
+```sh
+ok: [rhel7test] => {
+  "msg": [
+    "The pre remediation results are: Count: 308, Failed: 157, Duration: 48.425s.",
+    "The post remediation results are: Count: 308, Failed: 15, Duration: 38.432s.",
+    "Full breakdown can be found in /var/tmp",
+    ""
+  ]
+}
+PLAY RECAP ****************************************************************************************************************
+rhel7test         : ok=369  changed=192  unreachable=0  failed=0  skipped=125  rescued=0  ignored=0  
+```
