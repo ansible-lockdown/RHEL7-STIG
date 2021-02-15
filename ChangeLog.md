@@ -1,6 +1,6 @@
-# release Stig October 2020
+# release Stig Jan 2021
 
-[Version 3, Rel 1 released on Oct 23, 2020](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R1_STIG.zip)
+[Version 3, Rel 2 released on Jan 22, 2021](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R2_STIG.zip)
 
 ## Whats new
 
@@ -9,6 +9,8 @@
 - reorder of rules inline with DISA changes
 - Amalgamation of OEL rules into RHEL
 - Ability to turn FIPS on and off in defaults/main.yml - runs in prelim with set_fact
+- If Python3 installed adds the epel repo to install python-rpm and then disables the repo after installing
+- Adding of the goss module to the library path
 
 refer to STIG documentation for specific changes
 
