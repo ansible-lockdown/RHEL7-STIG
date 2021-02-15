@@ -5,7 +5,7 @@
   - name: Setup the LE audit
     include_tasks: LE_audit_setup.yml
     when:
-    - rhel7stig_setup_audit
+    - rhel7stig_setup_audit|bool
     tags:
     - setup_audit
     
@@ -44,12 +44,12 @@
     when: 
     - not goss_available.stat.exists
   when:
-  - rhel7stig_run_audit
+  - rhel7stig_run_audit|bool
 
 - name: "Run pre_remediation {{ benchmark }} audit"
   goss:
     goss_path: "{{ goss_bin }}"
-    path: "{{ goss_test_file }}"
+    path: "{{ goss_file }}"
     vars_path: "{{ goss_vars_path }}"
     format: "{{ goss_format | default('json') }}"
     output_file: "{{ pre_audit_outfile }}"

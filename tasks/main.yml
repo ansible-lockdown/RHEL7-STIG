@@ -25,7 +25,7 @@
   set_fact:
     fips_value: fips=1
   when:
-  - rhel7stig_use_FIPS
+  - rhel7stig_use_FIPS|bool
 
 - name: Check rhel7stig_bootloader_password_hash variable has been changed
   assert:
@@ -45,7 +45,7 @@
 
 - import_tasks: pre_LE_audit.yml
   when:
-  - rhel7stig_run_audit
+  - rhel7stig_run_audit|bool
 
 - import_tasks: prelim.yml
   become: yes
@@ -84,10 +84,10 @@
 
 - import_tasks: post_LE_audit.yml
   when:
-  - rhel7stig_run_audit
+  - rhel7stig_run_audit|bool
 
 - name: Show Audit Summary
   debug:
     msg: "{{ Audit_results.split('\n') }}"
   when:
-  - rhel7stig_run_audit
+  - rhel7stig_run_audit|bool
