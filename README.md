@@ -31,7 +31,7 @@ This is much quicker, very lightweight, checking (where possible) config complia
 A new form of auditing has been develeoped, by using a small (12MB) go binary called [goss](https://github.com/aelsabbahy/goss) along with the relevant configurations to check. Without the need for infrastructure or other tooling.
 This audit will not only check the config has the correct setting but aims to capture if it is running with that configuration also trying to remove [false positives](https://www.mindpointgroup.com/blog/is-compliance-scanning-still-relevant/) in the process.
 
-Refer to [RHEL7-STIG-Audit](http://https://github.com/ansible-lockdown/RHEL7-STIG-Audit).
+Refer to [RHEL7-STIG-Audit](https://github.com/ansible-lockdown/RHEL7-STIG-Audit).
 
 Requirements
 ------------
