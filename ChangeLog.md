@@ -23,3 +23,4 @@ refer to STIG documentation for specific changes
 
 - use of the packages facts module
 - ability to set own Ciphers and MACs (defaults to FIPS) - note this can affect logins with grub settings
+- Oracle Enterprise Linux - whilst other versions have specific OEL controls. With the latest release there more controlled contained in RHEL. These contain all OEL requirements too.
