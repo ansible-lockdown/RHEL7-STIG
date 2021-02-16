@@ -105,11 +105,13 @@ Note: More tests are run during audit as we check config and running state.
 
 ```sh
 ok: [rhel7test] => {
-  "msg": [
-    "The pre remediation results are: Count: 308, Failed: 157, Duration: 48.425s.",
-    "The post remediation results are: Count: 308, Failed: 15, Duration: 38.432s.",
-    "Full breakdown can be found in /var/tmp",
-    ""
+    "msg": [
+        "The pre remediation results are: Count: 308, Failed: 156, Duration: 44.108s.",
+        "The post remediation results are: Count: 308, Failed: 14, Duration: 37.647s.",
+        "Full breakdown can be found in /var/tmp",
+        ""
+    ]
+}
   ]
 }
 PLAY RECAP ****************************************************************************************************************
