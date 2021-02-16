@@ -16,7 +16,7 @@ refer to STIG documentation for specific changes
 
 ## High level changes within tasks
 
-- Python3 now default for control node (should be backward compatible in setup)
+- Python 2 & 3 (preferred) working an setup for control node and host
 - Grub password no longer created using passlib needs to be supplied as variable
 
   - assert has been created if rule still enabled and password not changed
