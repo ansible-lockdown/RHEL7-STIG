@@ -9,13 +9,13 @@ rhel7stig_cat3_patch: yes
 ## This is used for python3 Installations where python2 OS modules are used in ansible
 python2_bin: /bin/python2.7
 
-## Benchmark name used by audting control role
+## Benchmark name used by auditing control role
 # audit variable found at the base
 benchmark: RHEL7-STIG
 
 # Enable goss binary download
 rhel7stig_setup_audit: false
-# options are downoad from github or copy from pre downloaded location
+# options are download from github or copy from pre downloaded location
 # copy or download
 get_goss_file: download
 
@@ -438,7 +438,7 @@ rhel7stig_boot_superuser: root
 # RHEL-07-021700 set the value for correctly configured grub bootloader sequence
 rhel7stig_grub_bootloader_validorder: " set root='hd0,msdos1'"
 
-# RHEL-07-040200 Path for cacrt buncdle that holds LDAP certs for tls transport
+# RHEL-07-040200 Path for cacrt bundle that holds LDAP certs for tls transport
 rhel_07_040200_cabundle_path: etc/pki/tls/certs/ca-bundle.crt
 
 # AIDE settings
@@ -670,7 +670,7 @@ ol7stig_ipv4_tcp_invalid_ratelimit: 500
 
 # Control OL-07-021031
 # This control sets all world writable files to be owned by root. To conform to STIG standard all world-writable files must be owned by root or another system account
-# With this toggle off it will list all world-writable files not woned by system accounts
+# With this toggle off it will list all world-writable files not owned by system accounts
 ol7stig_world_write_files_owner_root: false
 
 # how to get audit files onto host options
