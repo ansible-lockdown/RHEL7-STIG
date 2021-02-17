@@ -41,6 +41,7 @@ rhel7stig_disruption_high: no
 # setting to make them stand out.
 rhel7stig_audit_disruptive: yes
 
+# Skip controls that conflict with travis environments
 rhel7stig_skip_for_travis: false
 
 rhel7stig_workaround_for_disa_benchmark: true
@@ -388,7 +389,9 @@ rhel7stig_time_service_configs:
             - regexp: ^#?maxpoll
               line: maxpoll 10
 
+# The firewall to be used
 rhel7stig_firewall_service: firewalld
+# The toggle to start the firewall service. Set to true the role will start the service for you where needed
 rhel7stig_start_firewall_service: true
 
 # RHEL-07-031010
@@ -475,6 +478,7 @@ rhel7stig_aide_conf:
 # Set maximum number of simultaneous system logins (RHEL-07-040000)
 rhel7stig_maxlogins: 10
 
+# Set the login banner settings
 rhel7stig_logon_banner: "{{ rhel7stig_workaround_for_disa_benchmark | ternary(
         rhel7stig_logon_banner_nice | regex_replace('(?s)(?<!\\n)\\n(?!(\n|$))', ' '),
         rhel7stig_logon_banner_nice) }}"
@@ -658,10 +662,12 @@ rhel7stig_local_mounts_query: "[?starts_with(device, '/dev/')].mount"
 rhel7stig_nfs_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_nfs_mounts_query) }}"
 rhel7stig_nfs_mounts_query: "[?starts_with(fstype, 'nfs')].mount"
 
+# DNS Servers to configure, you need two to conform to STIG standards
 rhel_07_040600_dns_servers:
     - 9.9.9.9
     - 149.112.112.112
 
+# The GID start point for interactive (non-system) users
 rhel7stig_int_gid: 1000
 
 # Control OL-07-040510
