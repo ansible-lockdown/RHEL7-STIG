@@ -173,7 +173,6 @@ rhel_07_021620: true
 rhel_07_021700: true
 rhel_07_030000: true
 rhel_07_030010: true
-#rhel_07_030200: true
 rhel_07_030201: true
 rhel_07_030210: true
 rhel_07_030211: true
@@ -226,7 +225,6 @@ rhel_07_030750: true
 rhel_07_030760: true
 rhel_07_030770: true
 rhel_07_030780: true
-#rhel_07_030790: true
 rhel_07_030800: true
 rhel_07_030810: true
 rhel_07_030819: true
@@ -271,9 +269,7 @@ rhel_07_040440: true
 rhel_07_040450: true
 rhel_07_040460: true
 rhel_07_040470: true
-ol_07_040480: true
 rhel_07_040500: true
-ol_07_040510: true
 rhel_07_040520: true
 rhel_07_040610: true
 rhel_07_040611: true
