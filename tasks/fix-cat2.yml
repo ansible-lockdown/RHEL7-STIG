@@ -2944,21 +2944,6 @@
   - RHEL-07-040500
   - chronyd
 
-- name: "MEDIUM | OL-07-040510 | PATCH | The Oracle Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
-  sysctl:
-    name: net.ipv4.tcp_invalid_ratelimit
-    value: "{{ ol7stig_ipv4_tcp_invalid_ratelimit }}"
-    state: present
-    reload: "{{ rhel7stig_sysctl_reload }}"
-  when:
-  - ol_07_040510
-  - ansible_distribution == "OracleLinux"
-  tags:
-  - OL-07-040510
-  - OracleLinux
-  - sysctl
-  - ipv4
-
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
   package:
     name: "{{ rhel7stig_firewall_service }}"
