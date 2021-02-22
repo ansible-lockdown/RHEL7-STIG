@@ -1,0 +1,737 @@
+Title: 1.3.3 Ensure sudo log file exists (Automated)_sudoers.d
+Command: log_sudoers_d: exit-status: matches expectation: [{"lt":3}]
+Command: log_sudoers_d: stdout: matches expectation: [/[1:99]/]
+Title: 1.2.3 Ensure gpgcheck is globally active
+Command: gpg_check_global: exit-status: matches expectation: [0]
+Title: 5.4.1.4 Ensure inactive password lock is 30 days or less
+Command: inactive_passwd: exit-status: matches expectation: [0]
+Command: inactive_passwd: stdout: matches expectation: [/^INACTIVE=[1-30]/]
+Title: 2.2.16 Ensure mail transfer agent is configured for local-only mode (Automated)
+Command: mta_installed: exit-status: matches expectation: [1]
+Command: mta_installed: stdout: matches expectation: [!/./]
+Title: 1.5.3 Ensure authentication required for single user mode (Automated)
+Command: single_user_1: exit-status: matches expectation: [0]
+Title: 1.2.1 Ensure GPG keys are configured
+Command: gpg_keys: exit-status: matches expectation: [0]
+Title: 1.1.1.4 Ensure mounting of fat filesystems is disabled (Automated)
+Command: fat_live: exit-status: matches expectation: [0]
+Command: fat_live: stdout: matches expectation: [Passed_Check]
+Title: 1.1.1.2 Ensure mounting of squashfs filesystems is disabled (Automated)
+Command: squashfs: exit-status: matches expectation: [0]
+Command: squashfs: stdout: matches expectation: [install /bin/true]
+Title: 5.4.1.5 Ensure all users last password change date is in the past
+Command: passwd_chg_past: exit-status: matches expectation: [1]
+Command: passwd_chg_past: stdout: matches expectation: [!Failed]
+Title: 1.3.2 Ensure sudo commands use pty (Automated)
+Command: pty_sudoers_d: exit-status: matches expectation: [0]
+Command: pty_sudoers_d: stdout: matches expectation: [/[1-99]/]
+Title: 1.2.3 Ensure gpgcheck is globally active
+Command: gpg_check_repo: exit-status: matches expectation: [0]
+Title: 1.1.21 Check for removeable media nosuid
+Command: floppy_nosuid: exit-status: matches expectation: [0]
+Command: floppy_nosuid: stdout: matches expectation: [Passed_Check]
+Title: 1.6.3 Ensure address space layout randomization (ASLR) is enabled (Automated)
+Command: aslr_enabled_1: exit-status: matches expectation: [0]
+Command: aslr_enabled_1: stdout: matches expectation: [kernel.randomize_va_space = 2]
+Title: 1.1.1.3 Ensure mounting of udf filesystems is disabled (Automated)
+Command: udf: exit-status: matches expectation: [0]
+Command: udf: stdout: matches expectation: [install /bin/true]
+Title: 1.1.19 Check for removeable media noexec
+Command: cdrom_noexec: exit-status: matches expectation: [0]
+Command: cdrom_noexec: stdout: matches expectation: [Passed_Check]
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_sysctl
+Command: suid_dumpable_1: exit-status: matches expectation: [0]
+Command: suid_dumpable_1: stdout: matches expectation: [fs.suid_dumpable = 0]
+Title: 1.2.4 Ensure Redhat Subscription Manager connection configured
+Command: subscription: exit-status: matches expectation: [{"or":[0,127]}]
+Command: subscription: stderr: matches expectation: [command not found]
+Title: 1.1.20 Check for removeable media nodev
+Command: floppy_nodev: exit-status: matches expectation: [0]
+Command: floppy_nodev: stdout: matches expectation: [Passed_Check]
+Title: 1.1.1.4 Ensure mounting of fat filesystems is disabled (Automated)
+Command: fat: exit-status: matches expectation: [0]
+Command: fat: stdout: matches expectation: [install /bin/true]
+Title: 1.1.1.4 Ensure mounting of fat filesystems is disabled (Automated)
+Command: msdos: exit-status: matches expectation: [0]
+Command: msdos: stdout: matches expectation: [install /bin/true]
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_sysctl
+Command: suid_dumpable_2: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: suid_dumpable_2: stdout: patterns not found: [fs.suid_dumpable = 0]
+Title: 4.2.3 Ensure permissions on all logfiles are configured
+Command: logfile_configured: exit-status: matches expectation: [0]
+Command: logfile_configured: stdout: patterns not found: [!/./]
+Title: 5.4.2 Ensure system accounts are secured (Automated)
+Command: secure_system_accts: exit-status: matches expectation: [1]
+Command: secure_system_accts: stdout: matches expectation: [!/./]
+Title: 5.4.4 Ensure default user shell timeout is configured (Automated)-profile.d
+Command: check_timeout: exit-status:
+Expected
+    <int>: 2
+to equal
+    <int>: 0
+Command: check_timeout: stdout: matches expectation: [!/./]
+Title: 5.4.1.4 Ensure inactive password lock is 30 days or less
+Command: inactive_users: exit-status: matches expectation: [0]
+Command: inactive_users: stdout: patterns not found: [!/./]
+Title: 1.1.21 Check for removeable media nosuid
+Command: cdrom_nosuid: exit-status: matches expectation: [0]
+Command: cdrom_nosuid: stdout: matches expectation: [Passed_Check]
+Title: 5.2.3 Ensure permissions on SSH private host key files are configured_group
+Command: /etc/ssh/ssh_host_key_group: exit-status: matches expectation: [0]
+Command: /etc/ssh/ssh_host_key_group: stdout: matches expectation: [!/./]
+Title: (L2) 4.1.1.3 Ensure auditing for processes that start prior to auditd is enabled (Automated)
+Command: auditd_grub: exit-status: matches expectation: [0]
+Command: auditd_grub: stdout: patterns not found: [!/./]
+Title: 3.1.2 Ensure wireless interfaces are disabled (Manual)
+Command: iwconfig: exit-status: matches expectation: [127]
+Title: 3.4.2 Ensure SCTP is disabled (Automated)
+Command: modprobe_sctp: exit-status: matches expectation: [0]
+Command: modprobe_sctp: stdout: patterns not found: [install /bin/true]
+Title: 1.1.19 Check for removeable media noexec
+Command: floppy_noexec: exit-status: matches expectation: [0]
+Command: floppy_noexec: stdout: matches expectation: [Passed_Check]
+Command: secure_system_LK: exit-status: matches expectation: [1]
+Command: secure_system_LK: stdout: matches expectation: [0]
+Title: 5.2.3 Ensure permissions on SSH pub host key files are configured_user
+Command: /etc/ssh/ssh_host_key_user: exit-status: matches expectation: [0]
+Command: /etc/ssh/ssh_host_key_user: stdout: matches expectation: [!/./]
+Title: 3.4.1 Ensure DCCP is disabled (Automated)
+Command: modprobe_dccp: exit-status: matches expectation: [0]
+Command: modprobe_dccp: stdout: patterns not found: [install /bin/true]
+Title: 1.1.20 Check for removeable media nodev
+Command: cdrom_nodev: exit-status: matches expectation: [0]
+Command: cdrom_nodev: stdout: matches expectation: [Passed_Check]
+Title: 1.5.3 Ensure authentication required for single user mode (Automated)
+Command: single_user_2: exit-status: matches expectation: [0]
+Title: 1.6.3 Ensure address space layout randomization (ASLR) is enabled (Automated)
+Command: aslr_enabled_2: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: aslr_enabled_2: stdout: patterns not found: [kernel.randomize_va_space = 2]
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_security_limits
+Command: core_dumps_limits: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: core_dumps_limits: stdout: patterns not found: [* hard core 0]
+Title: 1.1.1.4 Ensure mounting of fat filesystems is disabled (Automated)
+Command: vfat: exit-status: matches expectation: [0]
+Command: vfat: stdout: matches expectation: [install /bin/true]
+Title: 5.2.3 Ensure permissions on SSH private host key files are configured_user
+Command: /etc/ssh/ssh_host_key_perms: exit-status: matches expectation: [0]
+Command: /etc/ssh/ssh_host_key_perms: stdout: matches expectation: [!/./]
+Title: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled (Automated)
+Command: cramfs: exit-status: matches expectation: [0]
+Command: cramfs: stdout: matches expectation: [install /bin/true]
+Title: 1.7.1.8 Ensure the MCS Translation Service (mcstrans) is not installed
+Package: mcstrans: installed: matches expectation: [false]
+Title: 2.2.4 Ensure CUPS is not installed (Automated)
+Package: cups: installed: matches expectation: [false]
+Title: 4.1.1.1 Ensure auditd is installed (Automated)
+Package: audit-libs: installed: matches expectation: [true]
+Title: 2.2.13 Ensure Samba is not installed (Automated)
+Package: samba: installed: matches expectation: [false]
+Title: 4.2.1.1 Ensure rsyslog is installed (Automated)
+Package: rsyslog: installed: matches expectation: [true]
+Title: (L2) 4.1.1.1 Ensure auditd is installed (Automated)
+Package: auditd: installed:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: 1.7.1.7 Ensure SETroubleshoot is not installed (Automated)
+Package: setroubleshoot: installed: matches expectation: [false]
+Title: 2.2.18 Ensure NIS server is not installed (Automated)
+Package: ypserver: installed: matches expectation: [false]
+Title: 1.6.4 Ensure prelink is disabled (Automated)
+Package: prelink: installed: matches expectation: [false]
+Title: 1.6.2 Ensure XD/NX support is enabled (Automated)
+Command: kernel_nx: exit-status: matches expectation: [0]
+Command: kernel_nx: stdout: matches expectation: [kernel: NX (Execute Disable) protection: active]
+Title: 2.2.1 Ensure xinetd is not installed (Automated)
+Package: xinetd: installed: matches expectation: [false]
+Title: 2.2.9 Ensure DNS Server is not installed (Automated)
+Package: bind: installed: matches expectation: [false]
+Title: 2.3.3 Ensure talk client is not installed (Automated)
+Package: talk: installed: matches expectation: [false]
+Title: 2.3.1 Ensure NIS Client is not installed (Automated)
+Package: ypbind: installed: matches expectation: [false]
+Title: 3.5.1.1 Ensure FirewallD is installed (Automated)
+Package: firewalld: installed: matches expectation: [true]
+Title: 2.2.11 Ensure HTTP Server is not installed (Automated)
+Package: httpd: installed: matches expectation: [false]
+Title: 2.2.5 Ensure DHCP Server is not installed (Automated)
+Package: dhcp: installed: matches expectation: [false]
+Title: 2.2.6 Ensure LDAP server is not installed (Automated)
+Package: openldap-servers: installed: matches expectation: [false]
+Title: 2.3.2 Ensure rsh client is not installed (Automated)
+Package: rsh: installed: matches expectation: [false]
+Title: 3.5.1.5 Ensure default zone is set (Automated)
+Command: default_zone: exit-status: matches expectation: [0]
+Command: default_zone: stdout: matches expectation: [public]
+Title: 2.2.10 Ensure FTP Server is not installed (Automated)
+Package: vsftpd: installed: matches expectation: [false]
+Title: 2.2.12 Ensure IMAP and POP3 Server is not installed (Automated)
+Package: dovecot: installed: matches expectation: [false]
+Title: 3.5.1.1 Ensure FirewallD is installed (Automated)
+Package: iptables: installed: matches expectation: [true]
+Title: 2.2.1.1 Ensure time synchronization is in use (Manual)_chrony
+Package: chrony: installed: matches expectation: [true]
+Title: 5.1.1 Ensure cron daemon is enabled and running (Automated)
+Package: crond: installed:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: 2.3.5 Ensure LDAP client is not installed (Automated)
+Package: openldap-clients: installed: matches expectation: [false]
+Title: 2.2.19 Ensure telnet-server is not installed (Automated)
+Package: telnet-server: installed: matches expectation: [false]
+Title: 2.3.4 Ensure telnet client is not installed (Automated)
+Package: telnet: installed: matches expectation: [false]
+Title: 2.2.2 Ensure X11 Server components are not installed (Automated)
+Package: xorgs-x11-servers: installed: matches expectation: [false]
+Title: 1.3.1 Ensure sudo is installed (Automated)
+Package: sudo: installed: matches expectation: [true]
+Title: 2.2.14 Ensure http proxy Server is not installed (Automated)
+Package: squid: installed: matches expectation: [false]
+Title: 4.2.1.2 Ensure rsyslog Service is enabled and running (Automated)
+Service: rsyslog: enabled: matches expectation: [true]
+Service: rsyslog: running: matches expectation: [true]
+Service: crond: enabled: matches expectation: [true]
+Service: crond: running: matches expectation: [true]
+Title: 2.2.3 Ensure Avahi Server is not installed (Automated)
+Package: avahi: installed: matches expectation: [false]
+Title: 1.1.23 Disable Automounting
+Service: autofs: enabled: matches expectation: [false]
+Service: autofs: running: matches expectation: [false]
+Title: 5.4.4 Ensure default user shell timeout is configured (Automated)-bashrc
+File: /etc/bashrc: exists: matches expectation: [true]
+File: /etc/bashrc: contains: patterns not found: [/^TMOUT=([1-8][0-9]{0,2}|900)/, /^readonly TMOUT/]
+Title: 4.2.1.3 Ensure rsyslog default file permissions configured
+File: /etc/rsyslog.d/*.conf: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/rsyslog.d/*.conf: contains: skipped
+Title: 5.1.7 Ensure permissions on /etc/cron.d are configured
+File: /etc/cron.d: exists: matches expectation: [true]
+File: /etc/cron.d: mode:
+Expected
+    <string>: 0755
+to equal
+    <string>: 0700
+File: /etc/cron.d: owner: matches expectation: ["root"]
+File: /etc/cron.d: group: matches expectation: ["root"]
+Title: 1.8.1.1 & 4 Ensure message of the day is configured properly (Automated)
+File: /etc/motd: exists: matches expectation: [true]
+File: /etc/motd: mode: matches expectation: ["0644"]
+File: /etc/motd: owner: matches expectation: ["root"]
+File: /etc/motd: group: matches expectation: ["root"]
+File: /etc/motd: contains: matches expectation: [![Cc]ent[Oo][Ss] ![Rr]hel ![Rr]ed[Hh]at !x86_64 ![Ll]inux]
+Title: 5.2.9 Ensure SSH HostbasedAuthentication is disabled
+File: /etc/ssh/sshd_config: exists: matches expectation: [true]
+File: /etc/ssh/sshd_config: contains: matches expectation: [HostbasedAuthentication no !/^HostbasedAuthentication yes/]
+Title: 5.4.4 Ensure default user shell timeout is configured (Automated)-profile
+File: /etc/profile: exists: matches expectation: [true]
+File: /etc/profile: contains: matches expectation: [/^TMOUT=([1-8][0-9]{0,2}|900)/ /^readonly TMOUT/]
+Title: 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk
+File: /etc/systemd/journald.conf: exists: matches expectation: [true]
+File: /etc/systemd/journald.conf: contains: patterns not found: [Storage=persistent]
+Title: 5.1.9 Ensure at is restricted to authorized users
+File: /etc/at.allow: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/at.allow: mode: skipped
+File: /etc/at.allow: owner: skipped
+File: /etc/at.allow: group: skipped
+Title: 5.3.1 Ensure password creation requirements are configured
+File: /etc/security/pwquality.conf: exists: matches expectation: [true]
+File: /etc/security/pwquality.conf: contains: patterns not found: [dcredit = -1, ucredit = -1, lcredit = -1, ocredit = -1]
+Title: 4.2.1.3 Ensure rsyslog default file permissions configured
+File: /etc/rsyslog.conf: exists: matches expectation: [true]
+File: /etc/rsyslog.conf: contains: patterns not found: [$FileCreateMode 06[0:4]0]
+Title: 1.8.1.2 & 5 Ensure local login warning banner is configured properly (Automated)
+File: /etc/issue: exists: matches expectation: [true]
+File: /etc/issue: mode: matches expectation: ["0644"]
+File: /etc/issue: owner: matches expectation: ["root"]
+File: /etc/issue: group: matches expectation: ["root"]
+File: /etc/issue: contains: matches expectation: [![Cc]ent[Oo][Ss] ![Rr]hel ![Rr]ed[Hh]at !x86_64 ![Ll]inux]
+Title: 5.3.4 Ensure password reuse is limited
+File: /etc/pam.d/system-auth: exists: matches expectation: [true]
+File: /etc/pam.d/system-auth: contains: patterns not found: [/^password sufficient pam_unix.so sha512 shadow nullok try_first_pass remember=5 user_authtok/]
+Title: 2.2.1.2 Ensure chrony is configured (Automated)_conf
+File: /etc/chrony.conf: exists: matches expectation: [true]
+File: /etc/chrony.conf: contains: matches expectation: [server]
+Title: 5.1.2 Ensure permissions on /etc/crontab are configured
+File: /etc/crontab: exists: matches expectation: [true]
+File: /etc/crontab: mode: matches expectation: ["0644"]
+File: /etc/crontab: owner: matches expectation: ["root"]
+File: /etc/crontab: group: matches expectation: ["root"]
+Title: (L2) 4.1.2.3 Ensure system is disabled when audit logs are full (Automated)
+File: /etc/audit/auditd.conf: exists: matches expectation: [true]
+File: /etc/audit/auditd.conf: contains: patterns not found: [space_left_action = email, /^admin_space_left_action = halt/]
+Title: 1.5.1 Ensure bootloader password is set (Automated) and permissions
+File: /boot/grub2/user.cfg: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /boot/grub2/user.cfg: mode: skipped
+File: /boot/grub2/user.cfg: owner: skipped
+File: /boot/grub2/user.cfg: group: skipped
+Title: 5.4.1.3 Ensure password expiration warning days is 7 or more
+File: /etc/login.defs: exists: matches expectation: [true]
+File: /etc/login.defs: contains: matches expectation: [/^PASS_WARN_AGE\s*7/ !/^PASS_WARN_AGE\s*[1-6]/]
+Title: 1.3.3 Ensure sudo log file exists (Automated)
+File: /etc/sudoers: exists: matches expectation: [true]
+File: /etc/sudoers: contains: patterns not found: [/^Defaults logfile=/var/log//, !/^#Defaults logfile=/]
+Title: 1.8.1.3 & 6 Ensure remote login warning banner is configured properly (Automated)
+File: /etc/issue.net: exists: matches expectation: [true]
+File: /etc/issue.net: mode: matches expectation: ["0644"]
+File: /etc/issue.net: owner: matches expectation: ["root"]
+File: /etc/issue.net: group: matches expectation: ["root"]
+File: /etc/issue.net: contains: matches expectation: [![Cc]ent[Oo][Ss] ![Rr]hel ![Rr]ed[Hh]at !x86_64 ![Ll]inux]
+Title: 5.1.9 Ensure at is restricted to authorized users
+File: /etc/at.deny: exists:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+Title: 2.2.1.2 Ensure chrony is configured (Automated)_sysconf
+File: /etc/sysconfig/chronyd: exists: matches expectation: [true]
+File: /etc/sysconfig/chronyd: contains: matches expectation: [OPTIONS="-u chrony"]
+Title: 5.3.4 Ensure password reuse is limited
+File: /etc/pam.d/password-auth: exists: matches expectation: [true]
+File: /etc/pam.d/password-auth: contains: patterns not found: [/^password sufficient pam_unix.so sha512 shadow nullok try_first_pass remember=5 user_authtok/]
+Title: (L2) 4.1.2.4  Ensure audit_backlog_limit is sufficient (Automated)
+File: /boot/grub2/grub.cfg: exists: matches expectation: [true]
+File: /boot/grub2/grub.cfg: contains: patterns not found: [GRUB_CMDLINE_LINUX="audit_backlog_limit=2048"]
+Title: 5.4.3 Ensure default group for the root account is GID 0 (Automated)
+root: exists: Error: Missing Required Attribute
+User: root: uid: skipped
+User: root: gid: skipped
+Title: 3.3.1 Ensure source routed packets are not accepted (Automated)_ipv6_default
+KernelParam: net.ipv6.conf.default.accept_source_route: value: matches expectation: ["0"]
+Title: 3.3.9 Ensure IPv6 router advertisements are not accepted (Automated)
+KernelParam: net.ipv6.conf.default.accept_ra: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.2.2 Ensure packet redirect sending is disabled (Automated)_default
+KernelParam: net.ipv4.conf.default.send_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.6 Ensure bogus ICMP responses are ignored (Automated)
+KernelParam: net.ipv4.icmp_ignore_bogus_error_responses: value: matches expectation: ["1"]
+Title: 3.3.7 Ensure Reverse Path Filtering is enabled (Automated)_def
+KernelParam: net.ipv4.conf.all.rp_filter: value: matches expectation: ["1"]
+Title: 3.3.8 Ensure TCP SYN Cookies is enabled (Automated)
+KernelParam: net.ipv4.tcp_syncookies: value: matches expectation: ["1"]
+Title: 3.2.1 Ensure IP forwarding is disabled (Automated)_ipv4
+KernelParam: net.ipv4.ip_forward: value: matches expectation: ["0"]
+Title: 3.3.1 Ensure source routed packets are not accepted (Automated)_ipv4_default
+KernelParam: net.ipv4.conf.default.accept_source_route: value: matches expectation: ["0"]
+Title: 3.3.3 Ensure secure ICMP redirects are not accepted (Automated)_all
+KernelParam: net.ipv4.conf.all.secure_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.2.1 Ensure IP forwarding is disabled (Automated)_ipv6
+KernelParam: net.ipv6.conf.all.forwarding: value: matches expectation: ["0"]
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv6_def
+KernelParam: net.ipv6.conf.default.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.4 Ensure suspicious packets are logged (Automated)_all
+KernelParam: net.ipv4.conf.all.log_martians: value:
+Expected
+    <string>: 0
+to equal
+    <string>: 1
+Title: 3.3.1 Ensure source routed packets are not accepted (Automated)_ipv4_all
+KernelParam: net.ipv4.conf.all.accept_source_route: value: matches expectation: ["0"]
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv4
+KernelParam: net.ipv4.conf.all.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.5 Ensure broadcast ICMP requests are ignored (Automated)
+KernelParam: net.ipv4.icmp_echo_ignore_broadcasts: value: matches expectation: ["1"]
+Title: 3.3.9 Ensure IPv6 router advertisements are not accepted (Automated)
+KernelParam: net.ipv6.conf.all.accept_ra: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.3.4 Ensure suspicious packets are logged (Automated)_def
+KernelParam: net.ipv4.conf.default.log_martians: value:
+Expected
+    <string>: 0
+to equal
+    <string>: 1
+Title: 3.3.1 Ensure source routed packets are not accepted (Automated)_ipv6_all
+KernelParam: net.ipv6.conf.all.accept_source_route: value: matches expectation: ["0"]
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv4_def
+KernelParam: net.ipv4.conf.default.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 2.2.15 Ensure net-snmp is not installed (Automated)
+Package: net-snmp: installed: matches expectation: [false]
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv6
+KernelParam: net.ipv6.conf.all.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: 3.2.2 Ensure packet redirect sending is disabled (Automated)_all
+KernelParam: net.ipv4.conf.all.send_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: (L2) 1.1.15 Ensure separate partition exists for /var/log (Automated)
+Mount: /var/log: exists: matches expectation: [true]
+Title: (L2) 1.1.16  Ensure separate partition exists for /var/log/audit (Automated)
+Mount: /var/log/audit: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: 1.1.17 Ensure separate partition exists for /home (Automated)
+Mount: /home: exists: matches expectation: [true]
+Mount: /home: opts: matches expectation: [["nodev"]]
+Title: 1.1.2_5 Ensure /tmp is configured (Automated) with mount options
+Mount: /tmp: exists: matches expectation: [true]
+Mount: /tmp: opts:
+Expected
+    <[]string | len:4, cap:4>: ["rw", "nodev", "noexec", "relatime"]
+to contain element matching
+    <string>: nosuid
+Title: 1.1.6_9 Ensure /dev/shm is configured
+Mount: /dev/shm: exists: matches expectation: [true]
+Mount: /dev/shm: opts:
+Expected
+    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
+to contain element matching
+    <string>: noexec
+Title: (L2) 1.1.10 Ensure separate partition exists for /var (Automated)
+Mount: /var: exists: matches expectation: [true]
+Title: (L2) 1.1.11_14 Ensure separate partition exists for /var/tmp (Automated)
+Mount: /var/tmp: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Mount: /var/tmp: opts: skipped
+Title: 3.3.3 Ensure secure ICMP redirects are not accepted (Automated)_def
+KernelParam: net.ipv4.conf.default.secure_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Service: coredump: enabled: matches expectation: [false]
+Service: coredump: running: matches expectation: [false]
+Title: 1.2.5 Disable the rhnsd Daemon (Manual)
+Service: rhnsd: enabled: matches expectation: [false]
+Service: rhnsd: running: matches expectation: [false]
+Title: 3.5.1.4 Ensure firewalld service is enabled and running (Automated)
+Service: firewalld: enabled: matches expectation: [true]
+Service: firewalld: running: matches expectation: [true]
+Title: (L2) 4.1.1.2 Ensure auditd service is enabled and running (Automated)
+Service: auditd: enabled: matches expectation: [true]
+Service: auditd: running: matches expectation: [true]
+Title: 1.1.22 Ensure sticky bit is set on all world-writable directories
+Command: sticky_bit: exit-status: matches expectation: [0]
+Command: sticky_bit: stdout: matches expectation: [!/./]
+Title: 3.5.1.6 Ensure network interfaces are assigned to appropriate zone
+Command: nic_assigned: exit-status: matches expectation: [0]
+Command: nic_assigned: stdout: matches expectation: [ens192]
+Title: 1.9 Ensure updates, patches, and additional security software are installed (Automated)
+Command: security-updates: exit-status:
+Expected
+    <int>: 100
+to equal
+    <int>: 0
+Command: security-updates: stdout: matches expectation: [![0-9].* packages available]
+Title: 1.2.2 Ensure Package manager repositories are configured
+Command: repos_configured: exit-status: matches expectation: [0]
+
+
+Failures/Skipped:
+
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_sysctl
+Command: suid_dumpable_2: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: suid_dumpable_2: stdout: patterns not found: [fs.suid_dumpable = 0]
+
+Title: 4.2.3 Ensure permissions on all logfiles are configured
+Command: logfile_configured: stdout: patterns not found: [!/./]
+
+Title: 5.4.4 Ensure default user shell timeout is configured (Automated)-profile.d
+Command: check_timeout: exit-status:
+Expected
+    <int>: 2
+to equal
+    <int>: 0
+
+Title: 5.4.1.4 Ensure inactive password lock is 30 days or less
+Command: inactive_users: stdout: patterns not found: [!/./]
+
+Title: (L2) 4.1.1.3 Ensure auditing for processes that start prior to auditd is enabled (Automated)
+Command: auditd_grub: stdout: patterns not found: [!/./]
+
+Title: 3.4.2 Ensure SCTP is disabled (Automated)
+Command: modprobe_sctp: stdout: patterns not found: [install /bin/true]
+
+Title: 3.4.1 Ensure DCCP is disabled (Automated)
+Command: modprobe_dccp: stdout: patterns not found: [install /bin/true]
+
+Title: 1.6.3 Ensure address space layout randomization (ASLR) is enabled (Automated)
+Command: aslr_enabled_2: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: aslr_enabled_2: stdout: patterns not found: [kernel.randomize_va_space = 2]
+
+Title: 1.6.1 Ensure core dumps are restricted (Automated)_security_limits
+Command: core_dumps_limits: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: core_dumps_limits: stdout: patterns not found: [* hard core 0]
+
+Title: (L2) 4.1.1.1 Ensure auditd is installed (Automated)
+Package: auditd: installed:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: 5.1.1 Ensure cron daemon is enabled and running (Automated)
+Package: crond: installed:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: 5.4.4 Ensure default user shell timeout is configured (Automated)-bashrc
+File: /etc/bashrc: contains: patterns not found: [/^TMOUT=([1-8][0-9]{0,2}|900)/, /^readonly TMOUT/]
+
+Title: 4.2.1.3 Ensure rsyslog default file permissions configured
+File: /etc/rsyslog.d/*.conf: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/rsyslog.d/*.conf: contains: skipped
+
+Title: 5.1.7 Ensure permissions on /etc/cron.d are configured
+File: /etc/cron.d: mode:
+Expected
+    <string>: 0755
+to equal
+    <string>: 0700
+
+Title: 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk
+File: /etc/systemd/journald.conf: contains: patterns not found: [Storage=persistent]
+
+Title: 5.1.9 Ensure at is restricted to authorized users
+File: /etc/at.allow: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/at.allow: mode: skipped
+File: /etc/at.allow: owner: skipped
+File: /etc/at.allow: group: skipped
+
+Title: 5.3.1 Ensure password creation requirements are configured
+File: /etc/security/pwquality.conf: contains: patterns not found: [dcredit = -1, ucredit = -1, lcredit = -1, ocredit = -1]
+
+Title: 4.2.1.3 Ensure rsyslog default file permissions configured
+File: /etc/rsyslog.conf: contains: patterns not found: [$FileCreateMode 06[0:4]0]
+
+Title: 5.3.4 Ensure password reuse is limited
+File: /etc/pam.d/system-auth: contains: patterns not found: [/^password sufficient pam_unix.so sha512 shadow nullok try_first_pass remember=5 user_authtok/]
+
+Title: (L2) 4.1.2.3 Ensure system is disabled when audit logs are full (Automated)
+File: /etc/audit/auditd.conf: contains: patterns not found: [space_left_action = email, /^admin_space_left_action = halt/]
+
+Title: 1.5.1 Ensure bootloader password is set (Automated) and permissions
+File: /boot/grub2/user.cfg: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /boot/grub2/user.cfg: mode: skipped
+File: /boot/grub2/user.cfg: owner: skipped
+File: /boot/grub2/user.cfg: group: skipped
+
+Title: 1.3.3 Ensure sudo log file exists (Automated)
+File: /etc/sudoers: contains: patterns not found: [/^Defaults logfile=/var/log//, !/^#Defaults logfile=/]
+
+Title: 5.1.9 Ensure at is restricted to authorized users
+File: /etc/at.deny: exists:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+
+Title: 5.3.4 Ensure password reuse is limited
+File: /etc/pam.d/password-auth: contains: patterns not found: [/^password sufficient pam_unix.so sha512 shadow nullok try_first_pass remember=5 user_authtok/]
+
+Title: (L2) 4.1.2.4  Ensure audit_backlog_limit is sufficient (Automated)
+File: /boot/grub2/grub.cfg: contains: patterns not found: [GRUB_CMDLINE_LINUX="audit_backlog_limit=2048"]
+
+Title: 5.4.3 Ensure default group for the root account is GID 0 (Automated)
+root: exists: Error: Missing Required Attribute
+User: root: uid: skipped
+User: root: gid: skipped
+
+Title: 3.3.9 Ensure IPv6 router advertisements are not accepted (Automated)
+KernelParam: net.ipv6.conf.default.accept_ra: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.2.2 Ensure packet redirect sending is disabled (Automated)_default
+KernelParam: net.ipv4.conf.default.send_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.3 Ensure secure ICMP redirects are not accepted (Automated)_all
+KernelParam: net.ipv4.conf.all.secure_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv6_def
+KernelParam: net.ipv6.conf.default.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.4 Ensure suspicious packets are logged (Automated)_all
+KernelParam: net.ipv4.conf.all.log_martians: value:
+Expected
+    <string>: 0
+to equal
+    <string>: 1
+
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv4
+KernelParam: net.ipv4.conf.all.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.9 Ensure IPv6 router advertisements are not accepted (Automated)
+KernelParam: net.ipv6.conf.all.accept_ra: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.4 Ensure suspicious packets are logged (Automated)_def
+KernelParam: net.ipv4.conf.default.log_martians: value:
+Expected
+    <string>: 0
+to equal
+    <string>: 1
+
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv4_def
+KernelParam: net.ipv4.conf.default.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.3.2 Ensure ICMP redirects are not accepted (Automated)_ipv6
+KernelParam: net.ipv6.conf.all.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 3.2.2 Ensure packet redirect sending is disabled (Automated)_all
+KernelParam: net.ipv4.conf.all.send_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: (L2) 1.1.16  Ensure separate partition exists for /var/log/audit (Automated)
+Mount: /var/log/audit: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: 1.1.2_5 Ensure /tmp is configured (Automated) with mount options
+Mount: /tmp: opts:
+Expected
+    <[]string | len:4, cap:4>: ["rw", "nodev", "noexec", "relatime"]
+to contain element matching
+    <string>: nosuid
+
+Title: 1.1.6_9 Ensure /dev/shm is configured
+Mount: /dev/shm: opts:
+Expected
+    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
+to contain element matching
+    <string>: noexec
+
+Title: (L2) 1.1.11_14 Ensure separate partition exists for /var/tmp (Automated)
+Mount: /var/tmp: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Mount: /var/tmp: opts: skipped
+
+Title: 3.3.3 Ensure secure ICMP redirects are not accepted (Automated)_def
+KernelParam: net.ipv4.conf.default.secure_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
+Title: 1.9 Ensure updates, patches, and additional security software are installed (Automated)
+Command: security-updates: exit-status:
+Expected
+    <int>: 100
+to equal
+    <int>: 0
+
+Total Duration: 6.844s
+Count: 230, Failed: 46, Skipped: 10
