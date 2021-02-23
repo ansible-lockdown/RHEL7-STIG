@@ -5,12 +5,14 @@
 ## Whats new
 
 - New auditing tool all controlled via defaults main. run on host using [goss](https://github.com/aelsabbahy/goss)
+- default variables also set the audit steps if run from ansible.
 - Seperate role required (use ansible galaxy with requirements.yml)
 - reorder of rules inline with DISA changes
 - Amalgamation of OEL rules into RHEL
 - Ability to turn FIPS on and off in defaults/main.yml - runs in prelim with set_fact
 - If Python3 installed adds the epel repo to install python-rpm and then disables the repo after installing
 - Adding of the goss module to the library path
+- deprecation warnings should be cleared
 
 refer to STIG documentation for specific changes
 
