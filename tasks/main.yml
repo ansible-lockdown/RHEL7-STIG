@@ -43,14 +43,14 @@
   - RHEL-07-010491
   - cat1
 
-- import_tasks: pre_LE_audit.yml
-  when:
-  - rhel7stig_run_audit
-
 - import_tasks: prelim.yml
   become: yes
   tags:
   - prelim_tasks
+
+- import_tasks: pre_LE_audit.yml
+  when:
+  - rhel7stig_run_audit
 
 - name: Gather the package facts
   package_facts:

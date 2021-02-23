@@ -134,7 +134,8 @@ RHEL_07_030010: true
 RHEL_07_030201: true
 RHEL_07_030210: true
 RHEL_07_030211: true
-RHEL_07_030300: true
+# if you set 030300 to 'true' ensure you define rhel7stig_audisp_remote_server
+rhel_07_030300: {{ rhel7stig_audisp_remote_server is defined }}
 RHEL_07_030310: true
 RHEL_07_030320: true
 RHEL_07_030321: true
