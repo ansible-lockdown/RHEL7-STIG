@@ -1,0 +1,399 @@
+### Variables for for stig options
+
+run_heavy_tests: true
+
+
+# If running on RHEL7 <= 7.2
+rhel7stig_legacyOS: {% if ansible_distribution_version > '7.2' %} false {% else %} true {% endif %}
+
+
+# If running non UEFI bootloader
+rhel7stig_legacy_boot: {{ rhel7stig_legacy_boot }}
+
+
+## Stig Categories
+rhel7stig_cat1: {{ rhel7stig_cat1_patch }}
+rhel7stig_cat2: {{ rhel7stig_cat2_patch }}
+rhel7stig_cat3: {{ rhel7stig_cat3_patch }}
+
+## CAT I 
+RHEL_07_010010: {{ rhel_07_010010 }}
+RHEL_07_010020: {{ rhel_07_010020 }}
+RHEL_07_010290: {{ rhel_07_010290 }}
+RHEL_07_010300: {{ rhel_07_010300 }}
+RHEL_07_010440: {{ rhel_07_010440 }}
+RHEL_07_010450: {{ rhel_07_010450 }}
+RHEL_07_010480: {{ rhel_07_010480 }}
+RHEL_07_010482: {{ rhel_07_010482 }}
+RHEL_07_010490: {{ rhel_07_010490 }}
+RHEL_07_010491: {{ rhel_07_010491 }}
+RHEL_07_020000: {{ rhel_07_020000 }}
+RHEL_07_020010: {{ rhel_07_020010 }}
+RHEL_07_020050: {{ rhel_07_020050 }}
+RHEL_07_020060: {{ rhel_07_020060 }}
+RHEL_07_020230: {{ rhel_07_020230 }}
+RHEL_07_020231: {{ rhel_07_020231 }}
+RHEL_07_020250: {{ rhel_07_020250 }}
+RHEL_07_021350: {{ rhel_07_021350 }}
+RHEL_07_021710: {{ rhel_07_021710 }}
+RHEL_07_020310: {{ rhel_07_020310 }}
+RHEL_07_032000: {{ rhel_07_032000 }}
+RHEL_07_040390: {{ rhel_07_040390 }}
+RHEL_07_040540: {{ rhel_07_040540 }}
+RHEL_07_040550: {{ rhel_07_040550 }}
+RHEL_07_040690: {{ rhel_07_040690 }}
+RHEL_07_040700: {{ rhel_07_040700 }}
+RHEL_07_040800: {{ rhel_07_040800 }}
+
+
+## Cat II
+RHEL_07_010030: false
+RHEL_07_010040: true
+RHEL_07_010050: true
+RHEL_07_010060: true
+RHEL_07_010061: true
+RHEL_07_010062: true
+RHEL_07_010070: true
+RHEL_07_010081: true
+RHEL_07_010082: true
+RHEL_07_010090: true
+RHEL_07_010100: true
+RHEL_07_010101: true
+RHEL_07_010110: true
+RHEL_07_010118: true
+RHEL_07_010119: true
+RHEL_07_010120: true
+RHEL_07_010130: true
+RHEL_07_010140: true
+RHEL_07_010150: true
+RHEL_07_010160: true
+RHEL_07_010170: true
+RHEL_07_010180: true
+RHEL_07_010190: true
+RHEL_07_010200: true
+RHEL_07_010210: true
+RHEL_07_010220: true
+RHEL_07_010230: true
+RHEL_07_010240: true
+RHEL_07_010250: true
+RHEL_07_010260: true
+RHEL_07_010270: true
+RHEL_07_010280: true
+RHEL_07_010310: true
+RHEL_07_010320: true
+RHEL_07_010330: true
+RHEL_07_010340: true
+RHEL_07_010350: true
+RHEL_07_010430: true
+RHEL_07_010460: true
+RHEL_07_010470: true
+RHEL_07_010481: true
+RHEL_07_010500: true
+RHEL_07_020019: true
+RHEL_07_020020: true
+RHEL_07_020030: true
+RHEL_07_020040: false # see rhel7stig_notify_command
+RHEL_07_020100: true
+RHEL_07_020101: true
+RHEL_07_020110: true
+RHEL_07_020210: true
+RHEL_07_020220: true
+RHEL_07_020240: true
+RHEL_07_020260: true
+RHEL_07_020270: true
+RHEL_07_020320: true
+RHEL_07_020330: true
+RHEL_07_020610: true
+RHEL_07_020620: true
+RHEL_07_020630: true
+RHEL_07_020640: true
+RHEL_07_020650: true
+RHEL_07_020660: true  ## WIP
+RHEL_07_020670: true  ## WIP
+RHEL_07_020680: true  ## WIP
+RHEL_07_020690: true  ## WIP
+RHEL_07_020700: true  ## WIP
+RHEL_07_020710: true  ## WIP
+RHEL_07_020720: true  ## WIP
+RHEL_07_020730: true
+RHEL_07_020900: true
+RHEL_07_021000: true
+RHEL_07_021010: true
+RHEL_07_021020: true
+RHEL_07_021021: true
+RHEL_07_021030: true
+RHEL_07_021040: true
+RHEL_07_021100: true
+RHEL_07_021110: true
+RHEL_07_021120: true
+RHEL_07_021300: true
+RHEL_07_021620: true
+RHEL_07_021700: true
+RHEL_07_030000: true
+RHEL_07_030010: true
+RHEL_07_030201: true
+RHEL_07_030210: true
+RHEL_07_030211: true
+RHEL_07_030300: true
+RHEL_07_030310: true
+RHEL_07_030320: true
+RHEL_07_030321: true
+RHEL_07_030330: true
+RHEL_07_030340: true
+RHEL_07_030350: true
+RHEL_07_030360: true
+RHEL_07_030370: true
+RHEL_07_030380: true
+RHEL_07_030390: true
+RHEL_07_030400: true
+RHEL_07_030410: true
+RHEL_07_030420: true
+RHEL_07_030430: true
+RHEL_07_030440: true
+RHEL_07_030450: true
+RHEL_07_030460: true
+RHEL_07_030470: true
+RHEL_07_030480: true
+RHEL_07_030490: true
+RHEL_07_030500: true
+RHEL_07_030510: true
+RHEL_07_030520: true
+RHEL_07_030530: true
+RHEL_07_030540: true
+RHEL_07_030550: true
+RHEL_07_030560: true
+RHEL_07_030570: true
+RHEL_07_030580: true
+RHEL_07_030590: true
+RHEL_07_030610: true
+RHEL_07_030620: true
+RHEL_07_030630: true
+RHEL_07_030640: true
+RHEL_07_030650: true
+RHEL_07_030660: true
+RHEL_07_030670: true
+RHEL_07_030680: true
+RHEL_07_030690: true
+RHEL_07_030700: true
+RHEL_07_030710: true
+RHEL_07_030720: true
+RHEL_07_030740: true
+RHEL_07_030750: true
+RHEL_07_030760: true
+RHEL_07_030770: true
+RHEL_07_030780: true
+RHEL_07_030800: true
+RHEL_07_030800: true
+RHEL_07_030810: true
+RHEL_07_030819: true
+RHEL_07_030820: true
+RHEL_07_030821: true
+RHEL_07_030830: true
+RHEL_07_030840: true
+RHEL_07_030870: true
+RHEL_07_030871: true
+RHEL_07_030872: true
+RHEL_07_030873: true
+RHEL_07_030874: true
+RHEL_07_030880: true
+RHEL_07_030890: true
+RHEL_07_030900: true
+RHEL_07_030910: true
+RHEL_07_030920: true
+RHEL_07_031000: true
+RHEL_07_031010: true
+RHEL_07_040100: true
+RHEL_07_040110: true
+RHEL_07_040160: true
+RHEL_07_040170: true
+RHEL_07_040180: true
+RHEL_07_040190: true
+RHEL_07_040200: true
+RHEL_07_040201: true
+RHEL_07_040300: true
+RHEL_07_040310: true
+RHEL_07_040320: true
+RHEL_07_040330: true
+RHEL_07_040340: true
+RHEL_07_040350: true
+RHEL_07_040360: true
+RHEL_07_040370: true
+RHEL_07_040380: true
+RHEL_07_040400: true
+RHEL_07_040410: true
+RHEL_07_040420: true
+RHEL_07_040430: true
+RHEL_07_040440: true
+RHEL_07_040450: true
+RHEL_07_040460: true
+RHEL_07_040470: true
+RHEL_07_040500: true
+RHEL_07_040520: true
+RHEL_07_040610: true
+RHEL_07_040611: true
+RHEL_07_040612: true
+RHEL_07_040620: true
+RHEL_07_040630: true
+RHEL_07_040640: true
+RHEL_07_040641: true
+RHEL_07_040650: true
+RHEL_07_040660: true
+RHEL_07_040670: true
+RHEL_07_040680: true
+RHEL_07_040710: true
+RHEL_07_040711: true
+RHEL_07_040720: true
+RHEL_07_040730: true
+RHEL_07_040740: true
+RHEL_07_040750: true
+RHEL_07_040810: true
+RHEL_07_040820: true
+RHEL_07_040830: true
+RHEL_07_041001: true
+RHEL_07_041002: true
+RHEL_07_041003: true
+RHEL_07_041010: true
+RHEL_07_910055: true
+
+
+## Cat III
+RHEL_07_020200: {{ rhel_07_020200 }}
+RHEL_07_020300: {{ rhel_07_020300 }}
+RHEL_07_021024: {{ rhel_07_021024 }}
+RHEL_07_021310: {{ rhel_07_021310 }}
+RHEL_07_021320: {{ rhel_07_021320 }}
+RHEL_07_021330: {{ rhel_07_021330 }}
+RHEL_07_021340: {{ rhel_07_021340 }}
+RHEL_07_021600: {{ rhel_07_021600 }}
+RHEL_07_021610: {{ rhel_07_021610 }}
+RHEL_07_040000: {{ rhel_07_040000 }}
+RHEL_07_040530: {{ rhel_07_040530 }}
+RHEL_07_040600: {{ rhel_07_040600 }}
+
+
+
+# if using gnome/gui or not
+rhel7stig_gui: {{ rhel7stig_gui }}
+
+# Whether or not to run tasks related to smart card authentication enforcement
+rhel7stig_smartcard: {{ rhel7stig_smartcard }}
+# Configure your smartcard driver
+rhel7stig_smartcarddriver: {{ rhel7stig_smartcarddriver }}
+
+# AntiVirus
+# Set true to skip AV check
+rhel7stig_antivirus_required: {{ rhel7stig_antivirus_required }}
+# Give process name as process should run
+Antivirus_ProcessName: {{ rhel7stig_av_package.package[0] }}
+
+rhel7stig_bootloader_password_hash: {{ rhel7stig_bootloader_password_hash }}
+
+# set to ntpd or chrony accordingly
+rhel7stig_time_service: {{ rhel7stig_time_service }}
+
+rhel7stig_auditd: true
+rhel7stig_tftp_required: {{ rhel7stig_tftp_required }}
+
+
+rhel7_stig_nameservers: {{ rhel_07_040600_dns_servers }}
+
+
+# RHEL_07_010050
+# Ability to use own banner if set to false
+rhel7stig_use_disa_banner: true
+
+rhel7stig_disa_logon_banner: 
+-  You are accessing a U.S. Government (USG) Information System (IS) that is
+-  By using this IS (which includes any device attached to this IS), you consent
+-  -The USG routinely intercepts and monitors communications on this IS for 
+-  -At any time, the USG may inspect and seize data stored on this IS.
+-  -Communications using, or data stored on, this IS are not private, are subject 
+-  -This IS includes security measures (e.g., authentication and access controls)
+-  -Notwithstanding the above, using this IS does not constitute consent to PM, LE
+-  communications and work product are private and confidential. See User 
+
+rhel7stig_logon_banner: Restricted System. Only use if you have been authorised to do so.
+
+
+
+# Users thats should exist in the sysadm_u selinux User context
+rhel7stig_sysadm_u:
+# Users thats should exist in the staff_u selinux User context
+rhel7stig_staff_u:
+
+# host intrision protection e.g. Mcafee HIPS
+rhel7stig_hip_enabled: false
+rhel7stig_hip_pkg: 
+rhel7stig_hip_proc: 
+
+# RHEL_07_020040 - if notify by mail
+rhel7stig_aide_cron:
+    user: {{ rhel7stig_aide_cron.user }}
+    cron_file: {{ rhel7stig_aide_cron.cron_file }}
+    job: {{ rhel7stig_aide_cron.job }}
+    hour: {{ rhel7stig_aide_cron.hour }}
+    minute: {{ rhel7stig_aide_cron.minute }}
+    special_time: {{ rhel7stig_aide_cron.special_time }}
+    # Disable the notification check rule to disable mailing notifications
+    notify_by_mail: {{ rhel_07_020040 }}
+    notify_cmd: ' {{ rhel7stig_aide_cron.notify_cmd }}'
+
+rhel7stig_unnecessary_accounts:
+- gopher
+- games
+- ftp
+
+# RHEL_07_021700 set the value for correctly configured grub bootloader sequence
+rhel7stig_grub_bootloader_validorder: " {{ rhel7stig_grub_bootloader_validorder }}"
+
+
+# RHEL_07_030300 uncomment and set the value to a remote IP address that can receive audit logs
+{% if rhel7stig_audisp_remote_server is defined %}
+rhel7stig_audisp_remote_server: {{ rhel7stig_audisp_remote_server }}
+{% endif %}
+
+# RHEL_07_030320 and RHEL_07_030321
+rhel7stig_audisp_disk_full_action: syslog
+rhel7stig_audisp_network_failure_action: syslog
+
+# RHEL_07_030330 - 25% space of the /var/log/audit hosted filesystem
+rhel7stig_auditd_space_left: 250
+# RHEL_07_030350
+rhel7stig_auditd_mail_acct: {{ rhel7stig_auditd_mail_acct }}
+
+# UID and GID no system users ID start
+rhel7stig_int_uid: {{ rhel7stig_int_gid }}
+rhel7stig_int_gid: {{ rhel7stig_int_gid }}
+
+# RHEL_07_031000 - replace with actual server for tests
+# note default sets to false (true is set to ensure it exists for goss)
+rhel7stig_log_aggregation_server: {{ rhel7stig_log_aggregation_server | default('false', true) }}
+
+
+# RHEL_07_031010
+rhel7stig_system_is_log_aggregator: {{ rhel7stig_system_is_log_aggregator }}
+
+
+rhel7stig_firewall_service: firewalld
+rhel7stig_firewalld_services:
+- ssh
+
+# FIPS 140-2
+
+#SSH settings
+rhel7stig_ssh_ciphers: {{ rhel7stig_ssh_ciphers }}
+rhel7stig_ssh_MACs: {{ rhel7stig_ssh_macs }}
+# RHEL_07_040160
+# Session timeout setting file (TMOUT setting can be set in multiple files)
+# Timeout value is in seconds. (60 seconds * 10 = 600)
+rhel7stig_shell_session_timeout:
+    timeout: {{ rhel7stig_shell_session_timeout.timeout }}
+
+# RHEL_07_040180
+# Whether the system should be using LDAP for authentication
+rhel7stig_auth_settings:
+    use_ldap: {{ rhel7stig_auth_settings.use_ldap }}
+    use_sssd: {{ rhel7stig_auth_settings.use_sssd }}
+
+# RHEL-07-040740
+rhel7stig_system_is_router: {{ rhel7stig_system_is_router }}
