@@ -33,7 +33,7 @@
 
 - name: get audit content from url
   get_url:
-    url: "{{ rhel7_audit_files_url }}"
+    url: "{{ rhel7stig_audit_files_url }}"
     dest: "{{ rhel7stig_audit_files }}"
   when:
   - rhel7stig_audit_content == 'get_url'
