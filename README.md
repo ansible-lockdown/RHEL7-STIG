@@ -40,12 +40,14 @@ RHEL 7 or CentOS 7 - Other versions are not supported.
 Access to download or add the goss binary and content to the system if using auditing. options are available on how to get the content to the system.
 
 **General:**
+
 - Basic knowledge of Ansible, below are some links to the Ansible documentation to help get started if you are unfamiliar with Ansible
+
   - [Main Ansible documentation page](https://docs.ansible.com)
   - [Ansible Getting Started](https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html)
   - [Tower User Guide](https://docs.ansible.com/ansible-tower/latest/html/userguide/index.html)
   - [Ansible Community Info](https://docs.ansible.com/ansible/latest/community/index.html)
-- Functioning Ansible and/or Tower Installed, configured, and running. This includes all of the base Ansible/Tower configurations, needed packages installed, and infrastructure setup. 
+- Functioning Ansible and/or Tower Installed, configured, and running. This includes all of the base Ansible/Tower configurations, needed packages installed, and infrastructure setup.
 - Please read through the tasks in this role to gain an understanding of what each control is doing. Some of the tasks are disruptive and can have unintended consiquences in a live production system. Also familiarize yourself with the variables in the defaults/main.yml file or the [Main Variables Wiki Page](https://github.com/ansible-lockdown/RHEL8-CIS/wiki/Main-Variables).
 
 Dependencies
@@ -65,15 +67,19 @@ This role is designed that the end user should not have to edit the tasks themse
 
 Tags
 ----
-There are many tags available for added control precision. Each control has it's own set of tags noting the control number as well as what parts of the system that control addresses. 
 
-Below is an example of the tag section from a control within this role. Using this example if you set your run to skip all controls with the tag ssh, this task will be skipped. The opposite can also happen where you run only controls tagged with ssh.
-```
+There are many tags available for added control precision. Each control has it's own set of tags noting the control number as well as what parts of the system that control addresses.
+
+Below is an example of the tag section from a control within this role. Using this example if you set your run to skip all controls with the tag ssh, this task will be skipped. The
+opposite can also happen where you run only controls tagged with ssh.
+
+```sh
 tags:
     - RHEL-07-010050
     - ssh
     - dod_logon_banner
 ```
+
 Example Audit Summary
 ---------------------
 
@@ -94,18 +100,21 @@ ok: [rhel7test] => {
 PLAY RECAP ****************************************************************************************************************
 rhel7test         : ok=369  changed=192  unreachable=0  failed=0  skipped=125  rescued=0  ignored=0  
 ```
+
 Branches
 -------
-**devel** - This is the default branch and the working development branch. Community pull requests will pull into this branch<br>
-**main** - This is the release branch<br>
-**reports** - This is a protected branch for our scoring reports, no code should ever go here<br>
-**all other branches** - Individual community member branches<br>
+
+**devel** - This is the default branch and the working development branch. Community pull requests will pull into this branch
+**main** - This is the release branch
+**reports** - This is a protected branch for our scoring reports, no code should ever go here
+**all other branches** - Individual community member branches
 
 Community Contribution
 ----------------------
 
-We encourage you (the community) to contribute to this role. Please read the rules below. 
+We encourage you (the community) to contribute to this role. Please read the rules below.
+
 - Your work is done in your own individual branch. Make sure to Signed-off and GPG sign all commits you intend to merge.
 - All community Pull Requests are pulled into the devel branch
 - Pull Requests into devel will confirm your commits have a GPG signature, Signed-off, and a functional test before being approved
-- Once your changes are merged and a more detailed review is complete, an authorized member will merge your changes into the main branch for a new release
+- Once your changes are merged and a more detailed review is complete, an authorized member will merge your changes into the main branch for a new release.
