@@ -692,7 +692,7 @@ rhel7stig_audit_git_version: stig_jan_21
 # get_url:
 #rhel7stig_audit_files_url: "some url maybe s3?"
 
-rhel7stig_audit_files: "/vagrant/{{ benchmark }}-Audit/"
+rhel7stig_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
 
 ## audit controls
 goss_version:
