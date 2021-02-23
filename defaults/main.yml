@@ -22,22 +22,22 @@ get_goss_file: download
 # enable audits to run
 rhel7stig_run_audit: false
 
-# We've defined complexity-high to mean that we canfalset automatically remediate
+# We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation
 # may fail in some cases.
 rhel7stig_complexity_high: false
 
-# Show "changed" for complex items falset remediated per complexity-high setting
+# Show "changed" for complex items not remediated per complexity-high setting
 # to make them stand out.  "changed" items on a second run of the role would
 # indicate items requiring manual review.
 rhel7stig_audit_complex: true
 
 # We've defined disruption-high to indicate items that are likely to cause
-# disruption in a falsermal workflow.  These items can be remediated automatically
+# disruption in a normal workflow.  These items can be remediated automatically
 # but are disabled by default to avoid disruption.
 rhel7stig_disruption_high: false
 
-# Show "changed" for disruptive items falset remediated per disruption-high
+# Show "changed" for disruptive items not remediated per disruption-high
 # setting to make them stand out.
 rhel7stig_audit_disruptive: true
 
@@ -50,11 +50,11 @@ rhel7stig_workaround_for_ssg_benchmark: true
 # tweak role to run in a chroot, such as in kickstart %post script
 rhel7stig_system_is_chroot: "{{ ansible_is_chroot | default(False) }}"
 
-# tweak role to run in a falsen-privileged container
+# tweak role to run in a non-privileged container
 rhel7stig_system_is_container: false
 
 # These variables correspond with the STIG IDs defined in the STIG and allows you to enable/disable specific rules.
-# PLEASE falseTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
+# PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
 # in order for the variables below to take effect.
 # CAT 1 rules
 rhel_07_010010: true
@@ -73,7 +73,7 @@ rhel_07_020050: true
 rhel_07_020060: true
 rhel_07_020230: true
 rhel_07_020231: true
-# falset an automated task
+# not an automated task
 rhel_07_020250: true
 rhel_07_020310: true
 rhel_07_021350: true
@@ -131,7 +131,7 @@ rhel_07_010500: true
 rhel_07_020019: true
 rhel_07_020020: true
 rhel_07_020030: true
-# Send AIDE reports as mail falsetifications - Disabled by default as this is a falsen-ideal way to do falsetifications
+# Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
 rhel_07_020040: "{{ rhel7stig_disruption_high }}"
 rhel_07_020100: true
 rhel_07_020101: true
@@ -311,14 +311,14 @@ rhel_07_040000: true
 rhel_07_040530: true
 rhel_07_040600: true
 
-# Whether or falset to run tasks related to auditing/patching the desktop environment
+# Whether or not to run tasks related to auditing/patching the desktop environment
 rhel7stig_gui: false
 
-# Whether to configure dconf rules unconditionally (igfalsering presence of dconf
+# Whether to configure dconf rules unconditionally (ignoring presence of dconf
 # or rhel7stig_gui)
 rhel7stig_always_configure_dconf: false
 
-# Whether or falset to run tasks related to smart card authentication enforcement
+# Whether or not to run tasks related to smart card authentication enforcement
 rhel7stig_smartcard: false
 # Configure your smartcard driver
 rhel7stig_smartcarddriver: cackey
@@ -327,7 +327,7 @@ rhel7stig_smartcarddriver: cackey
 # Set "selinux_change_users" false to disable this control's actions and just report results.
 # You will need to adjust the paths for installed HIPS/HBSS for this control.
 # You will need to map both the local interactive and LDAP groups to map selinux user groups to.
-# If LDAP is falset in use, it will igfalsere the settings below and falset attempt to map LDAP users.
+# If LDAP is not in use, it will ignore the settings below and not attempt to map LDAP users.
 rhel_07_020020_selinux_change_users: true
 rhel_07_020020_HBSS_path: /opt/McAfee/Agent/bin
 rhel_07_020020_HIPS_path: /opt/McAfee/Agent/bin
@@ -355,7 +355,7 @@ rhel7stig_min_supported_os_ver:
     OracleLinux: "7.9"
 
 # RHEL-07-040740
-# If system is falset router, run tasks that disable router functions.
+# If system is not router, run tasks that disable router functions.
 rhel7stig_system_is_router: false
 
 # RHEL-07-032000
@@ -411,11 +411,11 @@ rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
 
 
 # RHEL-07-040490
-# If falset required, remove vsftpd.
+# If not required, remove vsftpd.
 rhel7stig_vsftpd_required: false
 
 # RHEL-07-040500
-# If falset required, remove tftp
+# If not required, remove tftp
 rhel7stig_tftp_required: false
 
 # Service configuration booleans set true to keep service
@@ -427,7 +427,7 @@ rhel7stig_kdump_required: false
 rhel7stig_snmp_community: Endgam3Ladyb0g
 
 # whether to force role-specified packages to be installed regardless of the
-# presence of afalsether compliant equivalent
+# presence of another compliant equivalent
 rhel7stig_force_exact_packages: "{{ rhel7stig_disruption_high }}"
 
 
@@ -448,7 +448,7 @@ rhel_07_040200_cabundle_path: etc/pki/tls/certs/ca-bundle.crt
 rhel7stig_wait_for_aide_init: true
 rhel7stig_aide_handler: "{{ (rhel7stig_wait_for_aide_init) | ternary('init aide and wait','init aide') }}"
 
-# Set to false to falset overwrite an existing AIDE DB
+# Set to false to not overwrite an existing AIDE DB
 rhel7stig_overwrite_aide_db: true
 
 # AIDE database file locations
@@ -462,9 +462,9 @@ rhel7stig_aide_cron:
     hour: '5'
     minute: '0'
     special_time: daily
-    # Disable the falsetification check rule to disable mailing falsetifications
-    falsetify_by_mail: "{{ rhel_07_020040 }}"
-    falsetify_cmd: ' | /bin/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
+    # Disable the notification check rule to disable mailing notifications
+    notify_by_mail: "{{ rhel_07_020040 }}"
+    notify_cmd: ' | /bin/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
 
 rhel7stig_cron_special_disable: "{{
         rhel7stig_workaround_for_disa_benchmark or
@@ -489,20 +489,20 @@ rhel7stig_logon_banner_nice: |
     to the following conditions:
 
     -The USG routinely intercepts and monitors communications on this IS for
-    purposes including, but falset limited to, penetration testing, COMSEC monitoring,
+    purposes including, but not limited to, penetration testing, COMSEC monitoring,
     network operations and defense, personnel misconduct (PM), law enforcement
     (LE), and counterintelligence (CI) investigations.
 
     -At any time, the USG may inspect and seize data stored on this IS.
 
-    -Communications using, or data stored on, this IS are falset private, are subject
+    -Communications using, or data stored on, this IS are not private, are subject
     to routine monitoring, interception, and search, and may be disclosed or used
     for any USG-authorized purpose.
 
     -This IS includes security measures (e.g., authentication and access controls)
-    to protect USG interests--falset for your personal benefit or privacy.
+    to protect USG interests--not for your personal benefit or privacy.
 
-    -falsetwithstanding the above, using this IS does falset constitute consent to PM, LE
+    -notwithstanding the above, using this IS does not constitute consent to PM, LE
     or CI investigative searching or monitoring of the content of privileged
     communications, or work product, related to personal representation or services
     by attorneys, psychotherapists, or clergy, and their assistants. Such
@@ -556,7 +556,7 @@ rhel7stig_auto_package_updates:
 # trigger RHEL-07-020320 (all files and directories must have a valid owner).
 # Set rhel7stig_remove_unnecessary_user_files to true to remove old files,
 # but this could remove files you intended to keep. And it's probably best to
-# avoid removing 'dbus', 'falsebody', 'systemd-network', and 'polkitd', as they all
+# avoid removing 'dbus', 'nobody', 'systemd-network', and 'polkitd', as they all
 # have home directories of '/' by default.
 rhel7stig_unnecessary_accounts:
     - ftp
@@ -629,14 +629,14 @@ rhel7stig_ipsec_required: false
 # RHEL-07-010340
 # Setting to enable or disable fixes that depend on password-based authentication
 # i.e. if users authenticate with a means other than passwords (pubkey)
-# and will falset kfalsew or use passwords then this should be 'false'
+# and will not know or use passwords then this should be 'false'
 rhel7stig_using_password_auth: true
 
 rhel7stig_availability_override: false
 # auditd_failure_flag
 # 2    Tells your system to perform an immediate shutdown without
 #      flushing any pending data to disk when the limits of your
-#      audit system are exceeded. Because this shutdown is falset a clean shutdown.
+#      audit system are exceeded. Because this shutdown is not a clean shutdown.
 #      restrict the use of -f 2 to only the most security conscious environments
 # 1    System continues to run, issues a warning and audit stops.
 #      Use this for any other setup to avoid loss of data or data corruption.
@@ -648,10 +648,10 @@ rhel7stig_boot_part: "{{ rhel_07_boot_part.stdout }}"
 
 rhel7stig_machine_uses_uefi: "{{ rhel_07_sys_firmware_efi.stat.exists }}"
 rhel7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
-rhel7stig_grub_cfg_path_invalid: "{{ (falset rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
+rhel7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
 
 oracle7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
-oracle7stig_grub_cfg_path_invalid: "{{ (falset rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
+oracle7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
 
 rhel7stig_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
 
@@ -666,7 +666,7 @@ rhel_07_040600_dns_servers:
     - 9.9.9.9
     - 149.112.112.112
 
-# The GID start point for interactive (falsen-system) users
+# The GID start point for interactive (non-system) users
 rhel7stig_int_gid: 1000
 
 # Control OL-07-040510
@@ -674,8 +674,8 @@ rhel7stig_int_gid: 1000
 ol7stig_ipv4_tcp_invalid_ratelimit: 500
 
 # Control OL-07-021031
-# This control sets all world writable files to be owned by root. To conform to STIG standard all world-writable files must be owned by root or afalsether system account
-# With this toggle off it will list all world-writable files falset owned by system accounts
+# This control sets all world writable files to be owned by root. To conform to STIG standard all world-writable files must be owned by root or another system account
+# With this toggle off it will list all world-writable files not owned by system accounts
 ol7stig_world_write_files_owner_root: false
 
 # how to get audit files onto host options
