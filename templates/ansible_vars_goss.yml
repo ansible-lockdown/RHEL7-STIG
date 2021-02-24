@@ -296,7 +296,7 @@ rhel7stig_auditd: true
 rhel7stig_tftp_required: {{ rhel7stig_tftp_required }}
 
 
-rhel7_stig_nameservers: {{ rhel_07_040600_dns_servers }}
+rhel7stig_nameservers: {{ rhel_07_040600_dns_servers | use_json }}
 
 
 # RHEL_07_010050
