@@ -684,7 +684,7 @@ rhel7stig_audit_content: git
 
 # git
 rhel7stig_audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
-rhel7stig_audit_git_version: stig_jan_21
+rhel7stig_audit_git_version: main
 
 # copy:
 #rhel7stig_audit_local_copy: "some path to copy from"
