@@ -2843,25 +2843,6 @@
   - RHEL-07-040470
   - ssh
 
-- name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources."
-  block:
-  - name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources. | Install unbound"
-    package:
-      name: unbound
-      state: present
-
-  - name: "MEDIUM | OL-07-040480 | PATCH | The operating system must request and perform data origin authentication verification and data integrity verification on the name/address resolution responses the system receives from authoritative sources. | Start service"
-    service:
-      name: unbound
-      enabled: true
-  when:
-  - ol_07_040480
-  - ansible_distribution == "OracleLinux"
-  tags:
-  - OL-07-040480
-  - OracleLinux
-  - unbound
-
 - name: "MEDIUM | RHEL-07-040500 | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
   block:
   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
@@ -2943,21 +2924,6 @@
   tags:
   - RHEL-07-040500
   - chronyd
-
-- name: "MEDIUM | OL-07-040510 | PATCH | The Oracle Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
-  sysctl:
-    name: net.ipv4.tcp_invalid_ratelimit
-    value: "{{ ol7stig_ipv4_tcp_invalid_ratelimit }}"
-    state: present
-    reload: "{{ rhel7stig_sysctl_reload }}"
-  when:
-  - ol_07_040510
-  - ansible_distribution == "OracleLinux"
-  tags:
-  - OL-07-040510
-  - OracleLinux
-  - sysctl
-  - ipv4
 
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
   package:
@@ -3134,6 +3100,36 @@
   - rhel_07_040680
   tags:
   - RHEL-07-040680
+
+- name: "MEDIUM | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections for interactive users are encrypted."
+  lineinfile:
+    create: yes
+    dest: /etc/ssh/sshd_config
+    regexp: "(?i)^#?X11Forwarding"
+    line: X11Forwarding yes
+    validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+  - rhel_07_040710
+  - rhel7stig_ssh_required
+  tags:
+  - RHEL-07-040710
+  - ssh
+
+- name: "MEDIUM | RHEL-07-040711 | PATCH | The Red Hat Enterprise Linux operating system must prevent remote hosts from connecting to the proxy display."
+  lineinfile:
+    create: yes
+    dest: /etc/ssh/sshd_config
+    regexp: "(?i)^#?X11UseLocalhost"
+    line: X11UseLocalhost yes
+    validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+  - rhel_07_040711
+  - rhel7stig_ssh_required
+  tags:
+  - RHEL-07-040711
+  - ssh
 
 - name: "MEDIUM | RHEL-07-040720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that if the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon is configured to operate in secure mode."
   lineinfile:

@@ -1,21 +1,21 @@
 ---
 
 ## STIG category to run
-rhel7stig_cat1_patch: yes
-rhel7stig_cat2_patch: yes
-rhel7stig_cat3_patch: yes
+rhel7stig_cat1_patch: true
+rhel7stig_cat2_patch: true
+rhel7stig_cat3_patch: true
 
 ## Python Binary
 ## This is used for python3 Installations where python2 OS modules are used in ansible
 python2_bin: /bin/python2.7
 
-## Benchmark name used by audting control role
+## Benchmark name used by auditing control role
 # audit variable found at the base
 benchmark: RHEL7-STIG
 
 # Enable goss binary download
 rhel7stig_setup_audit: false
-# options are downoad from github or copy from pre downloaded location
+# options are download from github or copy from pre downloaded location
 # copy or download
 get_goss_file: download
 
@@ -25,22 +25,23 @@ rhel7stig_run_audit: false
 # We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation
 # may fail in some cases.
-rhel7stig_complexity_high: no
+rhel7stig_complexity_high: false
 
 # Show "changed" for complex items not remediated per complexity-high setting
 # to make them stand out.  "changed" items on a second run of the role would
 # indicate items requiring manual review.
-rhel7stig_audit_complex: yes
+rhel7stig_audit_complex: true
 
 # We've defined disruption-high to indicate items that are likely to cause
 # disruption in a normal workflow.  These items can be remediated automatically
 # but are disabled by default to avoid disruption.
-rhel7stig_disruption_high: no
+rhel7stig_disruption_high: false
 
 # Show "changed" for disruptive items not remediated per disruption-high
 # setting to make them stand out.
-rhel7stig_audit_disruptive: yes
+rhel7stig_audit_disruptive: true
 
+# Skip controls that conflict with travis environments
 rhel7stig_skip_for_travis: false
 
 rhel7stig_workaround_for_disa_benchmark: true
@@ -72,7 +73,7 @@ rhel_07_020050: true
 rhel_07_020060: true
 rhel_07_020230: true
 rhel_07_020231: true
-# Not an automated task
+# not an automated task
 rhel_07_020250: true
 rhel_07_020310: true
 rhel_07_021350: true
@@ -83,7 +84,6 @@ rhel_07_040540: true
 rhel_07_040550: true
 rhel_07_040690: true
 rhel_07_040700: true
-rhel_07_040710: true
 rhel_07_040800: true
 # CAT 2 rules
 rhel_07_010030: "{{ rhel7stig_gui }}"
@@ -174,7 +174,6 @@ rhel_07_021620: true
 rhel_07_021700: true
 rhel_07_030000: true
 rhel_07_030010: true
-#rhel_07_030200: true
 rhel_07_030201: true
 rhel_07_030210: true
 rhel_07_030211: true
@@ -227,7 +226,6 @@ rhel_07_030750: true
 rhel_07_030760: true
 rhel_07_030770: true
 rhel_07_030780: true
-#rhel_07_030790: true
 rhel_07_030800: true
 rhel_07_030810: true
 rhel_07_030819: true
@@ -272,9 +270,7 @@ rhel_07_040440: true
 rhel_07_040450: true
 rhel_07_040460: true
 rhel_07_040470: true
-ol_07_040480: true
 rhel_07_040500: true
-ol_07_040510: true
 rhel_07_040520: true
 rhel_07_040610: true
 rhel_07_040611: true
@@ -287,6 +283,8 @@ rhel_07_040650: true
 rhel_07_040660: true
 rhel_07_040670: true
 rhel_07_040680: true
+rhel_07_040710: true
+rhel_07_040711: true
 rhel_07_040720: true
 rhel_07_040730: true
 rhel_07_040740: true
@@ -318,7 +316,7 @@ rhel7stig_gui: false
 
 # Whether to configure dconf rules unconditionally (ignoring presence of dconf
 # or rhel7stig_gui)
-rhel7stig_always_configure_dconf: no
+rhel7stig_always_configure_dconf: false
 
 # Whether or not to run tasks related to smart card authentication enforcement
 rhel7stig_smartcard: false
@@ -358,7 +356,7 @@ rhel7stig_min_supported_os_ver:
 
 # RHEL-07-040740
 # If system is not router, run tasks that disable router functions.
-rhel7stig_system_is_router: no
+rhel7stig_system_is_router: false
 
 # RHEL-07-032000
 # Install and enable a DOD-approved AV program. ClamAV and McAfee (nails)
@@ -367,7 +365,7 @@ rhel7stig_system_is_router: no
 
 # Only set this to true if you have a valid
 # antivirus solution in your repositories, else it will fail every time.
-rhel7stig_antivirus_required: no
+rhel7stig_antivirus_required: false
 
 rhel7stig_av_package:
     package:
@@ -391,7 +389,9 @@ rhel7stig_time_service_configs:
             - regexp: ^#?maxpoll
               line: maxpoll 10
 
+# The firewall to be used
 rhel7stig_firewall_service: firewalld
+# The toggle to start the firewall service. Set to true the role will start the service for you where needed
 rhel7stig_start_firewall_service: true
 
 # RHEL-07-031010
@@ -399,12 +399,12 @@ rhel7stig_system_is_log_aggregator: false
 
 rhel7stig_use_FIPS: true
 fips_value: fips=0
-rhel7stig_FIPS_ciphers: aes128-ctr,aes192-ctr,aes256-ctr
+rhel7stig_FIPS_ciphers: aes256-ctr,aes192-ctr,aes128-ctr
 rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
 # RHEL-07-040300
 # RHEL-07-040310
 # Install and enable ssh on networked systems
-rhel7stig_ssh_required: yes
+rhel7stig_ssh_required: true
 rhel7stig_ssh_ciphers: "{{ rhel7stig_FIPS_ciphers }}"
 rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
 
@@ -412,11 +412,11 @@ rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
 
 # RHEL-07-040490
 # If not required, remove vsftpd.
-rhel7stig_vsftpd_required: no
+rhel7stig_vsftpd_required: false
 
 # RHEL-07-040500
 # If not required, remove tftp
-rhel7stig_tftp_required: no
+rhel7stig_tftp_required: false
 
 # Service configuration booleans set true to keep service
 rhel7stig_autofs_required: false
@@ -433,15 +433,14 @@ rhel7stig_force_exact_packages: "{{ rhel7stig_disruption_high }}"
 
 # RHEL-07-010480 and RHEL-07-010490
 # Password protect the boot loader
-#rhel7stig_bootloader_password: 'Boot1tUp!'
-#rhel7stig_bootloader_password_hash: "{{ rhel7stig_bootloader_password | grub2_hash(salt='KeokpkECTJeoDhEA5XtiLQ') }}"
+
 rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispassword'
 rhel7stig_boot_superuser: root
 
 # RHEL-07-021700 set the value for correctly configured grub bootloader sequence
 rhel7stig_grub_bootloader_validorder: " set root='hd0,msdos1'"
 
-# RHEL-07-040200 Path for cacrt buncdle that holds LDAP certs for tls transport
+# RHEL-07-040200 Path for cacrt bundle that holds LDAP certs for tls transport
 rhel_07_040200_cabundle_path: etc/pki/tls/certs/ca-bundle.crt
 
 # AIDE settings
@@ -478,6 +477,7 @@ rhel7stig_aide_conf:
 # Set maximum number of simultaneous system logins (RHEL-07-040000)
 rhel7stig_maxlogins: 10
 
+# Set the login banner settings
 rhel7stig_logon_banner: "{{ rhel7stig_workaround_for_disa_benchmark | ternary(
         rhel7stig_logon_banner_nice | regex_replace('(?s)(?<!\\n)\\n(?!(\n|$))', ' '),
         rhel7stig_logon_banner_nice) }}"
@@ -502,7 +502,7 @@ rhel7stig_logon_banner_nice: |
     -This IS includes security measures (e.g., authentication and access controls)
     to protect USG interests--not for your personal benefit or privacy.
 
-    -Notwithstanding the above, using this IS does not constitute consent to PM, LE
+    -notwithstanding the above, using this IS does not constitute consent to PM, LE
     or CI investigative searching or monitoring of the content of privileged
     communications, or work product, related to personal representation or services
     by attorneys, psychotherapists, or clergy, and their assistants. Such
@@ -543,7 +543,7 @@ rhel7stig_ssh_session_timeout: 600
 # minimal                            = yum --bugfix upgrade-minimal
 # minimal-security                   = yum --security upgrade-minimal
 # minimal-security-severity:Critical =  --sec-severity=Critical upgrade-minimal
-rhel7stig_auto_package_updates_enabled: no
+rhel7stig_auto_package_updates_enabled: false
 rhel7stig_auto_package_updates:
     enabled: "{{ rhel7stig_auto_package_updates_enabled }}"
     update_cmd: "minimal-security"
@@ -554,14 +554,14 @@ rhel7stig_auto_package_updates:
 #
 # By default, files owned by removed users will be retained, but this may
 # trigger RHEL-07-020320 (all files and directories must have a valid owner).
-# Set rhel7stig_remove_unnecessary_user_files to yes to remove old files,
+# Set rhel7stig_remove_unnecessary_user_files to true to remove old files,
 # but this could remove files you intended to keep. And it's probably best to
 # avoid removing 'dbus', 'nobody', 'systemd-network', and 'polkitd', as they all
 # have home directories of '/' by default.
 rhel7stig_unnecessary_accounts:
     - ftp
     - games
-rhel7stig_remove_unnecessary_user_files: no
+rhel7stig_remove_unnecessary_user_files: false
 
 # RHEL-07-010270
 # pam_pwhistory settings - Verify the operating system prohibits password reuse for a minimum of five generations.
@@ -576,7 +576,7 @@ rhel7stig_pam_faillock:
     attempts: 3
     interval: 900
     unlock_time: 900
-    fail_for_root: yes
+    fail_for_root: true
 
 # RHEL-07-030320 and RHEL-07-030321
 rhel7stig_audisp_disk_full_action: syslog
@@ -584,7 +584,7 @@ rhel7stig_audisp_network_failure_action: syslog
 
 # RHEL-07-040670
 # Network interface promiscuous mode setting will be disabled unless set to true
-rhel7stig_net_promisc_mode_required: no
+rhel7stig_net_promisc_mode_required: false
 
 # /etc/login.defs settings
 # RHEL-07-010210
@@ -599,7 +599,7 @@ rhel7stig_login_defaults:
     pass_max_days: 60
     fail_delay_secs: 4
     umask: '077'
-    create_home: 'yes'
+    create_home: 'true'
 
 # RHEL-07-030300 uncomment and set the value to a remote IP address that can receive audit logs
 # rhel7stig_audisp_remote_server: 10.10.10.10
@@ -620,17 +620,17 @@ rhel7stig_homedir_mode: g-w,o-rwx
 # RHEL-07-040180
 # Whether the system should be using LDAP for authentication
 rhel7stig_auth_settings:
-    use_ldap: yes
-    use_sssd: yes
+    use_ldap: true
+    use_sssd: true
 
 # RHEL-07-040820
-rhel7stig_ipsec_required: no
+rhel7stig_ipsec_required: false
 
 # RHEL-07-010340
 # Setting to enable or disable fixes that depend on password-based authentication
 # i.e. if users authenticate with a means other than passwords (pubkey)
-# and will not know or use passwords then this should be 'no'
-rhel7stig_using_password_auth: yes
+# and will not know or use passwords then this should be 'false'
+rhel7stig_using_password_auth: true
 
 rhel7stig_availability_override: false
 # auditd_failure_flag
@@ -661,10 +661,12 @@ rhel7stig_local_mounts_query: "[?starts_with(device, '/dev/')].mount"
 rhel7stig_nfs_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_nfs_mounts_query) }}"
 rhel7stig_nfs_mounts_query: "[?starts_with(fstype, 'nfs')].mount"
 
+# DNS Servers to configure, you need two to conform to STIG standards
 rhel_07_040600_dns_servers:
     - 9.9.9.9
     - 149.112.112.112
 
+# The GID start point for interactive (non-system) users
 rhel7stig_int_gid: 1000
 
 # Control OL-07-040510
@@ -673,23 +675,24 @@ ol7stig_ipv4_tcp_invalid_ratelimit: 500
 
 # Control OL-07-021031
 # This control sets all world writable files to be owned by root. To conform to STIG standard all world-writable files must be owned by root or another system account
-# With this toggle off it will list all world-writable files not woned by system accounts
+# With this toggle off it will list all world-writable files not owned by system accounts
 ol7stig_world_write_files_owner_root: false
 
 # how to get audit files onto host options
 # options are git/copy/get_url
 rhel7stig_audit_content: git
-rhel7stig_audit_file_git: "git@github.com:uk-bolly/{{ benchmark }}-AUDIT.git"
+
+# git
+rhel7stig_audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
+rhel7stig_audit_git_version: main
 
 # copy:
-#rhel7stig_audit_content: copy
-#rhel7stig_audit_local_copy: "/goss/audit/{{ benchmark }}-AUDIT"
+#rhel7stig_audit_local_copy: "some path to copy from"
 
 # get_url:
-#rhel7stig_audit_content: get_url
-#rhel7stig_audit_files_url: "/goss/audit/{{ benchmark }}-AUDIT"
+#rhel7stig_audit_files_url: "some url maybe s3?"
 
-rhel7stig_audit_files: "/vagrant/{{ benchmark }}-Audit/"
+rhel7stig_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
 
 ## audit controls
 goss_version:
@@ -700,12 +703,13 @@ goss_version:
 #goss_checksum: "checksum_{{ goss_version }}"
 goss_path: /usr/local/bin/
 goss_bin: "{{ goss_path }}goss"
+goss_format: documentation
 goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
 
 ## Goss tests information
-goss_tests_path: /vagrant/RHEL7-STIG-Audit/
-goss_test_file: "{{ goss_tests_path }}goss.yml"
-goss_vars_path: "{{ goss_tests_path }}/vars/stig.yml"
+goss_audit_dir: "/var/tmp/{{ benchmark }}-Audit/"
+goss_file: "{{ goss_audit_dir }}goss.yml"
+goss_vars_path: "{{ goss_audit_dir }}/vars/{{ ansible_hostname }}.yml"
 goss_out_dir: '/var/tmp'
 pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
 post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"
@@ -714,3 +718,4 @@ Audit_results: |
       The pre remediation results are: {{ pre_audit_summary }}.
       The post remediation results are: {{ post_audit_summary }}.
       Full breakdown can be found in {{ goss_out_dir }}
+

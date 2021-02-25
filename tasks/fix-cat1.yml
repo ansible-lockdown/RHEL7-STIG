@@ -576,21 +576,6 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
   - RHEL-07-040700
   - tftp
 
-- name: "HIGH | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections for interactive users are encrypted."
-  lineinfile:
-    create: yes
-    dest: /etc/ssh/sshd_config
-    regexp: "(?i)^#?X11Forwarding"
-    line: X11Forwarding yes
-    validate: /usr/sbin/sshd -t -f %s
-  notify: restart sshd
-  when:
-  - rhel_07_040710
-  - rhel7stig_ssh_required
-  tags:
-  - RHEL-07-040710
-  - ssh
-
 - name: "HIGH | RHEL-07-040800 | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
   block:
   - name: "HIGH | RHEL-07-040800 | AUDIT | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
