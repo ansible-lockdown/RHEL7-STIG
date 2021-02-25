@@ -1,0 +1,46 @@
+---
+- name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+  find:
+      paths:
+          - "{{ homedir }}"
+      recurse: true
+      file_type: any
+  register: rhel_07_020680_results
+  when:
+      - rhel_07_020680
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-020680
+      - complexity-high
+
+- name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+  file:
+      path: "{{ line_item.path }}"
+      mode: 0640
+  loop: "{{ rhel_07_020680_results.files }}"
+  loop_control:
+      label: "{{ line_item.path }}"
+      loop_var: line_item
+  when:
+      - rhel_07_020680_results.files.isreg is defined
+      - rhel_07_020710
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-020680
+      - complexity-high
+
+- name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+  file:
+      path: "{{ line_item.path }}"
+      mode: 0750
+  loop: "{{ rhel_07_020680_results.files }}"
+  loop_control:
+      label: "{{ line_item.path }}"
+      loop_var: line_item
+  when:
+      - rhel_07_020680_results.files.isdir is defined
+      - rhel_07_020680
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-020680
+      - complexity-high

@@ -1,27 +1,47 @@
 ---
-rhel7stig_cat1_patch: yes
-rhel7stig_cat2_patch: yes
-rhel7stig_cat3_patch: yes
+
+## STIG category to run
+rhel7stig_cat1_patch: true
+rhel7stig_cat2_patch: true
+rhel7stig_cat3_patch: true
+
+## Python Binary
+## This is used for python3 Installations where python2 OS modules are used in ansible
+python2_bin: /bin/python2.7
+
+## Benchmark name used by auditing control role
+# audit variable found at the base
+benchmark: RHEL7-STIG
+
+# Enable goss binary download
+rhel7stig_setup_audit: false
+# options are download from github or copy from pre downloaded location
+# copy or download
+get_goss_file: download
+
+# enable audits to run
+rhel7stig_run_audit: false
 
 # We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation
 # may fail in some cases.
-rhel7stig_complexity_high: no
+rhel7stig_complexity_high: false
 
 # Show "changed" for complex items not remediated per complexity-high setting
 # to make them stand out.  "changed" items on a second run of the role would
 # indicate items requiring manual review.
-rhel7stig_audit_complex: yes
+rhel7stig_audit_complex: true
 
 # We've defined disruption-high to indicate items that are likely to cause
 # disruption in a normal workflow.  These items can be remediated automatically
 # but are disabled by default to avoid disruption.
-rhel7stig_disruption_high: no
+rhel7stig_disruption_high: false
 
 # Show "changed" for disruptive items not remediated per disruption-high
 # setting to make them stand out.
-rhel7stig_audit_disruptive: yes
+rhel7stig_audit_disruptive: true
 
+# Skip controls that conflict with travis environments
 rhel7stig_skip_for_travis: false
 
 rhel7stig_workaround_for_disa_benchmark: true
@@ -31,7 +51,7 @@ rhel7stig_workaround_for_ssg_benchmark: true
 rhel7stig_system_is_chroot: "{{ ansible_is_chroot | default(False) }}"
 
 # tweak role to run in a non-privileged container
-rhel7stig_system_is_container: no
+rhel7stig_system_is_container: false
 
 # These variables correspond with the STIG IDs defined in the STIG and allows you to enable/disable specific rules.
 # PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
@@ -51,38 +71,35 @@ rhel_07_020000: true
 rhel_07_020010: true
 rhel_07_020050: true
 rhel_07_020060: true
-rhel_07_020210: true
-rhel_07_020220: true
 rhel_07_020230: true
 rhel_07_020231: true
-# Not an automated task
+# not an automated task
 rhel_07_020250: true
 rhel_07_020310: true
 rhel_07_021350: true
 rhel_07_021710: true
-rhel_07_030000: true
 rhel_07_032000: true
 rhel_07_040390: true
 rhel_07_040540: true
 rhel_07_040550: true
 rhel_07_040690: true
 rhel_07_040700: true
-rhel_07_040710: true
 rhel_07_040800: true
 # CAT 2 rules
-rhel_07_010030: true
-rhel_07_010040: true
-rhel_07_010050: true
-rhel_07_010060: true
-rhel_07_010061: true
-rhel_07_010062: true
-rhel_07_010070: true
-rhel_07_010081: true
-rhel_07_010082: true
+rhel_07_010030: "{{ rhel7stig_gui }}"
+rhel_07_010040: "{{ rhel7stig_gui }}"
+rhel_07_010050: "{{ rhel7stig_gui }}"
+rhel_07_010060: "{{ rhel7stig_gui }}"
+rhel_07_010061: "{{ rhel7stig_gui }}"
+rhel_07_010062: "{{ rhel7stig_gui }}"
+rhel_07_010070: "{{ rhel7stig_gui }}"
+rhel_07_010081: "{{ rhel7stig_gui }}"
+rhel_07_010082: "{{ rhel7stig_gui }}"
 rhel_07_010090: true
-rhel_07_010100: true
-rhel_07_010101: true
-rhel_07_010110: true
+rhel_07_010100: "{{ rhel7stig_gui }}"
+rhel_07_010101: "{{ rhel7stig_gui }}"
+rhel_07_010110: "{{ rhel7stig_gui }}"
+rhel_07_010118: true
 rhel_07_010119: true
 rhel_07_010120: true
 rhel_07_010130: true
@@ -111,6 +128,7 @@ rhel_07_010460: true
 rhel_07_010470: true
 rhel_07_010481: true
 rhel_07_010500: true
+rhel_07_020019: true
 rhel_07_020020: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
@@ -119,6 +137,8 @@ rhel_07_020100: true
 rhel_07_020101: true
 rhel_07_020110: true
 rhel_07_020111: true
+rhel_07_020210: true
+rhel_07_020220: true
 rhel_07_020240: true
 rhel_07_020260: true
 rhel_07_020270: true
@@ -144,6 +164,7 @@ rhel_07_021010: true
 rhel_07_021020: true
 rhel_07_021021: true
 rhel_07_021030: true
+rhel_07_021031: true
 rhel_07_021040: true
 rhel_07_021100: true
 rhel_07_021110: true
@@ -151,8 +172,11 @@ rhel_07_021120: true
 rhel_07_021300: true
 rhel_07_021620: true
 rhel_07_021700: true
+rhel_07_030000: true
 rhel_07_030010: true
-rhel_07_030200: true
+rhel_07_030201: true
+rhel_07_030210: true
+rhel_07_030211: true
 # if you set 030300 to 'true' ensure you define rhel7stig_audisp_remote_server
 rhel_07_030300: "{{ rhel7stig_audisp_remote_server is defined }}"
 rhel_07_030310: true
@@ -202,7 +226,6 @@ rhel_07_030750: true
 rhel_07_030760: true
 rhel_07_030770: true
 rhel_07_030780: true
-rhel_07_030790: true
 rhel_07_030800: true
 rhel_07_030810: true
 rhel_07_030819: true
@@ -250,6 +273,8 @@ rhel_07_040470: true
 rhel_07_040500: true
 rhel_07_040520: true
 rhel_07_040610: true
+rhel_07_040611: true
+rhel_07_040612: true
 rhel_07_040620: true
 rhel_07_040630: true
 rhel_07_040640: true
@@ -258,6 +283,8 @@ rhel_07_040650: true
 rhel_07_040660: true
 rhel_07_040670: true
 rhel_07_040680: true
+rhel_07_040710: true
+rhel_07_040711: true
 rhel_07_040720: true
 rhel_07_040730: true
 rhel_07_040740: true
@@ -269,11 +296,10 @@ rhel_07_041001: true
 rhel_07_041002: true
 rhel_07_041003: true
 rhel_07_041010: true
+rhel_07_910055: true
 # CAT 3 rules
 rhel_07_020200: true
 rhel_07_020300: true
-rhel_07_021022: true
-rhel_07_021023: true
 rhel_07_021024: true
 rhel_07_021310: true
 rhel_07_021320: true
@@ -286,23 +312,51 @@ rhel_07_040530: true
 rhel_07_040600: true
 
 # Whether or not to run tasks related to auditing/patching the desktop environment
-rhel7stig_gui: no
+rhel7stig_gui: false
 
 # Whether to configure dconf rules unconditionally (ignoring presence of dconf
 # or rhel7stig_gui)
-rhel7stig_always_configure_dconf: no
+rhel7stig_always_configure_dconf: false
+
+# Whether or not to run tasks related to smart card authentication enforcement
+rhel7stig_smartcard: false
+# Configure your smartcard driver
+rhel7stig_smartcarddriver: cackey
+
+# RHEL_07_020020
+# Set "selinux_change_users" false to disable this control's actions and just report results.
+# You will need to adjust the paths for installed HIPS/HBSS for this control.
+# You will need to map both the local interactive and LDAP groups to map selinux user groups to.
+# If LDAP is not in use, it will ignore the settings below and not attempt to map LDAP users.
+rhel_07_020020_selinux_change_users: true
+rhel_07_020020_HBSS_path: /opt/McAfee/Agent/bin
+rhel_07_020020_HIPS_path: /opt/McAfee/Agent/bin
+rhel_07_020020_selinux_ldap_maps: false
+rhel_07_020020_selinux_local_interactive_admin_group: wheel
+rhel_07_020020_selinux_local_interactive_users_group: users
+
+# RHEL-07-020710
+# Set standard user paths here
+# Also set whether we should automatically remediate paths in user ini files.
+rhel_07_020720_user_path: "PATH=$PATH:$HOME/.local/bin:$HOME/bin"
+rhel7stig_change_user_path: false
+
+# RHEL-07-020730
+# Do we change world-writable executable programs to mode 0755?
+rhel_07_020730_WWP_Change: true
 
 # RHEL-07-020250
 # This is a check for a "supported release"
 # These are the minimum supported releases.
 # (Red Hat has support for older versions if you pay extra for it.)
 rhel7stig_min_supported_os_ver:
-    RedHat: "7.7"
-    CentOS: "7.7.1908"
+    RedHat: "7.9"
+    CentOS: "7.9.2009"
+    OracleLinux: "7.9"
 
 # RHEL-07-040740
 # If system is not router, run tasks that disable router functions.
-rhel7stig_system_is_router: no
+rhel7stig_system_is_router: false
 
 # RHEL-07-032000
 # Install and enable a DOD-approved AV program. ClamAV and McAfee (nails)
@@ -311,7 +365,7 @@ rhel7stig_system_is_router: no
 
 # Only set this to true if you have a valid
 # antivirus solution in your repositories, else it will fail every time.
-rhel7stig_antivirus_required: no
+rhel7stig_antivirus_required: false
 
 rhel7stig_av_package:
     package:
@@ -335,23 +389,34 @@ rhel7stig_time_service_configs:
             - regexp: ^#?maxpoll
               line: maxpoll 10
 
+# The firewall to be used
 rhel7stig_firewall_service: firewalld
+# The toggle to start the firewall service. Set to true the role will start the service for you where needed
+rhel7stig_start_firewall_service: true
 
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
 
+rhel7stig_use_FIPS: true
+fips_value: fips=0
+rhel7stig_FIPS_ciphers: aes256-ctr,aes192-ctr,aes128-ctr
+rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
 # RHEL-07-040300
 # RHEL-07-040310
 # Install and enable ssh on networked systems
-rhel7stig_ssh_required: yes
+rhel7stig_ssh_required: true
+rhel7stig_ssh_ciphers: "{{ rhel7stig_FIPS_ciphers }}"
+rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
+
+
 
 # RHEL-07-040490
 # If not required, remove vsftpd.
-rhel7stig_vsftpd_required: no
+rhel7stig_vsftpd_required: false
 
-# RHEL-07-040700 & RHEL-07-040720
+# RHEL-07-040500
 # If not required, remove tftp
-rhel7stig_tftp_required: no
+rhel7stig_tftp_required: false
 
 # Service configuration booleans set true to keep service
 rhel7stig_autofs_required: false
@@ -361,24 +426,22 @@ rhel7stig_kdump_required: false
 # Set the SNMP community string to this from the default of public or private
 rhel7stig_snmp_community: Endgam3Ladyb0g
 
-# RHEL-07-010090 acceptable values: screen, tmux
-rhel7stig_screen_package: "{{ ansible_distribution_major_version is version_compare('8', '<') | ternary('screen', 'tmux') }}"
-
 # whether to force role-specified packages to be installed regardless of the
 # presence of another compliant equivalent
 rhel7stig_force_exact_packages: "{{ rhel7stig_disruption_high }}"
 
+
 # RHEL-07-010480 and RHEL-07-010490
 # Password protect the boot loader
-rhel7stig_bootloader_password: 'Boot1tUp!'
-rhel7stig_bootloader_password_hash: "{{ 'grub.pbkdf2.sha512.25000.4B656F6B706B4543544A656F44684541355874694C51.9FB9906DFBC1B84A13BA1FCDB2EA6A35E493A6A07ED4506ACF35EAA2F293E24083BFE2FBE4EE842296CC1AEDA26F70E1DD62AC768016DD68FFD8F63C95DFB819' if rhel7stig_bootloader_password == 'Boot1tUp!' else (rhel7stig_bootloader_password | grub2_hash(salt=ansible_machine_id)) }}"
-rhel7stig_boot_superuser: root
-rhel7stig_boot_password_config:
-    - regexp: ^set superusers
-      line: 'set superusers="{{ rhel7stig_boot_superuser }}"'
 
-    - regexp: ^password_pbkdf2 {{ rhel7stig_boot_superuser }}
-      line: password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}
+rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispassword'
+rhel7stig_boot_superuser: root
+
+# RHEL-07-021700 set the value for correctly configured grub bootloader sequence
+rhel7stig_grub_bootloader_validorder: " set root='hd0,msdos1'"
+
+# RHEL-07-040200 Path for cacrt bundle that holds LDAP certs for tls transport
+rhel_07_040200_cabundle_path: etc/pki/tls/certs/ca-bundle.crt
 
 # AIDE settings
 # Set to false for fire and forget mode
@@ -396,10 +459,12 @@ rhel7stig_aide_cron:
     user: root
     cron_file: aide
     job: '/usr/sbin/aide --check'
+    hour: '5'
+    minute: '0'
     special_time: daily
     # Disable the notification check rule to disable mailing notifications
     notify_by_mail: "{{ rhel_07_020040 }}"
-    notify_cmd: ' | /bin/mail -s "$HOSTNAME - Daily aide integrity check run" root'
+    notify_cmd: ' | /bin/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
 
 rhel7stig_cron_special_disable: "{{
         rhel7stig_workaround_for_disa_benchmark or
@@ -412,6 +477,7 @@ rhel7stig_aide_conf:
 # Set maximum number of simultaneous system logins (RHEL-07-040000)
 rhel7stig_maxlogins: 10
 
+# Set the login banner settings
 rhel7stig_logon_banner: "{{ rhel7stig_workaround_for_disa_benchmark | ternary(
         rhel7stig_logon_banner_nice | regex_replace('(?s)(?<!\\n)\\n(?!(\n|$))', ' '),
         rhel7stig_logon_banner_nice) }}"
@@ -436,7 +502,7 @@ rhel7stig_logon_banner_nice: |
     -This IS includes security measures (e.g., authentication and access controls)
     to protect USG interests--not for your personal benefit or privacy.
 
-    -Notwithstanding the above, using this IS does not constitute consent to PM, LE
+    -notwithstanding the above, using this IS does not constitute consent to PM, LE
     or CI investigative searching or monitoring of the content of privileged
     communications, or work product, related to personal representation or services
     by attorneys, psychotherapists, or clergy, and their assistants. Such
@@ -477,7 +543,7 @@ rhel7stig_ssh_session_timeout: 600
 # minimal                            = yum --bugfix upgrade-minimal
 # minimal-security                   = yum --security upgrade-minimal
 # minimal-security-severity:Critical =  --sec-severity=Critical upgrade-minimal
-rhel7stig_auto_package_updates_enabled: no
+rhel7stig_auto_package_updates_enabled: false
 rhel7stig_auto_package_updates:
     enabled: "{{ rhel7stig_auto_package_updates_enabled }}"
     update_cmd: "minimal-security"
@@ -488,14 +554,14 @@ rhel7stig_auto_package_updates:
 #
 # By default, files owned by removed users will be retained, but this may
 # trigger RHEL-07-020320 (all files and directories must have a valid owner).
-# Set rhel7stig_remove_unnecessary_user_files to yes to remove old files,
+# Set rhel7stig_remove_unnecessary_user_files to true to remove old files,
 # but this could remove files you intended to keep. And it's probably best to
 # avoid removing 'dbus', 'nobody', 'systemd-network', and 'polkitd', as they all
 # have home directories of '/' by default.
 rhel7stig_unnecessary_accounts:
     - ftp
     - games
-rhel7stig_remove_unnecessary_user_files: no
+rhel7stig_remove_unnecessary_user_files: false
 
 # RHEL-07-010270
 # pam_pwhistory settings - Verify the operating system prohibits password reuse for a minimum of five generations.
@@ -510,7 +576,7 @@ rhel7stig_pam_faillock:
     attempts: 3
     interval: 900
     unlock_time: 900
-    fail_for_root: yes
+    fail_for_root: true
 
 # RHEL-07-030320 and RHEL-07-030321
 rhel7stig_audisp_disk_full_action: syslog
@@ -518,7 +584,7 @@ rhel7stig_audisp_network_failure_action: syslog
 
 # RHEL-07-040670
 # Network interface promiscuous mode setting will be disabled unless set to true
-rhel7stig_net_promisc_mode_required: no
+rhel7stig_net_promisc_mode_required: false
 
 # /etc/login.defs settings
 # RHEL-07-010210
@@ -533,13 +599,10 @@ rhel7stig_login_defaults:
     pass_max_days: 60
     fail_delay_secs: 4
     umask: '077'
-    create_home: 'yes'
+    create_home: 'true'
 
 # RHEL-07-030300 uncomment and set the value to a remote IP address that can receive audit logs
 # rhel7stig_audisp_remote_server: 10.10.10.10
-
-# RHEL-07-030200 thru RHEL-07-030321
-rhel7stig_audisp_config_path: "{{ ansible_distribution_major_version is version_compare('8', '<') | ternary('/etc/audisp', '/etc/audit') }}"
 
 # RHEL-07-030330: set this to 25% of the free space in /var/log/audit (measured in megabytes)
 rhel7stig_auditd_space_left: "{{ ( ansible_mounts | json_query(rhel7stig_audit_disk_size_query) | int / 4 / 1024 / 1024 ) | int + 1 }}"
@@ -557,27 +620,19 @@ rhel7stig_homedir_mode: g-w,o-rwx
 # RHEL-07-040180
 # Whether the system should be using LDAP for authentication
 rhel7stig_auth_settings:
-    use_ldap: no
-    use_sssd: no
+    use_ldap: true
+    use_sssd: true
 
 # RHEL-07-040820
-rhel7stig_ipsec_required: no
-
-# RHEL-07-041001
-rhel7stig_mfa_package: "{{ ansible_distribution_major_version is version_compare('8', '<') | ternary('pam_pkcs11', 'sssd-common') }}"
+rhel7stig_ipsec_required: false
 
 # RHEL-07-010340
 # Setting to enable or disable fixes that depend on password-based authentication
 # i.e. if users authenticate with a means other than passwords (pubkey)
-# and will not know or use passwords then this should be 'no'
-rhel7stig_using_password_auth: yes
+# and will not know or use passwords then this should be 'false'
+rhel7stig_using_password_auth: true
 
 rhel7stig_availability_override: false
-
-# RHEL-07-021000
-# Setting to enable use of UUID for fstab entries instead of device
-rhel7stig_using_uuid_fstab: false
-
 # auditd_failure_flag
 # 2    Tells your system to perform an immediate shutdown without
 #      flushing any pending data to disk when the limits of your
@@ -595,6 +650,9 @@ rhel7stig_machine_uses_uefi: "{{ rhel_07_sys_firmware_efi.stat.exists }}"
 rhel7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
 rhel7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
 
+oracle7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
+oracle7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
+
 rhel7stig_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
 
 rhel7stig_local_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_local_mounts_query) }}"
@@ -602,3 +660,62 @@ rhel7stig_local_mounts_query: "[?starts_with(device, '/dev/')].mount"
 
 rhel7stig_nfs_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_nfs_mounts_query) }}"
 rhel7stig_nfs_mounts_query: "[?starts_with(fstype, 'nfs')].mount"
+
+# DNS Servers to configure, you need two to conform to STIG standards
+rhel_07_040600_dns_servers:
+    - 9.9.9.9
+    - 149.112.112.112
+
+# The GID start point for interactive (non-system) users
+rhel7stig_int_gid: 1000
+
+# Control OL-07-040510
+# Sets the invalid rate limit for IPv4 connections. Should be set to less than 1000 to conform to STIG standards
+ol7stig_ipv4_tcp_invalid_ratelimit: 500
+
+# Control OL-07-021031
+# This control sets all world writable files to be owned by root. To conform to STIG standard all world-writable files must be owned by root or another system account
+# With this toggle off it will list all world-writable files not owned by system accounts
+ol7stig_world_write_files_owner_root: false
+
+# how to get audit files onto host options
+# options are git/copy/get_url
+rhel7stig_audit_content: git
+
+# git
+rhel7stig_audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
+rhel7stig_audit_git_version: main
+
+# copy:
+#rhel7stig_audit_local_copy: "some path to copy from"
+
+# get_url:
+#rhel7stig_audit_files_url: "some url maybe s3?"
+
+rhel7stig_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
+
+## audit controls
+goss_version:
+  release: v0.3.16
+  checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+
+### Audit Settings ###
+#goss_checksum: "checksum_{{ goss_version }}"
+goss_path: /usr/local/bin/
+goss_bin: "{{ goss_path }}goss"
+goss_format: documentation
+goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
+
+## Goss tests information
+goss_audit_dir: "/var/tmp/{{ benchmark }}-Audit/"
+goss_file: "{{ goss_audit_dir }}goss.yml"
+goss_vars_path: "{{ goss_audit_dir }}/vars/{{ ansible_hostname }}.yml"
+goss_out_dir: '/var/tmp'
+pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
+post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"
+
+Audit_results: |
+      The pre remediation results are: {{ pre_audit_summary }}.
+      The post remediation results are: {{ post_audit_summary }}.
+      Full breakdown can be found in {{ goss_out_dir }}
+

@@ -11,7 +11,7 @@ delete*
 ignore*
 # VSCode
 .vscode
-
+.github/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -34,3 +34,10 @@ tramp
 *.swo
 rh-creds.env
 travis.env
+
+# Lockdown-specific
+benchparse/
+*xccdf.xml
+*.retry
+test_inv
+

@@ -1,0 +1,14 @@
+---
+- name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+  debug:
+      msg: "You will need to audit {{ ini_item }} for reference to {{ item }}, which has been found with world-writable permissions. Those permissions will be changed in the next task to 0755."
+  failed_when: false
+  changed_when: false
+  with_items: "{{ rhel_07_020730_perms_results.stdout_lines }}"
+  when:
+      - rhel7stig_disruption_high
+      - rhel_07_020730
+      - rhel_07_020730_perms_results.stdout_lines is defined
+  tags:
+      - RHEL-07-020730
+      - complexity-high
