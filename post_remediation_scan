@@ -1,4 +1,4 @@
-Original post scan
+Original post scan /var/tmp
 Title: 1.3.3 Ensure sudo log file exists (Automated)_sudoers.d
 Command: log_sudoers_d: exit-status: matches expectation: [{"lt":3}]
 Command: log_sudoers_d: stdout: matches expectation: [/[1:99]/]
@@ -736,3 +736,4 @@ to equal
 
 Total Duration: 6.844s
 Count: 230, Failed: 46, Skipped: 10
+
