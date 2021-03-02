@@ -1,0 +1,128 @@
+Title: CAT_3 | RHEL-07-020200 | Remove all software components after updated versions have been installed.
+File: /etc/yum.conf: exists: matches expectation: [true]
+File: /etc/yum.conf: contains: patterns not found: [/^clean_requirements_on_remove=1/]
+Title: CAT_3 | RHEL-07-021600 | Must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs). | Aide ACL rules| CAT_3 | RHEL-07-021610 | Must be configured so that the file integrity tool is configured to verify extended attributes | Aide Extend Att rules
+File: /etc/aide.conf: exists: matches expectation: [true]
+File: /etc/aide.conf: contains: patterns not found: [FIPSR = p+i+n+u+g+s+m+S+acl+selinux+xattrs+sha512]
+Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options.
+Command: dev_shm_etc_fstab: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: dev_shm_etc_fstab: stdout: patterns not found: [nodev, noexec, nosuid]
+Title: CAT_3 | RHEL-07-040000 | Must limit the number of concurrent sessions to 10 for all accounts and/or account types.
+File: /etc/security/limits.conf: exists: matches expectation: [true]
+File: /etc/security/limits.conf: contains: patterns not found: [/\*\s+hard\s+maxlogins\s+10/]
+Title: CAT_3 | RHEL-07-040600 | Using DNS resolution, at least two name servers must be configured.
+File: /etc/resolv.conf: exists: matches expectation: [true]
+File: /etc/resolv.conf: contains: patterns not found: [nameserver 9.9.9.9, nameserver 149.112.112.112]
+Title: CAT_3 | RHEL_07_021310 | A separate file system is used for user home directories (such as /home or an equivalent). | running
+Mount: /home: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: CAT_3 | RHEL-07-021320 | A separate file system is used for /var | running
+Mount: /var: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: CAT_3 | RHEL-07-021330 | A separate file system is used for /var/log/audit | running
+Mount: /var/log/audit: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: CAT_3 | RHEL-07-021340 | A separate file system is used for /tmp (or equivalent) | running
+Mount: /tmp: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options. | running
+Mount: /dev/shm: exists: matches expectation: [true]
+Mount: /dev/shm: opts:
+Expected
+    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
+to contain element matching
+    <string>: noexec
+Title: CAT_3 | RHEL_07_021340 | A separate file system is used for /tmp
+File: /etc/fstab: exists: matches expectation: [true]
+File: /etc/fstab: contains: patterns not found: [/tmp]
+Title: CAT_3 | RHEL-07-040530 | Must display the date and time of the last successful account logon upon logon.
+File: /etc/pam.d/postlogin: exists: matches expectation: [true]
+File: /etc/pam.d/postlogin: contains: patterns not found: [/^session\s+required pam_lastlog.so.*showfailed/]
+Title: CAT_3 | RHEL-07-021600 | Must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs). | Aide Installed
+Package: aide: installed: matches expectation: [true]
+Title: CAT_3 | RHEL-07-020300 | Must be configured so that all Group Identifiers (GIDs) referenced in the /etc/passwd file are defined in the /etc/group file.
+Command: gids_defined: exit-status: matches expectation: [0]
+Command: gids_defined: stdout: matches expectation: [!/./]
+
+
+Failures/Skipped:
+
+Title: CAT_3 | RHEL-07-020200 | Remove all software components after updated versions have been installed.
+File: /etc/yum.conf: contains: patterns not found: [/^clean_requirements_on_remove=1/]
+
+Title: CAT_3 | RHEL-07-021600 | Must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs). | Aide ACL rules| CAT_3 | RHEL-07-021610 | Must be configured so that the file integrity tool is configured to verify extended attributes | Aide Extend Att rules
+File: /etc/aide.conf: contains: patterns not found: [FIPSR = p+i+n+u+g+s+m+S+acl+selinux+xattrs+sha512]
+
+Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options.
+Command: dev_shm_etc_fstab: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: dev_shm_etc_fstab: stdout: patterns not found: [nodev, noexec, nosuid]
+
+Title: CAT_3 | RHEL-07-040000 | Must limit the number of concurrent sessions to 10 for all accounts and/or account types.
+File: /etc/security/limits.conf: contains: patterns not found: [/\*\s+hard\s+maxlogins\s+10/]
+
+Title: CAT_3 | RHEL-07-040600 | Using DNS resolution, at least two name servers must be configured.
+File: /etc/resolv.conf: contains: patterns not found: [nameserver 9.9.9.9, nameserver 149.112.112.112]
+
+Title: CAT_3 | RHEL_07_021310 | A separate file system is used for user home directories (such as /home or an equivalent). | running
+Mount: /home: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: CAT_3 | RHEL-07-021320 | A separate file system is used for /var | running
+Mount: /var: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: CAT_3 | RHEL-07-021330 | A separate file system is used for /var/log/audit | running
+Mount: /var/log/audit: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: CAT_3 | RHEL-07-021340 | A separate file system is used for /tmp (or equivalent) | running
+Mount: /tmp: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options. | running
+Mount: /dev/shm: opts:
+Expected
+    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
+to contain element matching
+    <string>: noexec
+
+Title: CAT_3 | RHEL_07_021340 | A separate file system is used for /tmp
+File: /etc/fstab: contains: patterns not found: [/tmp]
+
+Title: CAT_3 | RHEL-07-040530 | Must display the date and time of the last successful account logon upon logon.
+File: /etc/pam.d/postlogin: contains: patterns not found: [/^session\s+required pam_lastlog.so.*showfailed/]
+
+Total Duration: 0.045s
+Count: 23, Failed: 13, Skipped: 0
