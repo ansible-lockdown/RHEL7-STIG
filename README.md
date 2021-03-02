@@ -54,15 +54,10 @@ Documentation
 -------------
 
 - [Repo GitHub Page](https://ansible-lockdown.github.io/RHEL7-STIG/)
-
 - [Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown)
-
 - [Customizing Roles](https://www.lockdownenterprise.com/docs/customizing-lockdown-enterprise)
-
 - [Per-Host Configuration](https://www.lockdownenterprise.com/docs/per-host-lockdown-enterprise-configuration)
-
 - [Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise)
-
 - [Wiki](https://github.com/ansible-lockdown/RHEL7-STIG/wiki)
 
 Dependencies
@@ -119,15 +114,11 @@ rhel7test         : ok=369  changed=192  unreachable=0  failed=0  skipped=125  r
 Branches
 -------
 
-**devel** - This is the default branch and the working development branch. Community pull requests will pull into this branch
-
-**main** - This is the release branch
-
-**reports** - This is a protected branch for our scoring reports, no code should ever go here
-
-**gh_pages** - github pages
-
-**all other branches** - Individual community member branches
+- **devel** - This is the default branch and the working development branch. Community pull requests will pull into this branch
+- **main** - This is the release branch
+- **reports** - This is a protected branch for our scoring reports, no code should ever go here
+- **gh_pages** - github pages
+- **all other branches** - Individual community member branches
 
 Community Contribution
 ----------------------
