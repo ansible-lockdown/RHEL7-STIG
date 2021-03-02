@@ -51,19 +51,19 @@ Access to download or add the goss binary and content to the system if using aud
 - Please read through the tasks in this role to gain an understanding of what each control is doing. Some of the tasks are disruptive and can have unintended consiquences in a live production system. Also familiarize yourself with the variables in the defaults/main.yml file or the [Main Variables Wiki Page](https://github.com/ansible-lockdown/RHEL8-CIS/wiki/Main-Variables).
 
 Documentation
-
 -------------
-[Repo GitHub Page](https://ansible-lockdown.github.io/RHEL7-STIG/)
 
-[Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown)
+- [Repo GitHub Page](https://ansible-lockdown.github.io/RHEL7-STIG/)
 
-[Customizing Roles](https://www.lockdownenterprise.com/docs/customizing-lockdown-enterprise)
+- [Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown)
 
-[Per-Host Configuration](https://www.lockdownenterprise.com/docs/per-host-lockdown-enterprise-configuration)
+- [Customizing Roles](https://www.lockdownenterprise.com/docs/customizing-lockdown-enterprise)
 
-[Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise)
+- [Per-Host Configuration](https://www.lockdownenterprise.com/docs/per-host-lockdown-enterprise-configuration)
 
-[Wiki](https://github.com/ansible-lockdown/RHEL7-STIG/wiki)
+- [Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise)
+
+- [Wiki](https://github.com/ansible-lockdown/RHEL7-STIG/wiki)
 
 Dependencies
 ------------
