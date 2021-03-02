@@ -50,6 +50,16 @@ Access to download or add the goss binary and content to the system if using aud
 - Functioning Ansible and/or Tower Installed, configured, and running. This includes all of the base Ansible/Tower configurations, needed packages installed, and infrastructure setup.
 - Please read through the tasks in this role to gain an understanding of what each control is doing. Some of the tasks are disruptive and can have unintended consiquences in a live production system. Also familiarize yourself with the variables in the defaults/main.yml file or the [Main Variables Wiki Page](https://github.com/ansible-lockdown/RHEL7-STIG/wiki/Main-Variables).
 
+Documentation
+-------------
+
+- [Repo GitHub Page](https://ansible-lockdown.github.io/RHEL7-STIG/)
+- [Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown)
+- [Customizing Roles](https://www.lockdownenterprise.com/docs/customizing-lockdown-enterprise)
+- [Per-Host Configuration](https://www.lockdownenterprise.com/docs/per-host-lockdown-enterprise-configuration)
+- [Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise)
+- [Wiki](https://github.com/ansible-lockdown/RHEL7-STIG/wiki)
+
 Dependencies
 ------------
 
@@ -107,6 +117,7 @@ Branches
 - **devel** - This is the default branch and the working development branch. Community pull requests will pull into this branch
 - **main** - This is the release branch
 - **reports** - This is a protected branch for our scoring reports, no code should ever go here
+- **gh_pages** - github pages
 - **all other branches** - Individual community member branches
 
 Community Contribution
