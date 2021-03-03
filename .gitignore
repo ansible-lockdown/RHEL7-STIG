@@ -11,7 +11,7 @@ delete*
 ignore*
 # VSCode
 .vscode
-
+.github/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -39,3 +39,5 @@ travis.env
 benchparse/
 *xccdf.xml
 *.retry
+test_inv
+

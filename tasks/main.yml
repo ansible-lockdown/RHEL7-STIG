@@ -1,60 +1,93 @@
 ---
 - name: Gather distribution info
   setup:
-      gather_subset: distribution,!all,!min
+    gather_subset: distribution,!all,!min
   when:
-      - ansible_distribution is not defined
+  - ansible_distribution is not defined
   tags:
-      - always
+  - always
 
 - name: Check OS version and family
   assert:
       that: ansible_os_family == 'RedHat' and ansible_distribution_major_version is version_compare('7', '==')
       msg: "This role can only be run against RHEL/CENTOS 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   tags:
-      - always
+  - always
 
 - name: Check ansible version
   assert:
       that: ansible_version.full is version_compare(rhel7stig_min_ansible_version, '>=')
       msg: You must use Ansible {{ rhel7stig_min_ansible_version }} or greater
   tags:
-      - always
+  - always
 
-- name: Install OpenSCAP and run a report
-  import_tasks: audit_oscap_scan_before.yml
-  when: rhel7stig_oscap_scan
+- name: FIPS turned on
+  set_fact:
+    fips_value: fips=1
+  when:
+  - rhel7stig_use_FIPS
+
+- name: Check rhel7stig_bootloader_password_hash variable has been changed
+  assert:
+    that: rhel7stig_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispassword'
+    msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set"
+  when:
+  - rhel_07_010480 or
+    rhel_07_010490 or
+    rhel_07_010482 or
+    rhel_07_010491
   tags:
-      - oscapreport
+  - RHEL-07-010480
+  - RHEL-07-010482
+  - RHEL-07-010490
+  - RHEL-07-010491
+  - cat1
 
 - import_tasks: prelim.yml
   become: yes
   tags:
-      - prelim_tasks
+  - prelim_tasks
+
+- import_tasks: pre_LE_audit.yml
+  when:
+  - rhel7stig_run_audit
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - always
 
 - name: Include CAT I patches
   import_tasks: fix-cat1.yml
-  when: rhel7stig_cat1_patch | bool
+  when: rhel7stig_cat1_patch
   tags:
-      - cat1
-      - high
+  - cat1
+  - high
 
 - name: Include CAT II patches
   import_tasks: fix-cat2.yml
-  when: rhel7stig_cat2_patch | bool
+  when: rhel7stig_cat2_patch
   tags:
-      - cat2
-      - medium
+  - cat2
+  - medium
 
 - name: Include CAT III patches
   import_tasks: fix-cat3.yml
-  when: rhel7stig_cat3_patch | bool
+  when: rhel7stig_cat3_patch 
   tags:
-      - cat3
-      - low
+  - cat3
+  - low
 
-- name: run the OpenSCAP reporting tool again
-  import_tasks: audit_oscap_scan_after.yml
-  when: rhel7stig_oscap_scan
-  tags:
-      - oscapreport
+- name: flush handlers
+  meta: flush_handlers
+
+- import_tasks: post_LE_audit.yml
+  when:
+  - rhel7stig_run_audit
+
+- name: Show Audit Summary
+  debug:
+    msg: "{{ Audit_results.split('\n') }}"
+  when:
+  - rhel7stig_run_audit

@@ -1,53 +1,102 @@
 ---
+
+- name: "PREREQ | Check required packages installed | Python2"
+  package:
+    list: "{{ item }}"
+    state: present
+  loop:
+  - rpm-python
+  - libselinux-python
+  vars:
+    ansible_python_interpreter: "{{ python2_bin }}"
+  when: ansible_python.version.major == 2
+
+- name: "PREREQ | Add the required packages | Python 3"
+  block:
+  - name: Check if python36-rpm package installed
+    command: rpm -q python36-rpm
+    register: python36_rpm_present
+    failed_when: ( python36_rpm_present.rc not in [ 0, 1 ] )
+    changed_when: false
+    args:
+      warn: false
+
+  - name: Add the EPEL repository required for the python36-rpm pkg
+    package:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      state: present
+    register: epel_installed
+    when:
+    - python36_rpm_present.rc != '0'
+  
+  - name: "PREREQ | Check required packages installed | Python3 "
+    package:
+      name: "{{ item }}"
+      state: present
+    register: python3reqs_installed
+    loop:
+    - python36-rpm
+    - libselinux-python3
+
+  - name: Disable Epel repo if installed earlier
+    command: yum-config-manager disable epel
+    when: epel_installed.changed
+  when:
+  - ( ansible_python.version.major == 3  and ansible_python.version.minor == 6 )
+  vars:
+    ansible_python_interpreter: "{{ python2_bin }}"
+
 - name: "PRELIM | dconf"
   block:
-      - name: "PRELIM | Check for dconf availability"
-        command: rpm -q dconf
-        changed_when: no
-        check_mode: no
-        failed_when: rhel7stig_dconf_audit.rc >= 2
-        register: rhel7stig_dconf_audit
+  - name: "PRELIM | Check for dconf availability"
+    command: rpm -q dconf
+    changed_when: no
+    check_mode: no
+    failed_when: rhel7stig_dconf_audit.rc >= 2
+    register: rhel7stig_dconf_audit
 
-      - name: "PRELIM | Install dconf"
-        yum:
-            name: dconf
-        when:
-            - rhel7stig_dconf_audit.rc == 1
-            - rhel7stig_gui
+  - name: "PRELIM | Install dconf"
+    package:
+      name: dconf
+    vars:
+      ansible_python_interpreter: "{{ python2_bin }}"
+    when:
+    - rhel7stig_dconf_audit.rc == 1
+    - rhel7stig_gui
 
-      - name: dconf directory structure
-        file:
-            path: /etc/dconf/db/local.d/locks
-            state: directory
-            mode: '0755'
-        when:
-            - rhel7stig_always_configure_dconf
+  - name: dconf directory structure
+    file:
+      path: /etc/dconf/db/local.d/locks
+      state: directory
+      mode: '0755'
+    when:
+    - rhel7stig_always_configure_dconf
   when:
-      - rhel_07_010030 or
-        rhel_07_010040 or
-        rhel_07_010060 or
-        rhel_07_010061 or
-        rhel_07_010062 or
-        rhel_07_010070 or
-        rhel_07_010081 or
-        rhel_07_010082 or
-        rhel_07_010100 or
-        rhel_07_010101 or
-        rhel_07_010110 or
-        rhel_07_020230
+  - rhel_07_010030 or
+    rhel_07_010040 or
+    rhel_07_010060 or
+    rhel_07_010061 or
+    rhel_07_010062 or
+    rhel_07_010070 or
+    rhel_07_010081 or
+    rhel_07_010082 or
+    rhel_07_010100 or
+    rhel_07_010101 or
+    rhel_07_010110 or
+    rhel_07_020230
   tags:
-      - RHEL-07-010030
-      - RHEL-07-010040
-      - RHEL-07-010060
-      - RHEL-07-010061
-      - RHEL-07-010062
-      - RHEL-07-010070
-      - RHEL-07-010081
-      - RHEL-07-010082
-      - RHEL-07-010100
-      - RHEL-07-010101
-      - RHEL-07-010110
-      - RHEL-07-020230
+  - RHEL-07-010030
+  - RHEL-07-010040
+  - RHEL-07-010060
+  - RHEL-07-010061
+  - RHEL-07-010062
+  - RHEL-07-010070
+  - RHEL-07-010081
+  - RHEL-07-010082
+  - RHEL-07-010100
+  - RHEL-07-010101
+  - RHEL-07-010110
+  - RHEL-07-020230
 
 - name: "PRELIM | Find all sudoers files."
   command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
@@ -56,155 +105,161 @@
   failed_when: no
   register: rhel7stig_sudoers_files
   when:
-      - rhel_07_010340 or
-        rhel_07_010350
+  - rhel_07_010340 or
+    rhel_07_010350
   tags:
-      - cat2
-      - medium
-      - RHEL-07-010340
-      - RHEL-07-010350
+  - cat2
+  - medium
+  - RHEL-07-010340
+  - RHEL-07-010350
 
 - name: "PRELIM | RHEL-07-010480 | RHEL-07-010490 | RHEL-07-021350 | Install grub2-tools."
-  yum:
-      name: grub2-tools
+  package:
+    name: grub2-tools
+  vars:
+    ansible_python_interpreter: "{{ python2_bin }}"
   when:
-      - rhel_07_010480 or
-        rhel_07_010482 or
-        rhel_07_010490 or
-        rhel_07_010491 or
-        rhel_07_021350
+  - rhel_07_010480 or
+    rhel_07_010482 or
+    rhel_07_010490 or
+    rhel_07_010491 or
+    rhel_07_021350
   tags:
-      - cat1
-      - high
-      - RHEL-07-010480
-      - RHEL-07-010482
-      - RHEL-07-010490
-      - RHEL-07-010491
-      - RHEL-07-021350
+  - cat1
+  - high
+  - RHEL-07-010480
+  - RHEL-07-010482
+  - RHEL-07-010490
+  - RHEL-07-010491
+  - RHEL-07-021350
 
 - name: "PRELIM | RHEL-07-010480 | RHEL-07-010490 | RHEL-07-021350 | RHEL-07-021700 | Check whether machine is UEFI-based"
   stat:
-      path: /sys/firmware/efi
+    path: /sys/firmware/efi
   register: rhel_07_sys_firmware_efi
   when:
-      - rhel_07_010480 or
-        rhel_07_010482 or
-        rhel_07_010490 or
-        rhel_07_010491 or
-        rhel_07_021350 or
-        rhel_07_021700
+  - rhel_07_010480 or
+    rhel_07_010482 or
+    rhel_07_010490 or
+    rhel_07_010491 or
+    rhel_07_021350 or
+    rhel_07_021700
   tags:
-      - cat1
-      - high
-      - cat2
-      - medium
-      - RHEL-07-010480
-      - RHEL-07-010482
-      - RHEL-07-010490
-      - RHEL-07-010491
-      - RHEL-07-021350
-      - RHEL-07-021700
+  - cat1
+  - high
+  - cat2
+  - medium
+  - RHEL-07-010480
+  - RHEL-07-010482
+  - RHEL-07-010490
+  - RHEL-07-010491
+  - RHEL-07-021350
+  - RHEL-07-021700
 
 - name: "PRELIM | Gather chroot status"
   setup:
-      gather_subset: chroot,!all,!min
-      filter: ansible_is_chroot
+    gather_subset: chroot,!all,!min
+    filter: ansible_is_chroot
   when:
-      - ansible_version.string is version_compare('2.7', '>=')
-      - ansible_is_chroot is not defined
+  - ansible_version.string is version_compare('2.7', '>=')
+  - ansible_is_chroot is not defined
   tags:
-      - always
+  - always
 
 - name: "PRELIM | Gather mount information"
   setup:
-      gather_subset: hardware,!all,!min
-      filter: ansible_mounts
+    gather_subset: hardware,!all,!min
+    filter: ansible_mounts
   when:
-      - ansible_mounts is not defined
+  - ansible_mounts is not defined
   tags:
-      - always
+  - always
 
 - name: ensure cronie is available
-  yum:
-      name: cronie
+  package:
+    name: cronie
+  vars:
+     ansible_python_interpreter: "{{ python2_bin }}"
   when:
-      - rhel_07_020030 or
-        rhel_07_020040 or
-        false
+  - rhel_07_020030 or
+    rhel_07_020040 or
+    false
   tags:
-      - cat2
-      - medium
-      - RHEL-07-020030
-      - RHEL-07-020040
+  - cat2
+  - medium
+  - RHEL-07-020030
+  - RHEL-07-020040
 
 - name: "PRELIM | RHEL-07-020600 | RHEL-07-020620 | RHEL-07-020630 | RHEL-07-020640 | RHEL-07-020650 | RHEL-07-020660 | RHEL-07-020690 | Parse /etc/passwd"
   include_tasks: parse_etc_passwd.yml
   vars:
-      rhel7stig_passwd_tasks: "RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690"
+    rhel7stig_passwd_tasks: "RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690"
   when:
-      - rhel_07_020600 or
-        rhel_07_020620 or
-        rhel_07_020630 or
-        rhel_07_020640 or
-        rhel_07_020650 or
-        rhel_07_020660 or
-        rhel_07_020670 or
-        rhel_07_020680 or
-        rhel_07_020690 or
-        rhel_07_020700 or
-        false
+  - rhel_07_020600 or
+    rhel_07_020620 or
+    rhel_07_020630 or
+    rhel_07_020640 or
+    rhel_07_020650 or
+    rhel_07_020660 or
+    rhel_07_020670 or
+    rhel_07_020680 or
+    rhel_07_020690 or
+    rhel_07_020700 or
+    false
   tags:
-      - cat2
-      - medium
-      - RHEL-07-020600
-      - RHEL-07-020620
-      - RHEL-07-020630
-      - RHEL-07-020640
-      - RHEL-07-020650
-      - RHEL-07-020660
-      - RHEL-07-020670
-      - RHEL-07-020680
-      - RHEL-07-020690
-      - RHEL-07-020700
+  - cat2
+  - medium
+  - RHEL-07-020600
+  - RHEL-07-020620
+  - RHEL-07-020630
+  - RHEL-07-020640
+  - RHEL-07-020650
+  - RHEL-07-020660
+  - RHEL-07-020670
+  - RHEL-07-020680
+  - RHEL-07-020690
+  - RHEL-07-020700
 
 ## NOTE: You will need to adjust the UID range in parenthases below.
 ## ALSO NOTE: We weed out any user with a home dir not in standard locations because interactive users shouldn't have those paths as a home dir. Add or removed directory paths as needed below.
 - name: "PRELIM | RHEL-07-020680 | RHEL-07-020710 | RHEL-07-020720 | RHEL-07-020730 | Gather local interactive user directories"
   shell: "getent passwd { {{ rhel7stig_int_gid }}..65535} | cut -d: -f6 | sort -u | grep -v '/var/' | grep -v '/nonexistent/*' | grep -v '/run/*'"
   register: rhel_07_020680_getent
-  changed_when: rhel_07_020680_getent.stdout_lines is defined
+  changed_when: false #rhel_07_020680_getent.stdout_lines is defined
   failed_when: false
   tags:
-      - RHEL-07-020680
-      - RHEL-07-020710
-      - RHEL-07-020720
-      - RHEL-07-020730
-      - complexity-high
+  - RHEL-07-020680
+  - RHEL-07-020710
+  - RHEL-07-020720
+  - RHEL-07-020730
+  - complexity-high
 
 - name: "PRELIM | RHEL-07-020680 | RHEL-07-020710 | RHEL-07-020720 | RHEL-07-020730 | Set fact for home directory paths for interactive users"
   set_fact:
-      rhel_07_stig_interactive_homedir_results: "{{ rhel_07_020680_getent.stdout_lines }}"
+    rhel_07_stig_interactive_homedir_results: "{{ rhel_07_020680_getent.stdout_lines }}"
   when: rhel_07_020680_getent.stdout_lines is defined
   tags:
-      - RHEL-07-020680
-      - RHEL-07-020710
-      - RHEL-07-020720
-      - RHEL-07-020730
-      - complexity-high
+  - RHEL-07-020680
+  - RHEL-07-020710
+  - RHEL-07-020720
+  - RHEL-07-020730
+  - complexity-high
 
 - name: "PRELIM | RHEL-07-021100 | RHEL-07-031000 | RHEL-07-031010 | Ensure rsyslog is installed when required."
-  yum:
-      name: rsyslog
+  package:
+    name: rsyslog
+  vars:
+    ansible_python_interpreter: "{{ python2_bin }}"
   when:
-      - rhel_07_021100 or
-        rhel_07_031000 or
-        rhel_07_031010
+  - rhel_07_021100 or
+    rhel_07_031000 or
+    rhel_07_031010
   tags:
-      - cat2
-      - medium
-      - RHEL-07-021100
-      - RHEL-07-031000
-      - RHEL-07-031010
+  - cat2
+  - medium
+  - RHEL-07-021100
+  - RHEL-07-031000
+  - RHEL-07-031010
 
 - name: "PRELIM | RHEL-07-021350 | Check if /boot or /boot/efi reside on separate partitions"
   shell: df --output=target /boot | tail -n 1
@@ -212,114 +267,121 @@
   check_mode: no
   register: rhel_07_boot_part
   when:
-      - rhel_07_021350
+  - rhel_07_021350
   tags:
-      - cat1
-      - high
-      - RHEL-07-021350
+  - cat1
+  - high
+  - RHEL-07-021350
 
 - name: "PRELIM | RHEL-07-030300 | RHEL-07-030310 | RHEL-07-030320 | RHEL-07-030321 | Install audit remote plugin."
-  yum:
-      name: audispd-plugins
+  package:
+    name: audispd-plugins
+  vars:
+    ansible_python_interpreter: "{{ python2_bin }}"
   when:
-      - rhel_07_030200 or
-        rhel_07_030300 or
-        rhel_07_030310 or
-        rhel_07_030320 or
-        rhel_07_030321
+  - rhel_07_030300 or
+    rhel_07_030310 or
+    rhel_07_030320 or
+    rhel_07_030321
   tags:
-      - cat2
-      - medium
-      - auditd
-      - RHEL-07-030200
-      - RHEL-07-030300
-      - RHEL-07-030310
-      - RHEL-07-030320
-      - RHEL-07-030321
+  - cat2
+  - medium
+  - auditd
+  - RHEL-07-030300
+  - RHEL-07-030310
+  - RHEL-07-030320
+  - RHEL-07-030321
 
 - name: "PRELIM | RHEL-07-030330 | Determine audit log partition."
   block:
-      - name: "PRELIM | RHEL-07-030330 | Find audit.log location"
-        command: grep -oP '^log_file\s*=\s*\K.*?(?=\s*$)' /etc/audit/auditd.conf
-        changed_when: no
-        check_mode: no
-        register: rhel_07_audit_log_file
+  - name: "PRELIM | RHEL-07-030330 | Find audit.log location"
+    command: grep -oP '^log_file\s*=\s*\K.*?(?=\s*$)' /etc/audit/auditd.conf
+    changed_when: no
+    check_mode: no
+    register: rhel_07_audit_log_file
 
-      - name: "PRELIM | RHEL-07-030330 | Find partition holding audit.log"
-        shell: df --output=target {{ rhel_07_audit_log_file.stdout }} | tail -n 1
-        changed_when: no
-        check_mode: no
-        register: rhel_07_audit_part
+  - name: "PRELIM | RHEL-07-030330 | Find partition holding audit.log"
+    shell: df --output=target {{ rhel_07_audit_log_file.stdout }} | tail -n 1
+    changed_when: no
+    check_mode: no
+    register: rhel_07_audit_part
   when:
-      - rhel_07_030330
+  - rhel_07_030330
   tags:
-      - cat2
-      - medium
-      - auditd
-      - RHEL-07-030330
+  - cat2
+  - medium
+  - auditd
+  - RHEL-07-030330
 
 - name: "PRELIM | RHEL-07-020030 | RHEL-07-020040 | RHEL-07-021600 | RHEL-07-021610 RHEL-07-021620 | Install and initialize AIDE"
   block:
-      - name: "PRELIM | RHEL-07-020030 | RHEL-07-020040 | RHEL-07-021600 | RHEL-07-021610 | RHEL-07-021620 | Install AIDE"
-        yum:
-            name: aide
-            state: present
-        notify: "{{ rhel7stig_aide_handler }}"
+  - name: "PRELIM | RHEL-07-020030 | RHEL-07-020040 | RHEL-07-021600 | RHEL-07-021610 | RHEL-07-021620 | Install AIDE"
+    package:
+      name: aide
+      state: present
+    vars:
+      ansible_python_interpreter: "{{ python2_bin }}"
+    notify: "{{ rhel7stig_aide_handler }}"
 
-      - name: "PRELIM | RHEL-07-020030 | RHEL-07-020040 | RHEL-07-021600 | RHEL-07-021610 | RHEL-07-021620 | Check for existing AIDE database"
-        stat:
-            path: "{{ rhel7stig_aide_db_file }}"
-        register: rhel7stig_aide_db_status
-        check_mode: no
-        changed_when: not rhel7stig_aide_db_status.stat.exists
-        notify: "{{ rhel7stig_aide_handler }}"
+  - name: "PRELIM | RHEL-07-020030 | RHEL-07-020040 | RHEL-07-021600 | RHEL-07-021610 | RHEL-07-021620 | Check for existing AIDE database"
+    stat:
+      path: "{{ rhel7stig_aide_db_file }}"
+    register: rhel7stig_aide_db_status
+    check_mode: no
+    changed_when: not rhel7stig_aide_db_status.stat.exists
+    notify: "{{ rhel7stig_aide_handler }}"
   when:
-      - rhel_07_020030 or
-        rhel_07_020040 or
-        rhel_07_021600 or
-        rhel_07_021610 or
-        rhel_07_021620
+  - rhel_07_020030 or
+    rhel_07_020040 or
+    rhel_07_021600 or
+    rhel_07_021610 or
+    rhel_07_021620
   tags:
-      - cat2
-      - medium
-      - patch
-      - aide
-      - RHEL-07-020030
-      - RHEL-07-020040
-      - RHEL-07-021600
-      - RHEL-07-021610
-      - RHEL-07-021620
+  - cat2
+  - medium
+  - patch
+  - aide
+  - RHEL-07-020030
+  - RHEL-07-020040
+  - RHEL-07-021600
+  - RHEL-07-021610
+  - RHEL-07-021620
 
 - name: "PRELIM | RHEL-07-020210 | RHEL-07-020220 | Install SELinux related dependencies"
-  yum:
-      name:
-          - libselinux-python
-          - policycoreutils-python
-          - selinux-policy-targeted
+  package:
+    name:
+    - libselinux-python
+    - policycoreutils-python
+    - selinux-policy-targeted
+  vars:
+    ansible_python_interpreter: "{{ python2_bin }}"
   when:
-      - rhel_07_020210 or
-        rhel_07_020220 or
-        rhel_07_020020
+  - rhel_07_020210 or
+    rhel_07_020220 or
+    rhel_07_020020
 
 - name: "PRELIM | Bare bones SSH Server"
   block:
-      - name: "PRELIM | Install SSH"
-        yum:
-            name: openssh-server
+  - name: "PRELIM | Install SSH"
+    package:
+      name: openssh-server
+    vars:
+      ansible_python_interpreter: "{{ python2_bin }}"
+    
+  - name: PRELIM | Start SSH
+    service:
+      name: sshd
+      state: "{{ rhel7stig_service_started }}"
+      enabled: yes
 
-      - name: PRELIM | Start SSH
-        service:
-            name: sshd
-            state: "{{ rhel7stig_service_started }}"
-            enabled: yes
+  - name: PRELIM | check if ssh host key exists
+    stat:
+      path: /etc/ssh/ssh_host_rsa_key
+    register: rhel7stig_ssh_host_rsa_key_stat
 
-      - name: PRELIM | check if ssh host key exists
-        stat:
-            path: /etc/ssh/ssh_host_rsa_key
-        register: rhel7stig_ssh_host_rsa_key_stat
-
-      - name: PRELIM | create ssh host key to allow 'sshd -t -f %s' to succeed
-        command: ssh-keygen -N '' -f /etc/ssh/ssh_host_rsa_key -t rsa -b 4096
-        when: not rhel7stig_ssh_host_rsa_key_stat.stat.exists
-        notify: clean up ssh host key
+  - name: PRELIM | create ssh host key to allow 'sshd -t -f %s' to succeed
+    command: ssh-keygen -N '' -f /etc/ssh/ssh_host_rsa_key -t rsa -b 4096
+    when: not rhel7stig_ssh_host_rsa_key_stat.stat.exists
+    notify: clean up ssh host key
   when: rhel7stig_ssh_required
+
