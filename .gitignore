@@ -42,4 +42,4 @@ benchparse/
 test_inv
 
 # refactr workflow gitignore
-.gitgub/workflow/
+.github/workflow/
