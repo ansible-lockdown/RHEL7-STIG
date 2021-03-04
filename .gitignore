@@ -41,3 +41,5 @@ benchparse/
 *.retry
 test_inv
 
+# refactr workflow gitignore
+.gitgub/workflow/
