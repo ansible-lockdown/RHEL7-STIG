@@ -2519,7 +2519,7 @@
   - name: "MEDIUM | RHEL-07-040180 | RHEL-07-040190 | RHEL-07-040200 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
     stat:
       path: /etc/sssd/sssd.conf
-      register: rhel_07_040180_LDAPconf_audit
+    register: rhel_07_040180_LDAPconf_audit
     changed_when: no
     when:
     - rhel_07_040180 or
