@@ -673,10 +673,10 @@ rhel7stig_int_gid: 1000
 # Sets the invalid rate limit for IPv4 connections. Should be set to less than 1000 to conform to STIG standards
 ol7stig_ipv4_tcp_invalid_ratelimit: 500
 
-# Control OL-07-021031
+# Control RHEL-07-021031
 # This control sets all world writable files to be owned by root. To conform to STIG standard all world-writable files must be owned by root or another system account
 # With this toggle off it will list all world-writable files not owned by system accounts
-ol7stig_world_write_files_owner_root: false
+rhel7stig_world_write_files_owner_root: false
 
 # how to get audit files onto host options
 # options are git/copy/get_url
