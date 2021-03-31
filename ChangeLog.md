@@ -16,6 +16,10 @@
 
 refer to STIG documentation for specific changes
 
+## Whats new in Release 1.0.1
+- renamed goss.yml to goss.py and aligned ansible.cfg
+  - thanks to Thulium-Drake
+
 ## High level changes within tasks
 
 - Python 2 & 3 (preferred) working an setup for control node and host
