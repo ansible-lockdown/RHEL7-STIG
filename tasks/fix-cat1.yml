@@ -8,14 +8,14 @@
         warn: no
     check_mode: no
     failed_when: no
-    changed_when: rhel_07_010010_audit.stdout != ""
+    changed_when: rhel_07_010010_audit.stdout|length > 0 
     register: rhel_07_010010_audit
 
   - name: "HIGH | RHEL-07-010010 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
     debug:
         msg: "{{ rhel_07_010010_audit.stderr_lines }}"
     changed_when: yes
-    when: rhel_07_010010_audit.stdout != ""
+    when: rhel_07_010010_audit.stdout|length > 0 
 
   - name: "HIGH | RHEL-07-010010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
     shell: >
@@ -24,7 +24,7 @@
     args:
         warn: no
     register: rhel_07_010010_patch
-    failed_when: rhel_07_010010_patch.stdout != ""
+    failed_when: rhel_07_010010_audit.stdout|length > 0 
     ignore_errors: yes
     with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
 
@@ -51,14 +51,14 @@
       warn: no
     check_mode: no
     failed_when: no
-    changed_when: rhel_07_010020_audit.stdout != ""
+    changed_when: rhel_07_010020_audit.stdout| length > 0
     register: rhel_07_010020_audit
 
   - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
     debug:
       msg: "{{ rhel_07_010020_audit.stderr_lines }}"
     changed_when: yes
-    when: rhel_07_010020_audit.stdout != ""
+    when: rhel_07_010020_audit.stdout | length > 0
 
   - name: "HIGH | RHEL-07-010020 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
     command: yum reinstall -y {{ item }}
@@ -358,7 +358,6 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
       ansible_python_interpreter: "{{ python2_bin }}"
     when:
     - "'dracut-fips' not in ansible_facts.packages"
-    - rhel7stig_use_FIPS
     notify: rebuild initramfs
 
   - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
@@ -370,31 +369,31 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
     - "'prelink' in ansible_facts.packages"
     notify: undo existing prelinking
 
-  - name: "HIGH | RHEL-07-021350 | AUDIT | Check for GRUB_CMDLINE_LINUX in /etc/default/grub"
-    command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*"$' /etc/default/grub
-    check_mode: no
-    failed_when: no
-    changed_when: rhel_07_021350_default_grub_missing_audit.rc > 0
-    register: rhel_07_021350_default_grub_missing_audit
+  - name: "HIGH | RHEL-07-021350 | AUDIT | Check /etc/default/grub exists"
+    stat:
+      path: /etc/default/grub
+    register: rhel7_stig_default_grub 
 
-  - name: "HIGH | RHEL-07-021350 | AUDIT | parse sane GRUB_CMDLINE_LINUX from /proc/cmdline"
-    command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
-    check_mode: no
-    changed_when: no
-    failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
-    when: rhel_07_021350_default_grub_missing_audit is changed
-    register: rhel_07_021350_grub_cmdline_linux_audit
-
-  - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
-    template:
-      src: etc_default_grub.j2
-      dest: /etc/default/grub
-      owner: root
-      group: root
-      mode: 0644
-    vars:
-      grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
-    when: rhel_07_021350_default_grub_missing_audit is changed
+  - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
+    block:
+    - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
+      command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
+      check_mode: no
+      changed_when: no
+      register: rhel_07_021350_grub_cmdline_linux_audit
+      failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
+  
+    - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
+      template:
+        src: etc_default_grub.j2
+        dest: /etc/default/grub
+        owner: root
+        group: root
+        mode: 0644
+      register: rhel7_stig_grub_template
+      vars:
+        grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
+    when: not rhel7_stig_default_grub.stat.exists
 
   - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
     replace:
@@ -404,57 +403,58 @@ data-at-rest protections in accordance with applicable federal laws, Executive O
     vars:
       key: GRUB_CMDLINE_LINUX
       param: fips
-      value: 1
+      value: "{{ fips_value }}"
       append: yes  # this is the default
     when:
     - not ansible_check_mode or
-      rhel_07_021350_default_grub_missing_audit is not changed
-    - rhel7stig_use_FIPS
+      rhel7_stig_grub_template is not changed
     notify: confirm grub2 user cfg
 
   - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
-    replace:
-      path: /etc/default/grub
-      regexp: "{{ rhel7stig_regexp_quoted_params }}"
-      replace: "{{ rhel7stig_replace_quoted_params }}"
-    with_items:
-    - "{{ ansible_mounts | json_query(query) }}"
-    vars:
-      query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
-      key: GRUB_CMDLINE_LINUX
-      param: boot
-      value: UUID={{ item.uuid }}
-      insert: yes
-    when:
-    - rhel7stig_boot_part not in ['/', '']
-    - not ansible_check_mode or
-      rhel_07_021350_default_grub_missing_audit is not changed
-    notify: confirm grub2 user cfg
-    register: result
+    block:
+    - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
+      replace:
+        path: /etc/default/grub
+        regexp: "{{ rhel7stig_regexp_quoted_params }}"
+        replace: "{{ rhel7stig_replace_quoted_params }}"
+      with_items:
+      - "{{ ansible_mounts | json_query(query) }}"
+      vars:
+        query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
+        key: GRUB_CMDLINE_LINUX
+        param: boot
+        value: UUID={{ item.uuid }}
+        insert: yes
+      when:
+      - not ansible_check_mode or
+        rhel7_stig_grub_template is not changed
+      notify: confirm grub2 user cfg
+      register: result
 
-  - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
-    command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
-    check_mode: no
-    with_items:
-    - "{{ fips_value }}" 
-    - boot=UUID={{ ansible_mounts | json_query(query) }}
-    vars:
-      query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
-    register: rhel_07_021350_audit
-    when:
-    - not ansible_check_mode or
-      rhel_07_021350_default_grub_missing_audit is not changed
-    - rhel7stig_boot_part not in ['/', ''] or
-      'boot=' not in item
-    changed_when:
-    - ansible_check_mode
-    - rhel_07_021350_audit is failed
-    failed_when:
-    - rhel_07_021350_audit is failed
-    - not ansible_check_mode or
-      rhel_07_021350_audit.rc > 1
+    - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
+      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
+      check_mode: no
+      with_items:
+      - "fips={{ fips_value }}" 
+      - boot=UUID={{ ansible_mounts | json_query(query) }}
+      vars:
+        query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
+      register: rhel_07_021350_audit
+      when:
+      - not ansible_check_mode or
+        rhel7_stig_grub_template is not changed
+      - rhel7stig_boot_part not in ['/', ''] or
+        'boot=' not in item
+      changed_when:
+      - ansible_check_mode
+      - rhel_07_021350_audit is failed
+      failed_when:
+      - rhel_07_021350_audit is failed
+      - not ansible_check_mode or
+        rhel_07_021350_audit.rc > 1
   when: 
   - rhel_07_021350
+  - rhel7stig_use_fips
   tags:
   - RHEL-07-021350
 

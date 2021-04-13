@@ -9,7 +9,7 @@
 
 - name: "Ensure {{ goss_audit_dir }} exists"
   file:
-    path: "{{ goss_audit_dir}}"
+    path: "{{ goss_audit_dir }}"
     state: directory
     mode: '0755'
 
@@ -32,8 +32,9 @@
 
 - name: copy to audit content files to server
   copy:
-    src: "{{ rhel7stig_audit_local_copy}}"
+    src: "{{ rhel7stig_audit_local_copy }}"
     dest: "{{ goss_audit_dir }}"
+    mode: 0644
   when:
   - rhel7stig_audit_content == 'copy'
 
