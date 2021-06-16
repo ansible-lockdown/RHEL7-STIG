@@ -88,7 +88,7 @@ rhel_07_040800: true
 # CAT 2 rules
 rhel_07_010030: "{{ rhel7stig_gui }}"
 rhel_07_010040: "{{ rhel7stig_gui }}"
-rhel_07_010050: "{{ rhel7stig_gui }}"
+rhel_07_010050: true
 rhel_07_010060: "{{ rhel7stig_gui }}"
 rhel_07_010061: "{{ rhel7stig_gui }}"
 rhel_07_010062: "{{ rhel7stig_gui }}"
