@@ -20,6 +20,7 @@ benchmark: RHEL7-STIG
 rhel7stig_setup_audit: false
 # How to retrive goss
 # Options are copy or download - detailed settings at the bottom of this file
+# you will need to access to either github or the file already dowmloaded
 get_goss_file: download
 
 # how to get audit files onto host options
