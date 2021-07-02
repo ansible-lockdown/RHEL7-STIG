@@ -1427,7 +1427,7 @@
   block:
   # Let's find any progerams with world-writable permissions.
   - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-    shell: find / -xdev -perm -002 -type f -exec ls -ld {} \;
+    shell: find / -xdev -perm -002 -type f -exec ls -ld {} \; | awk '{print $9}'
     failed_when: false
     changed_when: false
     register: rhel_07_020730_perms_results
@@ -1439,7 +1439,7 @@
     failed_when: false
     changed_when: false
     when:
-    - rhel_07_020730_perms_results.stdout_lines is not defined
+    - rhel_07_020730_perms_results.stdout_lines | length == 0
   
   - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
     include_tasks: audit_homedirinifiles.yml
@@ -1448,7 +1448,7 @@
     loop_control:
       loop_var: ini_item
     when:
-    - rhel_07_020730_perms_results.stdout_lines is defined
+    - rhel_07_020730_perms_results.stdout_lines | length > 0
  
   - name: "MEDIUM | RHEL-07-020730 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
     file:
