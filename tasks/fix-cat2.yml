@@ -826,7 +826,7 @@
   with_items:
   - file: /etc/modprobe.d/blacklist.conf
     insertafter: "^#blacklist usb-storage(\\s+|$)"
-    regexp: "^blacklist usb-storage(\\s+|$)"
+    regexp: "^install usb-storagee(\\s+|$)"
     line: 'blacklist usb-storage'
   - file: /etc/modprobe.d/usb-storage.conf
     insertafter: "^#install usb-storage"
