@@ -23,9 +23,11 @@
 
 - name: FIPS turned on
   set_fact:
-    fips_value: fips=1
+    fips_value: '1'
   when:
-  - rhel7stig_use_FIPS
+  - rhel7stig_use_fips
+  tags:
+  - RHEL-07-021350
 
 - name: Check rhel7stig_bootloader_password_hash variable has been changed
   assert:

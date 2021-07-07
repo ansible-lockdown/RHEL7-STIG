@@ -13,14 +13,26 @@ python2_bin: /bin/python2.7
 # audit variable found at the base
 benchmark: RHEL7-STIG
 
-# Enable goss binary download
+#### Basic external goss audit enablement settings ####
+#### Precise details - per setting can be found at the bottom of this file ####
+
+### Goss is required on the remote host
 rhel7stig_setup_audit: false
-# options are download from github or copy from pre downloaded location
-# copy or download
+# How to retrive goss
+# Options are copy or download - detailed settings at the bottom of this file
+# you will need to access to either github or the file already dowmloaded
 get_goss_file: download
 
-# enable audits to run
+# how to get audit files onto host options
+# options are git/copy/get_url
+rhel7stig_audit_content: git
+
+# enable audits to run - this  runs the audit and get the latest content
 rhel7stig_run_audit: false
+
+### End Goss enablements ####
+#### Detailed settings found at the end of this document ####
+
 
 # We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation
@@ -88,7 +100,7 @@ rhel_07_040800: true
 # CAT 2 rules
 rhel_07_010030: "{{ rhel7stig_gui }}"
 rhel_07_010040: "{{ rhel7stig_gui }}"
-rhel_07_010050: "{{ rhel7stig_gui }}"
+rhel_07_010050: true
 rhel_07_010060: "{{ rhel7stig_gui }}"
 rhel_07_010061: "{{ rhel7stig_gui }}"
 rhel_07_010062: "{{ rhel7stig_gui }}"
@@ -397,8 +409,8 @@ rhel7stig_start_firewall_service: true
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
 
-rhel7stig_use_FIPS: true
-fips_value: fips=0
+rhel7stig_use_fips: true
+fips_value: '0'
 rhel7stig_FIPS_ciphers: aes256-ctr,aes192-ctr,aes128-ctr
 rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
 # RHEL-07-040300
@@ -599,7 +611,7 @@ rhel7stig_login_defaults:
     pass_max_days: 60
     fail_delay_secs: 4
     umask: '077'
-    create_home: 'true'
+    create_home: 'yes'
 
 # RHEL-07-030300 uncomment and set the value to a remote IP address that can receive audit logs
 # rhel7stig_audisp_remote_server: 10.10.10.10
@@ -673,47 +685,55 @@ rhel7stig_int_gid: 1000
 # Sets the invalid rate limit for IPv4 connections. Should be set to less than 1000 to conform to STIG standards
 ol7stig_ipv4_tcp_invalid_ratelimit: 500
 
-# Control OL-07-021031
+# Control RHEL-07-021031
 # This control sets all world writable files to be owned by root. To conform to STIG standard all world-writable files must be owned by root or another system account
 # With this toggle off it will list all world-writable files not owned by system accounts
-ol7stig_world_write_files_owner_root: false
+rhel7stig_world_write_files_owner_root: false
 
-# how to get audit files onto host options
-# options are git/copy/get_url
-rhel7stig_audit_content: git
 
+#### Goss Configuration Settings ####
+
+### Goss binary settings ###
+goss_version:
+  release: v0.3.16
+  checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+goss_path: /usr/local/bin/
+goss_bin: "{{ goss_path }}goss"
+goss_format: documentation
+
+# if get_goss_file == download change accordingly
+goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
+
+## if get_goss_file - copy the following needs to be updated for your environment
+## it is expected that it will be copied from somewhere accessible to the control node
+## e.g copy from ansible control node to remote host
+copy_goss_from_path: /some/accessible/path
+
+### Goss Audit Benchmark file ###
+## manged by the control rhel7stig_audit_content
 # git
 rhel7stig_audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
 rhel7stig_audit_git_version: main
 
 # copy:
-#rhel7stig_audit_local_copy: "some path to copy from"
+rhel7stig_audit_local_copy: "some path to copy from"
 
 # get_url:
-#rhel7stig_audit_files_url: "some url maybe s3?"
+rhel7stig_audit_files_url: "some url maybe s3?"
 
+# Where the goss audit configuration will be stored
 rhel7stig_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
 
-## audit controls
-goss_version:
-  release: v0.3.16
-  checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+## Goss configuration information
+# Where the goss configs and outputs are stored
+goss_out_dir: '/var/tmp'
+goss_audit_dir: "{{ goss_out_dir }}/{{ benchmark }}-Audit/"
+pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}"
+post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}"
 
-### Audit Settings ###
-#goss_checksum: "checksum_{{ goss_version }}"
-goss_path: /usr/local/bin/
-goss_bin: "{{ goss_path }}goss"
-goss_format: documentation
-goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
-
-## Goss tests information
-goss_audit_dir: "/var/tmp/{{ benchmark }}-Audit/"
+## The following should not need changing
 goss_file: "{{ goss_audit_dir }}goss.yml"
 goss_vars_path: "{{ goss_audit_dir }}/vars/{{ ansible_hostname }}.yml"
-goss_out_dir: '/var/tmp'
-pre_audit_outfile: "{{ goss_out_dir }}/pre_remediation_scan"
-post_audit_outfile: "{{ goss_out_dir }}/post_remediation_scan"
-
 Audit_results: |
       The pre remediation results are: {{ pre_audit_summary }}.
       The post remediation results are: {{ post_audit_summary }}.
