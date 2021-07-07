@@ -1,431 +1,3 @@
-Title: CAT_2 | RHEL-07-030490 | Must audit all uses of the lremovexattr syscall. | running
-Command: auditd_lremovexattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_lremovexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-040110 | Must be configured so that all network connections associated with a communication session are terminated at the end of the session or after 15 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements.
-Command: session_timeout: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: session_timeout: stdout: patterns not found: [TMOUT=600]
-Title: CAT_2 | RHEL-07-030890 | Must audit all uses of the renameat syscall.| running
-Command: audit_renameat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_renameat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S renameat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-Title: CAT_2 | RHEL-07-041002 | The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM).
-Command: sssd_pam: exit-status:
-Expected
-    <int>: 2
-to equal
-    <int>: 0
-Command: sssd_pam: stdout: patterns not found: [/^services =*pam*/]
-Title: CAT_2 | RHEL-07-030873 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/shadow.| running
-Command: audit_etc_shadow_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_shadow_running: stdout: patterns not found: [/^-w /etc/shadow -p wa -k identity/]
-Title: CAT_2 | RHEL-07-040680 | Must be configured to prevent unrestricted mail relaying.
-Command: mail_restricted: exit-status: matches expectation: [0]
-Command: mail_restricted: stdout: patterns not found: [/^smtpd_client_restrictions = permit_mynetworks, reject/]
-Title: CAT_2 | RHEL-07-040810 | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services.
-Command: firewall_default_zone: exit-status:
-Expected
-    <int>: 127
-to equal
-    <int>: 0
-Command: firewall_default_zone: stdout: patterns not found: [public]
-Title: CAT_2 | RHEL-07-030450 | Must audit all uses of the fsetxattr syscall. | running
-Command: auditd_fsetxattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fsetxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-030630 | Must audit all uses of the semanage command. | running
-Command: audit_semanage_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_semanage_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/semanage -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
-Title: CAT_2 | RHEL-07-030560 | Must audit all uses of the setsebool command. | running
-Command: audit_setsebool_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_setsebool_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/setsebool -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
-Title: CAT_2 | RHEL-07-910055	| Must protect audit information from unauthorized read, modification, or deletion.
-Command: audit_logs_owner: exit-status: matches expectation: [0]
-Command: audit_logs_owner: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-020650 | Must be configured so that all local interactive user home directories are group-owned by the home directory owners primary group.
-Command: group_homedirs: exit-status: matches expectation: [0]
-Command: group_homedirs: stdout: matches expectation: [/home_group_ok/ !/^Incorrect/]
-Title: CAT_2 | RHEL-07-020670 | Must be configured so that all files and directories contained in local interactive user home directories are group-owned by a group of which the home directory owner is a member.
-Command: group_home_files: exit-status: matches expectation: [0]
-Command: group_home_files: stdout: matches expectation: [/home_files_ok/ !/^Incorrect/]
-Title: CAT_2 | RHEL-07-020020 | Must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures.
-Command: semanage_unconfined_check: exit-status: matches expectation: [1]
-Command: semanage_unconfined_check: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-021040 | The Red Hat Enterprise Linux operating system must set the umask value to 077 for all local interactive user accounts
-Command: home_dir_umask: exit-status: matches expectation: [2]
-Command: home_dir_umask: stdout: matches expectation: [!/./ !/umask [0:2][0:2][0:2]/]
-Title: CAT_2 | RHEL-07-030740 | Must audit all uses of the mount command and syscall.| running
-Command: audit_mount_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_mount_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/, /^-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/, /^-a always,exit -S all -F path=/usr/bin/mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/]
-Command: auditd_priv_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_priv_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -F key=setuid/, /^-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F key=setuid/, /^-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -F key=setgid/, /^-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -F key=setgid/]
-Title: CAT_2 | RHEL-07-020680 | Must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive.
-Command: home_files: exit-status: matches expectation: [0]
-Title: CAT_2 | RHEL-07-020720 | Must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory.
-Command: home_init_files: exit-status: matches expectation: [1]
-Command: home_init_files: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-030870 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/passwd.| running
-Command: audit_etc_passwd_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_passwd_running: stdout: patterns not found: [/^-w /etc/passwd -p wa -k identity/]
-Title: CAT_2 | RHEL-07-030810 | Must audit all uses of the pam_timestamp_check command. | running
-Command: audit_timestamp_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_timestamp_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/pam_timestamp_check -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-pam/]
-Title: CAT_2 | RHEL-07-030380 | Must audit all uses of the fchown syscall. | running
-Command: auditd_fchown_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fchown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-020220 | Must enable SELinux targeted policy. | running
-Command: getenforce: exit-status: matches expectation: [0]
-Command: getenforce: stdout: matches expectation: [/^Loaded policy name:\s+targeted/ /^SELinux status:\s+enabled/]
-Title: CAT_2 | RHEL-07-020620 | Must be configured so that all local interactive users have a home directory assigned and defined in the /etc/passwd file.
-Command: homedirs_exists: exit-status:
-Expected
-    <int>: 2
-to equal
-    <int>: 0
-Command: homedirs_exists: stdout: patterns not found: [!/./]
-Title: CAT_2 | RHEL-07-030370 | Must audit all uses of the chown syscall. | running
-Command: auditd_chown_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_chown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S chown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S chown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_3 | RHEL-07-020300 | Must be configured so that all Group Identifiers (GIDs) referenced in the /etc/passwd file are defined in the /etc/group file.
-Command: gids_defined: exit-status: matches expectation: [0]
-Command: gids_defined: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-020101 | Must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required. | running
-Command: modprobe_dccp: exit-status: matches expectation: [0]
-Command: modprobe_dccp: stdout: patterns not found: [install /bin/true]
-Title: CAT_2 | RHEL-07-020900 | Must be configured so that all system device files are correctly labeled to prevent unauthorized modification.
-Command: dev_file_perms_2: exit-status: matches expectation: [0]
-Command: dev_file_perms_2: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-020630 | Must be configured so that all local interactive user home directories have mode 0750 or less permissive.
-Command: homedirs_perms: exit-status: matches expectation: [0]
-Command: homedirs_perms: stdout: matches expectation: [/7[0,5]0\s/]
-Title: CAT_2 | RHEL-07-020640 | Must be configured so that all local interactive user home directories are owned by their respective users.
-Command: user_homedirs: exit-status: matches expectation: [0]
-Command: user_homedirs: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-020900 | Must be configured so that all system device files are correctly labeled to prevent unauthorized modification.
-Command: dev_file_perms_1: exit-status: matches expectation: [0]
-Command: dev_file_perms_1: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-021021 | Must prevent binary files from being executed on file systems that are being imported via Network File System (NFS).
-Command: nfs_nosuid: exit-status: matches expectation: [{"or":[0,1]}]
-Command: nfs_nosuid: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-020260 | Must be configured so that file systems containing user home directories are mounted to prevent files with the setuid and setgid bit set from being executed.
-Command: home_dirs_mountpoint: exit-status: matches expectation: [0]
-Command: home_dirs_mountpoint: stdout: patterns not found: [/^OK/, !/^FAILED/]
-Title: CAT_2 | RHEL-07-030620 | Must generate audit records for all successful account access events.| running
-Command: audit_faillock_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_faillock_running: stdout: patterns not found: [/^-w /var/log/lastlog -p wa -k logins/]
-Title: CAT_1 | RHEL_07_040550 | Must not contain shosts.equiv files.
-Command: check_.shosts: exit-status: matches expectation: [1]
-Command: check_.shosts: stdout: matches expectation: [!/./]
-Title: CAT_2 |  RHEL-07-040410 | Must be configured so that the SSH public host key files have mode 0644 or less permissive.
-Command: ssh_pub_key_perms: exit-status: matches expectation: [0]
-Command: ssh_pub_key_perms: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-020730 | Must be configured so that local initialization files do not execute world-writable programs
-Command: worldwriteable_files: exit-status: matches expectation: [0]
-Command: worldwriteable_files: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-910055	| Must protect audit information from unauthorized read, modification, or deletion.
-Command: audit_logs_perm: exit-status: matches expectation: [0]
-Command: audit_logs_perm: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-030400 | Must audit all uses of the fchownat syscall | running
-Command: auditd_fchownat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fchownat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchownat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchownat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-030910 | Must audit all uses of the unlink syscall.| running
-Command: audit_unlink_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_unlink_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S unlink -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S unlink -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-Title: CAT_2 | RHEL-07-030410 | Must audit all uses of the chmod syscall. | running
-Command: auditd_chmod_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_chmod_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S chmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S chmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-030819 | Must audit all uses of the init_module syscall. | running
-Command: audit_init_module_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_init_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S init_module -F key=module-change/, /^-a always,exit -F arch=b64 -S init_module -F key=module-change/]
-Title: CAT_2 | RHEL-07-020700 | Must be configured so that all local initialization files for local interactive users are be group-owned by the users primary group or root.
-Command: home_dirs: exit-status: matches expectation: [1]
-Command: home_dirs: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-030819 | Must audit all uses of the create_module syscall. | running
-Command: audit_create_module_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_create_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S create_module -F key=module-change/, /^-a always,exit -F arch=b64 -S create_module -F key=module-change/]
-Title: CAT_2 | RHEL-07-020020 | Must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures.
-Command: semanage_sysadm_u_check: exit-status: matches expectation: [1]
-Title: CAT_2 | RHEL-07-030010 | must shut down upon audit processing failure, unless availability is an overriding concern. If availability is a concern, the system must alert the designated staff (System Administrator [SA] and Information System Security Officer [ISSO] at a minimum) in the event of an audit processing failure.
-Command: auditctl_fips: exit-status: matches expectation: [0]
-Command: auditctl_fips: stdout: matches expectation: [/^failure [1-2]/]
-Title: CAT_2 | RHEL-07-030420 | Must audit all uses of the fchmod syscall. | running
-Command: auditd_fchmod_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fchmod_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-030500 | Must audit all uses of the creat syscall. | running
-Command: audit_creat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_creat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b32 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/]
-Title: CAT_2 | RHEL-07-040100 | Must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments.
-Command: firewall_services: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: firewall_services: stdout: patterns not found: [ssh]
-Title: CAT_2 | RHEL-07-030874 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/oshadow.| running
-Command: audit_etc_opasswd_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_opasswd_running: stdout: patterns not found: [/^-w /etc/security/opasswd -p wa -k identity/]
-Title: 
-CAT_2 | RHEL-07-021110 | Must be configured so that the cron.allow file, if it exists, is owned by root. 
-CAT_2 | RHEL-07-021120 | Must be configured so that the cron.allow file, if it exists, is group-owned by root.
-Command: cron.allow: exit-status: matches expectation: [0]
-Command: cron.allow: stdout: matches expectation: [/(root root|No File)/]
-Title: CAT_2 | RHEL-07-030550 | Must audit all uses of the ftruncate syscall. | running
-Command: audit_open_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_open_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/]
-Title: CAT_2 | RHEL-07-040750 | Must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS.
-Command: nfs_using_auth: exit-status: matches expectation: [0]
-Command: nfs_using_auth: stdout: matches expectation: [0]
-Title: CAT_2 | RHEL-07-030872 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/gshadow.| running
-Command: audit_etc_gshadow_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_gshadow_running: stdout: patterns not found: [/^-w /etc/gshadow -p wa -k identity/]
-Title: CAT_2 | RHEL-07-030780 | Must audit all uses of the ssh-keysign command. | running
-Command: audit_postqueue_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_postqueue_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/libexec/openssh/ssh-keysign -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-ssh/]
-Title: CAT_2 | RHEL-07-030640 | Must audit all uses of the unix_chkpwd command. | running
-Command: audit_sunix_chkpwd running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_sunix_chkpwd running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/unix_chkpwd -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-passwd/]
-Title: CAT_2 | RHEL-07-010260 | Must be configured so that existing passwords are restricted to a 60-day maximum lifetime.
-Command: password_lifetime: exit-status: matches expectation: [1]
-Command: password_lifetime: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-030750 | Must audit all uses of the umount command. | running
-Command: audit_umount_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_umount_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/umount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/]
-Title: CAT_2 | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled.
-Command: wireless_enabled: exit-status: matches expectation: [1]
-Command: wireless_enabled: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-030800 | Must audit all uses of the crontab command. | running
-Command: audit_cron_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_cron_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/crontab -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-cron/]
-Title: CAT_2 | RHEL-07-030840 | Must audit all uses of the kmod command | running
-Command: audit_kmod_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_kmod_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/kmod -F perm=x -F auid!=(4294967295|unset|-1) -F key=module-change/]
-Title: CAT_2 | RHEL-07-030470 | Must audit all uses of the removexattr syscall. | running
-Command: auditd_removexattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_removexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S removexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-030590 | Must audit all uses of the setfiles command. | running
-Command: audit_setfiles_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_setfiles_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/setfiles -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
-Title: CAT_2 | RHEL-07-030580 | Must audit all uses of the chcon command. | running
-Command: audit_chcon_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_chcon_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/chcon -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
-Title: CAT_2 | RHEL-07-021030 | Must be configured so that all world-writable directories are group-owned by root, sys, bin, or an application group.
-Command: ww_dirs_root_owned: exit-status: matches expectation: [0]
-Command: ww_dirs_root_owned: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-030920 | Must audit all uses of the unlinkat syscall.| running
-Command: audit_unlinkat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_unlinkat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-Title: CAT_2 | RHEL-07-021100	| must have cron logging implemented.
-Command: cron_syslog: exit-status: matches expectation: [0]
-Command: cron_syslog: stdout: matches expectation: [/^.*:cron.\*\s+/var/log/cron/]
-Title: CAT_2 | RHEL-07-030430 | Must audit all uses of the fchmodat syscall. | running
-Command: auditd_fchmodat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fchmodat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchmodat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchmodat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-030871 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/group.| running
-Command: audit_etc_group_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_group_running: stdout: patterns not found: [/^-w /etc/group -p wa -k identity/]
-Title: CAT_2 | RHEL-07-030880 | Must audit all uses of the rename syscall.| running
-Command: audit_rename_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_rename_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S rename -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S rename -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-Title: CAT_2 | RHEL-07-030900 | Must audit all uses of the rmdir syscall.| running
-Command: audit_rmdir_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_rmdir_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S rmdir -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S rmdir -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-Title: CAT_1 | RHEL_07_020310 | Must be configured so that the root account must be the only account having unrestricted access to the system.
-Command: uid_0_check: exit-status: matches expectation: [0]
-Command: uid_0_check: stdout: matches expectation: [root]
-Title: CAT_2 | RHEL-07-030480 | Must audit all uses of the fremovexattr syscall. | running
-Command: auditd_fremovexattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fremovexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-030390 | Must audit all uses of the lchown syscall. | running
-Command: auditd_lchown_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_lchown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-030650 | Must audit all uses of the gpasswd command. | running
-Command: audit_unix_chkpwd running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_unix_chkpwd running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-passwd/]
-Title: CAT_2 | RHEL-07-030460 | Must audit all uses of the lsetxattr syscall. | running
-Command: auditd_lsetxattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_lsetxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: CAT_2 | RHEL-07-030820 | Must audit all uses of the finit_module syscall. | running
-Command: audit_finit_module_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_finit_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S finit_module -F key=module-change/, /^-a always,exit -F arch=b64 -S finit_module -F key=module-change/]
-Title: CAT_2 | RHEL-07-030440 | Must audit all uses of the setxattr syscall. | running
-Command: auditd_setxattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_setxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S setxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S setxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-Title: RHEL_07_010290 | System must not have accounts configured with blank or null passwords.
-Command: check_nullok: exit-status:
-Expected
-    <int>: 0
-to equal
-    <int>: 1
-Command: check_nullok: stdout: patterns not found: [!/./]
 Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options.
 Command: dev_shm_etc_fstab: exit-status:
 Expected
@@ -433,34 +5,60 @@ Expected
 to equal
     <int>: 0
 Command: dev_shm_etc_fstab: stdout: patterns not found: [nodev, noexec, nosuid]
-Title: CAT_2 | RHEL-07-020020 | Must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures.
-Command: semanage_staff_u_check: exit-status: matches expectation: [0]
-Title: CAT_2 | RHEL-07-020320 | Must be configured so that all files and directories have a valid owner.
-Command: unowned: exit-status: matches expectation: [0]
-Command: unowned: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-030830 | Must audit all uses of the delete_module syscall. | running
-Command: audit_delete_module_running: exit-status:
+Title: CAT_2 | RHEL-07-030920 | Must audit all uses of the unlinkat syscall.| running
+Command: audit_unlinkat_running: exit-status:
 Expected
     <int>: 1
 to equal
     <int>: 0
-Command: audit_delete_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S delete_module -F key=module-change/, /^-a always,exit -F arch=b64 -S delete_module -F key=module-change/]
-Title: CAT_2 | RHEL-07-010350 | Must be configured so that users must re-authenticate for privilege escalation.
-Command: sudo_nopasswd: exit-status: matches expectation: [1]
-Command: sudo_nopasswd: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-020100 | Must be configured to disable USB mass storage. | running
-Command: modprobe_usb-storage: exit-status: matches expectation: [0]
-Command: modprobe_usb-storage: stdout: patterns not found: [install /bin/true]
-Title: CAT_2 | RHEL-07-040670 | Nnmclietwork interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode.
-Command: int_promis: exit-status: matches expectation: [1]
-Command: int_promis: stdout: matches expectation: [!/./]
-Title: CAT_2 | RHEL-07-030700 | Must audit all uses of the sudoers file and all files in the /etc/sudoers.d/ directory. | running
-Command: audit_chage_running: exit-status:
+Command: audit_unlinkat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
+Title: CAT_2 | RHEL-07-030440 | Must audit all uses of the setxattr syscall. | running
+Command: auditd_setxattr_running: exit-status:
 Expected
     <int>: 1
 to equal
     <int>: 0
-Command: audit_chage_running: stdout: patterns not found: [/^-w /etc/sudoers -p wa -k privileged-actions/]
+Command: auditd_setxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S setxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S setxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-030380 | Must audit all uses of the fchown syscall. | running
+Command: auditd_fchown_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fchown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-030800 | Must audit all uses of the crontab command. | running
+Command: audit_cron_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_cron_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/crontab -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-cron/]
+Title: CAT_1 | RHEL_07_020310 | Must be configured so that the root account must be the only account having unrestricted access to the system.
+Command: uid_0_check: exit-status: matches expectation: [0]
+Command: uid_0_check: stdout: matches expectation: [root]
+Title: CAT_2 | RHEL-07-030750 | Must audit all uses of the umount command. | running
+Command: audit_umount_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_umount_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/umount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/]
+Title: CAT_2 | RHEL-07-030010 | must shut down upon audit processing failure, unless availability is an overriding concern. If availability is a concern, the system must alert the designated staff (System Administrator [SA] and Information System Security Officer [ISSO] at a minimum) in the event of an audit processing failure.
+Command: auditctl_fips: exit-status: matches expectation: [0]
+Command: auditctl_fips: stdout: matches expectation: [/^failure [1-2]/]
+Title: CAT_3 | RHEL-07-020300 | Must be configured so that all Group Identifiers (GIDs) referenced in the /etc/passwd file are defined in the /etc/group file.
+Command: gids_defined: exit-status: matches expectation: [0]
+Command: gids_defined: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-010260 | Must be configured so that existing passwords are restricted to a 60-day maximum lifetime.
+Command: password_lifetime: exit-status: matches expectation: [1]
+Command: password_lifetime: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-030620 | Must generate audit records for all successful account access events.| running
+Command: audit_faillock_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_faillock_running: stdout: patterns not found: [/^-w /var/log/lastlog -p wa -k logins/]
 Title: CAT_2 | RHEL-07-030710 | Must audit all uses of the chsh command.| running
 Command: audit_chsh_running: exit-status:
 Expected
@@ -468,13 +66,6 @@ Expected
 to equal
     <int>: 0
 Command: audit_chsh_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/chsh -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
-Title: CAT_2 | RHEL-07-030760 | Must audit all uses of the postdrop command. | running
-Command: audit_postdrop_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_postdrop_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/postdrop -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-postfix/]
 Title: CAT_2 | RHEL-07-030710 | Must audit all uses of the newgrp command.| running
 Command: audit_newgrp_running: exit-status:
 Expected
@@ -482,19 +73,426 @@ Expected
 to equal
     <int>: 0
 Command: audit_newgrp_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/newgrp -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+Title: CAT_2 | RHEL-07-030780 | Must audit all uses of the ssh-keysign command. | running
+Command: audit_postqueue_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_postqueue_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/libexec/openssh/ssh-keysign -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-ssh/]
+Title: CAT_2 | RHEL-07-030819 | Must audit all uses of the init_module syscall. | running
+Command: audit_init_module_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_init_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S init_module -F key=module-change/, /^-a always,exit -F arch=b64 -S init_module -F key=module-change/]
+Title: CAT_2 | RHEL-07-030410 | Must audit all uses of the chmod syscall. | running
+Command: auditd_chmod_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_chmod_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S chmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S chmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-030819 | Must audit all uses of the create_module syscall. | running
+Command: audit_create_module_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_create_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S create_module -F key=module-change/, /^-a always,exit -F arch=b64 -S create_module -F key=module-change/]
+Title: CAT_2 | RHEL-07-020220 | Must enable SELinux targeted policy. | running
+Command: getenforce: exit-status: matches expectation: [0]
+Command: getenforce: stdout: matches expectation: [/^Loaded policy name:\s+targeted/ /^SELinux status:\s+enabled/]
+Title: CAT_2 | RHEL-07-030870 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/passwd.| running
+Command: audit_etc_passwd_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_passwd_running: stdout: patterns not found: [/^-w /etc/passwd -p wa -k identity/]
+Title: CAT_2 | RHEL-07-030873 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/shadow.| running
+Command: audit_etc_shadow_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_shadow_running: stdout: patterns not found: [/^-w /etc/shadow -p wa -k identity/]
+Title: CAT_2 | RHEL-07-020700 | Must be configured so that all local initialization files for local interactive users are be group-owned by the users primary group or root.
+Command: home_dirs: exit-status: matches expectation: [1]
+Command: home_dirs: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-040110 | Must be configured so that all network connections associated with a communication session are terminated at the end of the session or after 15 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements.
+Command: session_timeout: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: session_timeout: stdout: patterns not found: [TMOUT=600]
+Title: CAT_2 | RHEL-07-030874 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/oshadow.| running
+Command: audit_etc_opasswd_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_opasswd_running: stdout: patterns not found: [/^-w /etc/security/opasswd -p wa -k identity/]
+Title: CAT_2 | RHEL-07-021100	| must have cron logging implemented.
+Command: cron_syslog: exit-status: matches expectation: [0]
+Command: cron_syslog: stdout: matches expectation: [/^.*:cron.\*\s+/var/log/cron/]
+Title: CAT_2 | RHEL-07-030872 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/gshadow.| running
+Command: audit_etc_gshadow_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_gshadow_running: stdout: patterns not found: [/^-w /etc/gshadow -p wa -k identity/]
+Title: CAT_2 | RHEL-07-030740 | Must audit all uses of the mount command and syscall.| running
+Command: audit_mount_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_mount_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/, /^-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/, /^-a always,exit -S all -F path=/usr/bin/mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/]
+Title: CAT_2 | RHEL-07-030470 | Must audit all uses of the removexattr syscall. | running
+Command: auditd_removexattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_removexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S removexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-030550 | Must audit all uses of the ftruncate syscall. | running
+Command: audit_open_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_open_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/]
+Title: RHEL_07_010290 | System must not have accounts configured with blank or null passwords.
+Command: check_nullok: exit-status:
+Expected
+    <int>: 0
+to equal
+    <int>: 1
+Command: check_nullok: stdout: patterns not found: [!/./]
+Title: CAT_2 | RHEL-07-021021 | Must prevent binary files from being executed on file systems that are being imported via Network File System (NFS).
+Command: nfs_nosuid: exit-status: matches expectation: [{"or":[0,1]}]
+Command: nfs_nosuid: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-020900 | Must be configured so that all system device files are correctly labeled to prevent unauthorized modification.
+Command: dev_file_perms_2: exit-status: matches expectation: [0]
+Command: dev_file_perms_2: stdout: matches expectation: [!/./]
 Title: CAT_2 |  RHEL-07-040420 | Must be configured so that the SSH private host key files have mode 0640 or less permissive.
 Command: ssh_priv_key_perms: exit-status: matches expectation: [0]
 Command: ssh_priv_key_perms: stdout: matches expectation: [!/./]
-Title: CAT_1 | RHEL_07_020000 | Must not have the rsh-server package installed.
-Package: rsh-server: installed: matches expectation: [false]
+Title: CAT_2 | RHEL-07-030590 | Must audit all uses of the setfiles command. | running
+Command: audit_setfiles_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_setfiles_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/setfiles -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+Title: CAT_2 | RHEL-07-030880 | Must audit all uses of the rename syscall.| running
+Command: audit_rename_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_rename_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S rename -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S rename -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
+Title: CAT_2 | RHEL-07-030400 | Must audit all uses of the fchownat syscall | running
+Command: auditd_fchownat_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fchownat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchownat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchownat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Command: auditd_priv_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_priv_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -F key=setuid/, /^-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F key=setuid/, /^-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -F key=setgid/, /^-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -F key=setgid/]
+Title: CAT_2 | RHEL-07-030630 | Must audit all uses of the semanage command. | running
+Command: audit_semanage_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_semanage_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/semanage -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+Title: CAT_2 | RHEL-07-030650 | Must audit all uses of the gpasswd command. | running
+Command: audit_unix_chkpwd running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_unix_chkpwd running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-passwd/]
+Title: CAT_2 | RHEL-07-020020 | Must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures.
+Command: semanage_sysadm_u_check: exit-status: matches expectation: [1]
+Title: CAT_2 | RHEL-07-020630 | Must be configured so that all local interactive user home directories have mode 0750 or less permissive.
+Command: homedirs_perms: exit-status: matches expectation: [0]
+Command: homedirs_perms: stdout: matches expectation: [/7[0,5]0\s/]
+Title: CAT_2 | RHEL-07-030580 | Must audit all uses of the chcon command. | running
+Command: audit_chcon_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_chcon_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/chcon -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+Title: CAT_2 | RHEL-07-020720 | Must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory.
+Command: home_init_files: exit-status: matches expectation: [1]
+Command: home_init_files: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-030370 | Must audit all uses of the chown syscall. | running
+Command: auditd_chown_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_chown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S chown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S chown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-020730 | Must be configured so that local initialization files do not execute world-writable programs
+Command: worldwriteable_files: exit-status: matches expectation: [0]
+Command: worldwriteable_files: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-020320 | Must be configured so that all files and directories have a valid owner.
+Command: unowned: exit-status: matches expectation: [0]
+Command: unowned: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-030480 | Must audit all uses of the fremovexattr syscall. | running
+Command: auditd_fremovexattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fremovexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-020101 | Must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required. | running
+Command: modprobe_dccp: exit-status: matches expectation: [0]
+Command: modprobe_dccp: stdout: patterns not found: [install /bin/true]
+Title: CAT_2 | RHEL-07-040810 | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services.
+Command: firewall_default_zone: exit-status:
+Expected
+    <int>: 127
+to equal
+    <int>: 0
+Command: firewall_default_zone: stdout: patterns not found: [public]
+Title: CAT_2 | RHEL-07-020020 | Must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures.
+Command: semanage_unconfined_check: exit-status: matches expectation: [1]
+Command: semanage_unconfined_check: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-030890 | Must audit all uses of the renameat syscall.| running
+Command: audit_renameat_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_renameat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S renameat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
+Title: CAT_2 | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled.
+Command: wireless_enabled: exit-status: matches expectation: [1]
+Command: wireless_enabled: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-021030 | Must be configured so that all world-writable directories are group-owned by root, sys, bin, or an application group.
+Command: ww_dirs_root_owned: exit-status: matches expectation: [0]
+Command: ww_dirs_root_owned: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-030450 | Must audit all uses of the fsetxattr syscall. | running
+Command: auditd_fsetxattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fsetxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-910055	| Must protect audit information from unauthorized read, modification, or deletion.
+Command: audit_logs_perm: exit-status: matches expectation: [0]
+Command: audit_logs_perm: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-030871 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/group.| running
+Command: audit_etc_group_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_group_running: stdout: patterns not found: [/^-w /etc/group -p wa -k identity/]
+Title: CAT_2 | RHEL-07-020670 | Must be configured so that all files and directories contained in local interactive user home directories are group-owned by a group of which the home directory owner is a member.
+Command: group_home_files: exit-status: matches expectation: [0]
+Command: group_home_files: stdout: matches expectation: [/home_files_ok/ !/^Incorrect/]
+Title: CAT_2 | RHEL-07-020620 | Must be configured so that all local interactive users have a home directory assigned and defined in the /etc/passwd file.
+Command: homedirs_exists: exit-status:
+Expected
+    <int>: 2
+to equal
+    <int>: 0
+Command: homedirs_exists: stdout: patterns not found: [!/./]
+Title: CAT_2 | RHEL-07-040680 | Must be configured to prevent unrestricted mail relaying.
+Command: mail_restricted: exit-status: matches expectation: [0]
+Command: mail_restricted: stdout: patterns not found: [/^smtpd_client_restrictions = permit_mynetworks, reject/]
+Title: CAT_2 | RHEL-07-030700 | Must audit all uses of the sudoers file and all files in the /etc/sudoers.d/ directory. | running
+Command: audit_chage_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_chage_running: stdout: patterns not found: [/^-w /etc/sudoers -p wa -k privileged-actions/]
+Title: CAT_2 | RHEL-07-040750 | Must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS.
+Command: nfs_using_auth: exit-status: matches expectation: [0]
+Command: nfs_using_auth: stdout: matches expectation: [0]
+Title: CAT_2 | RHEL-07-030820 | Must audit all uses of the finit_module syscall. | running
+Command: audit_finit_module_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_finit_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S finit_module -F key=module-change/, /^-a always,exit -F arch=b64 -S finit_module -F key=module-change/]
+Title: CAT_2 | RHEL-07-021040 | The Red Hat Enterprise Linux operating system must set the umask value to 077 for all local interactive user accounts
+Command: home_dir_umask: exit-status: matches expectation: [2]
+Command: home_dir_umask: stdout: matches expectation: [!/./ !/umask [0:2][0:2][0:2]/]
+Title: CAT_2 | RHEL-07-020100 | Must be configured to disable USB mass storage. | running
+Command: modprobe_usb-storage: exit-status: matches expectation: [0]
+Command: modprobe_usb-storage: stdout: patterns not found: [install /bin/true]
+Title: CAT_2 | RHEL-07-910055	| Must protect audit information from unauthorized read, modification, or deletion.
+Command: audit_logs_owner: exit-status: matches expectation: [0]
+Command: audit_logs_owner: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-020640 | Must be configured so that all local interactive user home directories are owned by their respective users.
+Command: user_homedirs: exit-status: matches expectation: [0]
+Command: user_homedirs: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-030390 | Must audit all uses of the lchown syscall. | running
+Command: auditd_lchown_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_lchown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-030490 | Must audit all uses of the lremovexattr syscall. | running
+Command: auditd_lremovexattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_lremovexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-030830 | Must audit all uses of the delete_module syscall. | running
+Command: audit_delete_module_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_delete_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S delete_module -F key=module-change/, /^-a always,exit -F arch=b64 -S delete_module -F key=module-change/]
+Title: CAT_2 | RHEL-07-030900 | Must audit all uses of the rmdir syscall.| running
+Command: audit_rmdir_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_rmdir_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S rmdir -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S rmdir -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
+Title: CAT_2 | RHEL-07-040100 | Must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments.
+Command: firewall_services: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: firewall_services: stdout: patterns not found: [ssh]
+Title: CAT_2 | RHEL-07-030760 | Must audit all uses of the postdrop command. | running
+Command: audit_postdrop_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_postdrop_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/postdrop -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-postfix/]
+Title: CAT_2 | RHEL-07-041002 | The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM).
+Command: sssd_pam: exit-status:
+Expected
+    <int>: 2
+to equal
+    <int>: 0
+Command: sssd_pam: stdout: patterns not found: [/^services =*pam*/]
+Title: CAT_2 | RHEL-07-020900 | Must be configured so that all system device files are correctly labeled to prevent unauthorized modification.
+Command: dev_file_perms_1: exit-status: matches expectation: [0]
+Command: dev_file_perms_1: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-020020 | Must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures.
+Command: semanage_staff_u_check: exit-status: matches expectation: [0]
+Title: CAT_2 | RHEL-07-020650 | Must be configured so that all local interactive user home directories are group-owned by the home directory owners primary group.
+Command: group_homedirs: exit-status: matches expectation: [0]
+Command: group_homedirs: stdout: matches expectation: [/home_group_ok/ !/^Incorrect/]
+Title: 
+CAT_2 | RHEL-07-021110 | Must be configured so that the cron.allow file, if it exists, is owned by root. 
+CAT_2 | RHEL-07-021120 | Must be configured so that the cron.allow file, if it exists, is group-owned by root.
+Command: cron.allow: exit-status: matches expectation: [0]
+Command: cron.allow: stdout: matches expectation: [/(root root|No File)/]
+Title: CAT_2 | RHEL-07-030640 | Must audit all uses of the unix_chkpwd command. | running
+Command: audit_sunix_chkpwd running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_sunix_chkpwd running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/unix_chkpwd -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-passwd/]
+Title: CAT_2 | RHEL-07-030420 | Must audit all uses of the fchmod syscall. | running
+Command: auditd_fchmod_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fchmod_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-020680 | Must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive.
+Command: home_files: exit-status: matches expectation: [0]
+Title: CAT_1 | RHEL_07_040550 | Must not contain shosts.equiv files.
+Command: check_.shosts: exit-status: matches expectation: [1]
+Command: check_.shosts: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-030810 | Must audit all uses of the pam_timestamp_check command. | running
+Command: audit_timestamp_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_timestamp_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/pam_timestamp_check -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-pam/]
+Title: CAT_2 |  RHEL-07-040410 | Must be configured so that the SSH public host key files have mode 0644 or less permissive.
+Command: ssh_pub_key_perms: exit-status: matches expectation: [0]
+Command: ssh_pub_key_perms: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-030460 | Must audit all uses of the lsetxattr syscall. | running
+Command: auditd_lsetxattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_lsetxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-030430 | Must audit all uses of the fchmodat syscall. | running
+Command: auditd_fchmodat_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fchmodat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchmodat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchmodat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+Title: CAT_2 | RHEL-07-030500 | Must audit all uses of the creat syscall. | running
+Command: audit_creat_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_creat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b32 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/]
+Title: CAT_2 | RHEL-07-030910 | Must audit all uses of the unlink syscall.| running
+Command: audit_unlink_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_unlink_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S unlink -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S unlink -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
+Title: CAT_2 | RHEL-07-030560 | Must audit all uses of the setsebool command. | running
+Command: audit_setsebool_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_setsebool_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/setsebool -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+Title: CAT_2 | RHEL-07-030840 | Must audit all uses of the kmod command | running
+Command: audit_kmod_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_kmod_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/kmod -F perm=x -F auid!=(4294967295|unset|-1) -F key=module-change/]
+Title: CAT_2 | RHEL-07-020260 | Must be configured so that file systems containing user home directories are mounted to prevent files with the setuid and setgid bit set from being executed.
+Command: home_dirs_mountpoint: exit-status: matches expectation: [0]
+Command: home_dirs_mountpoint: stdout: patterns not found: [/^OK/, !/^FAILED/]
+Title: CAT_2 | RHEL-07-010350 | Must be configured so that users must re-authenticate for privilege escalation.
+Command: sudo_nopasswd: exit-status: matches expectation: [1]
+Command: sudo_nopasswd: stdout: matches expectation: [!/./]
+Title: CAT_2 | RHEL-07-040670 | Nnmclietwork interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode.
+Command: int_promis: exit-status: matches expectation: [1]
+Command: int_promis: stdout: matches expectation: [!/./]
 Title: CAT_1 | RHEL_07_021710 | Must not have the telnet-server package installed.
 Package: telnet-server: installed: matches expectation: [false]
-Title: CAT_3 | RHEL-07-021600 | Must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs). | Aide Installed
-Package: aide: installed: matches expectation: [true]
+Title: CAT_1 | RHEL_07_040700 | Must not have the Trivial File Transfer Protocol (TFTP) server package installed if not required for operational support.
+Package: vsftpd: installed: matches expectation: [false]
 Title: CAT_2 | RHEL-07-040300 | Must be configured so that all networked systems have SSH installed.
-Package: openssh: installed: matches expectation: [true]
-Title: CAT_1 | RHEL_07_020010 | Must not have the ypserv package installed.
-Package: ypserv: installed: matches expectation: [false]
+Package: libssh2: installed: matches expectation: [true]
+Title: CAT_2 | RHEL-07-040300 | Must be configured so that all networked systems have SSH installed.
+Package: openssh-server: installed: matches expectation: [true]
 Title: CAT_2 | RHEL-07-040520 | Must enable an application firewall, if available.
 Package: firewalld: installed:
 Expected
@@ -504,49 +502,27 @@ to equal
 Title: CAT_2 | RHEL-7-020330 | Must be configured so that all files and directories have a valid group owner.
 Command: ungrouped: exit-status: matches expectation: [0]
 Command: ungrouped: stdout: matches expectation: [!/./]
-Title: CAT_1 | RHEL_07_040700 | Must not have the Trivial File Transfer Protocol (TFTP) server package installed if not required for operational support.
-Package: vsftpd: installed: matches expectation: [false]
-Title: CAT_2 | RHEL-07-040300 | Must be configured so that all networked systems have SSH installed.
-Package: openssh-server: installed: matches expectation: [true]
-Title: CAT_2 | RHEL-07-040300 | Must be configured so that all networked systems have SSH installed.
-Package: libssh2: installed: matches expectation: [true]
 Title: CAT_2 | RHEL-07-040730 | Must not have a graphical display manager installed unless approved.
 Package: xorgs-x11-server: installed: matches expectation: [false]
-Title: CAT_2 | RHEL-07-040820 | The Red Hat Enterprise Linux operating system must not have unauthorized IP tunnels configured.
-Package: libreswan: installed: matches expectation: [false]
 Title: CAT_2 | RHEL-07-041001 | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed.
 Package: pam_pkcs11: installed:
 Expected
     <bool>: false
 to equal
     <bool>: true
-Title: CAT_2 | RHEL-07-021300 | Must disable Kernel core dumps unless needed.
-Service: kdump: enabled:
-Expected
-    <bool>: true
-to equal
-    <bool>: false
-Service: kdump: running: matches expectation: [false]
-Title: CAT_2 | RHEL-07-030000 | must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users.
-Service: auditd: enabled: matches expectation: [true]
-Service: auditd: running: matches expectation: [true]
-Title: 
-CAT_2 | RHEL-07-040180 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications. 
-CAT_2 | RHEL-07-040190 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications. 
-CAT_2 | RHEL-07-040200 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.
-Service: sssd: enabled:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
-Service: sssd: running:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
+Title: CAT_1 | RHEL_07_020010 | Must not have the ypserv package installed.
+Package: ypserv: installed: matches expectation: [false]
+Title: CAT_3 | RHEL-07-021600 | Must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs). | Aide Installed
+Package: aide: installed: matches expectation: [true]
+Title: CAT_1 | RHEL_07_020000 | Must not have the rsh-server package installed.
+Package: rsh-server: installed: matches expectation: [false]
+Title: CAT_2 | RHEL-07-040300 | Must be configured so that all networked systems have SSH installed.
+Package: openssh: installed: matches expectation: [true]
 Title: CAT_2 | RHEL-07-040310 | Must be configured so that all networked systems use SSH for confidentiality and integrity of transmitted and received information as well as information during preparation for transmission.
 Service: sshd: enabled: matches expectation: [true]
 Service: sshd: running: matches expectation: [true]
+Title: CAT_2 | RHEL-07-040820 | The Red Hat Enterprise Linux operating system must not have unauthorized IP tunnels configured.
+Package: libreswan: installed: matches expectation: [false]
 Title: CAT_2 | RHEL-07-040520 | Must enable an application firewall, if available.
 Service: firewalld: enabled:
 Expected
@@ -561,12 +537,47 @@ to equal
 Title: CAT_1 | RHEL-07-020230 | System must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled on the command line.
 Service: ctrl-alt-del: enabled: matches expectation: [false]
 Service: ctrl-alt-del: running: matches expectation: [false]
+Title: CAT_2 |  RHEL-07-020110 | Must disable the file system automounter unless required.
+Service: autofs: enabled: matches expectation: [false]
+Service: autofs: running: matches expectation: [false]
+Title: CAT_2 | RHEL-07-021300 | Must disable Kernel core dumps unless needed.
+Service: kdump: enabled:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+Service: kdump: running: matches expectation: [false]
+Title: CAT_2 | RHEL-07-030000 | must be configured so that auditing is configured to produce records containing information to establish what type of events occurred, where the events occurred, the source of the events, and the outcome of the events. These audit records must also identify individual identities of group account users.
+Service: auditd: enabled: matches expectation: [true]
+Service: auditd: running: matches expectation: [true]
+Title: CAT_2 | RHEL-07-010220 | Must be configured so that user and group account administration utilities are configured to store only encrypted representations of passwords.
+File: /etc/libuser.conf: exists: matches expectation: [true]
+File: /etc/libuser.conf: contains: matches expectation: [/^crypt_style\s=\ssha512/]
+File: /etc/passwd: exists: matches expectation: [true]
+File: /etc/passwd: contains: patterns not found: [!/games/, !/ftp/]
+Title: 
+CAT_2 | RHEL-07-040180 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications. 
+CAT_2 | RHEL-07-040190 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications. 
+CAT_2 | RHEL-07-040200 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.
+Service: sssd: enabled:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Service: sssd: running:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: CAT_3 | RHEL-07-040600 | Using DNS resolution, at least two name servers must be configured.
+File: /etc/resolv.conf: exists: matches expectation: [true]
+File: /etc/resolv.conf: contains: patterns not found: [nameserver 9.9.9.9, nameserver 149.112.112.112]
 Title: CAT_2 | RHEL-07-030350 | Must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) when the threshold for the repository maximum audit record storage capacity is reached.
 File: /etc/audit/auditd.conf: exists: matches expectation: [true]
 File: /etc/audit/auditd.conf: contains: matches expectation: [/^action_mail_acct = root/]
-Title: CAT_3 | RHEL-07-020200 | Remove all software components after updated versions have been installed.
-File: /etc/yum.conf: exists: matches expectation: [true]
-File: /etc/yum.conf: contains: patterns not found: [/^clean_requirements_on_remove=1/]
+Title: CAT_2 | RHEL-07-010320 | RHEL-07-010330 | Must be configured to lock accounts for a minimum of 15 minutes after three unsuccessful logon attempts within a 15-minute timeframe.
+File: /etc/pam.d/system-auth: exists: matches expectation: [true]
+File: /etc/pam.d/system-auth: contains: patterns not found: [/^auth\s+required pam_faillock.so preauth silent audit deny=3 even_deny_root fail_interval=900 unlock_time=900/, /^auth\s+sufficient pam_unix.so try_first_pass/, auth       [default=die] pam_faillock.so authfail audit deny=3 even_deny_root fail_interval=900 unlock_time=900, /^account\s+required pam_faillock.so/]
 Title: CAT_1 | RHEL_07_040800 | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default.
 File: /etc/snmp/snmpd.conf: exists:
 Expected
@@ -574,19 +585,30 @@ Expected
 to equal
     <bool>: true
 File: /etc/snmp/snmpd.conf: contains: skipped
-Title: 
-CAT_2 | RHEL-07-040180 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications. 
-CAT_2 | RHEL-07-040190 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications. 
-CAT_2 | RHEL-07-040200 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.
-File: /etc/sssd/sssd.conf: exists:
+Title: CAT_2 | RHEL-07-010310 | Must disable account identifiers (individuals, groups, roles, and devices) if the password expires.
+File: /etc/default/useradd: exists: matches expectation: [true]
+File: /etc/default/useradd: contains: patterns not found: [/^INACTIVE=0/]
+Title: CAT_3 | RHEL-07-040000 | Must limit the number of concurrent sessions to 10 for all accounts and/or account types.
+File: /etc/security/limits.conf: exists: matches expectation: [true]
+File: /etc/security/limits.conf: contains: patterns not found: [/\*\s+hard\s+maxlogins\s+10/]
+Title: CAT_1 | RHEL_07_021350 | Verify the operating system implements DoD-approved encryption to protect the confidentiality of remote access sessions.
+File: /etc/system-fips: exists:
 Expected
     <bool>: false
 to equal
     <bool>: true
-File: /etc/sssd/sssd.conf: contains: skipped
-Title: CAT_2 | RHEL-07-040500 | Must for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS).
-File: /etc/chrony.conf: exists: matches expectation: [true]
-File: /etc/chrony.conf: contains: patterns not found: [/server\s.*maxpoll 10$/]
+Title: CAT_2 | RHEL-07-010050 | Must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon.
+File: /etc/issue: exists: matches expectation: [true]
+File: /etc/issue: contains: patterns not found: [You are accessing a U.S. Government (USG) Information System (IS) that is, By using this IS (which includes any device attached to this IS), you consent, -The USG routinely intercepts and monitors communications on this IS for, -At any time, the USG may inspect and seize data stored on this IS., -Communications using, or data stored on, this IS are not private, are subject, -This IS includes security measures (e.g., authentication and access controls), -Notwithstanding the above, using this IS does not constitute consent to PM, LE, communications and work product are private and confidential. See User]
+Title: CAT_2 | RHEL-07-030211 | Must label all off-loaded audit logs before sending them to the central log server.
+File: /etc/audisp/audispd.conf: exists: matches expectation: [true]
+File: /etc/audisp/audispd.conf: contains: patterns not found: [/^name_format = hostname/]
+Title: CAT_2 | RHEL-07-010481 | Must require authentication upon booting into single-user and maintenance modes.
+File: /usr/lib/systemd/system/rescue.service: exists: matches expectation: [true]
+File: /usr/lib/systemd/system/rescue.service: contains: matches expectation: [/^ExecStart=.*/usr/sbin/sulogin;.*"/]
+Title: CAT_2 | RHEL-07-030920 | Must audit all uses of the unlinkat syscall.
+File: /etc/audit/audit.rules: exists: matches expectation: [true]
+File: /etc/audit/audit.rules: contains: patterns not found: [/^-a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset) -k delete/, /^-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset) -k delete/]
 Title: CAT_2 | RHEL-07-020100 | Must be configured to disable USB mass storage.
 File: /etc/modprobe.d/usb-storage.conf: exists:
 Expected
@@ -595,30 +617,27 @@ to equal
     <bool>: true
 File: /etc/modprobe.d/usb-storage.conf: mode: skipped
 File: /etc/modprobe.d/usb-storage.conf: contains: skipped
-File: /etc/passwd: exists: matches expectation: [true]
-File: /etc/passwd: contains: patterns not found: [!/games/, !/ftp/]
-Title: CAT_1 | RHEL-07-010482 | Require authentication upon booting into single-user and maintenance modes. | BIOS | (>=RHEL7.3)
-File: /boot/grub2/user.cfg: exists:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
-File: /boot/grub2/user.cfg: contains: skipped
-Title: CAT_2 | RHEL-07-010050 | Must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon.
-File: /etc/issue: exists: matches expectation: [true]
-File: /etc/issue: contains: patterns not found: [You are accessing a U.S. Government (USG) Information System (IS) that is, By using this IS (which includes any device attached to this IS), you consent, -The USG routinely intercepts and monitors communications on this IS for, -At any time, the USG may inspect and seize data stored on this IS., -Communications using, or data stored on, this IS are not private, are subject, -This IS includes security measures (e.g., authentication and access controls), -Notwithstanding the above, using this IS does not constitute consent to PM, LE, communications and work product are private and confidential. See User]
+Title: CAT_2 | RHEL-07-040500 | Must for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS).
+File: /etc/chrony.conf: exists: matches expectation: [true]
+File: /etc/chrony.conf: contains: patterns not found: [/server\s.*maxpoll 10$/]
+Title: CAT_3 | RHEL-07-020200 | Remove all software components after updated versions have been installed.
+File: /etc/yum.conf: exists: matches expectation: [true]
+File: /etc/yum.conf: contains: patterns not found: [/^clean_requirements_on_remove=1/]
+Title: CAT_2 | RHEL_07_040711 | Must prevent remote hosts from connecting to the proxy display.
+File: /etc/ssh/sshd_config: exists: matches expectation: [true]
+File: /etc/ssh/sshd_config: contains: patterns not found: [/^X11UseLocalhost yes/]
+Title: CAT_3 | RHEL-07-040530 | Must display the date and time of the last successful account logon upon logon.
+File: /etc/pam.d/postlogin: exists: matches expectation: [true]
+File: /etc/pam.d/postlogin: contains: patterns not found: [/^session\s+required pam_lastlog.so.*showfailed/]
 Title: CAT_2 | RHEL-07-010320 | RHEL-07-010330 | Must be configured to lock accounts for a minimum of 15 minutes after three unsuccessful logon attempts within a 15-minute timeframe.
-File: /etc/pam.d/system-auth: exists: matches expectation: [true]
-File: /etc/pam.d/system-auth: contains: patterns not found: [/^auth\s+required pam_faillock.so preauth silent audit deny=3 even_deny_root fail_interval=900 unlock_time=900/, /^auth\s+sufficient pam_unix.so try_first_pass/, auth       [default=die] pam_faillock.so authfail audit deny=3 even_deny_root fail_interval=900 unlock_time=900, /^account\s+required pam_faillock.so/]
-Title: CAT_3 | RHEL-07-021600 | Must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs). | Aide ACL rules| CAT_3 | RHEL-07-021610 | Must be configured so that the file integrity tool is configured to verify extended attributes | Aide Extend Att rules
-File: /etc/aide.conf: exists: matches expectation: [true]
-File: /etc/aide.conf: contains: patterns not found: [FIPSR = p+i+n+u+g+s+m+S+acl+selinux+xattrs+sha512]
-Title: CAT_1 | RHEL_07_021350 | Verify the operating system implements DoD-approved encryption to protect the confidentiality of remote access sessions.
-File: /etc/system-fips: exists:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
+File: /etc/pam.d/password-auth: exists: matches expectation: [true]
+File: /etc/pam.d/password-auth: contains: patterns not found: [/^auth\s+required pam_faillock.so preauth silent audit deny=3 even_deny_root fail_interval=900 unlock_time=900/, /^auth\s+sufficient pam_unix.so try_first_pass/, auth       [default=die] pam_faillock.so authfail audit deny=3 even_deny_root fail_interval=900 unlock_time=900, /^account\s+required pam_faillock.so/]
+Title: CAT_3 | RHEL_07_021340 | A separate file system is used for /tmp
+File: /etc/fstab: exists: matches expectation: [true]
+File: /etc/fstab: contains: patterns not found: [/tmp]
+Title: CAT_2 | RHEL-07-010280 | Must be configured so that passwords are a minimum of 15 characters in length.
+File: /etc/security/pwquality.conf: exists: matches expectation: [true]
+File: /etc/security/pwquality.conf: contains: patterns not found: [/^minlen = 15/]
 Title: CAT_2 | RHEL-07-020101 | Must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required.
 File: /etc/modprobe.d/dccp.conf: exists:
 Expected
@@ -627,6 +646,13 @@ to equal
     <bool>: true
 File: /etc/modprobe.d/dccp.conf: mode: skipped
 File: /etc/modprobe.d/dccp.conf: contains: skipped
+Title: CAT_1 | RHEL-07-010482 | Require authentication upon booting into single-user and maintenance modes. | BIOS | (>=RHEL7.3)
+File: /boot/grub2/user.cfg: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /boot/grub2/user.cfg: contains: skipped
 Title: 
 CAT_2 | RHEL-07-020030 | Must be configured so that a file integrity tool verifies the baseline operating system configuration at least weekly. 
 CAT_2 | RHEL-07-020040 | Must be configured so that designated personnel are notified if baseline configurations are changed in an unauthorized manner.
@@ -637,16 +663,25 @@ to equal
     <bool>: true
 File: /etc/cron.d/aide: mode: skipped
 File: /etc/cron.d/aide: contains: skipped
-Title: CAT_2 | RHEL-07-030211 | Must label all off-loaded audit logs before sending them to the central log server.
-File: /etc/audisp/audispd.conf: exists: matches expectation: [true]
-File: /etc/audisp/audispd.conf: contains: patterns not found: [/^name_format = hostname/]
-Title: CAT_2 | RHEL_07_040711 | Must prevent remote hosts from connecting to the proxy display.
-File: /etc/ssh/sshd_config: exists: matches expectation: [true]
-File: /etc/ssh/sshd_config: contains: patterns not found: [/^X11UseLocalhost yes/]
 Title: CAT_2 | RHEL-07-020610 | Must be configured so that all local interactive user accounts, upon creation, are assigned a home directory.
 File: /etc/login.defs: exists: matches expectation: [true]
 File: /etc/login.defs: mode: matches expectation: ["0644"]
 File: /etc/login.defs: contains: patterns not found: [/^CREATE_HOME yes/]
+Title: CAT_1 | RHEL_07_020250 | Ensure its a supported Operating System | Not EUS
+File: /etc/redhat-release: exists: matches expectation: [true]
+File: /etc/redhat-release: contains: patterns not found: [/^Red Hat Enterprise Linux Server release 7.\b([9]|1[0-2])\b/]
+Title: CAT_3 | RHEL-07-021600 | Must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs). | Aide ACL rules| CAT_3 | RHEL-07-021610 | Must be configured so that the file integrity tool is configured to verify extended attributes | Aide Extend Att rules
+File: /etc/aide.conf: exists: matches expectation: [true]
+File: /etc/aide.conf: contains: patterns not found: [FIPSR = p+i+n+u+g+s+m+S+acl+selinux+xattrs+sha512]
+Title: CAT_2 | RHEL-07-020220 | Must enable the SELinux targeted policy.
+File: /etc/selinux/config: exists: matches expectation: [true]
+File: /etc/selinux/config: contains: matches expectation: [/SELINUXTYPE=targeted/ !/SELINUXTYPE=minimal/]
+Title: CAT_2 | RHEL-07-030201 | Must be configured to off-load audit logs onto a different system or storage media from the system being audited.
+File: /etc/audisp/plugins.d/au-remote.conf: exists: matches expectation: [true]
+File: /etc/audisp/plugins.d/au-remote.conf: contains: patterns not found: [/^active = yes/]
+Title: CAT_2 | RHEL-07-030321| Must be configured so that the audit system takes appropriate action when there is an error sending audit records to a remote system.
+File: /etc/audisp/audisp-remote.conf: exists: matches expectation: [true]
+File: /etc/audisp/audisp-remote.conf: contains: patterns not found: [/^network_failure_action = syslog/]
 Title: CAT_2 | RHEL-07-041003 | The Red Hat Enterprise Linux operating system must implement certificate status checking for PKI authentication.
 File: /etc/pam_pkcs11/pam_pkcs11.conf: exists:
 Expected
@@ -654,42 +689,19 @@ Expected
 to equal
     <bool>: true
 File: /etc/pam_pkcs11/pam_pkcs11.conf: contains: skipped
-Title: CAT_3 | RHEL-07-040000 | Must limit the number of concurrent sessions to 10 for all accounts and/or account types.
-File: /etc/security/limits.conf: exists: matches expectation: [true]
-File: /etc/security/limits.conf: contains: patterns not found: [/\*\s+hard\s+maxlogins\s+10/]
-Title: CAT_1 | RHEL_07_020250 | Ensure its a supported Operating System | Not EUS
-File: /etc/redhat-release: exists: matches expectation: [true]
-File: /etc/redhat-release: contains: patterns not found: [/^Red Hat Enterprise Linux Server release 7.\b([9]|1[0-2])\b/]
-Title: CAT_2 | RHEL-07-010320 | RHEL-07-010330 | Must be configured to lock accounts for a minimum of 15 minutes after three unsuccessful logon attempts within a 15-minute timeframe.
-File: /etc/pam.d/password-auth: exists: matches expectation: [true]
-File: /etc/pam.d/password-auth: contains: patterns not found: [/^auth\s+required pam_faillock.so preauth silent audit deny=3 even_deny_root fail_interval=900 unlock_time=900/, /^auth\s+sufficient pam_unix.so try_first_pass/, auth       [default=die] pam_faillock.so authfail audit deny=3 even_deny_root fail_interval=900 unlock_time=900, /^account\s+required pam_faillock.so/]
-Title: CAT_3 | RHEL-07-040600 | Using DNS resolution, at least two name servers must be configured.
-File: /etc/resolv.conf: exists: matches expectation: [true]
-File: /etc/resolv.conf: contains: patterns not found: [nameserver 9.9.9.9, nameserver 149.112.112.112]
-Title: CAT_2 | RHEL-07-010220 | Must be configured so that user and group account administration utilities are configured to store only encrypted representations of passwords.
-File: /etc/libuser.conf: exists: matches expectation: [true]
-File: /etc/libuser.conf: contains: matches expectation: [/^crypt_style\s=\ssha512/]
-Title: CAT_2 | RHEL-07-030201 | Must be configured to off-load audit logs onto a different system or storage media from the system being audited.
-File: /etc/audisp/plugins.d/au-remote.conf: exists: matches expectation: [true]
-File: /etc/audisp/plugins.d/au-remote.conf: contains: patterns not found: [/^active = yes/]
-Title: CAT_2 | RHEL-07-030321| Must be configured so that the audit system takes appropriate action when there is an error sending audit records to a remote system.
-File: /etc/audisp/audisp-remote.conf: exists: matches expectation: [true]
-File: /etc/audisp/audisp-remote.conf: contains: patterns not found: [/^network_failure_action = syslog/]
-Title: CAT_2 |  RHEL-07-020110 | Must disable the file system automounter unless required.
-Service: autofs: enabled: matches expectation: [false]
-Service: autofs: running: matches expectation: [false]
-Title: CAT_2 | RHEL-07-020220 | Must enable the SELinux targeted policy.
-File: /etc/selinux/config: exists: matches expectation: [true]
-File: /etc/selinux/config: contains: matches expectation: [/SELINUXTYPE=targeted/ !/SELINUXTYPE=minimal/]
 Title: CAT_1 | RHEL-07-010482 | Require authentication upon booting into single-user and maintenance modes. | BIOS | (<= RHEL7.2)
 File: /boot/grub2/grub.cfg: exists: matches expectation: [true]
 File: /boot/grub2/grub.cfg: contains: matches expectation: [/\s+password_pbkdf2\sroot\s.*/]
-Title: CAT_2 | RHEL-07-010310 | Must disable account identifiers (individuals, groups, roles, and devices) if the password expires.
-File: /etc/default/useradd: exists: matches expectation: [true]
-File: /etc/default/useradd: contains: patterns not found: [/^INACTIVE=0/]
-Title: CAT_2 | RHEL-07-010481 | Must require authentication upon booting into single-user and maintenance modes.
-File: /usr/lib/systemd/system/rescue.service: exists: matches expectation: [true]
-File: /usr/lib/systemd/system/rescue.service: contains: matches expectation: [/^ExecStart=.*/usr/sbin/sulogin;.*"/]
+Title: 
+CAT_2 | RHEL-07-040180 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications. 
+CAT_2 | RHEL-07-040190 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications. 
+CAT_2 | RHEL-07-040200 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.
+File: /etc/sssd/sssd.conf: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/sssd/sssd.conf: contains: skipped
 Title: CAT_2 | RHEL-07-020101 | Must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required.
 File: /etc/modprobe.d/blacklist.conf: exists:
 Expected
@@ -698,69 +710,67 @@ to equal
     <bool>: true
 File: /etc/modprobe.d/blacklist.conf: mode: skipped
 File: /etc/modprobe.d/blacklist.conf: contains: skipped
-Title: CAT_3 | RHEL-07-040530 | Must display the date and time of the last successful account logon upon logon.
-File: /etc/pam.d/postlogin: exists: matches expectation: [true]
-File: /etc/pam.d/postlogin: contains: patterns not found: [/^session\s+required pam_lastlog.so.*showfailed/]
-Title: CAT_2 | RHEL-07-030920 | Must audit all uses of the unlinkat syscall.
-File: /etc/audit/audit.rules: exists: matches expectation: [true]
-File: /etc/audit/audit.rules: contains: patterns not found: [/^-a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset) -k delete/, /^-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset) -k delete/]
-Title: CAT_3 | RHEL_07_021340 | A separate file system is used for /tmp
-File: /etc/fstab: exists: matches expectation: [true]
-File: /etc/fstab: contains: patterns not found: [/tmp]
-Title: CAT_2 | RHEL-07-010280 | Must be configured so that passwords are a minimum of 15 characters in length.
-File: /etc/security/pwquality.conf: exists: matches expectation: [true]
-File: /etc/security/pwquality.conf: contains: patterns not found: [/^minlen = 15/]
 Title: CAT_2 | RHEL-07-040612 | Must use a reverse-path filter for IPv4 network traffic when possible by default.
 KernelParam: net.ipv4.conf.default.rp_filter: value: matches expectation: ["1"]
-Title: CAT_2 | RHEL-07-010118 | Must be configured so that /etc/pam.d/passwd implements /etc/pam.d/system-auth when changing passwords.
-File: /etc/pam.d/passwd: exists: matches expectation: [true]
-File: /etc/pam.d/passwd: contains: matches expectation: [/^password\s+substack\s+system-auth/]
-Title: CAT_2 | RHEL-07-040610 | Must not forward Internet Protocol version 4 (IPv4) source-routed pack
-KernelParam: net.ipv4.conf.all.accept_source_route: value: matches expectation: ["0"]
+Title: CAT_2 | RHEL-07-040627 | Must not respond to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) echoes sent to a broadcast address.
+KernelParam: net.ipv4.icmp_echo_ignore_broadcasts: value: matches expectation: ["1"]
 Title: CAT_2 | RHEL-07-040740 | Must not be performing packet forwarding unless the system is a router.
 KernelParam: net.ipv4.ip_forward: value: matches expectation: ["0"]
+Title: CAT_2 | RHEL-07-040201 | Must implement virtual address space randomization.
+KernelParam: kernel.randomize_va_space: value: matches expectation: ["2"]
+Title: CAT_2 | RHEL-07-040611 | Must use a reverse-path filter for IPv4 network traffic when possible on all interfaces.
+KernelParam: net.ipv4.conf.all.rp_filter: value: matches expectation: ["1"]
+Title: CAT_2 | RHEL-07-040620 | Must not forward Internet Protocol version 4 (IPv4) source-routed packet by default
+KernelParam: net.ipv4.conf.default.accept_source_route: value: matches expectation: ["0"]
 Title: CAT_2 | RHEL-07-040640 | Must prevent Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages from being accepted.
 KernelParam: net.ipv4.conf.default.accept_redirects: value:
 Expected
     <string>: 1
 to equal
     <string>: 0
-Title: CAT_2 | RHEL-07-040620 | Must not forward Internet Protocol version 4 (IPv4) source-routed packet by default
-KernelParam: net.ipv4.conf.default.accept_source_route: value: matches expectation: ["0"]
 Title: CAT_2 | RHEL-07-040650 | Must not allow interfaces to perform Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects by default.
 KernelParam: net.ipv4.conf.default.send_redirects: value:
 Expected
     <string>: 1
 to equal
     <string>: 0
-Title: CAT_2 | RHEL-07-040830 | Must not forward IPv6 source-routed packets.
-KernelParam: net.ipv6.conf.all.accept_source_route: value: matches expectation: ["0"]
-Title: CAT_2 | RHEL-07-040660 | Must not send Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects.
-KernelParam: net.ipv4.conf.all.send_redirects: value:
-Expected
-    <string>: 1
-to equal
-    <string>: 0
-Title: CAT_2 | RHEL-07-040627 | Must not respond to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) echoes sent to a broadcast address.
-KernelParam: net.ipv4.icmp_echo_ignore_broadcasts: value: matches expectation: ["1"]
 Title: CAT_2 | RHEL-07-040641 | Must ignore Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages from being accepted.
 KernelParam: net.ipv4.conf.all.accept_redirects: value:
 Expected
     <string>: 1
 to equal
     <string>: 0
-Title: CAT_2 | RHEL-07-040611 | Must use a reverse-path filter for IPv4 network traffic when possible on all interfaces.
-KernelParam: net.ipv4.conf.all.rp_filter: value: matches expectation: ["1"]
+Title: CAT_2 | RHEL-07-040830 | Must not forward IPv6 source-routed packets.
+KernelParam: net.ipv6.conf.all.accept_source_route: value: matches expectation: ["0"]
+Title: CAT_2 | RHEL-07-040610 | Must not forward Internet Protocol version 4 (IPv4) source-routed pack
+KernelParam: net.ipv4.conf.all.accept_source_route: value: matches expectation: ["0"]
+Title: CAT_2 | RHEL-07-040660 | Must not send Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects.
+KernelParam: net.ipv4.conf.all.send_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options. | running
+Mount: /dev/shm: exists: matches expectation: [true]
+Mount: /dev/shm: opts:
+Expected
+    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
+to contain element matching
+    <string>: noexec
 Title: CAT_3 | RHEL-07-021320 | A separate file system is used for /var | running
 Mount: /var: exists:
 Expected
     <bool>: false
 to equal
     <bool>: true
-Title: CAT_2 | RHEL-07-040201 | Must implement virtual address space randomization.
-KernelParam: kernel.randomize_va_space: value: matches expectation: ["2"]
 Title: CAT_3 | RHEL-07-021330 | A separate file system is used for /var/log/audit | running
 Mount: /var/log/audit: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Title: CAT_3 | RHEL-07-021340 | A separate file system is used for /tmp (or equivalent) | running
+Mount: /tmp: exists:
 Expected
     <bool>: false
 to equal
@@ -778,12 +788,6 @@ Expected
 to equal
     <bool>: true
 Mount: /mnt: opts: skipped
-Title: CAT_3 | RHEL-07-021340 | A separate file system is used for /tmp (or equivalent) | running
-Mount: /tmp: exists:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
 Title: CAT_2 | RHEL-07-021000 | Must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media.
 Mount: /media: exists:
 Expected
@@ -791,13 +795,9 @@ Expected
 to equal
     <bool>: true
 Mount: /media: opts: skipped
-Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options. | running
-Mount: /dev/shm: exists: matches expectation: [true]
-Mount: /dev/shm: opts:
-Expected
-    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
-to contain element matching
-    <string>: noexec
+Title: CAT_2 | RHEL-07-010118 | Must be configured so that /etc/pam.d/passwd implements /etc/pam.d/system-auth when changing passwords.
+File: /etc/pam.d/passwd: exists: matches expectation: [true]
+File: /etc/pam.d/passwd: contains: matches expectation: [/^password\s+substack\s+system-auth/]
 Title: CAT_2 | RHEL-07-020260 | security patches and updates must be installed and up to date.
 Command: security-updates: exit-status:
 Expected
@@ -806,406 +806,14 @@ to equal
     <int>: 0
 Command: security-updates: stdout: matches expectation: [![0-9].* packages available]
 Title: CAT_1 | RHEL_07_010020 | Must be configured so that the cryptographic hash of system files and commands matches vendor values.
-Command: rpm_check: exit-status: matches expectation: [1]
-Command: rpm_check: stdout: matches expectation: [0]
+rpm_check: exit-status: Error: Command execution timed out (1m0s)
+rpm_check: stdout: Error: Command execution timed out (1m0s)
 Title: CAT_1 | RHEL_07_010010 | System files match vendor package values
-Command: system_file_perms: exit-status: matches expectation: [0]
-Command: system_file_perms: stdout: patterns not found: [!/./]
+system_file_perms: exit-status: Error: Command execution timed out (1m0s)
+system_file_perms: stdout: Error: Command execution timed out (1m0s)
 
 
 Failures/Skipped:
-
-Title: CAT_2 | RHEL-07-030490 | Must audit all uses of the lremovexattr syscall. | running
-Command: auditd_lremovexattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_lremovexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-040110 | Must be configured so that all network connections associated with a communication session are terminated at the end of the session or after 15 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements.
-Command: session_timeout: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: session_timeout: stdout: patterns not found: [TMOUT=600]
-
-Title: CAT_2 | RHEL-07-030890 | Must audit all uses of the renameat syscall.| running
-Command: audit_renameat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_renameat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S renameat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-
-Title: CAT_2 | RHEL-07-041002 | The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM).
-Command: sssd_pam: exit-status:
-Expected
-    <int>: 2
-to equal
-    <int>: 0
-Command: sssd_pam: stdout: patterns not found: [/^services =*pam*/]
-
-Title: CAT_2 | RHEL-07-030873 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/shadow.| running
-Command: audit_etc_shadow_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_shadow_running: stdout: patterns not found: [/^-w /etc/shadow -p wa -k identity/]
-
-Title: CAT_2 | RHEL-07-040680 | Must be configured to prevent unrestricted mail relaying.
-Command: mail_restricted: stdout: patterns not found: [/^smtpd_client_restrictions = permit_mynetworks, reject/]
-
-Title: CAT_2 | RHEL-07-040810 | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services.
-Command: firewall_default_zone: exit-status:
-Expected
-    <int>: 127
-to equal
-    <int>: 0
-Command: firewall_default_zone: stdout: patterns not found: [public]
-
-Title: CAT_2 | RHEL-07-030450 | Must audit all uses of the fsetxattr syscall. | running
-Command: auditd_fsetxattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fsetxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-030630 | Must audit all uses of the semanage command. | running
-Command: audit_semanage_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_semanage_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/semanage -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
-
-Title: CAT_2 | RHEL-07-030560 | Must audit all uses of the setsebool command. | running
-Command: audit_setsebool_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_setsebool_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/setsebool -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
-
-Title: CAT_2 | RHEL-07-030740 | Must audit all uses of the mount command and syscall.| running
-Command: audit_mount_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_mount_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/, /^-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/, /^-a always,exit -S all -F path=/usr/bin/mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/]
-
-Command: auditd_priv_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_priv_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -F key=setuid/, /^-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F key=setuid/, /^-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -F key=setgid/, /^-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -F key=setgid/]
-
-Title: CAT_2 | RHEL-07-030870 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/passwd.| running
-Command: audit_etc_passwd_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_passwd_running: stdout: patterns not found: [/^-w /etc/passwd -p wa -k identity/]
-
-Title: CAT_2 | RHEL-07-030810 | Must audit all uses of the pam_timestamp_check command. | running
-Command: audit_timestamp_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_timestamp_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/pam_timestamp_check -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-pam/]
-
-Title: CAT_2 | RHEL-07-030380 | Must audit all uses of the fchown syscall. | running
-Command: auditd_fchown_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fchown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-020620 | Must be configured so that all local interactive users have a home directory assigned and defined in the /etc/passwd file.
-Command: homedirs_exists: exit-status:
-Expected
-    <int>: 2
-to equal
-    <int>: 0
-Command: homedirs_exists: stdout: patterns not found: [!/./]
-
-Title: CAT_2 | RHEL-07-030370 | Must audit all uses of the chown syscall. | running
-Command: auditd_chown_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_chown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S chown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S chown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-020101 | Must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required. | running
-Command: modprobe_dccp: stdout: patterns not found: [install /bin/true]
-
-Title: CAT_2 | RHEL-07-020260 | Must be configured so that file systems containing user home directories are mounted to prevent files with the setuid and setgid bit set from being executed.
-Command: home_dirs_mountpoint: stdout: patterns not found: [/^OK/, !/^FAILED/]
-
-Title: CAT_2 | RHEL-07-030620 | Must generate audit records for all successful account access events.| running
-Command: audit_faillock_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_faillock_running: stdout: patterns not found: [/^-w /var/log/lastlog -p wa -k logins/]
-
-Title: CAT_2 | RHEL-07-030400 | Must audit all uses of the fchownat syscall | running
-Command: auditd_fchownat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fchownat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchownat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchownat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-030910 | Must audit all uses of the unlink syscall.| running
-Command: audit_unlink_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_unlink_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S unlink -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S unlink -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-
-Title: CAT_2 | RHEL-07-030410 | Must audit all uses of the chmod syscall. | running
-Command: auditd_chmod_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_chmod_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S chmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S chmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-030819 | Must audit all uses of the init_module syscall. | running
-Command: audit_init_module_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_init_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S init_module -F key=module-change/, /^-a always,exit -F arch=b64 -S init_module -F key=module-change/]
-
-Title: CAT_2 | RHEL-07-030819 | Must audit all uses of the create_module syscall. | running
-Command: audit_create_module_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_create_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S create_module -F key=module-change/, /^-a always,exit -F arch=b64 -S create_module -F key=module-change/]
-
-Title: CAT_2 | RHEL-07-030420 | Must audit all uses of the fchmod syscall. | running
-Command: auditd_fchmod_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fchmod_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-030500 | Must audit all uses of the creat syscall. | running
-Command: audit_creat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_creat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b32 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/]
-
-Title: CAT_2 | RHEL-07-040100 | Must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments.
-Command: firewall_services: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: firewall_services: stdout: patterns not found: [ssh]
-
-Title: CAT_2 | RHEL-07-030874 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/oshadow.| running
-Command: audit_etc_opasswd_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_opasswd_running: stdout: patterns not found: [/^-w /etc/security/opasswd -p wa -k identity/]
-
-Title: CAT_2 | RHEL-07-030550 | Must audit all uses of the ftruncate syscall. | running
-Command: audit_open_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_open_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/]
-
-Title: CAT_2 | RHEL-07-030872 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/gshadow.| running
-Command: audit_etc_gshadow_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_gshadow_running: stdout: patterns not found: [/^-w /etc/gshadow -p wa -k identity/]
-
-Title: CAT_2 | RHEL-07-030780 | Must audit all uses of the ssh-keysign command. | running
-Command: audit_postqueue_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_postqueue_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/libexec/openssh/ssh-keysign -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-ssh/]
-
-Title: CAT_2 | RHEL-07-030640 | Must audit all uses of the unix_chkpwd command. | running
-Command: audit_sunix_chkpwd running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_sunix_chkpwd running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/unix_chkpwd -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-passwd/]
-
-Title: CAT_2 | RHEL-07-030750 | Must audit all uses of the umount command. | running
-Command: audit_umount_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_umount_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/umount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/]
-
-Title: CAT_2 | RHEL-07-030800 | Must audit all uses of the crontab command. | running
-Command: audit_cron_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_cron_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/crontab -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-cron/]
-
-Title: CAT_2 | RHEL-07-030840 | Must audit all uses of the kmod command | running
-Command: audit_kmod_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_kmod_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/kmod -F perm=x -F auid!=(4294967295|unset|-1) -F key=module-change/]
-
-Title: CAT_2 | RHEL-07-030470 | Must audit all uses of the removexattr syscall. | running
-Command: auditd_removexattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_removexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S removexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-030590 | Must audit all uses of the setfiles command. | running
-Command: audit_setfiles_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_setfiles_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/setfiles -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
-
-Title: CAT_2 | RHEL-07-030580 | Must audit all uses of the chcon command. | running
-Command: audit_chcon_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_chcon_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/chcon -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
-
-Title: CAT_2 | RHEL-07-030920 | Must audit all uses of the unlinkat syscall.| running
-Command: audit_unlinkat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_unlinkat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-
-Title: CAT_2 | RHEL-07-030430 | Must audit all uses of the fchmodat syscall. | running
-Command: auditd_fchmodat_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fchmodat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchmodat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchmodat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-030871 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/group.| running
-Command: audit_etc_group_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_etc_group_running: stdout: patterns not found: [/^-w /etc/group -p wa -k identity/]
-
-Title: CAT_2 | RHEL-07-030880 | Must audit all uses of the rename syscall.| running
-Command: audit_rename_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_rename_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S rename -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S rename -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-
-Title: CAT_2 | RHEL-07-030900 | Must audit all uses of the rmdir syscall.| running
-Command: audit_rmdir_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_rmdir_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S rmdir -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S rmdir -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
-
-Title: CAT_2 | RHEL-07-030480 | Must audit all uses of the fremovexattr syscall. | running
-Command: auditd_fremovexattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_fremovexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-030390 | Must audit all uses of the lchown syscall. | running
-Command: auditd_lchown_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_lchown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-030650 | Must audit all uses of the gpasswd command. | running
-Command: audit_unix_chkpwd running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_unix_chkpwd running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-passwd/]
-
-Title: CAT_2 | RHEL-07-030460 | Must audit all uses of the lsetxattr syscall. | running
-Command: auditd_lsetxattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_lsetxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: CAT_2 | RHEL-07-030820 | Must audit all uses of the finit_module syscall. | running
-Command: audit_finit_module_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: audit_finit_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S finit_module -F key=module-change/, /^-a always,exit -F arch=b64 -S finit_module -F key=module-change/]
-
-Title: CAT_2 | RHEL-07-030440 | Must audit all uses of the setxattr syscall. | running
-Command: auditd_setxattr_running: exit-status:
-Expected
-    <int>: 1
-to equal
-    <int>: 0
-Command: auditd_setxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S setxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S setxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
-
-Title: RHEL_07_010290 | System must not have accounts configured with blank or null passwords.
-Command: check_nullok: exit-status:
-Expected
-    <int>: 0
-to equal
-    <int>: 1
-Command: check_nullok: stdout: patterns not found: [!/./]
 
 Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options.
 Command: dev_shm_etc_fstab: exit-status:
@@ -1215,24 +823,53 @@ to equal
     <int>: 0
 Command: dev_shm_etc_fstab: stdout: patterns not found: [nodev, noexec, nosuid]
 
-Title: CAT_2 | RHEL-07-030830 | Must audit all uses of the delete_module syscall. | running
-Command: audit_delete_module_running: exit-status:
+Title: CAT_2 | RHEL-07-030920 | Must audit all uses of the unlinkat syscall.| running
+Command: audit_unlinkat_running: exit-status:
 Expected
     <int>: 1
 to equal
     <int>: 0
-Command: audit_delete_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S delete_module -F key=module-change/, /^-a always,exit -F arch=b64 -S delete_module -F key=module-change/]
+Command: audit_unlinkat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
 
-Title: CAT_2 | RHEL-07-020100 | Must be configured to disable USB mass storage. | running
-Command: modprobe_usb-storage: stdout: patterns not found: [install /bin/true]
-
-Title: CAT_2 | RHEL-07-030700 | Must audit all uses of the sudoers file and all files in the /etc/sudoers.d/ directory. | running
-Command: audit_chage_running: exit-status:
+Title: CAT_2 | RHEL-07-030440 | Must audit all uses of the setxattr syscall. | running
+Command: auditd_setxattr_running: exit-status:
 Expected
     <int>: 1
 to equal
     <int>: 0
-Command: audit_chage_running: stdout: patterns not found: [/^-w /etc/sudoers -p wa -k privileged-actions/]
+Command: auditd_setxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S setxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S setxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030380 | Must audit all uses of the fchown syscall. | running
+Command: auditd_fchown_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fchown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030800 | Must audit all uses of the crontab command. | running
+Command: audit_cron_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_cron_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/crontab -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-cron/]
+
+Title: CAT_2 | RHEL-07-030750 | Must audit all uses of the umount command. | running
+Command: audit_umount_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_umount_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/umount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/]
+
+Title: CAT_2 | RHEL-07-030620 | Must generate audit records for all successful account access events.| running
+Command: audit_faillock_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_faillock_running: stdout: patterns not found: [/^-w /var/log/lastlog -p wa -k logins/]
 
 Title: CAT_2 | RHEL-07-030710 | Must audit all uses of the chsh command.| running
 Command: audit_chsh_running: exit-status:
@@ -1242,6 +879,294 @@ to equal
     <int>: 0
 Command: audit_chsh_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/chsh -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
 
+Title: CAT_2 | RHEL-07-030710 | Must audit all uses of the newgrp command.| running
+Command: audit_newgrp_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_newgrp_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/newgrp -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+
+Title: CAT_2 | RHEL-07-030780 | Must audit all uses of the ssh-keysign command. | running
+Command: audit_postqueue_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_postqueue_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/libexec/openssh/ssh-keysign -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-ssh/]
+
+Title: CAT_2 | RHEL-07-030819 | Must audit all uses of the init_module syscall. | running
+Command: audit_init_module_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_init_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S init_module -F key=module-change/, /^-a always,exit -F arch=b64 -S init_module -F key=module-change/]
+
+Title: CAT_2 | RHEL-07-030410 | Must audit all uses of the chmod syscall. | running
+Command: auditd_chmod_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_chmod_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S chmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S chmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030819 | Must audit all uses of the create_module syscall. | running
+Command: audit_create_module_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_create_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S create_module -F key=module-change/, /^-a always,exit -F arch=b64 -S create_module -F key=module-change/]
+
+Title: CAT_2 | RHEL-07-030870 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/passwd.| running
+Command: audit_etc_passwd_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_passwd_running: stdout: patterns not found: [/^-w /etc/passwd -p wa -k identity/]
+
+Title: CAT_2 | RHEL-07-030873 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/shadow.| running
+Command: audit_etc_shadow_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_shadow_running: stdout: patterns not found: [/^-w /etc/shadow -p wa -k identity/]
+
+Title: CAT_2 | RHEL-07-040110 | Must be configured so that all network connections associated with a communication session are terminated at the end of the session or after 15 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements.
+Command: session_timeout: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: session_timeout: stdout: patterns not found: [TMOUT=600]
+
+Title: CAT_2 | RHEL-07-030874 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/oshadow.| running
+Command: audit_etc_opasswd_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_opasswd_running: stdout: patterns not found: [/^-w /etc/security/opasswd -p wa -k identity/]
+
+Title: CAT_2 | RHEL-07-030872 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/gshadow.| running
+Command: audit_etc_gshadow_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_gshadow_running: stdout: patterns not found: [/^-w /etc/gshadow -p wa -k identity/]
+
+Title: CAT_2 | RHEL-07-030740 | Must audit all uses of the mount command and syscall.| running
+Command: audit_mount_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_mount_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/, /^-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/, /^-a always,exit -S all -F path=/usr/bin/mount -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-mount/]
+
+Title: CAT_2 | RHEL-07-030470 | Must audit all uses of the removexattr syscall. | running
+Command: auditd_removexattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_removexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S removexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030550 | Must audit all uses of the ftruncate syscall. | running
+Command: audit_open_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_open_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b32 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/]
+
+Title: RHEL_07_010290 | System must not have accounts configured with blank or null passwords.
+Command: check_nullok: exit-status:
+Expected
+    <int>: 0
+to equal
+    <int>: 1
+Command: check_nullok: stdout: patterns not found: [!/./]
+
+Title: CAT_2 | RHEL-07-030590 | Must audit all uses of the setfiles command. | running
+Command: audit_setfiles_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_setfiles_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/setfiles -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+
+Title: CAT_2 | RHEL-07-030880 | Must audit all uses of the rename syscall.| running
+Command: audit_rename_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_rename_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S rename -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S rename -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
+
+Title: CAT_2 | RHEL-07-030400 | Must audit all uses of the fchownat syscall | running
+Command: auditd_fchownat_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fchownat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchownat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchownat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Command: auditd_priv_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_priv_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -F key=setuid/, /^-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F key=setuid/, /^-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -F key=setgid/, /^-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -F key=setgid/]
+
+Title: CAT_2 | RHEL-07-030630 | Must audit all uses of the semanage command. | running
+Command: audit_semanage_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_semanage_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/semanage -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+
+Title: CAT_2 | RHEL-07-030650 | Must audit all uses of the gpasswd command. | running
+Command: audit_unix_chkpwd running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_unix_chkpwd running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-passwd/]
+
+Title: CAT_2 | RHEL-07-030580 | Must audit all uses of the chcon command. | running
+Command: audit_chcon_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_chcon_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/chcon -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+
+Title: CAT_2 | RHEL-07-030370 | Must audit all uses of the chown syscall. | running
+Command: auditd_chown_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_chown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S chown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S chown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030480 | Must audit all uses of the fremovexattr syscall. | running
+Command: auditd_fremovexattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fremovexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-020101 | Must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required. | running
+Command: modprobe_dccp: stdout: patterns not found: [install /bin/true]
+
+Title: CAT_2 | RHEL-07-040810 | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services.
+Command: firewall_default_zone: exit-status:
+Expected
+    <int>: 127
+to equal
+    <int>: 0
+Command: firewall_default_zone: stdout: patterns not found: [public]
+
+Title: CAT_2 | RHEL-07-030890 | Must audit all uses of the renameat syscall.| running
+Command: audit_renameat_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_renameat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S renameat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
+
+Title: CAT_2 | RHEL-07-030450 | Must audit all uses of the fsetxattr syscall. | running
+Command: auditd_fsetxattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fsetxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030871 | Must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/group.| running
+Command: audit_etc_group_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_etc_group_running: stdout: patterns not found: [/^-w /etc/group -p wa -k identity/]
+
+Title: CAT_2 | RHEL-07-020620 | Must be configured so that all local interactive users have a home directory assigned and defined in the /etc/passwd file.
+Command: homedirs_exists: exit-status:
+Expected
+    <int>: 2
+to equal
+    <int>: 0
+Command: homedirs_exists: stdout: patterns not found: [!/./]
+
+Title: CAT_2 | RHEL-07-040680 | Must be configured to prevent unrestricted mail relaying.
+Command: mail_restricted: stdout: patterns not found: [/^smtpd_client_restrictions = permit_mynetworks, reject/]
+
+Title: CAT_2 | RHEL-07-030700 | Must audit all uses of the sudoers file and all files in the /etc/sudoers.d/ directory. | running
+Command: audit_chage_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_chage_running: stdout: patterns not found: [/^-w /etc/sudoers -p wa -k privileged-actions/]
+
+Title: CAT_2 | RHEL-07-030820 | Must audit all uses of the finit_module syscall. | running
+Command: audit_finit_module_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_finit_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S finit_module -F key=module-change/, /^-a always,exit -F arch=b64 -S finit_module -F key=module-change/]
+
+Title: CAT_2 | RHEL-07-020100 | Must be configured to disable USB mass storage. | running
+Command: modprobe_usb-storage: stdout: patterns not found: [install /bin/true]
+
+Title: CAT_2 | RHEL-07-030390 | Must audit all uses of the lchown syscall. | running
+Command: auditd_lchown_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_lchown_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lchown -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030490 | Must audit all uses of the lremovexattr syscall. | running
+Command: auditd_lremovexattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_lremovexattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030830 | Must audit all uses of the delete_module syscall. | running
+Command: audit_delete_module_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_delete_module_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S delete_module -F key=module-change/, /^-a always,exit -F arch=b64 -S delete_module -F key=module-change/]
+
+Title: CAT_2 | RHEL-07-030900 | Must audit all uses of the rmdir syscall.| running
+Command: audit_rmdir_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_rmdir_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S rmdir -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S rmdir -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
+
+Title: CAT_2 | RHEL-07-040100 | Must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments.
+Command: firewall_services: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: firewall_services: stdout: patterns not found: [ssh]
+
 Title: CAT_2 | RHEL-07-030760 | Must audit all uses of the postdrop command. | running
 Command: audit_postdrop_running: exit-status:
 Expected
@@ -1250,13 +1175,88 @@ to equal
     <int>: 0
 Command: audit_postdrop_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/postdrop -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-postfix/]
 
-Title: CAT_2 | RHEL-07-030710 | Must audit all uses of the newgrp command.| running
-Command: audit_newgrp_running: exit-status:
+Title: CAT_2 | RHEL-07-041002 | The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM).
+Command: sssd_pam: exit-status:
+Expected
+    <int>: 2
+to equal
+    <int>: 0
+Command: sssd_pam: stdout: patterns not found: [/^services =*pam*/]
+
+Title: CAT_2 | RHEL-07-030640 | Must audit all uses of the unix_chkpwd command. | running
+Command: audit_sunix_chkpwd running: exit-status:
 Expected
     <int>: 1
 to equal
     <int>: 0
-Command: audit_newgrp_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/newgrp -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+Command: audit_sunix_chkpwd running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/unix_chkpwd -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-passwd/]
+
+Title: CAT_2 | RHEL-07-030420 | Must audit all uses of the fchmod syscall. | running
+Command: auditd_fchmod_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fchmod_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchmod -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030810 | Must audit all uses of the pam_timestamp_check command. | running
+Command: audit_timestamp_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_timestamp_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/pam_timestamp_check -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-pam/]
+
+Title: CAT_2 | RHEL-07-030460 | Must audit all uses of the lsetxattr syscall. | running
+Command: auditd_lsetxattr_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_lsetxattr_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S lsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S lsetxattr -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030430 | Must audit all uses of the fchmodat syscall. | running
+Command: auditd_fchmodat_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: auditd_fchmodat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S fchmodat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/, /^-a always,exit -F arch=b64 -S fchmodat -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=perm_mod/]
+
+Title: CAT_2 | RHEL-07-030500 | Must audit all uses of the creat syscall. | running
+Command: audit_creat_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_creat_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b32 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/, /^-a always,exit -F arch=b64 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=access/]
+
+Title: CAT_2 | RHEL-07-030910 | Must audit all uses of the unlink syscall.| running
+Command: audit_unlink_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_unlink_running: stdout: patterns not found: [/^-a always,exit -F arch=b32 -S unlink -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/, /^-a always,exit -F arch=b64 -S unlink -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=delete/]
+
+Title: CAT_2 | RHEL-07-030560 | Must audit all uses of the setsebool command. | running
+Command: audit_setsebool_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_setsebool_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/sbin/setsebool -F auid>=1000 -F auid!=(4294967295|unset|-1) -F key=privileged-priv_change/]
+
+Title: CAT_2 | RHEL-07-030840 | Must audit all uses of the kmod command | running
+Command: audit_kmod_running: exit-status:
+Expected
+    <int>: 1
+to equal
+    <int>: 0
+Command: audit_kmod_running: stdout: patterns not found: [/^-a always,exit -S all -F path=/usr/bin/kmod -F perm=x -F auid!=(4294967295|unset|-1) -F key=module-change/]
+
+Title: CAT_2 | RHEL-07-020260 | Must be configured so that file systems containing user home directories are mounted to prevent files with the setuid and setgid bit set from being executed.
+Command: home_dirs_mountpoint: stdout: patterns not found: [/^OK/, !/^FAILED/]
 
 Title: CAT_2 | RHEL-07-040520 | Must enable an application firewall, if available.
 Package: firewalld: installed:
@@ -1267,28 +1267,6 @@ to equal
 
 Title: CAT_2 | RHEL-07-041001 | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed.
 Package: pam_pkcs11: installed:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
-
-Title: CAT_2 | RHEL-07-021300 | Must disable Kernel core dumps unless needed.
-Service: kdump: enabled:
-Expected
-    <bool>: true
-to equal
-    <bool>: false
-
-Title: 
-CAT_2 | RHEL-07-040180 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications. 
-CAT_2 | RHEL-07-040190 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications. 
-CAT_2 | RHEL-07-040200 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.
-Service: sssd: enabled:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
-Service: sssd: running:
 Expected
     <bool>: false
 to equal
@@ -1306,8 +1284,35 @@ Expected
 to equal
     <bool>: true
 
-Title: CAT_3 | RHEL-07-020200 | Remove all software components after updated versions have been installed.
-File: /etc/yum.conf: contains: patterns not found: [/^clean_requirements_on_remove=1/]
+Title: CAT_2 | RHEL-07-021300 | Must disable Kernel core dumps unless needed.
+Service: kdump: enabled:
+Expected
+    <bool>: true
+to equal
+    <bool>: false
+
+File: /etc/passwd: contains: patterns not found: [!/games/, !/ftp/]
+
+Title: 
+CAT_2 | RHEL-07-040180 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications. 
+CAT_2 | RHEL-07-040190 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications. 
+CAT_2 | RHEL-07-040200 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.
+Service: sssd: enabled:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+Service: sssd: running:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: CAT_3 | RHEL-07-040600 | Using DNS resolution, at least two name servers must be configured.
+File: /etc/resolv.conf: contains: patterns not found: [nameserver 9.9.9.9, nameserver 149.112.112.112]
+
+Title: CAT_2 | RHEL-07-010320 | RHEL-07-010330 | Must be configured to lock accounts for a minimum of 15 minutes after three unsuccessful logon attempts within a 15-minute timeframe.
+File: /etc/pam.d/system-auth: contains: patterns not found: [/^auth\s+required pam_faillock.so preauth silent audit deny=3 even_deny_root fail_interval=900 unlock_time=900/, /^auth\s+sufficient pam_unix.so try_first_pass/, auth       [default=die] pam_faillock.so authfail audit deny=3 even_deny_root fail_interval=900 unlock_time=900, /^account\s+required pam_faillock.so/]
 
 Title: CAT_1 | RHEL_07_040800 | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default.
 File: /etc/snmp/snmpd.conf: exists:
@@ -1317,19 +1322,27 @@ to equal
     <bool>: true
 File: /etc/snmp/snmpd.conf: contains: skipped
 
-Title: 
-CAT_2 | RHEL-07-040180 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications. 
-CAT_2 | RHEL-07-040190 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications. 
-CAT_2 | RHEL-07-040200 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.
-File: /etc/sssd/sssd.conf: exists:
+Title: CAT_2 | RHEL-07-010310 | Must disable account identifiers (individuals, groups, roles, and devices) if the password expires.
+File: /etc/default/useradd: contains: patterns not found: [/^INACTIVE=0/]
+
+Title: CAT_3 | RHEL-07-040000 | Must limit the number of concurrent sessions to 10 for all accounts and/or account types.
+File: /etc/security/limits.conf: contains: patterns not found: [/\*\s+hard\s+maxlogins\s+10/]
+
+Title: CAT_1 | RHEL_07_021350 | Verify the operating system implements DoD-approved encryption to protect the confidentiality of remote access sessions.
+File: /etc/system-fips: exists:
 Expected
     <bool>: false
 to equal
     <bool>: true
-File: /etc/sssd/sssd.conf: contains: skipped
 
-Title: CAT_2 | RHEL-07-040500 | Must for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS).
-File: /etc/chrony.conf: contains: patterns not found: [/server\s.*maxpoll 10$/]
+Title: CAT_2 | RHEL-07-010050 | Must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon.
+File: /etc/issue: contains: patterns not found: [You are accessing a U.S. Government (USG) Information System (IS) that is, By using this IS (which includes any device attached to this IS), you consent, -The USG routinely intercepts and monitors communications on this IS for, -At any time, the USG may inspect and seize data stored on this IS., -Communications using, or data stored on, this IS are not private, are subject, -This IS includes security measures (e.g., authentication and access controls), -Notwithstanding the above, using this IS does not constitute consent to PM, LE, communications and work product are private and confidential. See User]
+
+Title: CAT_2 | RHEL-07-030211 | Must label all off-loaded audit logs before sending them to the central log server.
+File: /etc/audisp/audispd.conf: contains: patterns not found: [/^name_format = hostname/]
+
+Title: CAT_2 | RHEL-07-030920 | Must audit all uses of the unlinkat syscall.
+File: /etc/audit/audit.rules: contains: patterns not found: [/^-a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset) -k delete/, /^-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset) -k delete/]
 
 Title: CAT_2 | RHEL-07-020100 | Must be configured to disable USB mass storage.
 File: /etc/modprobe.d/usb-storage.conf: exists:
@@ -1340,31 +1353,26 @@ to equal
 File: /etc/modprobe.d/usb-storage.conf: mode: skipped
 File: /etc/modprobe.d/usb-storage.conf: contains: skipped
 
-File: /etc/passwd: contains: patterns not found: [!/games/, !/ftp/]
+Title: CAT_2 | RHEL-07-040500 | Must for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS).
+File: /etc/chrony.conf: contains: patterns not found: [/server\s.*maxpoll 10$/]
 
-Title: CAT_1 | RHEL-07-010482 | Require authentication upon booting into single-user and maintenance modes. | BIOS | (>=RHEL7.3)
-File: /boot/grub2/user.cfg: exists:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
-File: /boot/grub2/user.cfg: contains: skipped
+Title: CAT_3 | RHEL-07-020200 | Remove all software components after updated versions have been installed.
+File: /etc/yum.conf: contains: patterns not found: [/^clean_requirements_on_remove=1/]
 
-Title: CAT_2 | RHEL-07-010050 | Must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon.
-File: /etc/issue: contains: patterns not found: [You are accessing a U.S. Government (USG) Information System (IS) that is, By using this IS (which includes any device attached to this IS), you consent, -The USG routinely intercepts and monitors communications on this IS for, -At any time, the USG may inspect and seize data stored on this IS., -Communications using, or data stored on, this IS are not private, are subject, -This IS includes security measures (e.g., authentication and access controls), -Notwithstanding the above, using this IS does not constitute consent to PM, LE, communications and work product are private and confidential. See User]
+Title: CAT_2 | RHEL_07_040711 | Must prevent remote hosts from connecting to the proxy display.
+File: /etc/ssh/sshd_config: contains: patterns not found: [/^X11UseLocalhost yes/]
+
+Title: CAT_3 | RHEL-07-040530 | Must display the date and time of the last successful account logon upon logon.
+File: /etc/pam.d/postlogin: contains: patterns not found: [/^session\s+required pam_lastlog.so.*showfailed/]
 
 Title: CAT_2 | RHEL-07-010320 | RHEL-07-010330 | Must be configured to lock accounts for a minimum of 15 minutes after three unsuccessful logon attempts within a 15-minute timeframe.
-File: /etc/pam.d/system-auth: contains: patterns not found: [/^auth\s+required pam_faillock.so preauth silent audit deny=3 even_deny_root fail_interval=900 unlock_time=900/, /^auth\s+sufficient pam_unix.so try_first_pass/, auth       [default=die] pam_faillock.so authfail audit deny=3 even_deny_root fail_interval=900 unlock_time=900, /^account\s+required pam_faillock.so/]
+File: /etc/pam.d/password-auth: contains: patterns not found: [/^auth\s+required pam_faillock.so preauth silent audit deny=3 even_deny_root fail_interval=900 unlock_time=900/, /^auth\s+sufficient pam_unix.so try_first_pass/, auth       [default=die] pam_faillock.so authfail audit deny=3 even_deny_root fail_interval=900 unlock_time=900, /^account\s+required pam_faillock.so/]
 
-Title: CAT_3 | RHEL-07-021600 | Must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs). | Aide ACL rules| CAT_3 | RHEL-07-021610 | Must be configured so that the file integrity tool is configured to verify extended attributes | Aide Extend Att rules
-File: /etc/aide.conf: contains: patterns not found: [FIPSR = p+i+n+u+g+s+m+S+acl+selinux+xattrs+sha512]
+Title: CAT_3 | RHEL_07_021340 | A separate file system is used for /tmp
+File: /etc/fstab: contains: patterns not found: [/tmp]
 
-Title: CAT_1 | RHEL_07_021350 | Verify the operating system implements DoD-approved encryption to protect the confidentiality of remote access sessions.
-File: /etc/system-fips: exists:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
+Title: CAT_2 | RHEL-07-010280 | Must be configured so that passwords are a minimum of 15 characters in length.
+File: /etc/security/pwquality.conf: contains: patterns not found: [/^minlen = 15/]
 
 Title: CAT_2 | RHEL-07-020101 | Must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required.
 File: /etc/modprobe.d/dccp.conf: exists:
@@ -1374,6 +1382,14 @@ to equal
     <bool>: true
 File: /etc/modprobe.d/dccp.conf: mode: skipped
 File: /etc/modprobe.d/dccp.conf: contains: skipped
+
+Title: CAT_1 | RHEL-07-010482 | Require authentication upon booting into single-user and maintenance modes. | BIOS | (>=RHEL7.3)
+File: /boot/grub2/user.cfg: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /boot/grub2/user.cfg: contains: skipped
 
 Title: 
 CAT_2 | RHEL-07-020030 | Must be configured so that a file integrity tool verifies the baseline operating system configuration at least weekly. 
@@ -1386,14 +1402,20 @@ to equal
 File: /etc/cron.d/aide: mode: skipped
 File: /etc/cron.d/aide: contains: skipped
 
-Title: CAT_2 | RHEL-07-030211 | Must label all off-loaded audit logs before sending them to the central log server.
-File: /etc/audisp/audispd.conf: contains: patterns not found: [/^name_format = hostname/]
-
-Title: CAT_2 | RHEL_07_040711 | Must prevent remote hosts from connecting to the proxy display.
-File: /etc/ssh/sshd_config: contains: patterns not found: [/^X11UseLocalhost yes/]
-
 Title: CAT_2 | RHEL-07-020610 | Must be configured so that all local interactive user accounts, upon creation, are assigned a home directory.
 File: /etc/login.defs: contains: patterns not found: [/^CREATE_HOME yes/]
+
+Title: CAT_1 | RHEL_07_020250 | Ensure its a supported Operating System | Not EUS
+File: /etc/redhat-release: contains: patterns not found: [/^Red Hat Enterprise Linux Server release 7.\b([9]|1[0-2])\b/]
+
+Title: CAT_3 | RHEL-07-021600 | Must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs). | Aide ACL rules| CAT_3 | RHEL-07-021610 | Must be configured so that the file integrity tool is configured to verify extended attributes | Aide Extend Att rules
+File: /etc/aide.conf: contains: patterns not found: [FIPSR = p+i+n+u+g+s+m+S+acl+selinux+xattrs+sha512]
+
+Title: CAT_2 | RHEL-07-030201 | Must be configured to off-load audit logs onto a different system or storage media from the system being audited.
+File: /etc/audisp/plugins.d/au-remote.conf: contains: patterns not found: [/^active = yes/]
+
+Title: CAT_2 | RHEL-07-030321| Must be configured so that the audit system takes appropriate action when there is an error sending audit records to a remote system.
+File: /etc/audisp/audisp-remote.conf: contains: patterns not found: [/^network_failure_action = syslog/]
 
 Title: CAT_2 | RHEL-07-041003 | The Red Hat Enterprise Linux operating system must implement certificate status checking for PKI authentication.
 File: /etc/pam_pkcs11/pam_pkcs11.conf: exists:
@@ -1403,26 +1425,16 @@ to equal
     <bool>: true
 File: /etc/pam_pkcs11/pam_pkcs11.conf: contains: skipped
 
-Title: CAT_3 | RHEL-07-040000 | Must limit the number of concurrent sessions to 10 for all accounts and/or account types.
-File: /etc/security/limits.conf: contains: patterns not found: [/\*\s+hard\s+maxlogins\s+10/]
-
-Title: CAT_1 | RHEL_07_020250 | Ensure its a supported Operating System | Not EUS
-File: /etc/redhat-release: contains: patterns not found: [/^Red Hat Enterprise Linux Server release 7.\b([9]|1[0-2])\b/]
-
-Title: CAT_2 | RHEL-07-010320 | RHEL-07-010330 | Must be configured to lock accounts for a minimum of 15 minutes after three unsuccessful logon attempts within a 15-minute timeframe.
-File: /etc/pam.d/password-auth: contains: patterns not found: [/^auth\s+required pam_faillock.so preauth silent audit deny=3 even_deny_root fail_interval=900 unlock_time=900/, /^auth\s+sufficient pam_unix.so try_first_pass/, auth       [default=die] pam_faillock.so authfail audit deny=3 even_deny_root fail_interval=900 unlock_time=900, /^account\s+required pam_faillock.so/]
-
-Title: CAT_3 | RHEL-07-040600 | Using DNS resolution, at least two name servers must be configured.
-File: /etc/resolv.conf: contains: patterns not found: [nameserver 9.9.9.9, nameserver 149.112.112.112]
-
-Title: CAT_2 | RHEL-07-030201 | Must be configured to off-load audit logs onto a different system or storage media from the system being audited.
-File: /etc/audisp/plugins.d/au-remote.conf: contains: patterns not found: [/^active = yes/]
-
-Title: CAT_2 | RHEL-07-030321| Must be configured so that the audit system takes appropriate action when there is an error sending audit records to a remote system.
-File: /etc/audisp/audisp-remote.conf: contains: patterns not found: [/^network_failure_action = syslog/]
-
-Title: CAT_2 | RHEL-07-010310 | Must disable account identifiers (individuals, groups, roles, and devices) if the password expires.
-File: /etc/default/useradd: contains: patterns not found: [/^INACTIVE=0/]
+Title: 
+CAT_2 | RHEL-07-040180 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications. 
+CAT_2 | RHEL-07-040190 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications. 
+CAT_2 | RHEL-07-040200 | Must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.
+File: /etc/sssd/sssd.conf: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+File: /etc/sssd/sssd.conf: contains: skipped
 
 Title: CAT_2 | RHEL-07-020101 | Must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required.
 File: /etc/modprobe.d/blacklist.conf: exists:
@@ -1432,18 +1444,6 @@ to equal
     <bool>: true
 File: /etc/modprobe.d/blacklist.conf: mode: skipped
 File: /etc/modprobe.d/blacklist.conf: contains: skipped
-
-Title: CAT_3 | RHEL-07-040530 | Must display the date and time of the last successful account logon upon logon.
-File: /etc/pam.d/postlogin: contains: patterns not found: [/^session\s+required pam_lastlog.so.*showfailed/]
-
-Title: CAT_2 | RHEL-07-030920 | Must audit all uses of the unlinkat syscall.
-File: /etc/audit/audit.rules: contains: patterns not found: [/^-a always,exit -F arch=b32 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset) -k delete/, /^-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=(4294967295|unset) -k delete/]
-
-Title: CAT_3 | RHEL_07_021340 | A separate file system is used for /tmp
-File: /etc/fstab: contains: patterns not found: [/tmp]
-
-Title: CAT_2 | RHEL-07-010280 | Must be configured so that passwords are a minimum of 15 characters in length.
-File: /etc/security/pwquality.conf: contains: patterns not found: [/^minlen = 15/]
 
 Title: CAT_2 | RHEL-07-040640 | Must prevent Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages from being accepted.
 KernelParam: net.ipv4.conf.default.accept_redirects: value:
@@ -1459,6 +1459,13 @@ Expected
 to equal
     <string>: 0
 
+Title: CAT_2 | RHEL-07-040641 | Must ignore Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages from being accepted.
+KernelParam: net.ipv4.conf.all.accept_redirects: value:
+Expected
+    <string>: 1
+to equal
+    <string>: 0
+
 Title: CAT_2 | RHEL-07-040660 | Must not send Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects.
 KernelParam: net.ipv4.conf.all.send_redirects: value:
 Expected
@@ -1466,12 +1473,12 @@ Expected
 to equal
     <string>: 0
 
-Title: CAT_2 | RHEL-07-040641 | Must ignore Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages from being accepted.
-KernelParam: net.ipv4.conf.all.accept_redirects: value:
+Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options. | running
+Mount: /dev/shm: opts:
 Expected
-    <string>: 1
-to equal
-    <string>: 0
+    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
+to contain element matching
+    <string>: noexec
 
 Title: CAT_3 | RHEL-07-021320 | A separate file system is used for /var | running
 Mount: /var: exists:
@@ -1482,6 +1489,13 @@ to equal
 
 Title: CAT_3 | RHEL-07-021330 | A separate file system is used for /var/log/audit | running
 Mount: /var/log/audit: exists:
+Expected
+    <bool>: false
+to equal
+    <bool>: true
+
+Title: CAT_3 | RHEL-07-021340 | A separate file system is used for /tmp (or equivalent) | running
+Mount: /tmp: exists:
 Expected
     <bool>: false
 to equal
@@ -1502,13 +1516,6 @@ to equal
     <bool>: true
 Mount: /mnt: opts: skipped
 
-Title: CAT_3 | RHEL-07-021340 | A separate file system is used for /tmp (or equivalent) | running
-Mount: /tmp: exists:
-Expected
-    <bool>: false
-to equal
-    <bool>: true
-
 Title: CAT_2 | RHEL-07-021000 | Must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media.
 Mount: /media: exists:
 Expected
@@ -1517,13 +1524,6 @@ to equal
     <bool>: true
 Mount: /media: opts: skipped
 
-Title: CAT_3 | RHEL-07-021024 | Must mount /dev/shm with secure options. | running
-Mount: /dev/shm: opts:
-Expected
-    <[]string | len:3, cap:3>: ["rw", "nosuid", "nodev"]
-to contain element matching
-    <string>: noexec
-
 Title: CAT_2 | RHEL-07-020260 | security patches and updates must be installed and up to date.
 Command: security-updates: exit-status:
 Expected
@@ -1531,8 +1531,13 @@ Expected
 to equal
     <int>: 0
 
-Title: CAT_1 | RHEL_07_010010 | System files match vendor package values
-Command: system_file_perms: stdout: patterns not found: [!/./]
+Title: CAT_1 | RHEL_07_010020 | Must be configured so that the cryptographic hash of system files and commands matches vendor values.
+rpm_check: exit-status: Error: Command execution timed out (1m0s)
+rpm_check: stdout: Error: Command execution timed out (1m0s)
 
-Total Duration: 40.490s
-Count: 309, Failed: 161, Skipped: 14
+Title: CAT_1 | RHEL_07_010010 | System files match vendor package values
+system_file_perms: exit-status: Error: Command execution timed out (1m0s)
+system_file_perms: stdout: Error: Command execution timed out (1m0s)
+
+Total Duration: 60.336s
+Count: 309, Failed: 164, Skipped: 14
