@@ -2550,7 +2550,7 @@
       path: /etc/sssd/sssd.conf
       insertafter: "^ldap_search_base*"
       create: yes
-      mode: 0644
+      mode: 0600
     when:
     - rhel_07_040180 or
       rhel_07_040190 or
