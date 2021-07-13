@@ -49,6 +49,41 @@
       - V-204392
       - permissions
 
+- name: "HIGH | RHEL-07-010020 | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+  block:
+      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+        shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
+        args:
+            warn: false
+        check_mode: false
+        failed_when: false
+        changed_when: rhel_07_010020_audit.stdout| length > 0
+        register: rhel_07_010020_audit
+
+      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+        debug:
+            msg: "{{ rhel_07_010020_audit.stderr_lines }}"
+        changed_when: true
+        when: rhel_07_010020_audit.stdout | length > 0
+
+      - name: "HIGH | RHEL-07-010020 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+        command: yum reinstall -y {{ item }}
+        args:
+            warn: false
+        ignore_errors: true
+        with_items:
+            - "{{ rhel_07_010020_audit.stdout_lines }}"
+        when: rhel_07_010020_audit.stdout_lines | length > 0
+  when:
+      - rhel_07_010020
+  tags:
+      - RHEL-07-010020
+      - CAT1
+      - CCI-001749
+      - SV-214799r603261_rule
+      - V-214799
+      - packages
+
 - name: "HIGH | RHEL-07-010290 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
   replace:
       dest: "{{ item }}"
@@ -533,6 +568,32 @@
       - V-204502
       - telnet
 
+- name: "HIGH | RHEL-07-032000 | The Red Hat Enterprise Linux operating system must use a virus scan program."
+  block:
+      - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
+        package:
+            name: "{{ rhel7stig_av_package.package }}"
+            state: present
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
+
+      - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
+        service:
+            name: "{{ rhel7stig_av_package.service }}"
+            state: "{{ rhel7stig_service_started }}"
+            enabled: yes
+        ignore_errors: true
+  when:
+      - rhel7stig_antivirus_required
+      - rhel_07_032000
+  tags:
+      - RHEL-07-032000
+      - CAT1
+      - CCI-001668
+      - SV-214801r603261_rule
+      - V-214801
+      - antivirus
+
 - name: "HIGH | RHEL-07-040390 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon is configured to only use the SSHv2 protocol."
   lineinfile:
       dest: /etc/ssh/sshd_config
@@ -679,63 +740,4 @@
       - V-204627
       - snmp
 
-- name: "HIGH | RHEL-07-010020 | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-  block:
-      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-        shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
-        args:
-            warn: false
-        check_mode: false
-        failed_when: false
-        changed_when: rhel_07_010020_audit.stdout| length > 0
-        register: rhel_07_010020_audit
 
-      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-        debug:
-            msg: "{{ rhel_07_010020_audit.stderr_lines }}"
-        changed_when: true
-        when: rhel_07_010020_audit.stdout | length > 0
-
-      - name: "HIGH | RHEL-07-010020 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-        command: yum reinstall -y {{ item }}
-        args:
-            warn: false
-        ignore_errors: true
-        with_items:
-            - "{{ rhel_07_010020_audit.stdout_lines }}"
-        when: rhel_07_010020_audit.stdout_lines | length > 0
-  when:
-      - rhel_07_010020
-  tags:
-      - RHEL-07-010020
-      - CAT1
-      - CCI-001749
-      - SV-214799r603261_rule
-      - V-214799
-      - packages
-
-- name: "HIGH | RHEL-07-032000 | The Red Hat Enterprise Linux operating system must use a virus scan program."
-  block:
-      - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
-        package:
-            name: "{{ rhel7stig_av_package.package }}"
-            state: present
-        vars:
-            ansible_python_interpreter: "{{ python2_bin }}"
-
-      - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
-        service:
-            name: "{{ rhel7stig_av_package.service }}"
-            state: "{{ rhel7stig_service_started }}"
-            enabled: yes
-        ignore_errors: true
-  when:
-      - rhel7stig_antivirus_required
-      - rhel_07_032000
-  tags:
-      - RHEL-07-032000
-      - CAT1
-      - CCI-001668
-      - SV-214801r603261_rule
-      - V-214801
-      - antivirus
