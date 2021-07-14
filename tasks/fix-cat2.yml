@@ -7,7 +7,7 @@
           [org/gnome/login-screen]
           banner-message-enable=true
           banner-message-text='{{ rhel7stig_logon_banner | replace(newline, "\n") }}'
-    mode: '0644'
+      mode: '0644'
   vars:
       newline: "\n"
   notify: dconf update
@@ -107,221 +107,275 @@
 
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The Red Hat Enterprise Linux operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   copy:
-    dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010070
-    content: |
-      [org/gnome/desktop/session]
-      idle-delay=uint32 900
-    mode: '0644'
+      dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010070
+      content: |
+          [org/gnome/desktop/session]
+          idle-delay=uint32 900
+      mode: '0644'
   notify: dconf update
   when:
-  - rhel7stig_dconf_available
-  - rhel_07_010070
+      - rhel7stig_dconf_available
+      - rhel_07_010070
   tags:
-  - RHEL-07-010070
-  - CAT2
-  - CCI-000057
-  - SRG-OS-000029-GPOS-00010
-  - SV-204398r603261_rule
-  - V-204398
-  - dconf
+      - RHEL-07-010070
+      - CAT2
+      - CCI-000057
+      - SRG-OS-000029-GPOS-00010
+      - SV-204398r603261_rule
+      - V-204398
+      - dconf
 
 - name: "MEDIUM | RHEL-07-010081 | PATCH | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-delay setting for the graphical user interface."
   copy:
-    dest: /etc/dconf/db/local.d/locks/session_rhel_07_010081
-    content: |
-      /org/gnome/desktop/screensaver/lock-delay
-    mode: '0644'
+      dest: /etc/dconf/db/local.d/locks/session_rhel_07_010081
+      content: |
+          /org/gnome/desktop/screensaver/lock-delay
+      mode: '0644'
   notify: dconf update
   when:
-  - rhel7stig_dconf_available
-  - rhel_07_010081
+      - rhel7stig_dconf_available
+      - rhel_07_010081
   tags:
-  - RHEL-07-010081
-  - CAT2
-  - CCI-000057
-  - SRG-OS-000029-GPOS-00010
-  - SV-204399r603261_rule
-  - V-204399
-  - dconf
+      - RHEL-07-010081
+      - CAT2
+      - CCI-000057
+      - SRG-OS-000029-GPOS-00010
+      - SV-204399r603261_rule
+      - V-204399
+      - dconf
 
 - name: "MEDIUM | RHEL-07-010082 | PATCH | The Red Hat Enterprise Linux operating system must prevent a user from overriding the session idle-delay setting for the graphical user interface."
   copy:
-    dest: /etc/dconf/db/local.d/locks/session_rhel_07_010082
-    content: |
-      /org/gnome/desktop/session/idle-delay
-    mode: '0644'
+      dest: /etc/dconf/db/local.d/locks/session_rhel_07_010082
+      content: |
+          /org/gnome/desktop/session/idle-delay
+      mode: '0644'
   notify: dconf update
   when:
-  - rhel7stig_dconf_available
-  - rhel_07_010082
+      - rhel7stig_dconf_available
+      - rhel_07_010082
   tags:
-  - RHEL-07-010082
-  - CAT2
-  - CCI-000057
-  - SRG-OS-000029-GPOS-00010
-  - SV-204400r603261_rule
-  - V-204400
-  - dconf
+      - RHEL-07-010082
+      - CAT2
+      - CCI-000057
+      - SRG-OS-000029-GPOS-00010
+      - SV-204400r603261_rule
+      - V-204400
+      - dconf
 
 - name: "MEDIUM | RHEL-07-010100 | PATCH | The Red Hat Enterprise Linux operating system must initiate a session lock for the screensaver after a period of inactivity for graphical user interfaces."
   copy:
-    dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010100
-    content: |
-      [org/gnome/desktop/screensaver]
-      idle-activation-enabled=true
-    mode: '0644'
+      dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010100
+      content: |
+          [org/gnome/desktop/screensaver]
+          idle-activation-enabled=true
+      mode: '0644'
   notify: dconf update
   when:
-  - rhel7stig_dconf_available
-  - rhel_07_010100
+      - rhel7stig_dconf_available
+      - rhel_07_010100
   tags:
-  - RHEL-07-010100
-  - CAT2
-  - CCI-000057
-  - SRG-OS-000029-GPOS-00010
-  - SV-204402r603261_rule
-  - V-204402
-  - dconf
+      - RHEL-07-010100
+      - CAT2
+      - CCI-000057
+      - SRG-OS-000029-GPOS-00010
+      - SV-204402r603261_rule
+      - V-204402
+      - dconf
 
 - name: "MEDIUM | RHEL-07-010101 | PATCH | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver idle-activation-enabled setting for the graphical user interface."
   copy:
-    dest: /etc/dconf/db/local.d/locks/session_rhel_07_010101
-    content: |
-      /org/gnome/desktop/screensaver/idle-activation-enabled
-    mode: '0644'
+      dest: /etc/dconf/db/local.d/locks/session_rhel_07_010101
+      content: |
+          /org/gnome/desktop/screensaver/idle-activation-enabled
+      mode: '0644'
   notify: dconf update
   when:
-  - rhel7stig_dconf_available
-  - rhel_07_010101
+      - rhel7stig_dconf_available
+      - rhel_07_010101
   tags:
-  - RHEL-07-010101
-  - CAT2
-  - CCI-000057
-  - SRG-OS-000029-GPOS-00010
-  - SV-204403r603261_rule
-  - V-204403
-  - dconf
+      - RHEL-07-010101
+      - CAT2
+      - CCI-000057
+      - SRG-OS-000029-GPOS-00010
+      - SV-204403r603261_rule
+      - V-204403
+      - dconf
 
-# - name: "MEDIUM | RHEL-07-010110 | PATCH | The Red Hat Enterprise Linux operating system must initiate a session lock for graphical user interfaces when the screensaver is activated."
-#   copy:
-#     dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010110
-#     content: |
-#       [org/gnome/desktop/screensaver]
-#       lock-delay=uint32 900
-#     mode: '0644'
-#   register: rhel_07_010110
-#   notify: dconf update
-#   when:
-#   - rhel7stig_dconf_available
-#   - rhel_07_010110
-#   tags:
-#   - RHEL-07-010110
+- name: "MEDIUM | RHEL-07-010110 | PATCH | The Red Hat Enterprise Linux operating system must initiate a session lock for graphical user interfaces when the screensaver is activated."
+  copy:
+      dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010110
+      content: |
+          [org/gnome/desktop/screensaver]
+          lock-delay=uint32 900
+      mode: '0644'
+  register: rhel_07_010110
+  notify: dconf update
+  when:
+      - rhel7stig_dconf_available
+      - rhel_07_010110
+  tags:
+      - RHEL-07-010110
+      - CAT2
+      - CCI-000057
+      - SRG-OS-000029-GPOS-00010
+      - SV-204404r603261_rule
+      - V-204404
+      - dconf
 
-# - name: "MEDIUM | RHEL-07-010118 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that /etc/pam.d/passwd implements /etc/pam.d/system-auth when changing passwords."
-#   lineinfile:
-#     path: /etc/pam.d/passwd
-#     regexp: '^password   substack     system-auth'
-#     line: 'password   substack     system-auth'
-#   when:
-#   - rhel_07_010118
-#   tags:
-#   - RHEL-07-010118
-#   - pamd
+- name: "MEDIUM | RHEL-07-010118 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that /etc/pam.d/passwd implements /etc/pam.d/system-auth when changing passwords."
+  lineinfile:
+      path: /etc/pam.d/passwd
+      regexp: '^password   substack     system-auth'
+      line: 'password   substack     system-auth'
+  when:
+      - rhel_07_010118
+  tags:
+      - RHEL-07-010118
+      - CAT2
+      - CCI-000192
+      - SRG-OS-000069-GPOS-00037
+      - SV-204405r603261_rule
+      - V-204405
+      - pamd
 
-# - name: "MEDIUM | RHEL-07-010119 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/pam.d/system-auth
-#     regexp: '^#?password required pam_pwquality.so retry'
-#     line: password required pam_pwquality.so retry=3
-#     mode: 0644
-#   when: rhel_07_010119
-#   tags:
-#   - RHEL-07-010119
+- name: "MEDIUM | RHEL-07-010119 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used."
+  lineinfile:
+      create: yes
+      dest: /etc/pam.d/system-auth
+      regexp: '^#?password required pam_pwquality.so retry'
+      line: password required pam_pwquality.so retry=3
+      mode: 0644
+  when:
+      - rhel_07_010119
+  tags:
+      - RHEL-07-010119
+      - CAT2
+      - CCI-000192
+      - SRG-OS-000069-GPOS-00037
+      - SV-204406r603261_rule
+      - V-204406
+      - pamd
 
-# - name: "MEDIUM | RHEL-07-010120 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one upper-case character."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/security/pwquality.conf
-#     regexp: '^#?\s*ucredit'
-#     line: "ucredit = {{ rhel7stig_password_complexity.ucredit | default('-1') }}"
-#     mode: 0644
-#   when: rhel_07_010120
-#   tags:
-#   - RHEL-07-010120
-#   - pwquality
+- name: "MEDIUM | RHEL-07-010120 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one upper-case character."
+  lineinfile:
+      create: yes
+      dest: /etc/security/pwquality.conf
+      regexp: '^#?\s*ucredit'
+      line: "ucredit = {{ rhel7stig_password_complexity.ucredit | default('-1') }}"
+      mode: 0644
+  when:
+      - rhel_07_010120
+  tags:
+      - RHEL-07-010120
+      - CAT2
+      - CCI-000192
+      - SRG-OS-000069-GPOS-00037
+      - SV-204407r603261_rule
+      - V-204407
+      - pwquality
 
-# - name: "MEDIUM | RHEL-07-010130 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one lower-case character."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/security/pwquality.conf
-#     regexp: '^#?\s*lcredit'
-#     line: "lcredit = {{ rhel7stig_password_complexity.lcredit | default('-1') }}"
-#     mode: 0644
-#   when: rhel_07_010130
-#   tags:
-#   - RHEL-07-010130
-#   - pwquality
+- name: "MEDIUM | RHEL-07-010130 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one lower-case character."
+  lineinfile:
+      create: yes
+      dest: /etc/security/pwquality.conf
+      regexp: '^#?\s*lcredit'
+      line: "lcredit = {{ rhel7stig_password_complexity.lcredit | default('-1') }}"
+      mode: 0644
+  when:
+      - rhel_07_010130
+  tags:
+      - RHEL-07-010130
+      - CAT2
+      - CCI-000193
+      - SRG-OS-000070-GPOS-00038
+      - SV-204408r603261_rule
+      - V-204408
+      - pwquality
 
-# - name: "MEDIUM | RHEL-07-010140 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are assigned, the new password must contain at least one numeric character."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/security/pwquality.conf
-#     regexp: '^#?\s*dcredit'
-#     line: "dcredit = {{ rhel7stig_password_complexity.dcredit | default('-1') }}"
-#     mode: 0644
-#   when: rhel_07_010140
-#   tags:
-#   - RHEL-07-010140
-#   - pwquality
+- name: "MEDIUM | RHEL-07-010140 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are assigned, the new password must contain at least one numeric character."
+  lineinfile:
+      create: yes
+      dest: /etc/security/pwquality.conf
+      regexp: '^#?\s*dcredit'
+      line: "dcredit = {{ rhel7stig_password_complexity.dcredit | default('-1') }}"
+      mode: 0644
+  when:
+      - rhel_07_010140
+  tags:
+      - RHELsality
 
-# - name: "MEDIUM | RHEL-07-010150 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one special character."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/security/pwquality.conf
-#     regexp: '^#?\s*ocredit'
-#     line: "ocredit = {{ rhel7stig_password_complexity.ocredit | default('-1') }}"
-#     mode: 0644
-#   when: rhel_07_010150
-#   tags:
-#   - RHEL-07-010150
-#   - pwquality
+- name: "MEDIUM | RHEL-07-010150 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one special character."
+  lineinfile:
+      create: yes
+      dest: /etc/security/pwquality.conf
+      regexp: '^#?\s*ocredit'
+      line: "ocredit = {{ rhel7stig_password_complexity.ocredit | default('-1') }}"
+      mode: 0644
+  when:
+      - rhel_07_010150
+  tags:
+      - RHEL-07-010150
+      - CAT2
+      - CCI-001619
+      - SRG-OS-000266-GPOS-00101
+      - SV-204410r603261_rule
+      - V-204410
+      - pwquality
 
-# - name: "MEDIUM | RHEL-07-010160 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed a minimum of eight of the total number of characters must be changed."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/security/pwquality.conf
-#     regexp: '^#?\s*difok'
-#     line: "difok = {{ rhel7stig_password_complexity.difok | default('8') }}"
-#     mode: 0644
-#   when: rhel_07_010160
-#   tags:
-#   - RHEL-07-010160
-#   - pwquality
+- name: "MEDIUM | RHEL-07-010160 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed a minimum of eight of the total number of characters must be changed."
+  lineinfile:
+      create: yes
+      dest: /etc/security/pwquality.conf
+      regexp: '^#?\s*difok'
+      line: "difok = {{ rhel7stig_password_complexity.difok | default('8') }}"
+      mode: 0644
+  when:
+      - rhel_07_010160
+  tags:
+      - RHEL-07-010160
+      - CAT2
+      - CCI-000195
+      - SRG-OS-000072-GPOS-00040
+      - SV-204411r603261_rule
+      - V-204411
+      - pwquality
 
-# - name: "MEDIUM | RHEL-07-010170 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed a minimum of four character classes must be changed."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/security/pwquality.conf
-#     regexp: '^#?\s*minclass'
-#     line: "minclass = {{ rhel7stig_password_complexity.minclass | default('4') }}"
-#     mode: 0644
-#   when: rhel_07_010170
-#   tags:
-#   - RHEL-07-010170
-#   - pwquality
+- name: "MEDIUM | RHEL-07-010170 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed a minimum of four character classes must be changed."
+  lineinfile:
+      create: yes
+      dest: /etc/security/pwquality.conf
+      regexp: '^#?\s*minclass'
+      line: "minclass = {{ rhel7stig_password_complexity.minclass | default('4') }}"
+      mode: 0644
+  when:
+      - rhel_07_010170
+  tags:
+      - RHEL-07-010170
+      - CAT2
+      - CCI-000195
+      - SRG-OS-000072-GPOS-00040
+      - SV-204412r603261_rule
+      - V-204412
+      - pwquality
 
-# - name: "MEDIUM | RHEL-07-010180 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed the number of repeating consecutive characters must not be more than three characters."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/security/pwquality.conf
-#     regexp: '^#?\s*maxrepeat'
-#     line: "maxrepeat = {{ rhel7stig_password_complexity.maxrepeat | default('3') }}"
-#     mode: 0644
-#   when: rhel_07_010180
-#   tags:
-#   - RHEL-07-010180
-#   - pwquality
+- name: "MEDIUM | RHEL-07-010180 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed the number of repeating consecutive characters must not be more than three characters."
+  lineinfile:
+      create: yes
+      dest: /etc/security/pwquality.conf
+      regexp: '^#?\s*maxrepeat'
+      line: "maxrepeat = {{ rhel7stig_password_complexity.maxrepeat | default('3') }}"
+      mode: 0644
+  when:
+      - rhel_07_010180
+  tags:
+      - RHEL-07-010180
+      - CAT2
+      - CCI-000195
+      - SRG-OS-000072-GPOS-00040
+      - SV-204413r603261_rule
+      - V-204413
+      - pwquality
 
 # - name: "MEDIUM | RHEL-07-010190 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed the number of repeating characters of the same character class must not be more than four characters."
 #   lineinfile:
