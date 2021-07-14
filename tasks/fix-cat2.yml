@@ -3594,143 +3594,188 @@
       - sysctl
       - ipv4
 
-# - name: "MEDIUM | RHEL-07-040612 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible by default."
-#   sysctl:
-#     name: net.ipv4.conf.default.rp_filter
-#     state: present
-#     value: '1'
-#     reload: "{{ ol7stig_sysctl_reload }}"
-#   when:
-#   - rhel_07_040612
-#   tags:
-#   - RHEL-07-040612
-#   - sysctl
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040612 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible by default."
+  sysctl:
+      name: net.ipv4.conf.default.rp_filter
+      state: present
+      value: '1'
+      reload: "{{ ol7stig_sysctl_reload }}"
+  when:
+      - rhel_07_040612
+  tags:
+      - RHEL-07-040612
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204611r603261_rule
+      - V-204611
+      - sysctl
+      - ipv4
 
-# - name: "MEDIUM | RHEL-07-040620 | PATCH | The Red Hat Enterprise Linux operating system must not forward Internet Protocol version 4 (IPv4) source-routed packets by default."
-#   sysctl:
-#     name: net.ipv4.conf.default.accept_source_route
-#     state: present
-#     value: '0'
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     ignoreerrors: yes
-#   when: 
-#   - rhel_07_040620
-#   tags:
-#   - RHEL-07-040620
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040620 | PATCH | The Red Hat Enterprise Linux operating system must not forward Internet Protocol version 4 (IPv4) source-routed packets by default."
+  sysctl:
+      name: net.ipv4.conf.default.accept_source_route
+      state: present
+      value: '0'
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when:
+      - rhel_07_040620
+  tags:
+      - RHEL-07-040620
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204612r603261_rule
+      - V-204612
+      - ipv4
 
-# - name: "MEDIUM | RHEL-07-040630 | PATCH | The Red Hat Enterprise Linux operating system must not respond to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) echoes sent to a broadcast address."
-#   sysctl:
-#     name: net.ipv4.icmp_echo_ignore_broadcasts
-#     state: present
-#     value: '1'
-#     sysctl_set: yes
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     ignoreerrors: yes
-#   when: 
-#   - rhel_07_040630
-#   tags:
-#   - RHEL-07-040630
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040630 | PATCH | The Red Hat Enterprise Linux operating system must not respond to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) echoes sent to a broadcast address."
+  sysctl:
+      name: net.ipv4.icmp_echo_ignore_broadcasts
+      state: present
+      value: '1'
+      sysctl_set: yes
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when:
+      - rhel_07_040630
+  tags:
+      - RHEL-07-040630
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204613r603261_rule
+      - V-204613
+      - ipv4
 
-# - name: "MEDIUM | RHEL-07-040640 | PATCH | The Red Hat Enterprise Linux operating system must prevent Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages from being accepted."
-#   sysctl:
-#     name: net.ipv4.conf.default.accept_redirects
-#     state: present
-#     value: '0'
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     ignoreerrors: yes
-#   when: 
-#   - rhel_07_040640
-#   tags:
-#   - RHEL-07-040640
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040640 | PATCH | The Red Hat Enterprise Linux operating system must prevent Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages from being accepted."
+  sysctl:
+      name: net.ipv4.conf.default.accept_redirects
+      state: present
+      value: '0'
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when:
+      - rhel_07_040640
+  tags:
+      - RHEL-07-040640
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204614r603261_rule
+      - V-204614
+      - ipv4
 
-# - name: "MEDIUM | RHEL-07-040641 | PATCH | The Red Hat Enterprise Linux operating system must ignore Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages"
-#   sysctl:
-#     name: net.ipv4.conf.all.accept_redirects
-#     state: present
-#     value: '0'
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     ignoreerrors: yes
-#   when: 
-#   - rhel_07_040641
-#   tags:
-#   - RHEL-07-040641
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040641 | PATCH | The Red Hat Enterprise Linux operating system must ignore Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages"
+  sysctl:
+      name: net.ipv4.conf.all.accept_redirects
+      state: present
+      value: '0'
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when:
+      - rhel_07_040641
+  tags:
+      - RHEL-07-040641
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204615r603261_rule
+      - V-204615
+      - ipv4
 
-# - name: "MEDIUM | RHEL-07-040650 | PATCH |  The Red Hat Enterprise Linux operating system must not allow interfaces to perform Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects by default."
-#   sysctl:
-#     name: net.ipv4.conf.default.send_redirects
-#     state: present
-#     value: '0'
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     ignoreerrors: yes
-#   when: 
-#   - rhel_07_040650
-#   tags:
-#   - RHEL-07-040650
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040650 | PATCH |  The Red Hat Enterprise Linux operating system must not allow interfaces to perform Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects by default."
+  sysctl:
+      name: net.ipv4.conf.default.send_redirects
+      state: present
+      value: '0'
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when:
+      - rhel_07_040650
+  tags:
+      - RHEL-07-040650
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204616r603261_rule
+      - V-204616
+      - ipv4
 
-# - name: "MEDIUM | RHEL-07-040660 | PATCH | The Red Hat Enterprise Linux operating system must not send Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects."
-#   sysctl:
-#     name: net.ipv4.conf.all.send_redirects
-#     state: present
-#     value: '0'
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     ignoreerrors: yes
-#   when: 
-#   - rhel_07_040660
-#   tags:
-#   - RHEL-07-040660
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040660 | PATCH | The Red Hat Enterprise Linux operating system must not send Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects."
+  sysctl:
+      name: net.ipv4.conf.all.send_redirects
+      state: present
+      value: '0'
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when:
+      - rhel_07_040660
+  tags:
+      - RHEL-07-040660
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204617r603261_rule
+      - V-204617
+      - ipv4
 
-# - name: "MEDIUM | RHEL-07-040670 | Network interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode."
-#     shell: "ip link | grep -i promisc | cut -d ':' -f 2"
-#     check_mode: no
-#     failed_when: no
-#     changed_when: rhel_07_040670_promisc_check.stdout| length > 0
-#     ignore_errors: yes
-#     register: rhel_07_040670_promisc_check
+- name: "MEDIUM | RHEL-07-040670 | Network interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode."
+  block:
+      - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode."
+        shell: "ip link | grep -i promisc | cut -d ':' -f 2"
+        changed_when: rhel_07_040670_promisc_check.stdout| length > 0
+        failed_when: false
+        check_mode: false
+        ignore_errors: yes
+        register: rhel_07_040670_promisc_check
 
-#   - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode."
-#     shell: "ip link set dev {{ item }} promisc off"
-#     with_items: "{{ rhel_07_040670_promisc_check.stdout_lines }}"
+      - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode."
+        shell: "ip link set dev {{ item }} promisc off"
+        with_items:
+            - "{{ rhel_07_040670_promisc_check.stdout_lines }}"
+  when:
+      - rhel_07_040670
+      - not rhel7stig_net_promisc_mode_required
+  tags:
+      - RHEL-07-040670
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204618r603261_rule
+      - V-204618
 
-#   when:
-#   - rhel_07_040670
-#   - not rhel7stig_net_promisc_mode_required
-#   tags:
-#   - RHEL-07-040670
+- name: "MEDIUM | RHEL-07-040680 | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
+  block:
+      - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
+        command: rpm -q postfix
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: rhel_07_040680_rpm_audit
 
-# - name: "MEDIUM | RHEL-07-040680 | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
-#     command: rpm -q postfix
-#     failed_when: no
-#     check_mode: no
-#     changed_when: no
-#     register: rhel_07_040680_rpm_audit
+      - name: "MEDIUM | RHEL-07-040680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
+        command: "/usr/sbin/postconf -n smtpd_client_restrictions"
+        check_mode: false
+        changed_when: false
+        register: rhel_07_040680_postconf_audit
+        when: rhel_07_040680_rpm_audit.rc == 0
 
-#   - name: "MEDIUM | RHEL-07-040680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
-#     command: "/usr/sbin/postconf -n smtpd_client_restrictions"
-#     check_mode: no
-#     changed_when: no
-#     register: rhel_07_040680_postconf_audit
-#     when: rhel_07_040680_rpm_audit.rc == 0
-
-#   - name: "MEDIUM | RHEL-07-040680 | PATCH | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
-#     command: "/usr/sbin/postconf -e 'smtpd_client_restrictions=permit_mynetworks, reject'"
-#     when:
-#     - rhel_07_040680_rpm_audit.rc == 0
-#     - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
-#   when: 
-#   - rhel_07_040680
-#   tags:
-#   - RHEL-07-040680
+      - name: "MEDIUM | RHEL-07-040680 | PATCH | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
+        command: "/usr/sbin/postconf -e 'smtpd_client_restrictions=permit_mynetworks, reject'"
+        when:
+            - rhel_07_040680_rpm_audit.rc == 0
+            - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
+  when:
+      - rhel_07_040680
+  tags:
+      - RHEL-07-040680
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204619r603261_rule
+      - V-204619
 
 # - name: "MEDIUM | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections for interactive users are encrypted."
 #   lineinfile:
@@ -3747,6 +3792,27 @@
 #   tags:
 #   - RHEL-07-040710
 #   - ssh
+
+- name: "MEDIUM | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections are disabled except to fulfill documented and validated mission requiremen"
+  lineinfile:
+      create: yes
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?X11Forwarding"
+      line: X11Forwarding no
+      validate: /usr/sbin/sshd -t -f %s
+      mode: 0600
+  notify: restart sshd
+  when:
+      - rhel_07_040710
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040710
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204622r603849_rule
+      - V-204622
+      - ssh
 
 # - name: "MEDIUM | RHEL-07-040711 | PATCH | The Red Hat Enterprise Linux operating system must prevent remote hosts from connecting to the proxy display."
 #   lineinfile:
