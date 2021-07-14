@@ -2429,7 +2429,7 @@
       - rhel7stig_auditd_action_mail_acct_result is failed
       - rhel7stig_auditd_action_mail_acct_result.rc != 257
   register: rhel7stig_auditd_action_mail_acct_result
-  when: 
+  when:
       - rhel_07_030350
   tags:
       - RHEL-07-030350
@@ -2463,7 +2463,7 @@
             - "-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid"
             - "-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k setgid"
             - "-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid"
-  when: 
+  when:
       - rhel_07_030360
   tags:
       - RHEL-07-030360
@@ -2767,8 +2767,8 @@
       - '^(\$ModLoad imtcp)'
       - '^(\$ModLoad imudp)'
       - '^(\$ModLoad imrelp)'
-      #- '^(\$UDPServerRun)'
-      #- '^(\$InputTCPServerRun)'
+      # - '^(\$UDPServerRun)'
+      # - '^(\$InputTCPServerRun)'
   failed_when:
       - result is failed
       - result.rc != 257
@@ -2810,7 +2810,7 @@
 #     tags:
 #     - RHEL-07-040520
 #     - firewall
-    
+
 #   - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
 #     package:
 #       name: iptables-services
@@ -2825,7 +2825,7 @@
 #     tags:
 #     - RHEL-07-040520
 #     - firewall
-    
+
 #   - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
 #     service:
 #       name: "{{ rhel7stig_firewall_service }}"
@@ -2859,22 +2859,22 @@
               failed_when: false
               check_mode: false
               register: rhel7stig_PPSM_CLSA_check_firewalld
-          
+
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
               debug:
                   msg: "The following task output is what firewalld is accepting on service ports to {{ ansible_hostname }}."
               changed_when: true
               when: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
-          
+
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-              debug: 
+              debug:
                   var: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines
               changed_when: true
               when: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
         when:
             - rhel7stig_firewall_service == "firewalld"
             - rhel7stig_start_firewall_service
-      
+
       - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
         block:
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
@@ -2889,9 +2889,9 @@
                   msg: "The following task output is what iptables is accepting on service ports to {{ ansible_hostname }}."
               changed_when: true
               when: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines is defined
-            
+
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-              debug: 
+              debug:
                   var: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines
               changed_when: true
               when: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines is defined
@@ -2957,7 +2957,7 @@
         state: present
       - dest: /etc/profile
         state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/profile') | ternary('present', 'absent') }}"
-  when: 
+  when:
       - rhel_07_040160
   tags:
       - RHEL-07-040160
@@ -3009,13 +3009,13 @@
         failed_when: false
         changed_when: false
         register: rhel_07_040180_audit
-      
+
       - name: |
           "MEDIUM | RHEL-07-040180 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
           "MEDIUM | RHEL-07-040190 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
           "MEDIUM | RHEL-07-040200 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
         stat:
-              path: /etc/sssd/sssd.conf
+            path: /etc/sssd/sssd.conf
         changed_when: false
         register: rhel_07_040180_LDAPconf_audit
         when: rhel_07_040180_audit.stdout == "Active"
@@ -3083,7 +3083,7 @@
           - openssh-server
       state: present
   vars:
-    ansible_python_interpreter: "{{ python2_bin }}"
+      ansible_python_interpreter: "{{ python2_bin }}"
   when:
       - rhel_07_040300
       - rhel7stig_ssh_required
@@ -3101,196 +3101,247 @@
 
 - name: "MEDIUM | RHEL-07-040310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all networked systems use SSH for confidentiality and integrity of transmitted and received information as well as information during preparation for transmission."
   service:
-    name: sshd
-    state: "{{ rhel7stig_service_started }}"
-    enabled: yes
+      name: sshd
+      state: "{{ rhel7stig_service_started }}"
+      enabled: yes
   when:
-  - rhel_07_040310
+      - rhel_07_040310
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040310
+      - CAT2
+      - CCI-002421
+      - SRG-OS-000423-GPOS-00187
+      - SV-204586r603261_rule
+      - V-204586
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with SSH traffic are terminated at the end of the session or after 10 minutes of inactivity, except to fulfill documented and validated mission requirements."
+  lineinfile:
+      create: yes
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?ClientAliveInterval"
+      line: ClientAliveInterval {{ rhel7stig_ssh_session_timeout }}
+      validate: /usr/sbin/sshd -t -f %s
+      mode: 0600
+  notify: restart sshd
+  when:
+      - rhel_07_040320
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040320
+      - CAT2
+      - CCI-001133
+      - CCI-002361
+      - SRG-OS-000163-GPOS-00072
+      - SV-204587r603261_rule
+      - V-204587
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040330 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using RSA rhosts authentication."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?RhostsRSAAuthentication"
+      line: RhostsRSAAuthentication no
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel_07_040330
+      - rhel7stig_ssh_required
+      - ansible_distribution_version is not version_compare('7.4', '>=')
+  tags:
+      - RHEL-07-040330
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204588r603261_rule
+      - V-204588
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040340 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with SSH traffic terminate after a period of inactivity."
+  lineinfile:
+      create: yes
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?ClientAliveCountMax"
+      line: ClientAliveCountMax 0
+      validate: /usr/sbin/sshd -t -f %s
+      mode: 0600
+  notify: restart sshd
+  when:
+      - rhel_07_040340
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040340
+      - CAT2
+      - CCI-001133
+      - CCI-002361
+      - SRG-OS-000163-GPOS-00072
+      - SV-204589r603261_rule
+      - V-204589
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using rhosts authentication."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?IgnoreRhosts"
+      line: IgnoreRhosts yes
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel_07_040350
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040350
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204590r603261_rule
+      - V-204590
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040360 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon an SSH logon."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?PrintLastLog"
+      line: PrintLastLog yes
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel_07_040360
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040360
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204591r603261_rule
+      - V-204591
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040370 | PATCH | The Red Hat Enterprise Linux operating system must not permit direct logons to the root account using remote access via SSH."
+  lineinfile:
+      create: yes
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?PermitRootLogin"
+      line: PermitRootLogin no
+      insertafter: '(?i)^#?authentication'
+      validate: /usr/sbin/sshd -t -f %s
+      mode: 0600
+  notify: restart sshd
+  when:
+      - rhel_07_040370
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040370
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204592r603261_rule
+      - V-204592
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040380 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using known hosts authentication."
+  lineinfile:
+      create: yes
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?IgnoreUserKnownHosts"
+      line: IgnoreUserKnownHosts yes
+      validate: /usr/sbin/sshd -t -f %s
+      mode: 0600
+  notify: restart sshd
+  when:
+      - rhel_07_040380
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040380
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204593r603261_rule
+      - V-204593
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040400 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon is configured to only use Message Authentication Codes (MACs) employing FIPS 140-2 approved cryptographic hash algorithms."
+  lineinfile:
+      create: yes
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?MACs"
+      line: "MACs {{ rhel7stig_ssh_macs }}"
+      validate: /usr/sbin/sshd -t -f %s
+      mode: 0600
+  notify: restart sshd
+  when:
+      - rhel_07_040400
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040400
+      - CAT2
+      - CCI-001453
+      - SRG-OS-000250-GPOS-00093
+      - SV-204595r603846_rule
+      - V-204595
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040410 | The Red Hat Enterprise Linux operating system must be configured so that the SSH public host key files have mode 0644 or less permissive."
+  block:
+      - name: "MEDIUM | RHEL-07-040410 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the SSH public host key files have mode 0644 or less permissive."
+        find:
+            paths: /etc/ssh
+            recurse: yes
+            file_type: file
+            patterns: 'ssh_host*_key.pub'
+            hidden: true
+        failed_when: false
+        changed_when: false
+        register: rhel_07_040410_audit
+
+      - name: "MEDIUM | RHEL-07-040410 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH public host key files have mode 0644 or less permissive."
+        file:
+            dest: "{{ item.path }}"
+            mode: a-stx,go-w
+            state: file
+        with_items: "{{ rhel_07_040410_audit.files | default([]) }}"
+  when:
+      - rhel_07_040410
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040410
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204596r603261_rule
+      - V-204596
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040420 | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
+  block:
+  - name: "MEDIUM | RHEL-07-040420 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
+    find:
+      paths: /etc/ssh
+      recurse: yes
+      file_type: file
+      patterns: 'ssh_host*_key'
+      hidden: true
+    failed_when: no
+    changed_when: no
+    register: rhel_07_040420_audit
+
+  - name: "MEDIUM | RHEL-07-040420 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
+    file:
+      dest: "{{ item.path }}"
+      mode: a-stx,go-w,o-r
+      state: file
+    with_items: "{{ rhel_07_040420_audit.files | default([]) }}"
+  when:
+  - rhel_07_040420
   - rhel7stig_ssh_required
   tags:
-  - RHEL-07-040310
+  - RHEL-07-040420
   - CAT2
-  - CCI-002421
-  - SRG-OS-000423-GPOS-00187
-  - SV-204586r603261_rule
-  - V-204586
+  - CCI-000366
+  - SRG-OS-000480-GPOS-00227
+  - SV-204597r603261_rule
+  - V-204597
   - ssh
-
-# - name: "MEDIUM | RHEL-07-040320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with SSH traffic are terminated at the end of the session or after 10 minutes of inactivity, except to fulfill documented and validated mission requirements."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?ClientAliveInterval"
-#     line: ClientAliveInterval {{ rhel7stig_ssh_session_timeout }}
-#     validate: /usr/sbin/sshd -t -f %s
-#     mode: 0600
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040320
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040320
-#   - ssh
-
-# - name: "MEDIUM | RHEL-07-040330 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using RSA rhosts authentication."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?RhostsRSAAuthentication"
-#     line: RhostsRSAAuthentication no
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040330
-#   - rhel7stig_ssh_required
-#   - ansible_distribution_version is not version_compare('7.4', '>=')
-#   tags:
-#   - RHEL-07-040330
-#   - ssh
-
-# - name: "MEDIUM | RHEL-07-040340 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with SSH traffic terminate after a period of inactivity."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?ClientAliveCountMax"
-#     line: ClientAliveCountMax 0
-#     validate: /usr/sbin/sshd -t -f %s
-#     mode: 0600
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040340
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040340
-#   - ssh
-
-# - name: "MEDIUM | RHEL-07-040350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using rhosts authentication."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?IgnoreRhosts"
-#     line: IgnoreRhosts yes
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040350
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040350
-#   - ssh
-
-# - name: "MEDIUM | RHEL-07-040360 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon an SSH logon."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?PrintLastLog"
-#     line: PrintLastLog yes
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040360
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040360
-#   - ssh
-
-# - name: "MEDIUM | RHEL-07-040370 | PATCH | The Red Hat Enterprise Linux operating system must not permit direct logons to the root account using remote access via SSH."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?PermitRootLogin"
-#     line: PermitRootLogin no
-#     insertafter: '(?i)^#?authentication'
-#     validate: /usr/sbin/sshd -t -f %s
-#     mode: 0600
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040370
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040370
-#   - ssh
-
-# - name: "MEDIUM | RHEL-07-040380 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using known hosts authentication."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?IgnoreUserKnownHosts"
-#     line: IgnoreUserKnownHosts yes
-#     validate: /usr/sbin/sshd -t -f %s
-#     mode: 0600
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040380
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040380
-#   - ssh
-
-# - name: "MEDIUM | RHEL-07-040400 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon is configured to only use Message Authentication Codes (MACs) employing FIPS 140-2 approved cryptographic hash algorithms."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?MACs"
-#     line: "MACs {{ rhel7stig_ssh_macs }}"
-#     validate: /usr/sbin/sshd -t -f %s
-#     mode: 0600
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040400
-#   - rhel7stig_ssh_required
-#   tags:
-#   - ssh
-#   - RHEL-07-040400
-
-# - name: "MEDIUM | RHEL-07-040410 | The Red Hat Enterprise Linux operating system must be configured so that the SSH public host key files have mode 0644 or less permissive."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040410 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the SSH public host key files have mode 0644 or less permissive."
-#     find:
-#       paths: /etc/ssh
-#       recurse: yes
-#       file_type: file
-#       patterns: 'ssh_host*_key.pub'
-#       hidden: true
-#     failed_when: no
-#     changed_when: no
-#     register: rhel_07_040410_audit
-
-#   - name: "MEDIUM | RHEL-07-040410 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH public host key files have mode 0644 or less permissive."
-#     file:
-#       dest: "{{ item.path }}"
-#       mode: a-stx,go-w
-#       state: file
-#     with_items: "{{ rhel_07_040410_audit.files | default([]) }}"
-#   when:
-#   - rhel_07_040410
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040410
-#   - ssh
-
-# - name: "MEDIUM | RHEL-07-040420 | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040420 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
-#     find:
-#       paths: /etc/ssh
-#       recurse: yes
-#       file_type: file
-#       patterns: 'ssh_host*_key'
-#       hidden: true
-#     failed_when: no
-#     changed_when: no
-#     register: rhel_07_040420_audit
-
-#   - name: "MEDIUM | RHEL-07-040420 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
-#     file:
-#       dest: "{{ item.path }}"
-#       mode: a-stx,go-w,o-r
-#       state: file
-#     with_items: "{{ rhel_07_040420_audit.files | default([]) }}"
-#   when:
-#   - rhel_07_040420
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040420
-#   - ssh
 
 # - name: "MEDIUM | RHEL-07-040430 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Generic Security Service Application Program Interface (GSSAPI) authentication unless needed."
 #   lineinfile:
