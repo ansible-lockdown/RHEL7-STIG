@@ -2729,51 +2729,65 @@
   tags:
       - audit-rules
 
-# - name: "MEDIUM | RHEL-07-031000 | PATCH | The Red Hat Enterprise Linux operating system must send rsyslog output to a log aggregation server."
-#   blockinfile:
-#     path: /etc/rsyslog.conf
-#     state: present
-#     block: |
-#         $ActionQueueFileName rhel-07-031000  # unique name prefix for spool files
-#         $ActionQueueMaxDiskSpace 1g    # 1gb space limit (use as much as possible)
-#         $ActionQueueSaveOnShutdown on  # save messages to disk on shutdown
-#         $ActionQueueType LinkedList    # run asynchronously
-#         $ActionResumeRetryCount -1     # infinite retries if host is down
-#         # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
-#         *.* @@{{ rhel7stig_log_aggregation_server }}
-#     insertafter: EOF
-#   register: result
-#   failed_when:
-#   - result is failed
-#   - result.rc != 257
-#   when:
-#   - rhel_07_031000
-#   - rhel7stig_log_aggregation_server is defined
-#   tags:
-#   - RHEL-07-031000
-#   - rsyslog
+- name: "MEDIUM | RHEL-07-031000 | PATCH | The Red Hat Enterprise Linux operating system must send rsyslog output to a log aggregation server."
+  blockinfile:
+      path: /etc/rsyslog.conf
+      state: present
+      block: |
+          $ActionQueueFileName rhel-07-031000  # unique name prefix for spool files
+          $ActionQueueMaxDiskSpace 1g    # 1gb space limit (use as much as possible)
+          $ActionQueueSaveOnShutdown on  # save messages to disk on shutdown
+          $ActionQueueType LinkedList    # run asynchronously
+          $ActionResumeRetryCount -1     # infinite retries if host is down
+          # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
+          *.* @@{{ rhel7stig_log_aggregation_server }}
+      insertafter: EOF
+  failed_when:
+      - result is failed
+      - result.rc != 257
+  register: result
+  when:
+      - rhel_07_031000
+      - rhel7stig_log_aggregation_server is defined
+  tags:
+      - RHEL-07-031000
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204574r603261_rule
+      - V-204574
+      - rsyslog
 
-# - name: "MEDIUM | RHEL-07-031010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the rsyslog daemon does not accept log messages from other servers unless the server is being used for log aggregation."
-#   replace:
-#     path: /etc/rsyslog.conf
-#     regexp: '({{ item }})'
-#     replace: '# \1'
-#   with_items:
-#   - '^(\$ModLoad imtcp)'
-#   - '^(\$ModLoad imudp)'
-#   - '^(\$ModLoad imrelp)'
-#   #- '^(\$UDPServerRun)'
-#   #- '^(\$InputTCPServerRun)'
-#   when:
-#   - rhel_07_031010
-#   - not rhel7stig_system_is_log_aggregator
-#   register: result
-#   failed_when:
-#   - result is failed
-#   - result.rc != 257
-#   tags:
-#   - RHEL-07-031010
-#   - rsyslog
+- name: "MEDIUM | RHEL-07-031010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the rsyslog daemon does not accept log messages from other servers unless the server is being used for log aggregation."
+  replace:
+      path: /etc/rsyslog.conf
+      regexp: '({{ item }})'
+      replace: '# \1'
+  with_items:
+      - '^(\$ModLoad imtcp)'
+      - '^(\$ModLoad imudp)'
+      - '^(\$ModLoad imrelp)'
+      #- '^(\$UDPServerRun)'
+      #- '^(\$InputTCPServerRun)'
+  failed_when:
+      - result is failed
+      - result.rc != 257
+  register: result
+  when:
+      - rhel_07_031010
+      - not rhel7stig_system_is_log_aggregator
+  tags:
+      - RHEL-07-031010
+      - CAT2
+      - CCI-000318
+      - CCI-001812
+      - CCI-001814
+      - CCI-001813
+      - CCI-000368
+      - SRG-OS-000480-GPOS-00227
+      - SV-204575r603261_rule
+      - V-204575
+      - rsyslog
 
 # ######################
 # ####### 040000 #######
@@ -2835,273 +2849,272 @@
 #   - firewall
 #   - disruption-high
 
-# - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#     block:
-#     - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#       shell: firewall-cmd --list-all | grep services | cut -d ':' -f 2 | tr " " "\n" | sed '/^$/d' | sort -u
-#       register: rhel7stig_PPSM_CLSA_check_firewalld
-#       changed_when: false
-#       failed_when: false
-#       check_mode: no
-#       when:
-#       - rhel_07_040100
-#       tags:
-#       - RHEL-07-040100
-#       - firewall
-  
-#     - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#       debug:
-#         msg: "The following task output is what firewalld is accepting on service ports to {{ ansible_hostname }}."
-#       changed_when: true
-#       when:
-#       - rhel_07_040100
-#       - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
-#       tags:
-#       - RHEL-07-040100
-#       - firewall
-  
-#     - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#       debug: 
-#         var: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines
-#       changed_when: true
-#       when:
-#       - rhel_07_040100
-#       - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
-#       tags:
-#       - RHEL-07-040100
-#       - firewall
-#     when:
-#     - rhel_07_040100
-#     - not rhel7stig_system_is_chroot
-#     - not rhel7stig_system_is_container
-#     - rhel7stig_firewall_service == "firewalld"
-#     - rhel7stig_start_firewall_service
-#     tags:
-#     - RHEL-07-040100
-#     - firewall
-   
-#   - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#     block:
-#     - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#       shell: iptables-save | grep -i accept | grep -i input
-#       register: rhel7stig_PPSM_CLSA_check_iptables
-#       changed_when: false
-#       failed_when: false
-#       check_mode: no
-#       when: 
-#       - rhel_07_040100
-#       tags:
-#       - RHEL-07-040100
-#       - firewall
-    
-#     - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#       debug:
-#         msg: "The following task output is what iptables is accepting on service ports to {{ ansible_hostname }}."
-#       changed_when: true
-#       when:
-#       - rhel_07_040100
-#       - rhel7stig_PPSM_CLSA_check_iptables.stdout_lines is defined
-#       tags:
-#       - RHEL-07-040100
-#       - firewall
-    
-#     - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#       debug: 
-#         var: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines
-#       changed_when: true
-#       when:
-#       - rhel_07_040100
-#       - rhel7stig_PPSM_CLSA_check_iptables.stdout_lines is defined
-#       tags:
-#       - RHEL-07-040100
-#       - firewall
-#     when:
-#     - rhel_07_040100
-#     - not rhel7stig_system_is_chroot
-#     - not rhel7stig_system_is_container
-#     - rhel7stig_firewall_service == "iptables"
-#     - rhel7stig_start_firewall_service
-#     tags:
-#     - RHEL-07-040100
-#     - firewall
+- name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+  block:
+      - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+        block:
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              shell: firewall-cmd --list-all | grep services | cut -d ':' -f 2 | tr " " "\n" | sed '/^$/d' | sort -u
+              changed_when: false
+              failed_when: false
+              check_mode: false
+              register: rhel7stig_PPSM_CLSA_check_firewalld
+          
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              debug:
+                  msg: "The following task output is what firewalld is accepting on service ports to {{ ansible_hostname }}."
+              changed_when: true
+              when: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
+          
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              debug: 
+                  var: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines
+              changed_when: true
+              when: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
+        when:
+            - rhel7stig_firewall_service == "firewalld"
+            - rhel7stig_start_firewall_service
+      
+      - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+        block:
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              shell: iptables-save | grep -i accept | grep -i input
+              changed_when: false
+              failed_when: false
+              check_mode: false
+              register: rhel7stig_PPSM_CLSA_check_iptables
 
-#   - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#     debug:
-#       msg: "Your configured firewall service is {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false. We cannot audit control RHEL-07-040100 - The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-#     changed_when: true
-#     when:
-#     - rhel_07_040100
-#     - not rhel7stig_start_firewall_service
-#     tags:
-#     - RHEL-07-040100
-#     - firewall
-#   when:
-#   - rhel_07_040100
-#   - not rhel7stig_system_is_chroot
-#   - not rhel7stig_system_is_container
-#   - rhel7stig_disruptive
-#   tags:
-#   - RHEL-07-040100
-#   - firewall
-#   - disruption-high
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              debug:
+                  msg: "The following task output is what iptables is accepting on service ports to {{ ansible_hostname }}."
+              changed_when: true
+              when: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines is defined
+            
+            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+              debug: 
+                  var: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines
+              changed_when: true
+              when: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines is defined
+        when:
+            - rhel7stig_firewall_service == "iptables"
+            - rhel7stig_start_firewall_service
 
-# - name: "MEDIUM | RHEL-07-040110 | PATCH | The Red Hat Enterprise Linux operating system must use a FIPS 140-2 approved cryptographic algorithm for SSH communications."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?Ciphers"
-#     line: "Ciphers {{ rhel7stig_ssh_ciphers }}"
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040110
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040110
-#   - ssh
+      - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+        debug:
+            msg: "Your configured firewall service is {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false. We cannot audit control RHEL-07-040100 - The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+        changed_when: true
+        when: not rhel7stig_start_firewall_service
+  when:
+      - rhel_07_040100
+      - not rhel7stig_system_is_chroot
+      - not rhel7stig_system_is_container
+      - rhel7stig_disruptive
+  tags:
+      - RHEL-07-040100
+      - CAT2
+      - CCI-000382
+      - SRG-OS-000096-GPOS-00050
+      - SV-204577r603261_rule
+      - V-204577
+      - firewall
+      - disruption-high
 
-# - name: "MEDIUM | RHEL-07-040160 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with a communication session are terminated at the end of the session or after 10 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
-#   blockinfile:
-#     create: yes
-#     mode: 0644
-#     dest: "{{ item.dest }}"
-#     state: "{{ item.state }}"
-#     marker: "# {mark} ANSIBLE MANAGED"
-#     block: |
-#       # Set session timeout - STIG ID RHEL-07-040160
-#       TMOUT={{ rhel7stig_shell_session_timeout.timeout }}
-#       readonly TMOUT
-#       export TMOUT
-#   with_items:
-#   - dest: "{{ rhel7stig_shell_session_timeout.file }}"
-#     state: present
-#   - dest: /etc/profile
-#     state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/profile') | ternary('present', 'absent') }}"
-#   when: 
-#   - rhel_07_040160
-#   tags:
-#   - RHEL-07-040160
-#   - profile
+- name: "MEDIUM | RHEL-07-040110 | PATCH | The Red Hat Enterprise Linux 7 operating system must implement DoD-approved encryption to protect the confidentiality of SSH connections."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?Ciphers"
+      line: "Ciphers {{ rhel7stig_ssh_ciphers }}"
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel_07_040110
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040110
+      - CAT2
+      - CCI-000366
+      - CCI-000803
+      - CCI-000068
+      - SRG-OS-000033-GPOS-00014
+      - SV-204578r603843_rule
+      - V-204578
+      - ssh
 
-# - name: "MEDIUM | RHEL-07-040170 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner immediately prior to, or as part of, remote access logon prompts."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?Banner"
-#     line: Banner /etc/issue
-#     validate: /usr/sbin/sshd -tf %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040170
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040170
-#   - ssh
-#   - dod_logon_banner
+- name: "MEDIUM | RHEL-07-040160 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with a communication session are terminated at the end of the session or after 15 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
+  blockinfile:
+      create: yes
+      mode: 0644
+      dest: "{{ item.dest }}"
+      state: "{{ item.state }}"
+      marker: "# {mark} ANSIBLE MANAGED"
+      block: |
+        # Set session timeout - STIG ID RHEL-07-040160
+        TMOUT={{ rhel7stig_shell_session_timeout.timeout }}
+        readonly TMOUT
+        export TMOUT
+  with_items:
+      - dest: "{{ rhel7stig_shell_session_timeout.file }}"
+        state: present
+      - dest: /etc/profile
+        state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/profile') | ternary('present', 'absent') }}"
+  when: 
+      - rhel_07_040160
+  tags:
+      - RHEL-07-040160
+      - CAT2
+      - CCI-001133
+      - CCI-002361
+      - SRG-OS-000163-GPOS-00072
+      - SV-204579r646844_rule
+      - V-204579
+      - profile
 
-# - name: "MEDIUM | RHEL-07-040180 | RHEL-07-040190 | RHEL-07-040200 | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040180 | RHEL-07-040190 | RHEL-07-040200 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-#     shell: systemctl status sssd.service | grep "Active" | cut -d ':' -f1 | tr " " "\n" | sed '/^$/d'
-#     check_mode: no
-#     register: rhel_07_040180_audit
-#     failed_when: no
-#     changed_when: false
-#     when:
-#     - rhel_07_040180 or
-#       rhel_07_040190 or
-#       rhel_07_040200
-#     tags:
-#     - RHEL-07-040180
-#     - RHEL-07-040190
-#     - RHEL-07-040200
-#     - ldap
-  
-#   - name: "MEDIUM | RHEL-07-040180 | RHEL-07-040190 | RHEL-07-040200 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-#     stat:
-#       path: /etc/sssd/sssd.conf
-#     register: rhel_07_040180_LDAPconf_audit
-#     changed_when: no
-#     when:
-#     - rhel_07_040180 or
-#       rhel_07_040190 or
-#       rhel_07_040200
-#     - rhel_07_040180_audit.stdout == "Active"
-#     tags:
-#     - RHEL-07-040180
-#     - RHEL-07-040190
-#     - RHEL-07-040200
-#     - ldap
-  
-#   - name: "MEDIUM | RHEL-07-040180 | RHEL-07-040190 | RHEL-07-040200 | PATCH | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
-#     blockinfile:
-#       block: |
-#           ldap_id_use_start_tls = true
-#           ldap_tls_reqcert = demand
-#           ldap_tls_cacert = "{{ rhel_07_040200_cabundle_path }}"
-#       path: /etc/sssd/sssd.conf
-#       insertafter: "^ldap_search_base*"
-#       create: yes
-#       mode: 0600
-#     when:
-#     - rhel_07_040180 or
-#       rhel_07_040190 or
-#       rhel_07_040200
-#     - rhel_07_040180_audit.stdout == "Active"
-#     tags:
-#     - RHEL-07-040180
-#     - RHEL-07-040190
-#     - RHEL-07-040200
-#     - ldap
-#   when:
-#   - rhel_07_040180 or
-#     rhel_07_040190 or
-#     rhel_07_040200
-#   tags:
-#   - RHEL-07-040180
-#   - RHEL-07-040190
-#   - RHEL-07-040200
-#   - ldap
+- name: "MEDIUM | RHEL-07-040170 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner immediately prior to, or as part of, remote access logon prompts."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?Banner"
+      line: Banner /etc/issue
+      validate: /usr/sbin/sshd -tf %s
+  notify: restart sshd
+  when:
+      - rhel_07_040170
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040170
+      - CAT2
+      - CCI-001384
+      - CCI-001385
+      - CCI-001386
+      - CCI-001387
+      - CCI-001388
+      - CCI-000048
+      - CCI-000050
+      - SRG-OS-000023-GPOS-00006
+      - SV-204580r603261_rule
+      - V-204580
+      - ssh
+      - dod_logon_banner
 
-# - name: "MEDIUM | RHEL-07-040201 | PATCH | The Red Hat Enterprise Linux operating system must implement virtual address space randomization."
-#   sysctl:
-#     name: kernel.randomize_va_space
-#     value: '2'
-#     state: present
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     sysctl_set: yes
-#     ignoreerrors: yes
-#   when: rhel_07_040201
-#   tags:
-#   - RHEL-07-040201
-#   - sysctl
+- name: |
+    "MEDIUM | RHEL-07-040180 | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+    "MEDIUM | RHEL-07-040190 | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
+    "MEDIUM | RHEL-07-040200 | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
+  block:
+      - name: |
+          "MEDIUM | RHEL-07-040180 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+          "MEDIUM | RHEL-07-040190 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
+          "MEDIUM | RHEL-07-040200 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
+        shell: systemctl status sssd.service | grep "Active" | cut -d ':' -f1 | tr " " "\n" | sed '/^$/d'
+        check_mode: false
+        failed_when: false
+        changed_when: false
+        register: rhel_07_040180_audit
+      
+      - name: |
+          "MEDIUM | RHEL-07-040180 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+          "MEDIUM | RHEL-07-040190 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
+          "MEDIUM | RHEL-07-040200 | AUDIT | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
+        stat:
+              path: /etc/sssd/sssd.conf
+        changed_when: false
+        register: rhel_07_040180_LDAPconf_audit
+        when: rhel_07_040180_audit.stdout == "Active"
 
-# - name: "MEDIUM | RHEL-07-040300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all networked systems have SSH installed."
-#   package:
-#     name:
-#     - openssh-clients
-#     - openssh-server
-#     state: present
-#   vars:
-#     ansible_python_interpreter: "{{ python2_bin }}"
-#   when:
-#   - rhel_07_040300
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040300
-#   - ssh
+      - name: |
+          "MEDIUM | RHEL-07-040180 | PATCH | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) authentication communications."
+          "MEDIUM | RHEL-07-040190 | PATCH | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
+          "MEDIUM | RHEL-07-040200 | PATCH | The Red Hat Enterprise Linux operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications."
+        blockinfile:
+            block: |
+                ldap_id_use_start_tls = true
+                ldap_tls_reqcert = demand
+                ldap_tls_cacert = "{{ rhel_07_040200_cabundle_path }}"
+            path: /etc/sssd/sssd.conf
+            insertafter: "^ldap_search_base*"
+            create: yes
+            mode: 0600
+        when: rhel_07_040180_audit.stdout == "Active"
+  when:
+      - rhel_07_040180 or
+        rhel_07_040190 or
+        rhel_07_040200
+  tags:
+      - CAT2
+      - RHEL-07-040180
+      - CCI-001453
+      - SRG-OS-000250-GPOS-00093
+      - SV-204581r603261_rule
+      - V-204581
+      - RHEL-07-040190
+      - CCI-001453
+      - SRG-OS-000250-GPOS-00093
+      - SV-204582r603261_rule
+      - V-204582
+      - RHEL-07-040200
+      - CCI-001453
+      - SRG-OS-000250-GPOS-00093
+      - SV-204583r603261_rule
+      - V-204583
+      - ldap
 
-# - name: "MEDIUM | RHEL-07-040310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all networked systems use SSH for confidentiality and integrity of transmitted and received information as well as information during preparation for transmission."
-#   service:
-#     name: sshd
-#     state: "{{ rhel7stig_service_started }}"
-#     enabled: yes
-#   when:
-#   - rhel_07_040310
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040310
-#   - ssh
+- name: "MEDIUM | RHEL-07-040201 | PATCH | The Red Hat Enterprise Linux operating system must implement virtual address space randomization."
+  sysctl:
+      name: kernel.randomize_va_space
+      value: '2'
+      state: present
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      sysctl_set: yes
+      ignoreerrors: yes
+  when:
+      - rhel_07_040201
+  tags:
+      - RHEL-07-040201
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204584r603261_rule
+      - V-204584
+      - sysctl
+
+- name: "MEDIUM | RHEL-07-040300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all networked systems have SSH installed."
+  package:
+      name:
+          - openssh-clients
+          - openssh-server
+      state: present
+  vars:
+    ansible_python_interpreter: "{{ python2_bin }}"
+  when:
+      - rhel_07_040300
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040300
+      - CAT2
+      - CCI-002422
+      - CCI-002418
+      - CCI-002420
+      - CCI-002421
+      - SRG-OS-000423-GPOS-00187
+      - SV-204585r603261_rule
+      - V-204585
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all networked systems use SSH for confidentiality and integrity of transmitted and received information as well as information during preparation for transmission."
+  service:
+    name: sshd
+    state: "{{ rhel7stig_service_started }}"
+    enabled: yes
+  when:
+  - rhel_07_040310
+  - rhel7stig_ssh_required
+  tags:
+  - RHEL-07-040310
+  - CAT2
+  - CCI-002421
+  - SRG-OS-000423-GPOS-00187
+  - SV-204586r603261_rule
+  - V-204586
+  - ssh
 
 # - name: "MEDIUM | RHEL-07-040320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with SSH traffic are terminated at the end of the session or after 10 minutes of inactivity, except to fulfill documented and validated mission requirements."
 #   lineinfile:
