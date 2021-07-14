@@ -1991,7 +1991,7 @@
 #     register: rhel_07_021031_world_writable_files
 #     with_items:
 #     - "{{ ansible_facts.mounts }}"
-      
+
 #   - name: "MEDIUM | RHEL-07-021031 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Flatten results"
 #     set_fact:
 #       rhel_07_021031_world_writable_files_flat: "{{ rhel_07_021031_world_writable_files.results | map(attribute='stdout_lines') | flatten }}"
@@ -2001,14 +2001,14 @@
 #       msg:
 #         - "Below are the world-writable files"
 #         - "{{ rhel_07_021031_world_writable_files_flat }}"
-#     when: 
+#     when:
 #     - rhel_07_021031_world_writable_files_flat != []
 
 #   - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Alert on no world-writable files"
 #     debug:
 #       msg:
 #         - "Good News! No world-writable files detected"
-#     when: 
+#     when:
 #     - rhel_07_021031_world_writable_files_flat == []
 
 #   - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Adjust world-writable files"
@@ -2062,7 +2062,7 @@
       - result is failed
       - result.rc != 257
   register: result
-  when: 
+  when:
       - rhel_07_021100
   tags:
       - RHEL-07-021100
@@ -2121,7 +2121,7 @@
         when:
             - rhel_07_021300_kdump_service_status.stdout == "loaded"
             - not rhel7stig_kdump_required
-  when: 
+  when:
       - rhel_07_021300
   tags:
       - RHEL-07-021300
@@ -2149,7 +2149,7 @@
             replace: '\1sha512\3'
         register: rhel_07_021620_sha256_result
         notify: "{{ rhel7stig_aide_handler }}"
-  when: 
+  when:
       - rhel_07_021620
   tags:
       - RHEL-07-021620
@@ -2168,12 +2168,12 @@
         register: rhel7stig_grub_cfg_mediacheck
         changed_when: false
         failed_when: false
-      
+
       # Set the fact, even if the return was empty/nonexistant
       - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
         set_fact:
             rhel7stig_grub_bootloader_checkorder: "{{ rhel7stig_grub_cfg_mediacheck.stdout_lines | default(rhel7stig_grub_bootloader_validorder | list) | unique }}"
-      
+
       # Report on the bootloader list
       - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
         debug:
@@ -2235,130 +2235,190 @@
       - auditd
       - logging
 
-# - name: "MEDIUM | RHEL-07-030010 | PATCH | The Red Hat Enterprise Linux operating system must shut down upon audit processing failure, unless availability is an overriding concern. If availability is a concern, the system must alert the designated staff (System Administrator [SA] and Information System Security Officer [ISSO] at a minimum) in the event of an audit processing failure."
-#   lineinfile:
-#     path: /etc/audit/rules.d/audit.rules
-#     regexp: "^-f "
-#     line: "-f {{ rhel7stig_auditd_failure_flag }}"
-#   notify: update running audit failure mode
-#   when: 
-#   - rhel_07_030010
-#   tags:
-#   - auditd
-#   - RHEL-07-030010
+- name: "MEDIUM | RHEL-07-030010 | PATCH | The Red Hat Enterprise Linux operating system must shut down upon audit processing failure, unless availability is an overriding concern. If availability is a concern, the system must alert the designated staff (System Administrator [SA] and Information System Security Officer [ISSO] at a minimum) in the event of an audit processing failure."
+  lineinfile:
+      path: /etc/audit/rules.d/audit.rules
+      regexp: "^-f "
+      line: "-f {{ rhel7stig_auditd_failure_flag }}"
+  notify: update running audit failure mode
+  when:
+      - rhel_07_030010
+  tags:
+      - RHEL-07-030010
+      - CAT2
+      - CCI-000139
+      - SRG-OS-000046-GPOS-00022
+      - SV-204504r603261_rule
+      - V-204504
+      - auditd
+      - logging
 
-# - name: "MEDIUM | OL-07-030201 | PATCH | The Red Hat Enterprise Linux operating system must be configured to off-load audit logs onto a different system or storage media from the system being audited."
-#   lineinfile:
-#     path: /etc/audisp/plugins.d/au-remote.conf
-#     regexp: "{{ item.regexp }}"
-#     line: "{{ item.line }}"
-#     create: yes
-#     mode: 0644
-#   notify: restart auditd
-#   with_items:
-#   - { regexp: '^active =', line: 'active = yes'}
-#   - { regexp: '^direction =', line: 'direction = out' }
-#   - { regexp: '^path =', line: 'path = /sbin/audisp-remote' }
-#   - { regexp: '^type =', line: 'type = always' }
-#   - { regexp: '^format =', line: 'format = string' }
-#   when:
-#   - rhel_07_030201
-#   tags:
-#   - RHEL-07-030201
-#   - auditd
+- name: "MEDIUM | RHEL-07-030201 | PATCH | The Red Hat Enterprise Linux operating system must be configured to off-load audit logs onto a different system or storage media from the system being audited."
+  lineinfile:
+      path: /etc/audisp/plugins.d/au-remote.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      create: yes
+      mode: 0644
+  notify: restart auditd
+  with_items:
+      - { regexp: '^active =', line: 'active = yes'}
+      - { regexp: '^direction =', line: 'direction = out' }
+      - { regexp: '^path =', line: 'path = /sbin/audisp-remote' }
+      - { regexp: '^type =', line: 'type = always' }
+      - { regexp: '^format =', line: 'format = string' }
+  when:
+      - rhel_07_030201
+  tags:
+      - RHEL-07-030201
+      - CAT2
+      - CCI-001851
+      - SRG-OS-000342-GPOS-00133
+      - SV-204506r603261_rule
+      - V-204506
+      - auditd
+      - logging
 
-# - name: "MEDIUM | OL-07-030210 | PATCH | The Red Hat Enterprise Linux operating system must take appropriate action when the remote logging buffer is full."
-#   lineinfile:
-#     path: /etc/audisp/audispd.conf
-#     regexp: '^overflow_action ='
-#     line: "overflow_action = syslog"
-#   notify: restart auditd
-#   when:
-#   - rhel_07_030210
-#   tags:
-#   - auditd
+- name: "MEDIUM | RHEL-07-030210 | PATCH | The Red Hat Enterprise Linux operating system must take appropriate action when the remote logging buffer is full."
+  lineinfile:
+      path: /etc/audisp/audispd.conf
+      regexp: '^overflow_action ='
+      line: "overflow_action = syslog"
+  notify: restart auditd
+  when:
+      - rhel_07_030210
+  tags:
+      - RHEL-07-030210
+      - CAT2
+      - CCI-001851
+      - SV-204507r603261_rule
+      - V-204507
+      - auditd
+      - logging
 
-# - name: "MEDIUM | OL-07-030211 | PATCH | The Red Hat Enterprise Linux operating system must label all off-loaded audit logs before sending them to the central log server."
-#   lineinfile:
-#     path: /etc/audisp/audispd.conf
-#     regexp: '^name_format ='
-#     line: name_format = hostname
-#   notify: restart auditd
-#   when:
-#   - rhel_07_030211
-#   tags:
-#   - RHEL-07-030211
-#   - auditd
+- name: "MEDIUM | RHEL-07-030211 | PATCH | The Red Hat Enterprise Linux operating system must label all off-loaded audit logs before sending them to the central log server."
+  lineinfile:
+      path: /etc/audisp/audispd.conf
+      regexp: '^name_format ='
+      line: name_format = hostname
+  notify: restart auditd
+  when:
+      - rhel_07_030211
+  tags:
+      - RHEL-07-030211
+      - CAT2
+      - CCI-001851
+      - SRG-OS-000342-GPOS-00133
+      - SV-204508r603261_rule
+      - V-204508
+      - auditd
+      - logging
 
-# - name: "MEDIUM | RHEL-07-030300 | PATCH | The Red Hat Enterprise Linux operating system must off-load audit records onto a different system or media from the system being audited."
-#   lineinfile:
-#     path: /etc/audisp/audisp-remote.conf
-#     regexp: ^remote_server *=
-#     line: remote_server = {{ rhel7stig_audisp_remote_server }}
-#   when: 
-#   - rhel_07_030300 and rhel7stig_audisp_remote_server
-#   tags:
-#   - auditd
-#   - RHEL-07-030300
+- name: "MEDIUM | RHEL-07-030300 | PATCH | The Red Hat Enterprise Linux operating system must off-load audit records onto a different system or media from the system being audited."
+  lineinfile:
+      path: /etc/audisp/audisp-remote.conf
+      regexp: ^remote_server *=
+      line: remote_server = {{ rhel7stig_audisp_remote_server }}
+  when:
+      - rhel_07_030300
+      - rhel7stig_audisp_remote_server
+  tags:
+      - RHEL-07-030300
+      - CAT2
+      - CCI-001851
+      - SV-204509r603261_rule
+      - V-204509
+      - auditd
+      - logging
 
-# - name: "MEDIUM | RHEL-07-030310 | PATCH | The Red Hat Enterprise Linux operating system must encrypt the transfer of audit records off-loaded onto a different system or media from the system being audited."
-#   lineinfile:
-#     path: /etc/audisp/audisp-remote.conf
-#     regexp: ^enable_krb5 +=
-#     line: enable_krb5 = yes
-#   when: 
-#   - rhel_07_030310
-#   tags:
-#   - auditd
-#   - RHEL-07-030310
+- name: "MEDIUM | RHEL-07-030310 | PATCH | The Red Hat Enterprise Linux operating system must encrypt the transfer of audit records off-loaded onto a different system or media from the system being audited."
+  lineinfile:
+      path: /etc/audisp/audisp-remote.conf
+      regexp: ^enable_krb5 +=
+      line: enable_krb5 = yes
+  when:
+      - rhel_07_030310
+  tags:
+      - RHEL-07-030310
+      - CAT2
+      - CCI-001851
+      - SRG-OS-000342-GPOS-00133
+      - SV-204510r603261_rule
+      - V-204510
+      - auditd
+      - logging
 
-# - name: "MEDIUM | RHEL-07-030320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when the audit storage volume is full."
-#   lineinfile:
-#     path: /etc/audisp/audisp-remote.conf
-#     regexp: ^disk_full_action +=
-#     line: "disk_full_action = {{ rhel7stig_audisp_disk_full_action }}"
-#   when: 
-#   - rhel_07_030320
-#   tags:
-#   - auditd
-#   - RHEL-07-030320
+- name: "MEDIUM | RHEL-07-030320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when the audit storage volume is full."
+  lineinfile:
+      path: /etc/audisp/audisp-remote.conf
+      regexp: ^disk_full_action +=
+      line: "disk_full_action = {{ rhel7stig_audisp_disk_full_action }}"
+  when:
+      - rhel_07_030320
+  tags:
+      - RHEL-07-030320
+      - CAT2
+      - CCI-001851
+      - SRG-OS-000342-GPOS-00133
+      - SV-204511r603261_rule
+      - V-204511
+      - auditd
+      - logging
 
-# - name: "MEDIUM | RHEL-07-030321 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when there is an error sending audit records to a remote system."
-#   lineinfile:
-#     path: /etc/audisp/audisp-remote.conf
-#     regexp: ^network_failure_action +=
-#     line: "network_failure_action = {{ rhel7stig_audisp_network_failure_action }}"
-#   when: 
-#   - rhel_07_030321
-#   tags:
-#   - auditd
-#   - RHEL-07-030321
+- name: "MEDIUM | RHEL-07-030321 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the audit system takes appropriate action when there is an error sending audit records to a remote system."
+  lineinfile:
+      path: /etc/audisp/audisp-remote.conf
+      regexp: ^network_failure_action +=
+      line: "network_failure_action = {{ rhel7stig_audisp_network_failure_action }}"
+  when:
+      - rhel_07_030321
+  tags:
+      - RHEL-07-030321
+      - CAT2
+      - CCI-001851
+      - SRG-OS-000342-GPOS-00133
+      - SV-204512r603261_rule
+      - V-204512
+      - auditd
+      - logging
 
-# - name: "MEDIUM | RHEL-07-030330 | PATCH | The Red Hat Enterprise Linux operating system must initiate an action to notify the System Administrator (SA) and Information System Security Officer ISSO, at a minimum, when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity."
-#   lineinfile:
-#     path: /etc/audit/auditd.conf
-#     regexp: ^space_left +=
-#     line: "space_left = {{ [rhel7stig_auditd_space_left | int, 51] | max }}"
-#   when: 
-#   - rhel_07_030330
-#   tags:
-#   - auditd
-#   - RHEL-07-030330
+- name: "MEDIUM | RHEL-07-030330 | PATCH | The Red Hat Enterprise Linux operating system must initiate an action to notify the System Administrator (SA) and Information System Security Officer ISSO, at a minimum, when allocated audit record storage volume reaches 75% of the repository maximum audit record storage capacity."
+  lineinfile:
+      path: /etc/audit/auditd.conf
+      regexp: ^space_left +=
+      line: "space_left = {{ [rhel7stig_auditd_space_left | int, 51] | max }}"
+  when:
+      - rhel_07_030330
+  tags:
+      - RHEL-07-030330
+      - CAT2
+      - CCI-001855
+      - SRG-OS-000343-GPOS-00134
+      - SV-204513r603261_rule
+      - V-204513
+      - auditd
+      - logging
 
-# - name: "MEDIUM | RHEL-07-030340 | PATCH | The Red Hat Enterprise Linux operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) via email when the threshold for the repository maximum audit record storage capacity is reached."
-#   lineinfile:
-#     path: /etc/audit/auditd.conf
-#     regexp: ^space_left_action +=
-#     line: "space_left_action = email"
-#   register: rhel7stig_auditd_space_left_action_result
-#   failed_when:
-#   - rhel7stig_auditd_space_left_action_result is failed
-#   - rhel7stig_auditd_space_left_action_result.rc != 257
-#   when: 
-#   - rhel_07_030340
-#   tags:
-#   - auditd
-#   - RHEL-07-030340
+- name: "MEDIUM | RHEL-07-030340 | PATCH | The Red Hat Enterprise Linux operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) via email when the threshold for the repository maximum audit record storage capacity is reached."
+  lineinfile:
+      path: /etc/audit/auditd.conf
+      regexp: ^space_left_action +=
+      line: "space_left_action = email"
+  failed_when:
+      - rhel7stig_auditd_space_left_action_result is failed
+      - rhel7stig_auditd_space_left_action_result.rc != 257
+  register: rhel7stig_auditd_space_left_action_result
+  when:
+      - rhel_07_030340
+  tags:
+      - RHEL-07-030340
+      - CAT2
+      - CCI-001855
+      - SRG-OS-000343-GPOS-00134
+      - SV-204514r603261_rule
+      - V-204514
+      - auditd
+      - logging
 
 # - name: "MEDIUM | RHEL-07-030350 | PATCH | The Red Hat Enterprise Linux operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) when the threshold for the repository maximum audit record storage capacity is reached."
 #   lineinfile:
