@@ -1549,362 +1549,386 @@
       - V-204472
       - users
 
-# - name: "MEDIUM | RHEL-07-020680 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-#     stat:
-#       path: "{{ item }}"
-#     with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', rhel7stig_int_gid) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
-#     register: rhel_07_020680_audit
+- name: "MEDIUM | RHEL-07-020680 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+  block:
+      - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+        stat:
+          path: "{{ item }}"
+        with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', rhel7stig_int_gid) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
+        register: rhel_07_020680_audit
 
-#   - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-#     command: find -H {{ item.0 | quote }} -not -type l -perm /027
-#     check_mode: no
-#     register: rhel_07_020680_patch_audit
-#     changed_when: rhel_07_020680_patch_audit.stdout| length > 0
-#     when:
-#     - ansible_check_mode
-#     - item.1.exists
-#     with_together:
-#     - "{{ rhel_07_020680_audit.results | map(attribute='item') | list }}"
-#     - "{{ rhel_07_020680_audit.results | map(attribute='stat') | list }}"
-#     loop_control:
-#       label: "{{ item.0 }}"
+      - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+        command: find -H {{ item.0 | quote }} -not -type l -perm /027
+        check_mode: false
+        changed_when: rhel_07_020680_patch_audit.stdout| length > 0
+        register: rhel_07_020680_patch_audit
+        with_together:
+            - "{{ rhel_07_020680_audit.results | map(attribute='item') | list }}"
+            - "{{ rhel_07_020680_audit.results | map(attribute='stat') | list }}"
+        loop_control:
+            label: "{{ item.0 }}"
+        when:
+            - ansible_check_mode
+            - item.1.exists
 
-#   - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-#     file:
-#       path: "{{ item.0 }}"
-#       recurse: yes
-#       mode: a-st,g-w,o-rwx
-#     register: rhel_07_020680_patch
-#     when:
-#     - not ansible_check_mode
-#     - item.1.exists
-#     with_together:
-#     - "{{ rhel_07_020680_audit.results | map(attribute='item') | list }}"
-#     - "{{ rhel_07_020680_audit.results | map(attribute='stat') | list }}"
-#     loop_control:
-#       label: "{{ item.0 }}"
+      - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+        file:
+            path: "{{ item.0 }}"
+            recurse: yes
+            mode: a-st,g-w,o-rwx
+        register: rhel_07_020680_patch
+        with_together:
+            - "{{ rhel_07_020680_audit.results | map(attribute='item') | list }}"
+            - "{{ rhel_07_020680_audit.results | map(attribute='stat') | list }}"
+        loop_control:
+            label: "{{ item.0 }}"
+        when:
+            - not ansible_check_mode
+            - item.1.exists
 
-#   # set default ACLs so the homedir has an effective umask of 0027
-#   - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-#     acl:
-#       path: "{{ item.0 }}"
-#       default: yes
-#       state: present
-#       recursive: yes
-#       etype: "{{ item.1.etype }}"
-#       permissions: "{{ item.1.mode }}"
-#     when: 
-#     - not rhel7stig_system_is_container
-#     with_nested:
-#     - "{{ (ansible_check_mode | ternary(rhel_07_020680_patch_audit, rhel_07_020680_patch)).results |
-#       rejectattr('skipped', 'defined') | map(attribute='item') | map('first') | list }}"
-#     -
-#         - etype: group
-#           mode: rx
-#         - etype: other
-#           mode: '0'
-#   when:
-#   - rhel_07_020680
-#   tags:
-#   - RHEL-07-020680
+      # set default ACLs so the homedir has an effective umask of 0027
+      - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
+        acl:
+            path: "{{ item.0 }}"
+            default: yes
+            state: present
+            recursive: yes
+            etype: "{{ item.1.etype }}"
+            permissions: "{{ item.1.mode }}"
+        with_nested:
+            - "{{ (ansible_check_mode | ternary(rhel_07_020680_patch_audit, rhel_07_020680_patch)).results |
+              rejectattr('skipped', 'defined') | map(attribute='item') | map('first') | list }}"
+            -
+                - etype: group
+                  mode: rx
+                - etype: other
+                  mode: '0'
+        when:  not rhel7stig_system_is_container
+  when:
+      - rhel_07_020680
+  tags:
+      - RHEL-07-020680
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204473r603261_rule
+      - V-204473
+      - permissions
 
-# - name: "MEDIUM | RHEL-07-020690 | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for interactive users are owned by the home directory user or root."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020690 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for interactive users are owned by the home directory user or root."
-#     command: "{{ find_command_base }} -print -quit"
-#     check_mode: no
-#     changed_when: rhel_07_020690_audit.stdout | length > 0
-#     register: rhel_07_020690_audit
-#     with_items: "{{ rhel7stig_passwd }}"
-#     loop_control:
-#       label: "{{ rhel7stig_passwd_label }}"
-#     when:
-#     - this_item.uid >= rhel7stig_int_gid
-#     vars:
-#       this_item: "{{ item }}"
+- name: "MEDIUM | RHEL-07-020690 | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for interactive users are owned by the home directory user or root."
+  block:
+      - name: "MEDIUM | RHEL-07-020690 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for interactive users are owned by the home directory user or root."
+        command: "{{ find_command_base }} -print -quit"
+        check_mode: false
+        changed_when: rhel_07_020690_audit.stdout | length > 0
+        register: rhel_07_020690_audit
+        with_items:
+            - "{{ rhel7stig_passwd }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when: this_item.uid >= rhel7stig_int_gid
+        vars:
+            this_item: "{{ item }}"
 
-#   - name: "MEDIUM | RHEL-07-020690 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for interactive users are owned by the home directory user or root."
-#     command: "{{ find_command_base }} -exec chown {{ this_item.uid }} {} +"
-#     with_items: "{{ rhel_07_020690_audit.results }}"
-#     loop_control:
-#       label: "{{ rhel7stig_passwd_label }}"
-#     when:
-#     - item is changed
-#     vars:
-#       this_item: "{{ item.item }}"
-#   vars:
-#     find_command_base: 'find "{{ this_item.dir }}" -mindepth 1 -type f
-#             -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*"
-#             -not ( -user {{ this_item.uid }} -o -user root )'
-#   when: 
-#   - rhel_07_020690
-#   tags:
-#   - RHEL-07-020690
+      - name: "MEDIUM | RHEL-07-020690 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for interactive users are owned by the home directory user or root."
+        command: "{{ find_command_base }} -exec chown {{ this_item.uid }} {} +"
+        with_items: "{{ rhel_07_020690_audit.results }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when: item is changed
+        vars:
+            this_item: "{{ item.item }}"
+  vars:
+      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1 -type f
+              -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*"
+              -not ( -user {{ this_item.uid }} -o -user root )'
+  when: 
+      - rhel_07_020690
+  tags:
+      - RHEL-07-020690
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204474r603834_rule
+      - V-204474
+      - permissions
 
-# - name: "MEDIUM | RHEL-07-020700 | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for local interactive users are be group-owned by the users primary group or root."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020700 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for local interactive users are be group-owned by the users primary group or root."
-#     command: "{{ find_command_base }} -print -quit"
-#     check_mode: no
-#     changed_when: rhel_07_020700_audit.stdout| length > 0
-#     register: rhel_07_020700_audit
-#     with_items: "{{ rhel7stig_passwd }}"
-#     loop_control:
-#       label: "{{ rhel7stig_passwd_label }}"
-#     when:
-#     - this_item.uid >= rhel7stig_int_gid
-#     vars:
-#       this_item: "{{ item }}"
+- name: "MEDIUM | RHEL-07-020700 | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for local interactive users are be group-owned by the users primary group or root."
+  block:
+      - name: "MEDIUM | RHEL-07-020700 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for local interactive users are be group-owned by the users primary group or root."
+        command: "{{ find_command_base }} -print -quit"
+        check_mode: false
+        changed_when: rhel_07_020700_audit.stdout| length > 0
+        register: rhel_07_020700_audit
+        with_items:
+            - "{{ rhel7stig_passwd }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when: this_item.uid >= rhel7stig_int_gid
+        vars:
+            this_item: "{{ item }}"
 
-#   - name: "MEDIUM | RHEL-07-020700 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for local interactive users are be group-owned by the users primary group or root."
-#     command: "{{ find_command_base }} -exec chgrp {{ this_item.gid }} {} +"
-#     with_items: "{{ rhel_07_020700_audit.results }}"
-#     loop_control:
-#       label: "{{ rhel7stig_passwd_label }}"
-#     when:
-#     - item is changed
-#     vars:
-#       this_item: "{{ item.item }}"
-#   vars:
-#     find_command_base: 'find "{{ this_item.dir }}" -mindepth 1 -type f
-#             -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*"
-#             -not ( -group {{ this_item.gid }} -o -group root )'
-#   when: 
-#   - rhel_07_020700
-#   tags:
-#   - RHEL-07-020700
+      - name: "MEDIUM | RHEL-07-020700 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local initialization files for local interactive users are be group-owned by the users primary group or root."
+        command: "{{ find_command_base }} -exec chgrp {{ this_item.gid }} {} +"
+        with_items: "{{ rhel_07_020700_audit.results }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when: item is changed
+        vars:
+            this_item: "{{ item.item }}"
+  vars:
+      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1 -type f
+              -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*"
+              -not ( -group {{ this_item.gid }} -o -group root )'
+  when: 
+      - rhel_07_020700
+  tags:
+      - RHEL-07-020700
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204475r603836_rule
+      - V-204475
+      - permissions
 
-# - name: "MEDIUM | RHEL-07-020710 | RHEL-07-020720 | RHEL-07-020730 | AUDIT | Find ini files for interactive users."
-#   shell: find "{{ item }}" -maxdepth 1 -type f | awk -F"/" '$NF ~ /^\..*$/ {print $NF}' | grep -v history
-#   with_items: "{{ rhel_07_stig_interactive_homedir_results }}"
-#   register: rhel_07_020710_ini_file_list
-#   changed_when: no
-#   failed_when: false
-#   when:
-#   - rhel_07_stig_interactive_homedir_results is defined
-#   - rhel_07_020710
-#   - rhel_07_020720
-#   - rhel_07_020730
-#   - rhel7stig_disruption_high
-#   tags:
-#   - RHEL-07-020710
-#   - RHEL-07-020720
-#   - RHEL-07-020730
-#   - complexity-high
+- name: "MEDIUM | RHEL-07-020710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files must have mode 0740 or less permissive."
+  file:
+      path: "{{ item }}"
+      mode: '0640'
+      state: touch
+  with_items:
+      - "{{ rhel_07_stig_interactive_homedir_inifiles }}"
+  when:
+      - rhel_07_stig_interactive_homedir_inifiles is defined
+      - rhel_07_020710
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-020710
+      - CAT2
+      - CCI-000366
+      - SV-204476r603261_rule
+      - V-204476
+      - complexity-high
 
-# - name: "MEDIUM | RHEL-07-020710 | RHEL-07-020720 | RHEL-07-020730 | Set fact for home directory paths for interactive users"
-#   set_fact:
-#     rhel_07_stig_interactive_homedir_inifiles: "{{ rhel_07_020710_ini_file_list.results | map(attribute='stdout_lines') | list }}"
-#   when:
-#   - rhel_07_stig_interactive_homedir_results is defined
-#   - rhel_07_020710
-#   - rhel_07_020720
-#   - rhel_07_020730
-#   - rhel7stig_disruption_high
-#   tags:
-#   - RHEL-07-020680
-#   - RHEL-07-020710
-#   - RHEL-07-020720
-#   - RHEL-07-020730
-#   - complexity-high
+- name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
+  block:
+      - name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
+        shell: find "{{ item }}" -maxdepth 1 -type f | xargs grep "PATH=" | cut -d':' -f1 | xargs realpath
+        with_items: "{{ rhel_07_stig_interactive_homedir_results }}"
+        changed_when: false
+        failed_when: false
+        register: rhel_07_020710_ini_path_grep_list
+        when:
+            - rhel_07_stig_interactive_homedir_results is defined
+            - rhel_07_stig_interactive_homedir_inifiles is defined
+      
+      - name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
+        debug:
+              msg: You will need to audit and correct executable paths set in "{{ item }}" to contain only paths that resolve to the user's home directory.
+        with_items:
+            - "{{ rhel_07_020710_ini_path_grep_list.results | map(attribute='stdout_lines') | list }}"
+      
+      - name: "MEDIUM | RHEL-07-020720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
+        lineinfile:
+            path: "{{ item }}"
+            regexp: "^PATH="
+            line: "{{ rhel_07_020720_user_path }}"
+        with_items:
+            - "{{ rhel_07_020710_ini_path_grep_list.results | map(attribute='stdout_lines') | list }}"
+        when:
+            - rhel7stig_change_user_path
+  when:
+      - rhel_07_020720
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-020720
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204477r603261_rule
+      - V-204477
+      - complexity-high
 
-# - name: "MEDIUM | RHEL-07-020710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files must have mode 0740 or less permissive."
-#   file:
-#     path: "{{ item }}"
-#     mode: '0640'
-#     state: touch
-#   with_items: "{{ rhel_07_stig_interactive_homedir_inifiles }}"
-#   when:
-#   - rhel_07_stig_interactive_homedir_inifiles is defined
-#   - rhel_07_020710
-#   - rhel7stig_disruption_high
-#   tags:
-#   - RHEL-07-020710
-#   - complexity-high
+- name: "MEDIUM | RHEL-07-020730 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+  block:
+      # Let's find any progerams with world-writable permissions.
+      - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+        shell: find / -xdev -perm -002 -type f -exec ls -ld {} \; | awk '{print $9}'
+        failed_when: false
+        changed_when: false
+        register: rhel_07_020730_perms_results
 
-# - name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
-#     shell: find "{{ item }}" -maxdepth 1 -type f | xargs grep "PATH=" | cut -d':' -f1 | xargs realpath
-#     with_items: "{{ rhel_07_stig_interactive_homedir_results }}"
-#     register: rhel_07_020710_ini_path_grep_list
-#     changed_when: no
-#     failed_when: false
-#     when:
-#     - rhel_07_stig_interactive_homedir_results is defined
-#      - rhel_07_stig_interactive_homedir_inifiles is defined
-  
-#   - name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
-#     debug:
-#       msg: You will need to audit and correct executable paths set in "{{ item }}" to contain only paths that resolve to the user's home directory.
-#     with_items:
-#     - "{{ rhel_07_020710_ini_path_grep_list.results | map(attribute='stdout_lines') | list }}"
-  
-#   - name: "MEDIUM | RHEL-07-020720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
-#     lineinfile:
-#       path: "{{ item }}"
-#       regexp: "^PATH="
-#       line: "{{ rhel_07_020720_user_path }}"
-#     with_items:
-#     - "{{ rhel_07_020710_ini_path_grep_list.results | map(attribute='stdout_lines') | list }}"
-#     when:
-#     - rhel7stig_change_user_path
-#   when:
-#   - rhel_07_020720
-#   - rhel7stig_disruption_high
-#   tags:
-#   - RHEL-07-020720
-#   - complexity-high
+      # Now let's see if those come up in any interactive users' home directory ini files.
+      - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+        debug:
+            msg: "Good news! We have not found any world-writable exeutable programs on your system."
+        failed_when: false
+        changed_when: false
+        when: rhel_07_020730_perms_results.stdout_lines | length == 0
+      
+      - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+        include_tasks: audit_homedirinifiles.yml
+        loop:
+            - "{{ rhel_07_stig_interactive_homedir_inifiles }}"
+        loop_control:
+              loop_var: ini_item
+        when: rhel_07_020730_perms_results.stdout_lines | length > 0
+    
+      - name: "MEDIUM | RHEL-07-020730 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
+        file:
+            path: "{{ item }}"
+            mode: '0755'
+            state: touch
+        with_items:
+            - "{{ rhel_07_020730_perms_results.stdout_lines }}"
+        when:
+            - rhel_07_020730_perms_results.stdout_lines is defined
+            - rhel_07_020730_WWP_Change
+  when:
+      - rhel_07_020730
+      - rhel7stig_disruption_high
+      - rhel_07_stig_interactive_homedir_inifiles is defined
+  tags:
+      - RHEL-07-020730
+      - CAT2
+      - CCI-000366
+      - SV-204478r603261_rule
+      - V-204478
+      - complexity-high
 
-# - name: "MEDIUM | RHEL-07-020730 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-#   block:
-#   # Let's find any progerams with world-writable permissions.
-#   - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-#     shell: find / -xdev -perm -002 -type f -exec ls -ld {} \; | awk '{print $9}'
-#     failed_when: false
-#     changed_when: false
-#     register: rhel_07_020730_perms_results
+- name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
+  setup:
+      gather_subset: selinux,!min,!all
+      filter: ansible_selinux
+  when:
+      - rhel_07_020900
+      - rhel7stig_complex
+      - ansible_selinux is not defined
+  tags:
+      - RHEL-07-020900
+      - CAT2
+      - CCI-000368
+      - CCI-001813
+      - CCI-001814
+      - CCI-001812
+      - CCI-000318
+      - SRG-OS-000480-GPOS-00227
+      - SV-204479r603261_rule
+      - V-204479
+      - complexity-high
 
-#   # Now let's see if those come up in any interactive users' home directory ini files.
-#   - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-#     debug:
-#       msg: "Good news! We have not found any world-writable exeutable programs on your system."
-#     failed_when: false
-#     changed_when: false
-#     when:
-#     - rhel_07_020730_perms_results.stdout_lines | length == 0
-  
-#   - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-#     include_tasks: audit_homedirinifiles.yml
-#     loop:
-#     - "{{ rhel_07_stig_interactive_homedir_inifiles }}"
-#     loop_control:
-#       loop_var: ini_item
-#     when:
-#     - rhel_07_020730_perms_results.stdout_lines | length > 0
- 
-#   - name: "MEDIUM | RHEL-07-020730 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-#     file:
-#       path: "{{ item }}"
-#       mode: '0755'
-#       state: touch
-#     with_items: "{{ rhel_07_020730_perms_results.stdout_lines }}"
-#     when:
-#     - rhel_07_020730_perms_results.stdout_lines is defined
-#     - rhel_07_020730_WWP_Change
-#   when:
-#   - rhel_07_020730
-#   - rhel7stig_disruption_high
-#   - rhel_07_stig_interactive_homedir_inifiles is defined
-#   tags:
-#   - RHEL-07-020730
-#   - complexity-high
+- name: "MEDIUM | RHEL-07-020900 | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
+  block:
+      - name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
+        command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev ( -context *:device_t:* -o -context *:unlabeled_t:* ) ( -type c -o -type b ) -printf '%p %Z\n'
+        changed_when: false
+        check_mode: false
+        register: rhel_07_020900_audit
 
-# - name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
-#   setup:
-#     gather_subset: selinux,!min,!all
-#     filter: ansible_selinux
-#   when:
-#   - rhel_07_020900
-#   - rhel7stig_complex
-#   - ansible_selinux is not defined
-#   tags:
-#   - RHEL-07-020900
-#   - complexity-high
+      - name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
+        debug:
+            msg: "{{ rhel_07_020900_audit.stdout_lines }}"
+        changed_when: rhel7stig_audit_complex
+        when: rhel_07_020900_audit.stdout_lines | length > 0
+  when:
+      - rhel_07_020900
+      - rhel7stig_complex
+      - ansible_selinux.status == "enabled"
+  tags:
+      - RHEL-07-020900
+      - CAT2
+      - CCI-000368
+      - CCI-001813
+      - CCI-001814
+      - CCI-001812
+      - CCI-000318
+      - SRG-OS-000480-GPOS-00227
+      - SV-204479r603261_rule
+      - V-204479
+      - complexity-high
 
-# - name: "MEDIUM | RHEL-07-020900 | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
-#     command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev ( -context *:device_t:* -o -context *:unlabeled_t:* ) ( -type c -o -type b ) -printf '%p %Z\n'
-#     changed_when: no
-#     check_mode: no
-#     register: rhel_07_020900_audit
+- name: "MEDIUM | RHEL-07-021000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that file systems containing user home directories are mounted to prevent files with the setuid and setgid bit set from being executed."
+  mount:
+      path: /home
+      state: mounted
+      src: "{{ home_mount.device }}"
+      fstype: "{{ home_mount.fstype }}"
+      opts: "{{ home_mount.options }},nosuid"
+  vars:
+      home_mount: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0]') }}"
+  when:
+      - rhel_07_021000
+      - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
+      - "'nosuid' not in home_mount.options"
+  tags:
+      - RHEL-07-021000
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204480r603838_rule
+      - V-204480
 
-#   - name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
-#     debug:
-#       msg: "{{ rhel_07_020900_audit.stdout_lines }}"
-#     changed_when:
-#     - rhel7stig_audit_complex
-#     when:
-#     - rhel_07_020900_audit.stdout_lines | length > 0
-#   when:
-#   - rhel_07_020900
-#   - rhel7stig_complex
-#   - ansible_selinux.status == "enabled"
-#   tags:
-#   - RHEL-07-020900
-#   - complexity-high
+- name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
+  block:
+      - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
+        mount:
+            path: /media
+            state: mounted
+            src: "{{ removable_mount.device }}"
+            fstype: "{{ removable_mount.fstype }}"
+            opts: "{{ removable_mount.options }},nosuid"
+        vars:
+            removable_mount: "{{ ansible_mounts | json_query('[?mount == `/media`] | [0]') }}"
+        when:
+            - ansible_mounts | selectattr('mount', 'match', '^/media$') | list | length != 0
+            - "'nosuid' not in home_mount.options"
+    
+      - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
+        mount:
+            path: /mnt
+            state: mounted
+            src: "{{ removable_mount2.device }}"
+            fstype: "{{ removable_mount2.fstype }}"
+            opts: "{{ removable_mount2.options }},nosuid"
+        vars:
+            removable_mount2: "{{ ansible_mounts | json_query('[?mount == `/mnt`] | [0]') }}"
+        when:
+            - ansible_mounts | selectattr('mount', 'match', '^/mnt$') | list | length != 0
+            - "'nosuid' not in home_mount.options"
+  when:
+      - rhel_07_021010
+      - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
+  tags:
+      - RHEL-07-021010
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204481r603261_rule
+      - V-204481
 
-# - name: "MEDIUM | RHEL-07-021000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that file systems containing user home directories are mounted to prevent files with the setuid and setgid bit set from being executed."
-#   mount:
-#     path: /home
-#     state: mounted
-#     src: "{{ home_mount.device }}"
-#     fstype: "{{ home_mount.fstype }}"
-#     opts: "{{ home_mount.options }},nosuid"
-#   when:
-#   - rhel_07_021000
-#   - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
-#   - "'nosuid' not in home_mount.options"
-#   vars:
-#     home_mount: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0]') }}"
-#   tags:
-#   - RHEL-07-021000
-
-# - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
-#   block:
-#   - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
-#     mount:
-#       path: /media
-#       state: mounted
-#       src: "{{ removable_mount.device }}"
-#       fstype: "{{ removable_mount.fstype }}"
-#       opts: "{{ removable_mount.options }},nosuid"
-#     when:
-#     - ansible_mounts | selectattr('mount', 'match', '^/media$') | list | length != 0
-#     - "'nosuid' not in home_mount.options"
-#     vars:
-#       removable_mount: "{{ ansible_mounts | json_query('[?mount == `/media`] | [0]') }}"
-
- 
-#   - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
-#     mount:
-#       path: /mnt
-#       state: mounted
-#       src: "{{ removable_mount2.device }}"
-#       fstype: "{{ removable_mount2.fstype }}"
-#       opts: "{{ removable_mount2.options }},nosuid"
-#     when:
-#     - ansible_mounts | selectattr('mount', 'match', '^/mnt$') | list | length != 0
-#     - "'nosuid' not in home_mount.options"
-#     vars:
-#       removable_mount2: "{{ ansible_mounts | json_query('[?mount == `/mnt`] | [0]') }}"
-
-#   when:
-#   - rhel_07_021010
-#   - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
-#   tags:
-#   - RHEL-07-021010
-
-# - name: "MEDIUM | RHEL-07-021020 | PATCH | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are being imported via Network File System (NFS)."
-#   mount:
-#     path: "{{ item }}"
-#     src: "{{ ansible_mounts | json_query(device_query) }}"
-#     fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
-#     opts: "{{ ansible_mounts | json_query(options_query) }},nosuid"
-#     state: mounted
-#   vars:
-#     device_query: '[?mount == `{{ item }}`] | [0].device'
-#     fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
-#     options_query: '[?mount == `{{ item }}`] | [0].options'
-#   with_items: "{{ rhel7stig_nfs_mounts }}"
-#   when:
-#   - rhel_07_021020
-#   - "'nosuid' not in (ansible_mounts | json_query(options_query))"
-#   tags:
-#   - RHEL-07-021020
+- name: "MEDIUM | RHEL-07-021020 | PATCH | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are being imported via Network File System (NFS)."
+  mount:
+      path: "{{ item }}"
+      src: "{{ ansible_mounts | json_query(device_query) }}"
+      fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
+      opts: "{{ ansible_mounts | json_query(options_query) }},nosuid"
+      state: mounted
+  vars:
+        device_query: '[?mount == `{{ item }}`] | [0].device'
+        fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
+        options_query: '[?mount == `{{ item }}`] | [0].options'
+  with_items:
+      - "{{ rhel7stig_nfs_mounts }}"
+  when:
+      - rhel_07_021020
+      - "'nosuid' not in (ansible_mounts | json_query(options_query))"
+  tags:
+      - RHEL-07-021020
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204482r603261_rule
+      - V-204482
 
 # - name: "MEDIUM | RHEL-07-021021 | PATCH | The Red Hat Enterprise Linux operating system must prevent binary files from being executed on file systems that are being imported via Network File System (NFS)."
 #   mount:

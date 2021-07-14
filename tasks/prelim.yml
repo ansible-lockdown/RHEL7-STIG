@@ -98,6 +98,40 @@
   - RHEL-07-010110
   - RHEL-07-020230
 
+- name: "MEDIUM | RHEL-07-020710 | RHEL-07-020720 | RHEL-07-020730 | AUDIT | Find ini files for interactive users."
+  shell: find "{{ item }}" -maxdepth 1 -type f | awk -F"/" '$NF ~ /^\..*$/ {print $NF}' | grep -v history
+  with_items: "{{ rhel_07_stig_interactive_homedir_results }}"
+  register: rhel_07_020710_ini_file_list
+  changed_when: no
+  failed_when: false
+  when:
+  - rhel_07_stig_interactive_homedir_results is defined
+  - rhel_07_020710
+  - rhel_07_020720
+  - rhel_07_020730
+  - rhel7stig_disruption_high
+  tags:
+  - RHEL-07-020710
+  - RHEL-07-020720
+  - RHEL-07-020730
+  - complexity-high
+
+- name: "MEDIUM | RHEL-07-020710 | RHEL-07-020720 | RHEL-07-020730 | Set fact for home directory paths for interactive users"
+  set_fact:
+    rhel_07_stig_interactive_homedir_inifiles: "{{ rhel_07_020710_ini_file_list.results | map(attribute='stdout_lines') | list }}"
+  when:
+  - rhel_07_stig_interactive_homedir_results is defined
+  - rhel_07_020710
+  - rhel_07_020720
+  - rhel_07_020730
+  - rhel7stig_disruption_high
+  tags:
+  - RHEL-07-020680
+  - RHEL-07-020710
+  - RHEL-07-020720
+  - RHEL-07-020730
+  - complexity-high
+
 - name: "PRELIM | Find all sudoers files."
   command: "find /etc/sudoers /etc/sudoers.d/ -type f ! -name '*~' ! -name '*.*'"
   check_mode: no
