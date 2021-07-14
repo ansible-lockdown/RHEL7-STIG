@@ -2422,313 +2422,312 @@
 
 - name: "MEDIUM | RHEL-07-030350 | PATCH | The Red Hat Enterprise Linux operating system must immediately notify the System Administrator (SA) and Information System Security Officer (ISSO) (at a minimum) when the threshold for the repository maximum audit record storage capacity is reached."
   lineinfile:
-    path: /etc/audit/auditd.conf
-    regexp: ^action_mail_acct +=
-    line: "action_mail_acct = {{ rhel7stig_auditd_mail_acct }}"
-  register: rhel7stig_auditd_action_mail_acct_result
+      path: /etc/audit/auditd.conf
+      regexp: ^action_mail_acct +=
+      line: "action_mail_acct = {{ rhel7stig_auditd_mail_acct }}"
   failed_when:
-  - rhel7stig_auditd_action_mail_acct_result is failed
-  - rhel7stig_auditd_action_mail_acct_result.rc != 257
+      - rhel7stig_auditd_action_mail_acct_result is failed
+      - rhel7stig_auditd_action_mail_acct_result.rc != 257
+  register: rhel7stig_auditd_action_mail_acct_result
   when: 
-  - rhel_07_030350
+      - rhel_07_030350
   tags:
-  - RHEL-07-030350
-  - CAT2
-  - CCI-001855
-  - SRG-OS-000343-GPOS-00134
-  - SV-204515r603261_rule
-  - V-204515
-  - auditd
-  - logging
+      - RHEL-07-030350
+      - CAT2
+      - CCI-001855
+      - SRG-OS-000343-GPOS-00134
+      - SV-204515r603261_rule
+      - V-204515
+      - auditd
+      - logging
 
 - name: "MEDIUM | RHEL-07-030360 | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions."
   block:
-  - name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions. (Delete obsolete suid/sgid rules)"
-    file:
-      path: "/etc/audit/rules.d/rhel7stig_suid_sgid_commands.rules"
-      state: absent
+      - name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions. (Delete obsolete suid/sgid rules)"
+        file:
+            path: "/etc/audit/rules.d/rhel7stig_suid_sgid_commands.rules"
+            state: absent
 
-  - name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions. (Audit rules for execve calls)"
-    lineinfile:
-      path: "/etc/audit/rules.d/rhel7stig_execve_calls.rules"
-      create: yes
-      owner: root
-      group: root
-      mode: 0600
-      line: "{{ item }}"
-      state: present
-    with_items:
-    - "-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k setuid"
-    - "-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid"
-    - "-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k setgid"
-    - "-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid"
-    notify: restart auditd
-
+      - name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions. (Audit rules for execve calls)"
+        lineinfile:
+            path: "/etc/audit/rules.d/rhel7stig_execve_calls.rules"
+            create: yes
+            owner: root
+            group: root
+            mode: 0600
+            line: "{{ item }}"
+            state: present
+        notify: restart auditd
+        with_items:
+            - "-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k setuid"
+            - "-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid"
+            - "-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k setgid"
+            - "-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid"
   when: 
-  - rhel_07_030360
+      - rhel_07_030360
   tags:
-  - RHEL-07-030360
-  - CAT2
-  - CCI-002234
-  - SRG-OS-000327-GPOS-00127
-  - SV-204516r603261_rule
-  - V-204516
-  - audit-rules
+      - RHEL-07-030360
+      - CAT2
+      - CCI-002234
+      - SRG-OS-000327-GPOS-00127
+      - SV-204516r603261_rule
+      - V-204516
+      - audit-rules
 
 - name: "MEDIUM | Auditing system calls"
   include_tasks: audit_system_call.yml
   with_items:
-  - id: "030370"
-    call: "chown"
-    key: "perm_mod"
-  - id: "030380"
-    call: "fchown"
-    key: "perm_mod"
-  - id: "030390"
-    call: "lchown"
-    key: "perm_mod"
-  - id: "030400"
-    call: "fchownat"
-    key: "perm_mod"
-  - id: "030410"
-    call: "chmod"
-    key: "perm_mod"
-  - id: "030420"
-    call: "fchmod"
-    key: "perm_mod"
-  - id: "030430"
-    call: "fchmodat"
-    key: "perm_mod"
-  - id: "030440"
-    call: "setxattr"
-    key: "perm_mod"
-  - id: "030450"
-    call: "fsetxattr"
-    key: "perm_mod"
-  - id: "030460"
-    call: "lsetxattr"
-    key: "perm_mod"
-  - id: "030470"
-    call: "removexattr"
-    key: "perm_mod"
-  - id: "030480"
-    call: "fremovexattr"
-    key: "perm_mod"
-  - id: "030490"
-    call: "lremovexattr"
-    key: "perm_mod"
-  - id: "030500"
-    call: "creat"
-    extra_fields: "-F exit=-EPERM"
-    key: "access"
-  - id: "030500"
-    call: "creat"
-    extra_fields: "-F exit=-EACCES"
-    key: "access"
-  - id: "030510"
-    call: "open"
-    extra_fields: "-F exit=-EPERM"
-    key: "access"
-  - id: "030510"
-    call: "open"
-    extra_fields: "-F exit=-EACCES"
-    key: "access"
-  - id: "030520"
-    call: "openat"
-    extra_fields: "-F exit=-EPERM"
-    key: "access"
-  - id: "030520"
-    call: "openat"
-    extra_fields: "-F exit=-EACCES"
-    key: "access"
-  - id: "030530"
-    call: "open_by_handle_at"
-    extra_fields: "-F exit=-EPERM"
-    key: "access"
-  - id: "030530"
-    call: "open_by_handle_at"
-    extra_fields: "-F exit=-EACCES"
-    key: "access"
-  - id: "030540"
-    call: "truncate"
-    extra_fields: "-F exit=-EACCES"
-    key: "access"
-  - id: "030540"
-    call: "truncate"
-    extra_fields: "-F exit=-EPERM"
-    key: "access"
-  - id: "030550"
-    call: "ftruncate"
-    extra_fields: "-F exit=-EACCES"
-    key: "access"
-  - id: "030550"
-    call: "ftruncate"
-    extra_fields: "-F exit=-EPERM"
-    key: "access"
-  - id: "030740"
-    call: "mount"
-    key: "privileged-mount"
-  - id: "030819"
-    call: "create_module"
-    include_all_auids: yes
-    key: "module-change"
-  - id: "030820"
-    call: "init_module"
-    include_all_auids: yes
-    key: "module-change"
-  - id: "030821"
-    call: "finit_module"
-    include_all_auids: yes
-    key: "module-change"
-  - id: "030830"
-    call: "delete_module"
-    include_all_auids: yes
-    key: "module-change"
-  - id: "030880"
-    call: "rename"
-    key: "delete"
-  - id: "030890"
-    call: "renameat"
-    key: "delete"
-  - id: "030900"
-    call: "rmdir"
-    key: "delete"
-  - id: "030910"
-    call: "unlink"
-    key: "delete"
-  - id: "030920"
-    call: "unlinkat"
-    key: "delete"
+      - id: "030370"
+        call: "chown"
+        key: "perm_mod"
+      - id: "030380"
+        call: "fchown"
+        key: "perm_mod"
+      - id: "030390"
+        call: "lchown"
+        key: "perm_mod"
+      - id: "030400"
+        call: "fchownat"
+        key: "perm_mod"
+      - id: "030410"
+        call: "chmod"
+        key: "perm_mod"
+      - id: "030420"
+        call: "fchmod"
+        key: "perm_mod"
+      - id: "030430"
+        call: "fchmodat"
+        key: "perm_mod"
+      - id: "030440"
+        call: "setxattr"
+        key: "perm_mod"
+      - id: "030450"
+        call: "fsetxattr"
+        key: "perm_mod"
+      - id: "030460"
+        call: "lsetxattr"
+        key: "perm_mod"
+      - id: "030470"
+        call: "removexattr"
+        key: "perm_mod"
+      - id: "030480"
+        call: "fremovexattr"
+        key: "perm_mod"
+      - id: "030490"
+        call: "lremovexattr"
+        key: "perm_mod"
+      - id: "030500"
+        call: "creat"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030500"
+        call: "creat"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030510"
+        call: "open"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030510"
+        call: "open"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030520"
+        call: "openat"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030520"
+        call: "openat"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030530"
+        call: "open_by_handle_at"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030530"
+        call: "open_by_handle_at"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030540"
+        call: "truncate"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030540"
+        call: "truncate"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030550"
+        call: "ftruncate"
+        extra_fields: "-F exit=-EACCES"
+        key: "access"
+      - id: "030550"
+        call: "ftruncate"
+        extra_fields: "-F exit=-EPERM"
+        key: "access"
+      - id: "030740"
+        call: "mount"
+        key: "privileged-mount"
+      - id: "030819"
+        call: "create_module"
+        include_all_auids: yes
+        key: "module-change"
+      - id: "030820"
+        call: "init_module"
+        include_all_auids: yes
+        key: "module-change"
+      - id: "030821"
+        call: "finit_module"
+        include_all_auids: yes
+        key: "module-change"
+      - id: "030830"
+        call: "delete_module"
+        include_all_auids: yes
+        key: "module-change"
+      - id: "030880"
+        call: "rename"
+        key: "delete"
+      - id: "030890"
+        call: "renameat"
+        key: "delete"
+      - id: "030900"
+        call: "rmdir"
+        key: "delete"
+      - id: "030910"
+        call: "unlink"
+        key: "delete"
+      - id: "030920"
+        call: "unlinkat"
+        key: "delete"
   tags:
-  - audit-rules
+      - audit-rules
 
 - name: "MEDIUM | Auditing commands"
   include_tasks: audit_command.yml
   with_items:
-  - id: "030560"
-    path: "/usr/sbin/semanage"
-    key: "privileged-priv_change"
-    no_perm_x_filter: true
-  - id: "030570"
-    path: "/usr/sbin/setsebool"
-    key: "privileged-priv_change"
-    no_perm_x_filter: true
-  - id: "030580"
-    path: "/usr/bin/chcon"
-    key: "privileged-priv_change"
-    no_perm_x_filter: true
-  - id: "030590"
-    path: "/usr/sbin/setfiles"
-    key: "privileged-priv_change"
-    no_perm_x_filter: true
-  - id: "030630"
-    path: "/usr/bin/passwd"
-    key: "privileged-passwd"
-  - id: "030640"
-    path: "/usr/sbin/unix_chkpwd"
-    key: "privileged-passwd"
-    no_perm_x_filter: true
-  - id: "030650"
-    path: "/usr/bin/gpasswd"
-    key: "privileged-passwd"
-  - id: "030660"
-    path: "/usr/bin/chage"
-    key: "privileged-passwd"
-  - id: "030670"
-    path: "/usr/sbin/userhelper"
-    key: "privileged-passwd"
-  - id: "030680"
-    path: "/usr/bin/su"
-    key: "privileged-priv_change"
-    no_perm_x_filter: true
-  - id: "030690"
-    path: "/usr/bin/sudo"
-    key: "privileged-priv_change"
-    no_perm_x_filter: true
-  - id: "030710"
-    path: "/usr/bin/newgrp"
-    key: "privileged-priv_change"
-    no_perm_x_filter: true
-  - id: "030720"
-    path: "/usr/bin/chsh"
-    key: "privileged-priv_change"
-    no_perm_x_filter: true
-  - id: "030740"
-    path: "/usr/bin/mount"
-    key: "privileged-mount"
-    no_perm_x_filter: true
-  - id: "030750"
-    path: "/usr/bin/umount"
-    key: "privileged-mount"
-    no_perm_x_filter: true
-  - id: "030760"
-    path: "/usr/sbin/postdrop"
-    key: "privileged-postfix"
-    no_perm_x_filter: true
-  - id: "030770"
-    path: "/usr/sbin/postqueue"
-    key: "privileged-postfix"
-    no_perm_x_filter: true
-  - id: "030780"
-    path: "/usr/libexec/openssh/ssh-keysign"
-    key: "privileged-ssh"
-    no_perm_x_filter: true
-  - id: "030800"
-    path: "/usr/bin/crontab"
-    key: "privileged-cron"
-    no_perm_x_filter: true
-  - id: "030810"
-    path: "/usr/sbin/pam_timestamp_check"
-    key: "privileged-pam"
-    no_perm_x_filter: true
-  - id: "030840"
-    path: "/usr/bin/kmod"
-    trivial: yes
-    key: "module-change"
+      - id: "030560"
+        path: "/usr/sbin/semanage"
+        key: "privileged-priv_change"
+        no_perm_x_filter: true
+      - id: "030570"
+        path: "/usr/sbin/setsebool"
+        key: "privileged-priv_change"
+        no_perm_x_filter: true
+      - id: "030580"
+        path: "/usr/bin/chcon"
+        key: "privileged-priv_change"
+        no_perm_x_filter: true
+      - id: "030590"
+        path: "/usr/sbin/setfiles"
+        key: "privileged-priv_change"
+        no_perm_x_filter: true
+      - id: "030630"
+        path: "/usr/bin/passwd"
+        key: "privileged-passwd"
+      - id: "030640"
+        path: "/usr/sbin/unix_chkpwd"
+        key: "privileged-passwd"
+        no_perm_x_filter: true
+      - id: "030650"
+        path: "/usr/bin/gpasswd"
+        key: "privileged-passwd"
+      - id: "030660"
+        path: "/usr/bin/chage"
+        key: "privileged-passwd"
+      - id: "030670"
+        path: "/usr/sbin/userhelper"
+        key: "privileged-passwd"
+      - id: "030680"
+        path: "/usr/bin/su"
+        key: "privileged-priv_change"
+        no_perm_x_filter: true
+      - id: "030690"
+        path: "/usr/bin/sudo"
+        key: "privileged-priv_change"
+        no_perm_x_filter: true
+      - id: "030710"
+        path: "/usr/bin/newgrp"
+        key: "privileged-priv_change"
+        no_perm_x_filter: true
+      - id: "030720"
+        path: "/usr/bin/chsh"
+        key: "privileged-priv_change"
+        no_perm_x_filter: true
+      - id: "030740"
+        path: "/usr/bin/mount"
+        key: "privileged-mount"
+        no_perm_x_filter: true
+      - id: "030750"
+        path: "/usr/bin/umount"
+        key: "privileged-mount"
+        no_perm_x_filter: true
+      - id: "030760"
+        path: "/usr/sbin/postdrop"
+        key: "privileged-postfix"
+        no_perm_x_filter: true
+      - id: "030770"
+        path: "/usr/sbin/postqueue"
+        key: "privileged-postfix"
+        no_perm_x_filter: true
+      - id: "030780"
+        path: "/usr/libexec/openssh/ssh-keysign"
+        key: "privileged-ssh"
+        no_perm_x_filter: true
+      - id: "030800"
+        path: "/usr/bin/crontab"
+        key: "privileged-cron"
+        no_perm_x_filter: true
+      - id: "030810"
+        path: "/usr/sbin/pam_timestamp_check"
+        key: "privileged-pam"
+        no_perm_x_filter: true
+      - id: "030840"
+        path: "/usr/bin/kmod"
+        trivial: yes
+        key: "module-change"
   tags:
-  - audit-rules
+      - audit-rules
 
 - name: "MEDIUM | Auditing files"
   include_tasks: audit_file.yml
   with_items:
-  - id: "030610"
-    path: "/var/run/faillock"
-    description: "unsuccessful account access events"
-    key: "logins"
-  - id: "030620"
-    path: "/var/log/lastlog"
-    description: "successful account access events"
-    key: "logins"
-  - id: "030700"
-    path: "/etc/sudoers"
-    description: "modifications to sudoers"
-    key: "privileged-actions"
-  - id: "030700"
-    path: "/etc/sudoers.d/"
-    description: "modifications to sudoers"
-    key: "privileged-actions"
-  - id: "030870"
-    path: "/etc/passwd"
-    description: "account creations, modifications, disabling, and termination events that affect /etc/passwd"
-    key: "identity"
-  - id: "030871"
-    path: "/etc/group"
-    description: "account creations, modifications, disabling, and termination events that affect /etc/group"
-    key: "identity"
-  - id: "030872"
-    path: "/etc/gshadow"
-    description: "account creations, modifications, disabling, and termination events that affect /etc/gshadow"
-    key: "identity"
-  - id: "030873"
-    path: "/etc/shadow"
-    description: "account creations, modifications, disabling, and termination events that affect /etc/shadow"
-    key: "identity"
-  - id: "030874"
-    path: "/etc/security/opasswd"
-    description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd"
-    key: "identity"
+      - id: "030610"
+        path: "/var/run/faillock"
+        description: "unsuccessful account access events"
+        key: "logins"
+      - id: "030620"
+        path: "/var/log/lastlog"
+        description: "successful account access events"
+        key: "logins"
+      - id: "030700"
+        path: "/etc/sudoers"
+        description: "modifications to sudoers"
+        key: "privileged-actions"
+      - id: "030700"
+        path: "/etc/sudoers.d/"
+        description: "modifications to sudoers"
+        key: "privileged-actions"
+      - id: "030870"
+        path: "/etc/passwd"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/passwd"
+        key: "identity"
+      - id: "030871"
+        path: "/etc/group"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/group"
+        key: "identity"
+      - id: "030872"
+        path: "/etc/gshadow"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/gshadow"
+        key: "identity"
+      - id: "030873"
+        path: "/etc/shadow"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/shadow"
+        key: "identity"
+      - id: "030874"
+        path: "/etc/security/opasswd"
+        description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd"
+        key: "identity"
   tags:
-  - audit-rules
+      - audit-rules
 
 # - name: "MEDIUM | RHEL-07-031000 | PATCH | The Red Hat Enterprise Linux operating system must send rsyslog output to a log aggregation server."
 #   blockinfile:
