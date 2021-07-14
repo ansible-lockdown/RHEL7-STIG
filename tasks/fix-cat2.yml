@@ -591,7 +591,6 @@
         with_items:
             - "{{ rhel_07_010270_audit.results }}"
         when: item.rc == 1
-
   when: 
       - rhel_07_010270
   tags:
@@ -621,281 +620,337 @@
       - V-204423
       - pwquality
 
-# - name: "MEDIUM | RHEL-07-010310 | PATCH | The Red Hat Enterprise Linux operating system must disable account identifiers (individuals, groups, roles, and devices) if the password expires."
-#   lineinfile:
-#     dest: /etc/default/useradd
-#     regexp: ^#?INACTIVE
-#     line: INACTIVE=0
-#   when: 
-#   - rhel_07_010310
-#   tags:
-#   - RHEL-07-010310
+- name: "MEDIUM | RHEL-07-010310 | PATCH | The Red Hat Enterprise Linux operating system must disable account identifiers (individuals, groups, roles, and devices) if the password expires."
+  lineinfile:
+      dest: /etc/default/useradd
+      regexp: ^#?INACTIVE
+      line: INACTIVE=0
+  when: 
+      - rhel_07_010310
+  tags:
+      - RHEL-07-010310
+      - CAT2
+      - CCI-000795
+      - SRG-OS-000118-GPOS-00060
+      - SV-204426r603261_rule
+      - V-20442
+      - accounts
 
-# - name: |
-#     "MEDIUM | RHEL-07-010320 | Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period."
-#     "MEDIUM | RHEL-07-010330 | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-#   block:
-#   - name: |
-#       "MEDIUM | RHEL-07-010320 | PATCH | Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period."
-#       "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-#     pamd:
-#       name: "{{ item }}"
-#       state: before
-#       type: auth
-#       control: sufficient
-#       module_path: pam_unix.so
-#       new_type: auth
-#       new_control: required
-#       new_module_path: pam_faillock.so
-#     with_items:
-#     - "system-auth"
-#     - "password-auth"
+- name: |
+    "MEDIUM | RHEL-07-010320 | The Red Hat Enterprise Linux operating system must be configured to lock accounts for a minimum of 15 minutes after three unsuccessful logon attempts within a 15-minute timeframe."
+    "MEDIUM | RHEL-07-010330 | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+  block:
+  - name: |
+      "MEDIUM | RHEL-07-010320 | PATCH | The Red Hat Enterprise Linux operating system must be configured to lock accounts for a minimum of 15 minutes after three unsuccessful logon attempts within a 15-minute timeframe."
+      "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+    pamd:
+        name: "{{ item }}"
+        state: before
+        type: auth
+        control: sufficient
+        module_path: pam_unix.so
+        new_type: auth
+        new_control: required
+        new_module_path: pam_faillock.so
+    with_items:
+        - "system-auth"
+        - "password-auth"
 
-#     # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
-# #  - name: |
-# #      "MEDIUM | RHEL-07-010320 | AUDIT | Check for existing account lockout settings"
-# #      "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
-# #    command: "grep -iE '^auth\\s+required\\s+pam_faillock.so\\s+preauth\\s+silent\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
-# #    check_mode: no
-# #    changed_when: no
-# #    failed_when: rhel_07_010320_010330_preauth_audit.rc > 1
-# #    register: rhel_07_010320_010330_preauth_audit
-# #    with_items:
-# #    - "system-auth"
-# #    - "password-auth"
+    # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+#  - name: |
+#      "MEDIUM | RHEL-07-010320 | AUDIT | Check for existing account lockout settings"
+#      "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
+#    command: "grep -iE '^auth\\s+required\\s+pam_faillock.so\\s+preauth\\s+silent\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
+#    check_mode: no
+#    changed_when: no
+#    failed_when: rhel_07_010320_010330_preauth_audit.rc > 1
+#    register: rhel_07_010320_010330_preauth_audit
+#    with_items:
+#    - "system-auth"
+#    - "password-auth"
 
-#   # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
-#   - name: |
-#       "MEDIUM | RHEL-07-010320 | PATCH | Accounts on the Red Hat Enterprise Linux operating system that are subject to three unsuccessful logon attempts within 15 minutes must be locked for the maximum configurable period."
-#       "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-#     pamd:
-#       name: "{{ item }}"
-#       state: updated
-#       type: auth
-#       control: required
-#       module_path: pam_faillock.so
-#       module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
-#     with_items:
-#     - "system-auth"
-#     - "password-auth"    
+  # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
+  - name: |
+      "MEDIUM | RHEL-07-010320 | PATCH | The Red Hat Enterprise Linux operating system must be configured to lock accounts for a minimum of 15 minutes after three unsuccessful logon attempts within a 15-minute timeframe."
+      "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+    pamd:
+        name: "{{ item }}"
+        state: updated
+        type: auth
+        control: required
+        module_path: pam_faillock.so
+        module_arguments: "preauth silent audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+    with_items:
+        - "system-auth"
+        - "password-auth"    
 
-#   - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-#     pamd:
-#       name: "{{ item }}"
-#       state: before
-#       type: auth
-#       control: required
-#       module_path: pam_deny.so
-#       new_type: auth
-#       new_control: "[default=die]"
-#       new_module_path: pam_faillock.so
-#     with_items:
-#     - "system-auth"
-#     - "password-auth"
+  - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+    pamd:
+        name: "{{ item }}"
+        state: before
+        type: auth
+        control: required
+        module_path: pam_deny.so
+        new_type: auth
+        new_control: "[default=die]"
+        new_module_path: pam_faillock.so
+    with_items:
+        - "system-auth"
+        - "password-auth"
 
-#   # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
-#   #- name: "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
-#   #  command: "grep -iE '^auth\\s+\\[default=die\\]\\s+pam_faillock.so\\s+authfail\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
-#   #  check_mode: no
-#   #  changed_when: no
-#   #  failed_when: rhel_07_010330_authfail_audit.rc > 1
-#   #  register: rhel_07_010330_authfail_audit
-#   #  with_items:
-#   #  - "system-auth"
-#   #  - "password-auth"
+  # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+  #- name: "MEDIUM | RHEL-07-010330 | AUDIT | Check for existing account lockout settings"
+  #  command: "grep -iE '^auth\\s+\\[default=die\\]\\s+pam_faillock.so\\s+authfail\\s+audit\\s+deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }}\\s+unlock_time={{ rhel7stig_pam_faillock.unlock_time }}$' /etc/pam.d/{{ item }}"
+  #  check_mode: no
+  #  changed_when: no
+  #  failed_when: rhel_07_010330_authfail_audit.rc > 1
+  #  register: rhel_07_010330_authfail_audit
+  #  with_items:
+  #  - "system-auth"
+  #  - "password-auth"
 
-#   # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
-#   - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-#     pamd:
-#       name: "{{ item }}"
-#       state: updated
-#       type: auth
-#       control: "[default=die]"
-#       module_path: pam_faillock.so
-#       module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
-#     with_items:
-#     - "system-auth"
-#     - "password-auth"
-# #    when: item.rc == 1
+  # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
+  - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+    pamd:
+        name: "{{ item }}"
+        state: updated
+        type: auth
+        control: "[default=die]"
+        module_path: pam_faillock.so
+        module_arguments: "authfail audit deny={{ rhel7stig_pam_faillock.attempts }}{{ (rhel7stig_pam_faillock.fail_for_root) | ternary(' even_deny_root ',' ') }}fail_interval={{ rhel7stig_pam_faillock.interval }} unlock_time={{ rhel7stig_pam_faillock.unlock_time }}"
+    with_items:
+        - "system-auth"
+        - "password-auth"
+#       when: item.rc == 1
 
-#   - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
-#     pamd:
-#       name: "{{ item }}"
-#       state: before
-#       type: account
-#       control: required
-#       module_path: pam_unix.so
-#       new_type: account
-#       new_control: required
-#       new_module_path: pam_faillock.so
-#     with_items:
-#     - "system-auth"
-#     - "password-auth"
+  - name: "MEDIUM | RHEL-07-010330 | PATCH | The Red Hat Enterprise Linux operating system must lock the associated account after three unsuccessful root logon attempts are made within a 15-minute period."
+    pamd:
+        name: "{{ item }}"
+        state: before
+        type: account
+        control: required
+        module_path: pam_unix.so
+        new_type: account
+        new_control: required
+        new_module_path: pam_faillock.so
+    with_items:
+        - "system-auth"
+        - "password-auth"
 
-#   when: 
-#   - rhel_07_010320 or rhel_07_010330
-#   tags:
-#   - RHEL-07-010320
-#   - RHEL-07-010330
-#   - pamd
+  when: 
+      - rhel_07_010320 or
+        rhel_07_010330
+  tags:
+      - CAT2
+      - RHEL-07-010320
+      - CCI-000044
+      - CCI-002236
+      - CCI-002237
+      - CCI-002238
+      - SRG-OS-000329-GPOS-00128
+      - SV-204427r603824_rule
+      - V-204427
+      - RHEL-07-010330
+      - CCI-002238
+      - SRG-OS-000329-GPOS-00128
+      - SV-204428r603261_rule
+      - V-204428
+      - pamd
 
-# - name: "MEDIUM | RHEL-07-010340 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must provide a password for privilege escalation."
-#   replace:
-#     path: "{{ item }}"
-#     regexp: '^([^#].*)NOPASSWD(.*)'
-#     replace: '\1PASSWD\2'
-#     validate: '/usr/sbin/visudo -cf %s'
-#   with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
-#   when:
-#   - rhel7stig_using_password_auth
-#   - rhel_07_010340
-#   tags:
-#   - RHEL-07-010340
-#   - sudoers
+- name: "MEDIUM | RHEL-07-010340 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must provide a password for privilege escalation."
+  replace:
+      path: "{{ item }}"
+      regexp: '^([^#].*)NOPASSWD(.*)'
+      replace: '\1PASSWD\2'
+      validate: '/usr/sbin/visudo -cf %s'
+  with_items:
+      - "{{ rhel7stig_sudoers_files.stdout_lines }}"
+  when:
+      - rhel7stig_using_password_auth
+      - rhel_07_010340
+  tags:
+      - RHEL-07-010340
+      - CAT2
+      - CCI-002038
+      - SRG-OS-000373-GPOS-00156
+      - SV-204429r603261_rule
+      - V-204429
+      - sudoers
 
-# - name: "MEDIUM | RHEL-07-010350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must re-authenticate for privilege escalation."
-#   replace:
-#     path: "{{ item }}"
-#     regexp: '^([^#].*)!authenticate(.*)'
-#     replace: '\1authenticate\2'
-#     validate: '/usr/sbin/visudo -cf %s'
-#   with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
-#   when:
-#   - rhel_07_010350
-#   - not ansible_distribution == "OracleLinux"
-#   tags:
-#   - RHEL-07-010350
-#   - sudoers
+- name: "MEDIUM | RHEL-07-010350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must re-authenticate for privilege escalation."
+  replace:
+      path: "{{ item }}"
+      regexp: '^([^#].*)!authenticate(.*)'
+      replace: '\1authenticate\2'
+      validate: '/usr/sbin/visudo -cf %s'
+  with_items: "{{ rhel7stig_sudoers_files.stdout_lines }}"
+  when:
+      - rhel_07_010350
+      - not ansible_distribution == "OracleLinux"
+  tags:
+      - RHEL-07-010350
+      - CAT2
+      - CCI-002038
+      - SRG-OS-000373-GPOS-00156
+      - SV-204430r603261_rule
+      - V-204430
+      - sudoers
 
-# - name: "MEDIUM | RHEL-07-010430 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the delay between logon prompts following a failed console logon attempt is at least four seconds."
-#   lineinfile:
-#     dest: /etc/login.defs
-#     regexp: ^#?FAIL_DELAY
-#     line: "FAIL_DELAY {{ rhel7stig_login_defaults.fail_delay_secs | default('4') }}"
-#   when: rhel_07_010430
-#   tags:
-#   - RHEL-07-010430
-#   - login
+- name: "MEDIUM | RHEL-07-010430 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the delay between logon prompts following a failed console logon attempt is at least four seconds."
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: ^#?FAIL_DELAY
+      line: "FAIL_DELAY {{ rhel7stig_login_defaults.fail_delay_secs | default('4') }}"
+  when:
+      - rhel_07_010430
+  tags:
+      - RHEL-07-010430
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00226
+      - SV-204431r603261_rule
+      - V-204431
+      - login
 
-# - name: "MEDIUM | RHEL-07-010460 | PATCH | The Red Hat Enterprise Linux operating system must not allow users to override SSH environment variables."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?PermitUserEnvironment"
-#     line: PermitUserEnvironment no
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_010460
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-010460
-#   - ssh
+- name: "MEDIUM | RHEL-07-010460 | PATCH | The Red Hat Enterprise Linux operating system must not allow users to override SSH environment variables."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?PermitUserEnvironment"
+      line: PermitUserEnvironment no
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel_07_010460
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-010460
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00229
+      - SV-204434r603261_rule
+      - V-204434
+      - ssh
 
-# - name: "MEDIUM | RHEL-07-010470 | PATCH | The Red Hat Enterprise Linux operating system must not allow a non-certificate trusted host SSH logon to the system."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?HostbasedAuthentication"
-#     line: HostbasedAuthentication no
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-010470
-#   - ssh
+- name: "MEDIUM | RHEL-07-010470 | PATCH | The Red Hat Enterprise Linux operating system must not allow a non-certificate trusted host SSH logon to the system."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?HostbasedAuthentication"
+      line: HostbasedAuthentication no
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-010470
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00229
+      - SV-204435r603261_rule
+      - V-204435
+      - ssh
 
-# # TODO: A user can still override the authentication requirement for single user mode in a couple ways that the STIG misses.
-# # This fix block does not check for those methods. i.e.
-# # User can override the rescue.service unit by placing a copy at /etc/systemd/system/rescue.service
-# # User can override some settings of the rescue.service unit by placing the overridden lines in /etc/systemd/system/rescue.service.d/override.conf
-# # Additionally the user can provide the -e or --force options to /usr/sbin/sulogin which will provide a root shell without password if the
-# # password file is inaccessbile or the root password is non-existent, LOCKED, or damaged.
-# - name: "MEDIUM | RHEL-07-010481 | The Red Hat Enterprise Linux operating system must require authentication upon booting into single-user and maintenance modes."
-#   block:
-#   - name: "MEDIUM | RHEL-07-010481 | PATCH | Check if the packaged rescue.service file was edited directly"
-#     shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*/usr/sbin/sulogin'"
-#     changed_when: no
-#     failed_when: no
-#     check_mode: no
-#     register: systemd_rescue_unit_check
+# TODO: A user can still override the authentication requirement for single user mode in a couple ways that the STIG misses.
+# This fix block does not check for those methods. i.e.
+# User can override the rescue.service unit by placing a copy at /etc/systemd/system/rescue.service
+# User can override some settings of the rescue.service unit by placing the overridden lines in /etc/systemd/system/rescue.service.d/override.conf
+# Additionally the user can provide the -e or --force options to /usr/sbin/sulogin which will provide a root shell without password if the
+# password file is inaccessbile or the root password is non-existent, LOCKED, or damaged.
+- name: "MEDIUM | RHEL-07-010481 | The Red Hat Enterprise Linux operating system must require authentication upon booting into single-user and maintenance modes."
+  block:
+      - name: "MEDIUM | RHEL-07-010481 | PATCH | Check if the packaged rescue.service file was edited directly"
+        shell: "cat /usr/lib/systemd/system/rescue.service | grep 'ExecStart=.*/usr/sbin/sulogin'"
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: systemd_rescue_unit_check
 
-#   - name: "MEDIUM | RHEL-07-010481 | PATCH | Force reinstall systemd package to replace edited /usr/lib/systemd/system/rescue.service"
-#     shell: yum -y reinstall systemd
-#     when: systemd_rescue_unit_check.rc == 1
-#   when: 
-#   - rhel_07_010481
-#   tags:
-#   - RHEL-07-010481
-#   - rescue
+      - name: "MEDIUM | RHEL-07-010481 | PATCH | Force reinstall systemd package to replace edited /usr/lib/systemd/system/rescue.service"
+        shell: yum -y reinstall systemd
+        when: systemd_rescue_unit_check.rc == 1
+  when: 
+      - rhel_07_010481
+  tags:
+      - RHEL-07-010481
+      - CAT2
+      - CCI-000213
+      - SRG-OS-000080-GPOS-00048
+      - SV-204437r603261_rule
+      - V-204437
+      - rescue
 
-# - name: "MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
-#   block:
-#   # This task checks to test if pamd is enabled for pkcs11
-#   - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
-#     shell: authconfig --test | grep "pam_pkcs11 is enabled"
-#     register: rhel_07_010500pkcs11output
+- name: "MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
+  block:
+      # This task checks to test if pamd is enabled for pkcs11
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --test | grep "pam_pkcs11 is enabled"
+        register: rhel_07_010500pkcs11output
 
-#   # This task gathers output so we can test if smartcard removal action is enabled
-#   - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
-#     shell: authconfig --test | grep "smartcard removal action"
-#     register: rhel_07_010500scremovaloutput
+      # This task gathers output so we can test if smartcard removal action is enabled
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --test | grep "smartcard removal action"
+        register: rhel_07_010500scremovaloutput
 
-#   # This task gathers output so we can test if smartcard module is enabled
-#   - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
-#     shell: authconfig --test | grep "smartcard module"
-#     register: rhel_07_010500scenabledoutput
+      # This task gathers output so we can test if smartcard module is enabled
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --test | grep "smartcard module"
+        register: rhel_07_010500scenabledoutput
 
-#   # This is to remediate if pam_pkcs11 is not installed.
-#   - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
-#     package:
-#       name: "{{ item }}"
-#       state: present
-#       with_items:
-#       - pam_pkcs11
-#       - pcsc-lite-libs
-#     vars:
-#       ansible_python_interpreter: "{{ python2_bin }}"
-#     register: rhel_07_010500pkcs11install
-#     when: 
-#     - rhel_07_010500pkcs11output.stdout != 'pam_pkcs11 is enabled'
+      # This is to remediate if pam_pkcs11 is not installed.
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        package:
+            name: "{{ item }}"
+            state: present
+            with_items:
+                - pam_pkcs11
+                - pcsc-lite-libs
+        vars:
+              ansible_python_interpreter: "{{ python2_bin }}"
+        register: rhel_07_010500pkcs11install
+        when: 
+            - rhel_07_010500pkcs11output.stdout != 'pam_pkcs11 is enabled'
 
-#   # This task will remediate the smartcard login setting
-#   - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
-#     shell: authconfig --enablesmartcard --smartcardaction=0 --update
-#     when: 
-#     - rhel_07_010500scenabledoutput.stdout == ' smartcard module = \"\"' or rhel_07_010500scremovaloutput.stdout == ' smartcard removal action = \"\"'
+      # This task will remediate the smartcard login setting
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --enablesmartcard --smartcardaction=0 --update
+        when: 
+            - rhel_07_010500scenabledoutput.stdout == ' smartcard module = \"\"' or rhel_07_010500scremovaloutput.stdout == ' smartcard removal action = \"\"'
 
-#   # This task will remediate the smartcard login setting
-#   - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
-#     shell: authconfig --enablerequiresmartcard --update
-#     when: rhel_07_010500scenabledoutput.stdout == ' smartcard module = \"\"' or rhel_07_010500scremovaloutput.stdout == ' smartcard removal action = \"\"'
+      # This task will remediate the smartcard login setting
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        shell: authconfig --enablerequiresmartcard --update
+        when: rhel_07_010500scenabledoutput.stdout == ' smartcard module = \"\"' or rhel_07_010500scremovaloutput.stdout == ' smartcard removal action = \"\"'
 
-#   # This remediates the screensaver settings for smartcard authentication
-#   - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
-#     lineinfile:
-#       create: yes
-#       dest: /etc/pam_pkcs11/pkcs11_eventmgr.conf
-#       regexp: '^#?/usr/X11R6/bin/xscreensaver-command -lock'
-#       line: "/usr/X11R6/bin/xscreensaver-command -lock"
-#       mode: 0644
-  
-#   # This remediates the pam_pkcs11.conf file to enforce the cackey usage for smartcard authentication
-#   ### NOTE:  If you have custom rules for /etc/pam_pkcs11/pam_pkcs11.conf then change the template pam_pkcs11.conf.j2
-#   - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
-#     template:
-#       src: pam_pkcs11.conf.j2
-#       dest: /etc/pam_pkcs11/pam_pkcs11.conf
-#       owner: root
-#       group: root
-#       mode: 0644
-#     when: 
-#     - rhel_07_010500pkcs11install is changed
-#   when:
-#   - rhel_07_010500
-#   - rhel7stig_gui
-#   - rhel7stig_smartcard
-#   tags:
-#   - RHEL-07-010500
+      # This remediates the screensaver settings for smartcard authentication
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        lineinfile:
+            create: yes
+            dest: /etc/pam_pkcs11/pkcs11_eventmgr.conf
+            regexp: '^#?/usr/X11R6/bin/xscreensaver-command -lock'
+            line: "/usr/X11R6/bin/xscreensaver-command -lock"
+            mode: 0644
+      
+      # This remediates the pam_pkcs11.conf file to enforce the cackey usage for smartcard authentication
+      ### NOTE:  If you have custom rules for /etc/pam_pkcs11/pam_pkcs11.conf then change the template pam_pkcs11.conf.j2
+      - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
+        template:
+              src: pam_pkcs11.conf.j2
+              dest: /etc/pam_pkcs11/pam_pkcs11.conf
+              owner: root
+              group: root
+              mode: 0644
+        when: 
+            - rhel_07_010500pkcs11install is changed
+  when:
+      - rhel_07_010500
+      - rhel7stig_gui
+      - rhel7stig_smartcard
+  tags:
+      - RHEL-07-010500
+      - CAT2
+      - CCI-000766
+      - SV-204441r603261_rule
+      - V-204441
+      - authentication
 
 # ##############################
 # #########   20000  ###########
@@ -913,147 +968,167 @@
 #   - RHEL-07-020019
 
 
-# - name: "MEDIUM | RHEL-07-020020 | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-#   block:
-#       # is a HBSS installed?
-#   - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-#     stat:
-#       path: "{{ rhel_07_020020_HBSS_path }}"
-#     register: rhel_07_020020_HBSS_check
-#     when:
-#     - rhel_07_020020
-#     - rhel7stig_disruption_high
-#     - rhel7stig_audit_disruptive
-#     tags:
-#     - RHEL-07-020020
-#       # is a HIPS installed?
-#   - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-#     stat:
-#       path: "{{ rhel_07_020020_HIPS_path }}"
-#     register: rhel_07_020020_HIPS_check
-#     when:
-#     - rhel_07_020020
-#     - rhel7stig_disruption_high
-#     - rhel7stig_audit_disruptive
-#     tags:
-#     - RHEL-07-020020
-  
-#   # This is an include to conditionally loop through users to selinux mappings
-#   - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-#     include_tasks: audit_selinuxlocaluserdefs.yml
-#     when:
-#     - rhel_07_020020
-#     - not rhel_07_020020_HBSS_check.stat.exists and not rhel_07_020020_HIPS_check.stat.exists
-#     - rhel7stig_disruption_high
-#     - rhel7stig_audit_disruptive
-#     tags:
-#     - RHEL-07-020020
-#   when:
-#   - rhel_07_020020
-#   - rhel7stig_disruption_high
-#   - rhel7stig_audit_disruptive
-#   tags:
-#   - RHEL-07-020020
+- name: "MEDIUM | RHEL-07-020020 | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+  block:
+      # is a HBSS installed?
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+        stat:
+            path: "{{ rhel_07_020020_HBSS_path }}"
+        register: rhel_07_020020_HBSS_check
 
-# - name: |
-#     "MEDIUM | RHEL-07-020030 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that a file integrity tool verifies the baseline operating system configuration at least weekly."
-#     "MEDIUM | RHEL-07-020040 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that designated personnel are notified if baseline configurations are changed in an unauthorized manner."
-#   cron:
-#     name: 'Run AIDE integrity check {{ rhel7stig_aide_cron.special_time }}'
-#     user: "{{ rhel7stig_aide_cron.user }}"
-#     cron_file: "{{ rhel7stig_aide_cron.cron_file }}"
-#     job: "{{ rhel7stig_aide_cron.job + ((rhel7stig_aide_cron.notify_by_mail) | ternary(rhel7stig_aide_cron.notify_cmd,'')) }}"
-#     minute: "{{ rhel7stig_aide_cron.minute | default((rhel7stig_cron_special_disable and
-#             rhel7stig_aide_cron.special_time in ['hourly', 'daily', 'weekly', 'monthly']) |
-#             ternary('0', omit)) | default(omit) }}"
-#     hour: "{{ rhel7stig_aide_cron.hour | default((rhel7stig_cron_special_disable and
-#           rhel7stig_aide_cron.special_time in ['daily', 'weekly', 'monthly']) |
-#           ternary('0', omit)) | default(omit) }}"
-#     weekday: "{{ rhel7stig_aide_cron.weekday | default((rhel7stig_cron_special_disable and
-#               rhel7stig_aide_cron.special_time in ['weekly']) |
-#               ternary('0', omit)) | default(omit) }}"
-#     day: "{{ rhel7stig_aide_cron.day | default((rhel7stig_cron_special_disable and
-#           rhel7stig_aide_cron.special_time in ['monthly']) |
-#           ternary('1', omit)) | default(omit) }}"
-#     special_time: "{{ (rhel7stig_cron_special_disable and
-#                   rhel7stig_aide_cron.special_time in ['hourly', 'daily', 'weekly', 'monthly']) |
-#                   ternary(omit, rhel7stig_aide_cron.special_time) }}"
-#   when: 
-#   - rhel_07_020030 or rhel_07_020040
-#   tags:
-#   - RHEL-07-020030
-#   - RHEL-07-020040
-#   - aide
+      # is a HIPS installed?
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+        stat:
+            path: "{{ rhel_07_020020_HIPS_path }}"
+        register: rhel_07_020020_HIPS_check
+      
+      # This is an include to conditionally loop through users to selinux mappings
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+        include_tasks: audit_selinuxlocaluserdefs.yml
+        when: not rhel_07_020020_HBSS_check.stat.exists and not rhel_07_020020_HIPS_check.stat.exists
+  when:
+      - rhel_07_020020
+      - rhel7stig_disruption_high
+      - rhel7stig_audit_disruptive
+  tags:
+      - RHEL-07-020020
+      - CAT2
+      - CCI-002235
+      - CCI-002165
+      - SRG-OS-000324-GPOS-00125
+      - SV-204444r603261_rule
+      - V-204444
 
-# - name: "MEDIUM | RHEL-07-020100 | PATCH | The Red Hat Enterprise Linux operating system must be configured to disable USB mass storage."
-#   lineinfile:
-#     dest: "{{ item.file }}"
-#     insertafter: "{{ item.insertafter }}"
-#     regexp: "{{ item.regexp }}"
-#     line: "{{ item.line }}"
-#     create: yes
-#     owner: root
-#     group: root
-#     mode: "0644"
-#   with_items:
-#   - file: /etc/modprobe.d/blacklist.conf
-#     insertafter: "^#blacklist usb-storage(\\s+|$)"
-#     regexp: "^install usb-storage(\\s+|$)"
-#     line: 'blacklist usb-storage'
-#   - file: /etc/modprobe.d/usb-storage.conf
-#     insertafter: "^#install usb-storage"
-#     regexp: "^install usb-storage"
-#     line: install usb-storage /bin/true
-#   when: 
-#   - rhel_07_020100
-#   tags:
-#   - RHEL-07-020100
-#   - usb_devices
+- name: |
+    "MEDIUM | RHEL-07-020030 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that a file integrity tool verifies the baseline operating system configuration at least weekly."
+    "MEDIUM | RHEL-07-020040 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that designated personnel are notified if baseline configurations are changed in an unauthorized manner."
+  cron:
+      name: 'Run AIDE integrity check {{ rhel7stig_aide_cron.special_time }}'
+      user: "{{ rhel7stig_aide_cron.user }}"
+      cron_file: "{{ rhel7stig_aide_cron.cron_file }}"
+      job: "{{ rhel7stig_aide_cron.job + ((rhel7stig_aide_cron.notify_by_mail) | ternary(rhel7stig_aide_cron.notify_cmd,'')) }}"
+      minute: "{{ rhel7stig_aide_cron.minute | default((rhel7stig_cron_special_disable and
+              rhel7stig_aide_cron.special_time in ['hourly', 'daily', 'weekly', 'monthly']) |
+              ternary('0', omit)) | default(omit) }}"
+      hour: "{{ rhel7stig_aide_cron.hour | default((rhel7stig_cron_special_disable and
+            rhel7stig_aide_cron.special_time in ['daily', 'weekly', 'monthly']) |
+            ternary('0', omit)) | default(omit) }}"
+      weekday: "{{ rhel7stig_aide_cron.weekday | default((rhel7stig_cron_special_disable and
+                rhel7stig_aide_cron.special_time in ['weekly']) |
+                ternary('0', omit)) | default(omit) }}"
+      day: "{{ rhel7stig_aide_cron.day | default((rhel7stig_cron_special_disable and
+            rhel7stig_aide_cron.special_time in ['monthly']) |
+            ternary('1', omit)) | default(omit) }}"
+      special_time: "{{ (rhel7stig_cron_special_disable and
+                    rhel7stig_aide_cron.special_time in ['hourly', 'daily', 'weekly', 'monthly']) |
+                    ternary(omit, rhel7stig_aide_cron.special_time) }}"
+  when: 
+      - rhel_07_020030 or
+        rhel_07_020040
+  tags:
+      - CAT2
+      - RHEL-07-020030
+      - CCI-001744
+      - SRG-OS-000363-GPOS-00150
+      - SV-204445r603261_rule
+      - V-204445
+      - RHEL-07-020040
+      - CCI-001744
+      - SRG-OS-000363-GPOS-00150
+      - SV-204446r603261_rule
+      - V-204446
+      - aide
 
-# - name: "MEDIUM | RHEL-07-020101 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required."
-#   lineinfile:
-#     dest: "{{ item.file }}"
-#     insertafter: "{{ item.insertafter }}"
-#     regexp: "{{ item.regexp }}"
-#     line: "{{ item.line }}"
-#     create: yes
-#     owner: root
-#     group: root
-#     mode: "0644"
-#   with_items:
-#   - file: /etc/modprobe.d/blacklist.conf
-#     insertafter: ^#blacklist dccp
-#     regexp: ^blacklist dccp(\s+|$)
-#     line: blacklist dccp
-#   - file: /etc/modprobe.d/dccp.conf
-#     insertafter: ^#install dccp
-#     regexp: "^install dccp "
-#     line: install dccp /bin/true
-#   when: rhel_07_020101
-#   tags:
-#       - RHEL-07-020101
-#       - dccp
+- name: "MEDIUM | RHEL-07-020100 | PATCH | The Red Hat Enterprise Linux operating system must be configured to disable USB mass storage."
+  lineinfile:
+      dest: "{{ item.file }}"
+      insertafter: "{{ item.insertafter }}"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      create: yes
+      owner: root
+      group: root
+      mode: "0644"
+  with_items:
+      - file: /etc/modprobe.d/blacklist.conf
+        insertafter: "^#blacklist usb-storage(\\s+|$)"
+        regexp: "^install usb-storage(\\s+|$)"
+        line: 'blacklist usb-storage'
+      - file: /etc/modprobe.d/usb-storage.conf
+        insertafter: "^#install usb-storage"
+        regexp: "^install usb-storage"
+        line: install usb-storage /bin/true
+  when: 
+      - rhel_07_020100
+  tags:
+      - RHEL-07-020100
+      - CAT2
+      - CCI-001958
+      - CCI-000778
+      - CCI-000366
+      - SRG-OS-000114-GPOS-00059
+      - SV-204449r603261_rule
+      - V-204449
+      - usb_devices
 
-# - name: "MEDIUM | RHEL-07-020110 | PATCH | The Red Hat Enterprise Linux operating system must disable the file system automounter unless required."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020110 | PATCH | The Red Hat Enterprise Linux operating system must disable the file system automounter unless required."
-#     shell: "systemctl show autofs | grep LoadState | cut -d = -f 2"
-#     register: rhel_07_020110_autofs_service_status
-#     changed_when: no
-#     check_mode: no
+- name: "MEDIUM | RHEL-07-020101 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required."
+  lineinfile:
+      dest: "{{ item.file }}"
+      insertafter: "{{ item.insertafter }}"
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      create: yes
+      owner: root
+      group: root
+      mode: "0644"
+  with_items:
+      - file: /etc/modprobe.d/blacklist.conf
+        insertafter: ^#blacklist dccp
+        regexp: ^blacklist dccp(\s+|$)
+        line: blacklist dccp
+      - file: /etc/modprobe.d/dccp.conf
+        insertafter: ^#install dccp
+        regexp: "^install dccp "
+        line: install dccp /bin/true
+  when:
+      - rhel_07_020101
+  tags:
+      - RHEL-07-020101
+      - CAT2
+      - CCI-001958
+      - SRG-OS-000378-GPOS-00163
+      - SV-204450r603261_rule
+      - V-204450
+      - dccp
 
-#   - name: "MEDIUM | RHEL-07-020110 | PATCH | The Red Hat Enterprise Linux operating system must disable the file system automounter unless required."
-#     service:
-#       name: autofs
-#       enabled: no
-#       state: stopped
-#     when:
-#     - rhel_07_020110_autofs_service_status == "loaded"
-#     - not rhel7stig_autofs_required
-#   when:
-#   - rhel_07_020110
-#   tags:
-#   - RHEL-07-020110
+- name: "MEDIUM | RHEL-07-020110 | PATCH | The Red Hat Enterprise Linux operating system must disable the file system automounter unless required."
+  block:
+      - name: "MEDIUM | RHEL-07-020110 | PATCH | The Red Hat Enterprise Linux operating system must disable the file system automounter unless required."
+        shell: "systemctl show autofs | grep LoadState | cut -d = -f 2"
+        changed_when: false
+        check_mode: false
+        register: rhel_07_020110_autofs_service_status
+
+      - name: "MEDIUM | RHEL-07-020110 | PATCH | The Red Hat Enterprise Linux operating system must disable the file system automounter unless required."
+        service:
+            name: autofs
+            enabled: no
+            state: stopped
+        when:
+            - rhel_07_020110_autofs_service_status == "loaded"
+            - not rhel7stig_autofs_required
+  when:
+      - rhel_07_020110
+  tags:
+      - RHEL-07-020110
+      - CAT2
+      - CCI-001958
+      - CCI-000366
+      - CCI-000778
+      - SRG-OS-000114-GPOS-00059
+      - SV-204451r603261_rule
+      - V-204451
+      - mount
 
 # - name: "MEDIUM | RHEL-07-020111 | PATCH | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
 #   copy:
@@ -1071,41 +1146,66 @@
 #   tags:
 #   - RHEL-07-020111
 
-# - name: "MEDIUM | RHEL-07-020210 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux.|
-#          MEDIUM | RHEL-07-020220 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux targeted policy."
-#   selinux:
-#     state: enforcing
-#     policy: targeted
-#   check_mode: "{{ ansible_check_mode or rhel7stig_system_is_chroot }}"
-#   when:
-#   - rhel_07_020210
-#   - not rhel7stig_system_is_container
-#   tags:
-#   - RHEL-07-020210
-#   - selinux
+- name: |
+    "MEDIUM | RHEL-07-020210 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux."
+    "MEDIUM | RHEL-07-020220 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux targeted policy."
+  selinux:
+      state: enforcing
+      policy: targeted
+  check_mode: "{{ ansible_check_mode or rhel7stig_system_is_chroot }}"
+  when:
+      - rhel_07_020210 or
+        rhel_07_020220
+      - not rhel7stig_system_is_container
+  tags:
+      - CAT2
+      - RHEL-07-020210
+      - CCI-002696
+      - CCI-002165
+      - SRG-OS-000445-GPOS-00199
+      - SV-204453r603261_rule
+      - V-204453
+      - RHEL-07-020220
+      - CCI-002165
+      - CCI-002696
+      - SV-204454r603261_rule
+      - V-204454
+      - selinux
 
 
-# - name: "MEDIUM | RHEL-07-020240 | PATCH | The Red Hat Enterprise Linux operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
-#   lineinfile:
-#     dest: /etc/login.defs
-#     regexp: ^#?UMASK
-#     line: "UMASK {{ rhel7stig_login_defaults.umask | default('077') }}"
-#   when: rhel_07_020240
-#   tags:
-#   - RHEL-07-020240
-#   - login
-#   - umask
+- name: "MEDIUM | RHEL-07-020240 | PATCH | The Red Hat Enterprise Linux operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: ^#?UMASK
+      line: "UMASK {{ rhel7stig_login_defaults.umask | default('077') }}"
+  when:
+      - rhel_07_020240
+  tags:
+      - RHEL-07-020240
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00228
+      - SV-204457r603261_rule
+      - V-204457
+      - login
+      - umask
 
-# - name: "MEDIUM | RHEL-07-020260 | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date."
-#   package:
-#     name: '*'
-#     state: latest
-#   vars:
-#     ansible_python_interpreter: "{{ python2_bin }}"
-#   when: rhel_07_020260
-#   tags:
-#   - RHEL-07-020260
-#   - packaging
+- name: "MEDIUM | RHEL-07-020260 | The Red Hat Enterprise Linux operating system security patches and updates must be installed and up to date."
+  package:
+      name: '*'
+      state: latest
+  vars:
+      ansible_python_interpreter: "{{ python2_bin }}"
+  when:
+      - rhel_07_020260
+  tags:
+      - RHEL-07-020260
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204459r603261_rule
+      - V-204459
+      - packaging
 
 # - name: "MEDIUM | RHEL-07-020270 | AUDIT | The Red Hat Enterprise Linux operating system must not have unnecessary accounts."
 #   block:
