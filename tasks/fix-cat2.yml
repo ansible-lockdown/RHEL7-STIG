@@ -3314,227 +3314,285 @@
 
 - name: "MEDIUM | RHEL-07-040420 | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
   block:
-  - name: "MEDIUM | RHEL-07-040420 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
-    find:
-      paths: /etc/ssh
-      recurse: yes
-      file_type: file
-      patterns: 'ssh_host*_key'
-      hidden: true
-    failed_when: no
-    changed_when: no
-    register: rhel_07_040420_audit
+      - name: "MEDIUM | RHEL-07-040420 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
+        find:
+            paths: /etc/ssh
+            recurse: yes
+            file_type: file
+            patterns: 'ssh_host*_key'
+            hidden: true
+        changed_when: false
+        failed_when: false
+        register: rhel_07_040420_audit
 
-  - name: "MEDIUM | RHEL-07-040420 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
-    file:
-      dest: "{{ item.path }}"
-      mode: a-stx,go-w,o-r
-      state: file
-    with_items: "{{ rhel_07_040420_audit.files | default([]) }}"
+      - name: "MEDIUM | RHEL-07-040420 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
+        file:
+            dest: "{{ item.path }}"
+            mode: a-stx,go-w,o-r
+            state: file
+        with_items:
+            - "{{ rhel_07_040420_audit.files | default([]) }}"
   when:
-  - rhel_07_040420
-  - rhel7stig_ssh_required
+      - rhel_07_040420
+      - rhel7stig_ssh_required
   tags:
-  - RHEL-07-040420
-  - CAT2
-  - CCI-000366
-  - SRG-OS-000480-GPOS-00227
-  - SV-204597r603261_rule
-  - V-204597
-  - ssh
+      - RHEL-07-040420
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204597r603261_rule
+      - V-204597
+      - ssh
 
-# - name: "MEDIUM | RHEL-07-040430 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Generic Security Service Application Program Interface (GSSAPI) authentication unless needed."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?GSSAPIAuthentication"
-#     line: GSSAPIAuthentication no
-#     validate: /usr/sbin/sshd -t -f %s
-#     mode: 0600
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040430
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040430
-#   - ssh
+- name: "MEDIUM | RHEL-07-040430 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Generic Security Service Application Program Interface (GSSAPI) authentication unless needed."
+  lineinfile:
+      create: yes
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?GSSAPIAuthentication"
+      line: GSSAPIAuthentication no
+      validate: /usr/sbin/sshd -t -f %s
+      mode: 0600
+  notify: restart sshd
+  when:
+      - rhel_07_040430
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040430
+      - CAT2
+      - CCI-000318
+      - CCI-001812
+      - CCI-001813
+      - CCI-000368
+      - CCI-001814
+      - SRG-OS-000364-GPOS-00151
+      - SV-204598r603261_rule
+      - V-204598
+      - ssh
 
-# - name: "MEDIUM | RHEL-07-040440 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Kerberos authentication unless needed."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?KerberosAuthentication"
-#     line: KerberosAuthentication no
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040440
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040440
-#   - ssh
+- name: "MEDIUM | RHEL-07-040440 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Kerberos authentication unless needed."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?KerberosAuthentication"
+      line: KerberosAuthentication no
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel_07_040440
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040440
+      - CAT2
+      - CCI-0003680
+      - CCI-001813
+      - CCI-001812
+      - CCI-001814
+      - CCI-000318
+      - SRG-OS-000364-GPOS-00151
+      - SV-204599r603261_rule
+      - V-204599
+      - ssh
 
-# - name: "MEDIUM | RHEL-07-040450 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon performs strict mode checking of home directory configuration files."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?StrictModes"
-#     line: StrictModes yes
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040450
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040450
-#   - ssh
+- name: "MEDIUM | RHEL-07-040450 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon performs strict mode checking of home directory configuration files."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?StrictModes"
+      line: StrictModes yes
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel_07_040450
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040450
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204600r603261_rule
+      - V-204600
+      - ssh
 
-# - name: "MEDIUM | RHEL-07-040460 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon uses privilege separation."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?UsePrivilegeSeparation"
-#     line: UsePrivilegeSeparation sandbox
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040460
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040460
-#   - ssh
+- name: "MEDIUM | RHEL-07-040460 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon uses privilege separation."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?UsePrivilegeSeparation"
+      line: UsePrivilegeSeparation sandbox
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel_07_040460
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040460
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204601r603261_rule
+      - V-204601
+      - ssh
 
-# - name: "MEDIUM | RHEL-07-040470 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow compression or only allows compression after successful authentication."
-#   lineinfile:
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?Compression"
-#     line: Compression no
-#     validate: /usr/sbin/sshd -t -f %s
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040470
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040470
-#   - ssh
+- name: "MEDIUM | RHEL-07-040470 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow compression or only allows compression after successful authentication."
+  lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?Compression"
+      line: Compression no
+      validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  when:
+      - rhel_07_040470
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040470
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204602r603261_rule
+      - V-204602
+      - ssh
 
-# - name: "MEDIUM | RHEL-07-040500 | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-#     package:
-#       name: chrony
-#       state: absent
-#     vars:
-#       ansible_python_interpreter: "{{ python2_bin }}"
-#     when:
-#     - "'chrony' in ansible_facts.packages"
-    
-#   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-#     package:
-#       name: ntp
-#       state: present
-#     vars:
-#       ansible_python_interpreter: "{{ python2_bin }}"
-#     when:
-#     - "'ntp' not in ansible_facts.packages"
+- name: "MEDIUM | RHEL-07-040500 | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+  block:
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        package:
+            name: chrony
+            state: absent
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
+        when: "'chrony' in ansible_facts.packages"
 
-#   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-#     lineinfile:
-#       create: yes
-#       dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
-#       regexp: "{{ item.regexp }}"
-#       line: "{{ item.line }}"
-#       mode: 0600
-#     notify: restart {{ rhel7stig_time_service }}
-#     with_items: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
-#   when:
-#   - rhel7stig_time_service == 'ntpd'
-#   - rhel_07_040500
-#   tags:
-#   - RHEL-07-040500
-#   - ntp
-#   - ntpd
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        package:
+            name: ntp
+            state: present
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
+        when: "'ntp' not in ansible_facts.packages"
 
-# - name: "MEDIUM | RHEL-07-040500 | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-#     package:
-#       name: ntp
-#       state: absent
-#     vars:
-#       ansible_python_interpreter: "{{ python2_bin }}"
-#     when:
-#     - "'ntp' in ansible_facts.packages"
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        lineinfile:
+            create: yes
+            dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
+            regexp: "{{ item.regexp }}"
+            line: "{{ item.line }}"
+            mode: 0600
+        notify: restart {{ rhel7stig_time_service }}
+        with_items:
+            - "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
+  when:
+      - rhel7stig_time_service == 'ntpd'
+      - rhel_07_040500
+  tags:
+      - RHEL-07-040500
+      - CAT2
+      - CCI-001891
+      - CCI-002046
+      - SRG-OS-000355-GPOS-00143
+      - SV-204603r603261_rule
+      - V-204603
+      - ntp
+      - ntpd
 
-#   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-#     package:
-#       name: chrony
-#       state: present
-#     vars:
-#       ansible_python_interpreter: "{{ python2_bin }}"
-#     when:
-#     - "'chrony' not in ansible_facts.packages"
+- name: "MEDIUM | RHEL-07-040500 | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+  block:
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        package:
+            name: ntp
+            state: absent
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
+        when: "'ntp' in ansible_facts.packages"
 
-#   - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-#     replace:
-#       dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
-#       regexp: '^server \S+( \w+)?$'
-#     notify: restart {{ rhel7stig_time_service }}
-#   when:
-#   - rhel7stig_time_service == 'chronyd'
-#   - rhel_07_040500
-#   tags:
-#   - RHEL-07-040500
-#   - chronyd
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        package:
+            name: chrony
+            state: present
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
+        when: "'chrony' not in ansible_facts.packages"
 
-# - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
-#   blockinfile:
-#     insertbefore: BOF
-#     dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
-#     block: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].block }}"
-#     state: present
-#   notify: restart {{ rhel7stig_time_service }}
-#   when:
-#   - rhel7stig_time_service == 'chronyd'
-#   - rhel_07_040500
-#   tags:
-#   - RHEL-07-040500
-#   - chronyd
+      - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+        replace:
+            dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
+            regexp: '^server \S+( \w+)?$'
+        notify: restart {{ rhel7stig_time_service }}
+  when:
+      - rhel7stig_time_service == 'chronyd'
+      - rhel_07_040500
+  tags:
+      - RHEL-07-040500
+      - chronyd
 
-# - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces."
-#   package:
-#     name: "{{ rhel7stig_firewall_service }}"
-#     state: present
-#   vars:
-#       ansible_python_interpreter: "{{ python2_bin }}"
-#   when: 
-#   - rhel_07_040520
-#   tags:
-#       - RHEL-07-040520
-#       - firewall
+- name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
+  blockinfile:
+      insertbefore: BOF
+      dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
+      block: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].block }}"
+      state: present
+  notify: restart {{ rhel7stig_time_service }}
+  when:
+      - rhel7stig_time_service == 'chronyd'
+      - rhel_07_040500
+  tags:
+      - RHEL-07-040500
+      - CAT2
+      - CCI-001891
+      - CCI-002046
+      - SRG-OS-000355-GPOS-00143
+      - SV-204603r603261_rule
+      - V-204603
+      - chronyd
 
-# - name: "MEDIUM | RHEL-07-040610 | PATCH | The Red Hat Enterprise Linux operating system must not forward Internet Protocol version 4 (IPv4) source-routed packets."
-#   sysctl:
-#     name: net.ipv4.conf.all.accept_source_route
-#     state: present
-#     value: '0'
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     ignoreerrors: yes
-#   when: 
-#   - rhel_07_040610
-#   tags:
-#   - RHEL-07-040610
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
+  package:
+      name: "{{ rhel7stig_firewall_service }}"
+      state: present
+  vars:
+      ansible_python_interpreter: "{{ python2_bin }}"
+  when:
+      - rhel_07_040520
+  tags:
+      - RHEL-07-040520
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204604r603261_rule
+      - V-204604
+      - firewall
 
-# - name: "MEDIUM | RHEL-07-040611 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible on all interfaces."
-#   sysctl:
-#     name: net.ipv4.conf.all.rp_filter
-#     value: '1'
-#     state: present
-#     reload: "{{ ol7stig_sysctl_reload }}"
-#   when:
-#   - rhel_07_040611
-#   tags:
-#   - RHEL-07-040611
-#   - sysctl
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040610 | PATCH | The Red Hat Enterprise Linux operating system must not forward Internet Protocol version 4 (IPv4) source-routed packets."
+  sysctl:
+      name: net.ipv4.conf.all.accept_source_route
+      state: present
+      value: '0'
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when:
+      - rhel_07_040610
+  tags:
+      - RHEL-07-040610
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204609r603261_rule
+      - V-204609
+      - ipv4
+
+- name: "MEDIUM | RHEL-07-040611 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible on all interfaces."
+  sysctl:
+      name: net.ipv4.conf.all.rp_filter
+      value: '1'
+      state: present
+      reload: "{{ ol7stig_sysctl_reload }}"
+  when:
+      - rhel_07_040611
+  tags:
+      - RHEL-07-040611
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204610r603261_rule
+      - V-204610
+      - sysctl
+      - ipv4
 
 # - name: "MEDIUM | RHEL-07-040612 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible by default."
 #   sysctl:
