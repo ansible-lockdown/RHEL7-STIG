@@ -377,187 +377,249 @@
       - V-204413
       - pwquality
 
-# - name: "MEDIUM | RHEL-07-010190 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed the number of repeating characters of the same character class must not be more than four characters."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/security/pwquality.conf
-#     regexp: '^#?\s*maxclassrepeat'
-#     line: "maxclassrepeat = {{ rhel7stig_password_complexity.maxclassrepeat | default('4') }}"
-#     mode: 0644
-#   when: rhel_07_010190
-#   tags:
-#   - RHEL-07-010190
-#   - pwquality
+- name: "MEDIUM | RHEL-07-010190 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed the number of repeating characters of the same character class must not be more than four characters."
+  lineinfile:
+      create: yes
+      dest: /etc/security/pwquality.conf
+      regexp: '^#?\s*maxclassrepeat'
+      line: "maxclassrepeat = {{ rhel7stig_password_complexity.maxclassrepeat | default('4') }}"
+      mode: 0644
+  when:
+      - rhel_07_010190
+  tags:
+      - RHEL-07-010190
+      - CAT2
+      - CCI-000195
+      - SRG-OS-000072-GPOS-00040
+      - SV-204414r603261_rule
+      - V-204414
+      - pwquality
 
-# - name: "MEDIUM | RHEL-07-010200 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the PAM system service is configured to store only encrypted representations of passwords."
-#   pamd:
-#     name: "{{ item[0] }}"
-#     state: "{{ item[1].state }}"
-#     type: password
-#     control: sufficient
-#     module_path: pam_unix.so
-#     module_arguments: "{{ item[1].args }}"
-#   with_nested:
-#   - [ 'system-auth', 'password-auth' ]
-#   -
-#     - state: args_present
-#       args:
-#       - "sha512"
-#     - state: args_absent
-#       args:
-#       - "md5"
-#       - "bigcrypt"
-#       - "sha256"
-#       - "blowfish"
-#   when: rhel_07_010200
-#   tags:
-#   - RHEL-07-010200
-#   - pamd
+- name: "MEDIUM | RHEL-07-010200 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the PAM system service is configured to store only encrypted representations of passwords."
+  pamd:
+      name: "{{ item[0] }}"
+      state: "{{ item[1].state }}"
+      type: password
+      control: sufficient
+      module_path: pam_unix.so
+      module_arguments: "{{ item[1].args }}"
+  with_nested:
+      - [ 'system-auth', 'password-auth' ]
+      -
+          - state: args_present
+            args:
+            - "sha512"
+          - state: args_absent
+            args:
+            - "md5"
+            - "bigcrypt"
+            - "sha256"
+            - "blowfish"
+  when:
+      - rhel_07_010200
+  tags:
+      - RHEL-07-010200
+      - CAT2
+      - CCI-000196
+      - SRG-OS-000073-GPOS-00041
+      - SV-204415r603261_rule
+      - V-204415
+      - pamd
 
-# - name: "MEDIUM | RHEL-07-010210 | PATCH | The Red Hat Enterprise Linux operating system must be configured to use the shadow file to store only encrypted representations of passwords."
-#   lineinfile:
-#     dest: /etc/login.defs
-#     regexp: ^#?ENCRYPT_METHOD
-#     line: "ENCRYPT_METHOD {{ rhel7stig_login_defaults.encrypt_method | default('SHA512') }}"
-#   when: rhel_07_010210
-#   tags:
-#   - RHEL-07-010210
-#   - login
+- name: "MEDIUM | RHEL-07-010210 | PATCH | The Red Hat Enterprise Linux operating system must be configured to use the shadow file to store only encrypted representations of passwords."
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: ^#?ENCRYPT_METHOD
+      line: "ENCRYPT_METHOD {{ rhel7stig_login_defaults.encrypt_method | default('SHA512') }}"
+  when:
+      - rhel_07_010210
+  tags:
+      - RHEL-07-010210
+      - CAT2
+      - CCI-000196
+      - SRG-OS-000073-GPOS-00041
+      - SV-204416r603261_rule
+      - V-204416
+      - login
 
-# - name: "MEDIUM | RHEL-07-010220 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that user and group account administration utilities are configured to store only encrypted representations of passwords."
-#   lineinfile:
-#     dest: /etc/libuser.conf
-#     regexp: ^#?crypt_style
-#     line: crypt_style = sha512
-#   when: rhel_07_010220
-#   tags:
-#   - RHEL-07-010220
+- name: "MEDIUM | RHEL-07-010220 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that user and group account administration utilities are configured to store only encrypted representations of passwords."
+  lineinfile:
+      dest: /etc/libuser.conf
+      regexp: ^#?crypt_style
+      line: crypt_style = sha512
+  when:
+      - rhel_07_010220
+  tags:
+      - RHEL-07-010220
+      - CAT2
+      - CCI-000196
+      - SRG-OS-000073-GPOS-00041
+      - SV-204417r603261_rule
+      - V-204417
+      - login
 
-# - name: "MEDIUM | RHEL-07-010230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords for new users are restricted to a 24 hours/1 day minimum lifetime."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/login.defs
-#     regexp: ^#?PASS_MIN_DAYS
-#     line: "PASS_MIN_DAYS {{ rhel7stig_login_defaults.pass_min_days | default('1') }}"
-#     mode: 0644
-#   when: rhel_07_010230
-#   tags:
-#   - RHEL-07-010230
-#   - login
+- name: "MEDIUM | RHEL-07-010230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords for new users are restricted to a 24 hours/1 day minimum lifetime."
+  lineinfile:
+      create: yes
+      dest: /etc/login.defs
+      regexp: ^#?PASS_MIN_DAYS
+      line: "PASS_MIN_DAYS {{ rhel7stig_login_defaults.pass_min_days | default('1') }}"
+      mode: 0644
+  when:
+      - rhel_07_010230
+  tags:
+      - RHEL-07-010230
+      - CAT2
+      - CCI-000198
+      - SRG-OS-000075-GPOS-00043
+      - SV-204418r603261_rule
+      - V-204418
+      - login
 
-# - name: "MEDIUM | RHEL-07-010240 | The Red Hat Enterprise Linux operating system must be configured so that passwords are restricted to a 24 hours/1 day minimum lifetime."
-#   block:
-#   - name: "MEDIUM | RHEL-07-010240 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-#     command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $4 < 1 {print $1}' /etc/shadow"
-#     check_mode: no
-#     changed_when: no
-#     register: rhel_07_010240_audit
+- name: "MEDIUM | RHEL-07-010240 | The Red Hat Enterprise Linux operating system must be configured so that passwords are restricted to a 24 hours/1 day minimum lifetime."
+  block:
+      - name: "MEDIUM | RHEL-07-010240 | AUDIT | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
+        command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $4 < 1 {print $1}' /etc/shadow"
+        check_mode: false
+        changed_when: false
+        register: rhel_07_010240_audit
 
-#   - name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
-#     command: chage -m 1 {{ item }}
-#     with_items: "{{ rhel_07_010240_audit.stdout_lines }}"
-#   when: rhel_07_010240
-#   tags:
-#   - RHEL-07-010240
-#   - password
+      - name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
+        command: chage -m 1 {{ item }}
+        with_items:
+            - "{{ rhel_07_010240_audit.stdout_lines }}"
+  when:
+      - rhel_07_010240
+  tags:
+      - RHEL-07-010240
+      - CAT2
+      - CCI-000198
+      - SRG-OS-000075-GPOS-00043
+      - SV-204419r603261_rule
+      - V-204419
+      - password
 
-# - name: "MEDIUM | RHEL-07-010250 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords for new users are restricted to a 60-day maximum lifetime."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/login.defs
-#     regexp: ^#?PASS_MAX_DAYS
-#     line: "PASS_MAX_DAYS {{ rhel7stig_login_defaults.pass_max_days | default('60') }}"
-#     mode: 0644
-#   when: rhel_07_010250
-#   tags:
-#   - RHEL-07-010250
-#   - login
+- name: "MEDIUM | RHEL-07-010250 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords for new users are restricted to a 60-day maximum lifetime."
+  lineinfile:
+      create: yes
+      dest: /etc/login.defs
+      regexp: ^#?PASS_MAX_DAYS
+      line: "PASS_MAX_DAYS {{ rhel7stig_login_defaults.pass_max_days | default('60') }}"
+      mode: 0644
+  when:
+      - rhel_07_010250
+  tags:
+      - RHEL-07-010250
+      - CAT2
+      - CCI-000199
+      - SRG-OS-000076-GPOS-00044
+      - SV-204420r603261_rule
+      - V-204420
+      - login
 
-# - name: "MEDIUM | RHEL-07-010260 | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
-#   block:
-#   - name: "MEDIUM | RHEL-07-010260 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
-#     command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $5 > 60 {print $1}' /etc/shadow"
-#     check_mode: no
-#     changed_when: rhel_07_010260_audit.stdout| length > 0
-#     register: rhel_07_010260_audit
+- name: "MEDIUM | RHEL-07-010260 | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
+  block:
+      - name: "MEDIUM | RHEL-07-010260 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
+        command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $5 > 60 {print $1}' /etc/shadow"
+        check_mode: no
+        changed_when: rhel_07_010260_audit.stdout| length > 0
+        register: rhel_07_010260_audit
 
-#   - name: "MEDIUM | RHEL-07-010260 | PATCH | Reset password timeout to prevent locking out user."
-#     command: chage -d '-1 day' {{ item }}
-#     check_mode: "{{ rhel7stig_disruptive_check_mode }}"
-#     with_items: "{{ rhel_07_010260_audit.stdout_lines }}"
+      - name: "MEDIUM | RHEL-07-010260 | PATCH | Reset password timeout to prevent locking out user."
+        command: chage -d '-1 day' {{ item }}
+        check_mode: "{{ rhel7stig_disruptive_check_mode }}"
+        with_items:
+            - "{{ rhel_07_010260_audit.stdout_lines }}"
 
-#   - name: "MEDIUM | RHEL-07-010260 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
-#     command: chage -M 60 {{ item }}
-#     check_mode: "{{ rhel7stig_disruptive_check_mode }}"
-#     with_items: "{{ rhel_07_010260_audit.stdout_lines }}"
-#   when:
-#   - rhel_07_010260
-#   - rhel7stig_disruptive
-#   tags:
-#   - RHEL-07-010260
-#   - disruption-high
-#   - password
+      - name: "MEDIUM | RHEL-07-010260 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
+        command: chage -M 60 {{ item }}
+        check_mode: "{{ rhel7stig_disruptive_check_mode }}"
+        with_items:
+            - "{{ rhel_07_010260_audit.stdout_lines }}"
+  when:
+      - rhel_07_010260
+      - rhel7stig_disruptive
+  tags:
+      - RHEL-07-010260
+      - CAT2
+      - CCI-000199
+      - SRG-OS-000076-GPOS-00044
+      - SV-204421r603261_rule
+      - V-204421
+      - disruption-high
+      - password
 
-# - name: "MEDIUM | RHEL-07-010270 | The Red Hat Enterprise Linux operating system must be configured so that passwords are prohibited from reuse for a minimum of five generations."
-#   block:
-#   - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory rule exists"
-#     pamd:
-#       name: "{{ item }}"
-#       state: before
-#       type: password
-#       control: sufficient
-#       module_path: pam_unix.so
-#       new_type: password
-#       new_control: requisite
-#       new_module_path: pam_pwhistory.so
-#     with_items:
-#     - "system-auth"
-#     - "password-auth"
+- name: "MEDIUM | RHEL-07-010270 | The Red Hat Enterprise Linux operating system must be configured so that passwords are prohibited from reuse for a minimum of five generations."
+  block:
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory rule exists"
+        pamd:
+            name: "{{ item }}"
+            state: before
+            type: password
+            control: sufficient
+            module_path: pam_unix.so
+            new_type: password
+            new_control: requisite
+            new_module_path: pam_pwhistory.so
+        with_items:
+            - "system-auth"
+            - "password-auth"
 
-#   # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
-#   - name: "MEDIUM | RHEL-07-010270 | AUDIT | Check for existing password history reuse settings"
-#     command: "grep -iE '^password\\s+requisite\\s+pam_pwhistory.so\\s+use_authtok\\s+remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}\\s+retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}$' /etc/pam.d/{{ item }}"
-#     check_mode: no
-#     changed_when: no
-#     failed_when: rhel_07_010270_audit.rc > 1
-#     register: rhel_07_010270_audit
-#     with_items:
-#     - "system-auth"
-#     - "password-auth"
+      # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
+      - name: "MEDIUM | RHEL-07-010270 | AUDIT | Check for existing password history reuse settings"
+        command: "grep -iE '^password\\s+requisite\\s+pam_pwhistory.so\\s+use_authtok\\s+remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}\\s+retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}$' /etc/pam.d/{{ item }}"
+        check_mode: false
+        changed_when: false
+        failed_when: rhel_07_010270_audit.rc > 1
+        register: rhel_07_010270_audit
+        with_items:
+            - "system-auth"
+            - "password-auth"
 
-#   # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
-#   - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory module arguments are set"
-#     pamd:
-#       name: "{{ item.item }}"
-#       state: updated
-#       type: password
-#       control: requisite
-#       module_path: pam_pwhistory.so
-#       module_arguments:
-#       - use_authtok
-#       - remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}
-#       - retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}
-#     with_items: "{{ rhel_07_010270_audit.results }}"
-#     when: item.rc == 1
+      # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory module arguments are set"
+        pamd:
+            name: "{{ item.item }}"
+            state: updated
+            type: password
+            control: requisite
+            module_path: pam_pwhistory.so
+            module_arguments:
+                - use_authtok
+                - remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}
+                - retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}
+        with_items:
+            - "{{ rhel_07_010270_audit.results }}"
+        when: item.rc == 1
 
-#   when: 
-#   - rhel_07_010270
-#   tags:
-#   - RHEL-07-010270
-#   - pamd
+  when: 
+      - rhel_07_010270
+  tags:
+      - RHEL-07-010270
+      - CAT2
+      - CCI-000200
+      - SRG-OS-000077-GPOS-00045
+      - SV-204422r603261_rule
+      - V-204422
+      - pamd
 
-# - name: "MEDIUM | RHEL-07-010280 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are a minimum of 15 characters in length."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/security/pwquality.conf
-#     regexp: '^#?\s*minlen'
-#     line: "minlen = {{ rhel7stig_password_complexity.minlen | default('15') }}"
-#     mode: 0644
-#   when: 
-#   - rhel_07_010280
-#   tags:
-#   - RHEL-07-010280
-#   - pwquality
+- name: "MEDIUM | RHEL-07-010280 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are a minimum of 15 characters in length."
+  lineinfile:
+      create: yes
+      dest: /etc/security/pwquality.conf
+      regexp: '^#?\s*minlen'
+      line: "minlen = {{ rhel7stig_password_complexity.minlen | default('15') }}"
+      mode: 0644
+  when: 
+      - rhel_07_010280
+  tags:
+      - RHEL-07-010280
+      - CAT2
+      - CCI-000205
+      - SRG-OS-000078-GPOS-00046
+      - SV-204423r603261_rule
+      - V-204423
+      - pwquality
 
 # - name: "MEDIUM | RHEL-07-010310 | PATCH | The Red Hat Enterprise Linux operating system must disable account identifiers (individuals, groups, roles, and devices) if the password expires."
 #   lineinfile:
