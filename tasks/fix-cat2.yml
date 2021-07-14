@@ -1207,87 +1207,107 @@
       - V-204459
       - packaging
 
-# - name: "MEDIUM | RHEL-07-020270 | AUDIT | The Red Hat Enterprise Linux operating system must not have unnecessary accounts."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020270 | AUDIT | The Red Hat Enterprise Linux operating system must not have unnecessary accounts."
-#     command: "grep '^{{ item }}:' /etc/passwd"
-#     check_mode: no
-#     failed_when: rhel_07_020270_audit.rc > 1
-#     changed_when: rhel_07_020270_audit.rc == 0
-#     register: rhel_07_020270_audit
-#     with_items: "{{ rhel7stig_unnecessary_accounts }}"
+- name: "MEDIUM | RHEL-07-020270 | AUDIT | The Red Hat Enterprise Linux operating system must not have unnecessary accounts."
+  block:
+      - name: "MEDIUM | RHEL-07-020270 | AUDIT | The Red Hat Enterprise Linux operating system must not have unnecessary accounts."
+        command: "grep '^{{ item }}:' /etc/passwd"
+        check_mode: false
+        failed_when: rhel_07_020270_audit.rc > 1
+        changed_when: rhel_07_020270_audit.rc == 0
+        register: rhel_07_020270_audit
+        with_items:
+            - "{{ rhel7stig_unnecessary_accounts }}"
 
-#   - name: "MEDIUM | RHEL-07-020270 | PATCH | The Red Hat Enterprise Linux operating system must not have unnecessary accounts."
-#     user:
-#       name: "{{ item }}"
-#       state: absent
-#       remove: "{{ rhel7stig_remove_unnecessary_user_files }}"
-#     register: rhel_07_020270_patch
-#     with_items: "{{ rhel7stig_unnecessary_accounts }}"
+      - name: "MEDIUM | RHEL-07-020270 | PATCH | The Red Hat Enterprise Linux operating system must not have unnecessary accounts."
+        user:
+            name: "{{ item }}"
+            state: absent
+            remove: "{{ rhel7stig_remove_unnecessary_user_files }}"
+        register: rhel_07_020270_patch
+        with_items:
+            - "{{ rhel7stig_unnecessary_accounts }}"
 
-#   - name: "MEDIUM | RHEL-07-020270 | AUDIT | Re-parse /etc/passwd since it changed."
-#     include_tasks: parse_etc_passwd.yml
-#     vars:
-#       rhel7stig_passwd_tasks: "RHEL-07-020270"
-#     when: rhel_07_020270_patch is changed
-#   when: 
-#   - rhel_07_020270
-#   tags:
-#   - RHEL-07-020270
+      - name: "MEDIUM | RHEL-07-020270 | AUDIT | Re-parse /etc/passwd since it changed."
+        include_tasks: parse_etc_passwd.yml
+        vars:
+            rhel7stig_passwd_tasks: "RHEL-07-020270"
+        when: rhel_07_020270_patch is changed
+  when: 
+      - rhel_07_020270
+  tags:
+      - RHEL-07-020270
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204460r603261_rule
+      - V-204460
+      - accounts
 
-# - name: "MEDIUM | RHEL-07-020320 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020320 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner."
-#     command: find "{{ item.mount }}" -xdev -nouser
-#     check_mode: no
-#     register: rhel_07_020320_audit
-#     failed_when: no
-#     changed_when: no
-#     when: item['device'].startswith('/dev') and not 'bind' in item['options']
-#     with_items: "{{ ansible_mounts }}"
+- name: "MEDIUM | RHEL-07-020320 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner."
+  block:
+      - name: "MEDIUM | RHEL-07-020320 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner."
+        command: find "{{ item.mount }}" -xdev -nouser
+        check_mode: false
+        failed_when: false
+        changed_when: false
+        register: rhel_07_020320_audit
+        with_items:
+            - "{{ ansible_mounts }}"
+        when: item['device'].startswith('/dev') and not 'bind' in item['options']
 
-#   - name: "MEDIUM | RHEL-07-020320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner."
-#     debug:
-#       msg: "Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
-#     changed_when:
-#     - rhel7stig_audit_complex
-#     when:
-#     - item.stdout_lines is defined
-#     - item.stdout_lines | length > 0
-#     with_items: "{{ rhel_07_020320_audit.results }}"
-#   when:
-#   - rhel_07_020320
-#   - rhel7stig_complex
-#   tags:
-#   - RHEL-07-020320
-#   - complexity-high
+      - name: "MEDIUM | RHEL-07-020320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner."
+        debug:
+            msg: "Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        changed_when: rhel7stig_audit_complex
+        with_items:
+            - "{{ rhel_07_020320_audit.results }}"
+        when:
+            - item.stdout_lines is defined
+            - item.stdout_lines | length > 0
+  when:
+      - rhel_07_020320
+      - rhel7stig_complex
+  tags:
+      - RHEL-07-020320
+      - CAT2
+      - CCI-002165
+      - SRG-OS-000480-GPOS-00227
+      - SV-204463r603261_rule
+      - V-204463
+      - complexity-high
 
-# - name: "MEDIUM | RHEL-07-020330 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020330 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner."
-#     command: find "{{ item.mount }}" -xdev -nogroup
-#     check_mode: no
-#     register: rhel_07_020330_audit
-#     failed_when: no
-#     changed_when: no
-#     when: item['device'].startswith('/dev') and not 'bind' in item['options']
-#     with_items: "{{ ansible_mounts }}"
+- name: "MEDIUM | RHEL-07-020330 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner."
+  block:
+      - name: "MEDIUM | RHEL-07-020330 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner."
+        command: find "{{ item.mount }}" -xdev -nogroup
+        check_mode: false
+        failed_when: false
+        changed_when: false
+        register: rhel_07_020330_audit
+        with_items:
+            - "{{ ansible_mounts }}"
+        when: item['device'].startswith('/dev') and not 'bind' in item['options']
 
-#   - name: "MEDIUM | RHEL-07-020330 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner."
-#     debug:
-#       msg: "Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
-#     changed_when:
-#     - rhel7stig_audit_complex
-#     when:
-#     - item.stdout_lines is defined
-#     - item.stdout_lines | length > 0
-#     with_items: "{{ rhel_07_020330_audit.results }}"
-#   when:
-#   - rhel_07_020330
-#   - rhel7stig_complex
-#   tags:
-#   - RHEL-07-020330
-#   - complexity-high
+      - name: "MEDIUM | RHEL-07-020330 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner."
+        debug:
+            msg: "Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+        changed_when: rhel7stig_audit_complex
+        with_items:
+            - "{{ rhel_07_020330_audit.results }}"
+        when:
+            - item.stdout_lines is defined
+            - item.stdout_lines | length > 0
+  when:
+      - rhel_07_020330
+      - rhel7stig_complex
+  tags:
+      - RHEL-07-020330
+      - CAT2
+      - CCI-002165
+      - SRG-OS-000480-GPOS-00227
+      - SV-204464r603261_rule
+      - V-204464
+      - complexity-high
 
 # - name: "MEDIUM | RHEL-07-020600 | The Red Hat Enterprise Linux operating system must be configured so that all local interactive users have a home directory assigned in the /etc/passwd file."
 #   block:
@@ -1343,148 +1363,191 @@
 #   - rhel_07_020600
 #   - ansible_distribution_file_variety == "RedHat"
 
-# - name: "MEDIUM | RHEL-07-020610 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user accounts, upon creation, are assigned a home directory."
-#   lineinfile:
-#     dest: /etc/login.defs
-#     regexp: ^#?CREATE_HOME
-#     line: "CREATE_HOME {{ rhel7stig_login_defaults.create_home | default('yes') }}"
-#   when: rhel_07_020610
-#   tags:
-#   - RHEL-07-020610
-#   - login
-#   - home
+- name: "MEDIUM | RHEL-07-020610 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user accounts, upon creation, are assigned a home directory."
+  lineinfile:
+      dest: /etc/login.defs
+      regexp: ^#?CREATE_HOME
+      line: "CREATE_HOME {{ rhel7stig_login_defaults.create_home | default('yes') }}"
+  when:
+      - rhel_07_020610
+  tags:
+      - RHEL-07-020610
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204466r603261_rule
+      - V-204466
+      - login
+      - home
 
-# - name: "MEDIUM | RHEL-07-020620 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are defined in the /etc/passwd file."
-#   file:
-#     path: "{{ item.dir }}"
-#     state: directory
-#   with_items: "{{ rhel7stig_passwd }}"
-#   loop_control:
-#     label: "{{ rhel7stig_passwd_label }}"
-#   when:
-#   - rhel_07_020620
-#   - item.uid >= rhel7stig_int_gid
-#   tags:
-#   - RHEL-07-020620
+- name: "MEDIUM | RHEL-07-020620 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are defined in the /etc/passwd file."
+  file:
+      path: "{{ item.dir }}"
+      state: directory
+  with_items:
+      - "{{ rhel7stig_passwd }}"
+  loop_control:
+      label: "{{ rhel7stig_passwd_label }}"
+  when:
+      - rhel_07_020620
+      - item.uid >= rhel7stig_int_gid
+  tags:
+      - RHEL-07-020620
+      - CAT2
+      - CCI-000366
+      - SV-204467r603826_rule
+      - V-204467
+      - users
 
-# - name: "MEDIUM | RHEL-07-020630 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories have mode 0750 or less permissive."
-#   file:
-#     path: "{{ item.dir }}"
-#     mode: "{{ rhel7stig_homedir_mode }}"
-#     state: directory
-#   with_items: "{{ rhel7stig_passwd }}"
-#   loop_control:
-#     label: "{{ rhel7stig_passwd_label }}"
-#   when:
-#   - rhel_07_020630
-#   - item.uid >= rhel7stig_int_gid
-#   tags:
-#   - RHEL-07-020630
+- name: "MEDIUM | RHEL-07-020630 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories have mode 0750 or less permissive."
+  file:
+      path: "{{ item.dir }}"
+      mode: "{{ rhel7stig_homedir_mode }}"
+      state: directory
+  with_items:
+      - "{{ rhel7stig_passwd }}"
+  loop_control:
+      label: "{{ rhel7stig_passwd_label }}"
+  when:
+      - rhel_07_020630
+      - item.uid >= rhel7stig_int_gid
+  tags:
+      - RHEL-07-020630
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204468r603828_rule
+      - V-204468
+      - users
 
-# - name: "MEDIUM | RHEL-07-020640 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are owned by their respective users."
-#   file:
-#     path: "{{ item.dir }}"
-#     owner: "{{ item.id }}"
-#     state: directory
-#   with_items: "{{ rhel7stig_passwd }}"
-#   loop_control:
-#     label: "{{ rhel7stig_passwd_label }}"
-#   when:
-#   - rhel_07_020640
-#   - item.uid >= rhel7stig_int_gid
-#   tags:
-#   - RHEL-07-020640
+- name: "MEDIUM | RHEL-07-020640 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are owned by their respective users."
+  file:
+      path: "{{ item.dir }}"
+      owner: "{{ item.id }}"
+      state: directory
+  with_items:
+      - "{{ rhel7stig_passwd }}"
+  loop_control:
+      label: "{{ rhel7stig_passwd_label }}"
+  when:
+      - rhel_07_020640
+      - item.uid >= rhel7stig_int_gid
+  tags:
+      - RHEL-07-020640
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204469r603830_rule
+      - V-204469
+      - users
 
-# - name: "MEDIUM | RHEL-07-020650 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are group-owned by the home directory owners primary group."
-#   file:
-#     path: "{{ item.dir }}"
-#     group: "{{ item.gid }}"
-#     state: directory
-#   with_items: "{{ rhel7stig_passwd }}"
-#   loop_control:
-#     label: "{{ rhel7stig_passwd_label }}"
-#   when:
-#   - rhel_07_020650
-#   - item.uid >= rhel7stig_int_gid
-#   tags:
-#   - RHEL-07-020650
+- name: "MEDIUM | RHEL-07-020650 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are group-owned by the home directory owners primary group."
+  file:
+      path: "{{ item.dir }}"
+      group: "{{ item.gid }}"
+      state: directory
+  with_items:
+      - "{{ rhel7stig_passwd }}"
+  loop_control:
+      label: "{{ rhel7stig_passwd_label }}"
+  when:
+      - rhel_07_020650
+      - item.uid >= rhel7stig_int_gid
+  tags:
+      - RHEL-07-020650
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204470r603832_rule
+      - V-204470
+      - users
 
-# - name: "MEDIUM | RHEL-07-020660 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are owned by the owner of the home directory."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020660 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are owned by the owner of the home directory."
-#     command: "{{ find_command_base }} -print -quit"
-#     check_mode: no
-#     changed_when: rhel_07_020660_audit.stdout |length > 0
-#     register: rhel_07_020660_audit
-#     with_items: "{{ rhel7stig_passwd }}"
-#     loop_control:
-#       label: "{{ rhel7stig_passwd_label }}"
-#     when:
-#     - this_item.uid >= rhel7stig_int_gid
-#     vars:
-#       this_item: "{{ item }}"
+- name: "MEDIUM | RHEL-07-020660 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are owned by the owner of the home directory."
+  block:
+      - name: "MEDIUM | RHEL-07-020660 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are owned by the owner of the home directory."
+        command: "{{ find_command_base }} -print -quit"
+        check_mode: false
+        changed_when: rhel_07_020660_audit.stdout |length > 0
+        register: rhel_07_020660_audit
+        with_items: "{{ rhel7stig_passwd }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when: this_item.uid >= rhel7stig_int_gid
+        vars:
+            this_item: "{{ item }}"
 
-#   - name: "MEDIUM | RHEL-07-020660 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are owned by the owner of the home directory."
-#     command: "{{ find_command_base }} -exec chown {{ this_item.uid }} {} +"
-#     with_items: "{{ rhel_07_020660_audit.results }}"
-#     loop_control:
-#       label: "{{ rhel7stig_passwd_label }}"
-#     when:
-#     - item is changed
-#     vars:
-#       this_item: "{{ item.item }}"
-#   vars:
-#     find_command_base: 'find "{{ this_item.dir }}" -mindepth 1
-#            ( -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*" -type f ) -o
-#            -not -user {{ this_item.uid }}'
-#   when: 
-#   - rhel_07_020660
-#   tags:
-#   - RHEL-07-020660
+      - name: "MEDIUM | RHEL-07-020660 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are owned by the owner of the home directory."
+        command: "{{ find_command_base }} -exec chown {{ this_item.uid }} {} +"
+        with_items: "{{ rhel_07_020660_audit.results }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when: item is changed
+        vars:
+            this_item: "{{ item.item }}"
+  vars:
+      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1
+            ( -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*" -type f ) -o
+            -not -user {{ this_item.uid }}'
+  when: 
+      - rhel_07_020660
+  tags:
+      - RHEL-07-020660
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204471r603261_rule
+      - V-204471
+      - users
 
-# - name: "MEDIUM | RHEL-07-020670 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are group-owned by a group of which the home directory owner is a member."
-#   block:
-#   - name: "MEDIUM | RHEL-07-020670 | AUDIT | Get all GIDs for each user."
-#     command: id -G "{{ item.id }}"
-#     check_mode: no
-#     changed_when: no
-#     register: rhel_07_all_gid_audit
-#     with_items: "{{ rhel7stig_passwd }}"
-#     loop_control:
-#       label: "{{ rhel7stig_passwd_label }}"
+- name: "MEDIUM | RHEL-07-020670 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are group-owned by a group of which the home directory owner is a member."
+  block:
+      - name: "MEDIUM | RHEL-07-020670 | AUDIT | Get all GIDs for each user."
+        command: id -G "{{ item.id }}"
+        check_mode: false
+        changed_when: false
+        register: rhel_07_all_gid_audit
+        with_items:
+            - "{{ rhel7stig_passwd }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
 
-#   - name: "MEDIUM | RHEL-07-020670 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are group-owned by a group of which the home directory owner is a member."
-#     command: "{{ find_command_base }} -print -quit"
-#     check_mode: no
-#     changed_when: rhel_07_020670_audit.stdout| length > 0
-#     register: rhel_07_020670_audit
-#     with_items: "{{ rhel_07_all_gid_audit.results }}"
-#     loop_control:
-#       label: "{{ rhel7stig_passwd_label }}"
-#     when:
-#     - this_item.uid >= rhel7stig_int_gid
-#     vars:
-#       this_item: "{{ item.item }}"
-#       this_result: "{{ item }}"
+      - name: "MEDIUM | RHEL-07-020670 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are group-owned by a group of which the home directory owner is a member."
+        command: "{{ find_command_base }} -print -quit"
+        check_mode: false
+        changed_when: rhel_07_020670_audit.stdout| length > 0
+        register: rhel_07_020670_audit
+        with_items:
+            - "{{ rhel_07_all_gid_audit.results }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when: this_item.uid >= rhel7stig_int_gid
+        vars:
+            this_item: "{{ item.item }}"
+            this_result: "{{ item }}"
 
-#   - name: "MEDIUM | RHEL-07-020670 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are group-owned by a group of which the home directory owner is a member."
-#     command: "{{ find_command_base }} -exec chgrp {{ this_item.gid }} {} +"
-#     with_items: "{{ rhel_07_020670_audit.results }}"
-#     loop_control:
-#       label: "{{ rhel7stig_passwd_label }}"
-#     when:
-#     - item is changed
-#     vars:
-#       this_item: "{{ item.item.item }}"
-#       this_result: "{{ item.item }}"
-#   vars:
-#     find_command_base: 'find "{{ this_item.dir }}" -mindepth 1
-#             ( -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*" -type f ) -o
-#             -not -group {{ this_result.stdout.split(" ") | join(" -not -group ") }}'
-#   when: 
-#   - rhel_07_020670
-#   tags:
-#   - RHEL-07-020670
+      - name: "MEDIUM | RHEL-07-020670 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories are group-owned by a group of which the home directory owner is a member."
+        command: "{{ find_command_base }} -exec chgrp {{ this_item.gid }} {} +"
+        with_items: "{{ rhel_07_020670_audit.results }}"
+        loop_control:
+            label: "{{ rhel7stig_passwd_label }}"
+        when: item is changed
+        vars:
+            this_item: "{{ item.item.item }}"
+            this_result: "{{ item.item }}"
+  vars:
+      find_command_base: 'find "{{ this_item.dir }}" -mindepth 1
+              ( -path "{{ this_item.dir }}/.*" -not -path "{{ this_item.dir }}/.*/*" -type f ) -o
+              -not -group {{ this_result.stdout.split(" ") | join(" -not -group ") }}'
+  when: 
+      - rhel_07_020670
+  tags:
+      - RHEL-07-020670
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204472r603261_rule
+      - V-204472
+      - users
 
 # - name: "MEDIUM | RHEL-07-020680 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
 #   block:
