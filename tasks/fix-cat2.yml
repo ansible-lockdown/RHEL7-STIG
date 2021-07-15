@@ -3830,220 +3830,248 @@
 #   - RHEL-07-040711
 #   - ssh
 
-# - name: "MEDIUM | RHEL-07-040720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that if the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon is configured to operate in secure mode."
-#   lineinfile:
-#     path: /etc/xinetd.d/tftp
-#     regexp: "(?i)^.*server_args.*="
-#     line: "\tserver_args\t\t= -s /var/lib/tftpboot"
-#     insertafter: "\tserver\t\t\t="
-#     state: present
-#   register: result
-#   failed_when:
-#   - result is failed
-#   - result.rc != 257
-#   when:
-#   - rhel7stig_tftp_required
-#   - rhel_07_040720
-#   tags:
-#   - RHEL-07-040720
+- name: "MEDIUM | RHEL-07-040720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that if the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon is configured to operate in secure mode."
+  lineinfile:
+      path: /etc/xinetd.d/tftp
+      regexp: "(?i)^.*server_args.*="
+      line: "\tserver_args\t\t= -s /var/lib/tftpboot"
+      insertafter: "\tserver\t\t\t="
+      state: present
+  failed_when:
+      - result is failed
+      - result.rc != 257
+  register: result
+  when:
+      - rhel7stig_tftp_required
+      - rhel_07_040720
+  tags:
+      - RHEL-07-040720
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204623r603261_rule
+      - V-204623
+      - tftp
 
-# - name: "MEDIUM | RHEL-07-040730 | PATCH | The Red Hat Enterprise Linux operating system must not have an X Windows display manager installed unless approved."
-#   package:
-#     name:
-#     - "@x11"
-#     - xorg-x11-server-common
-#     state: absent
-#   vars:
-#     ansible_python_interpreter: "{{ python2_bin }}" 
-#   when:
-#   - not rhel7stig_gui
-#   - rhel_07_040730
-#   tags:
-#   - RHEL-07-040730
-#   - x11
+- name: "MEDIUM | RHEL-07-040730 | PATCH | The Red Hat Enterprise Linux operating system must not have an X Windows display manager installed unless approved."
+  package:
+      name:
+          - "@x11"
+          - xorg-x11-server-common
+      state: absent
+  vars:
+      ansible_python_interpreter: "{{ python2_bin }}"
+  when:
+      - not rhel7stig_gui
+      - rhel_07_040730
+  tags:
+      - RHEL-07-040730
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204624r646847_rule
+      - V-204624
+      - x11
 
-# - name: "MEDIUM | RHEL-07-040740 | PATCH | The Red Hat Enterprise Linux operating system must not be performing packet forwarding unless the system is a router."
-#   sysctl:
-#     name: net.ipv4.ip_forward
-#     state: present
-#     value: '0'
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     ignoreerrors: yes
-#   when:
-#   - not rhel7stig_system_is_router
-#   - rhel_07_040740
-#   tags:
-#   - RHEL-07-040740
-#   - ipv4
+- name: "MEDIUM | RHEL-07-040740 | PATCH | The Red Hat Enterprise Linux operating system must not be performing packet forwarding unless the system is a router."
+  sysctl:
+      name: net.ipv4.ip_forward
+      state: present
+      value: '0'
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when:
+      - not rhel7stig_system_is_router
+      - rhel_07_040740
+  tags:
+      - RHEL-07-040740
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204625r603261_rule
+      - V-204625
+      - ipv4
 
-# - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
-#     shell: cat /etc/fstab | grep nfs
-#     register: rhel_07_040750_nfssec_check
-#     changed_when: false
-#     failed_when: false
-#     check_mode: no
-#     when: 
-#     - rhel_07_040750
-#     tags:
-#     - RHEL-07-040750
+- name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
+  block:
+      - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
+        shell: cat /etc/fstab | grep nfs
+        register: rhel_07_040750_nfssec_check
+        changed_when: false
+        failed_when: false
+        check_mode: false
 
-#   - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
-#     debug:
-#         msg: "There were no applicable NFS mounts found to audit per RHEL-07-040750."
-#     changed_when: true
-#     when:
-#     - rhel_07_040750
-#     - rhel_07_040750_nfssec_check.stdout_lines is not defined
-#     tags:
-#     - RHEL-07-040750
+      - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
+        debug:
+            msg: "There were no applicable NFS mounts found to audit per RHEL-07-040750."
+        changed_when: true
+        when: rhel_07_040750_nfssec_check.stdout_lines is not defined
 
-#   - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
-#     debug:
-#         msg: "The following NFS mount is required to be audited per RHEL-07-040750: {{ item }} - If the system is mounting file systems via NFS and has the sec option without the 'krb5:krb5i:krb5p' settings, the 'sec' option has the 'sys' setting, or the 'sec' option is missing, this is a finding."
-#     with_items:
-#     - "{{ rhel_07_040750_nfssec_check.stdout_lines }}"
-#     changed_when: true
-#     when:
-#     - rhel_07_040750
-#     - rhel_07_040750_nfssec_check.stdout_lines is defined
-#     tags:
-#     - RHEL-07-040750
+      - name: "MEDIUM | RHEL-07-040750 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Network File System (NFS) is configured to use RPCSEC_GSS."
+        debug:
+            msg: "The following NFS mount is required to be audited per RHEL-07-040750: {{ item }} - If the system is mounting file systems via NFS and has the sec option without the 'krb5:krb5i:krb5p' settings, the 'sec' option has the 'sys' setting, or the 'sec' option is missing, this is a finding."
+        changed_when: true
+        with_items:
+            - "{{ rhel_07_040750_nfssec_check.stdout_lines }}"
+        when: rhel_07_040750_nfssec_check.stdout_lines is defined
+  when:
+      - rhel_07_040750
+  tags:
+      - RHEL-07-040750
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204626r603261_rule
+      - V-204626
 
-#   when: 
-#   - rhel_07_040750
-#   tags:
-#   - RHEL-07-040750
+- name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
+  block:
+      - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
+        include_tasks: audit_firewalld.yml
+        when: rhel7stig_firewall_service == "firewalld"
 
-# - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-#   block:
-#   - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-#     include_tasks: audit_firewalld.yml
-#     when:
-#     - rhel_07_040810
-#     - rhel7stig_firewall_service == "firewalld"
-#     tags:
-#     - RHEL-07-040810
-#     - firewall
-  
-#   - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-#     include_tasks: audit_iptables.yml
-#     when:
-#     - rhel_07_040810
-#     - rhel7stig_firewall_service != "firewalld"
-#     tags:
-#     - RHEL-07-040810
-#     - firewall
-  
-#   - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-#     debug:
-#       msg: "Your configured firewall service is {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false. We cannot audit control RHEL-07-040810. Please set the variable rhel7stig_start_firewall_service to true in the defaults file of this role and re-run the playbook."
-#     changed_when: true
-#     when:
-#     - not rhel7stig_start_firewall_service
-#     tags:
-#     - RHEL-07-040810
-#     - firewall
-#   when:
-#   - rhel_07_040810
-#   - rhel7stig_disruptive
-#   tags:
-#   - RHEL-07-040810
-#   - firewall
-#   - disruption-high
+      - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
+        include_tasks: audit_iptables.yml
+        when: rhel7stig_firewall_service != "firewalld"
 
-# - name: "MEDIUM | RHEL-07-040820 | PATCH | The Red Hat Enterprise Linux operating system must not have unauthorized IP tunnels configured."
-#   package:
-#     name:
-#     - libreswan
-#     state: absent
-#   vars:
-#     ansible_python_interpreter: "{{ python2_bin }}"
-#   when: 
-#   - "'libreswan' not in ansible_facts.packages"
-#   - rhel_07_040820
-#   tags:
-#   - RHEL-07-040820
+      - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
+        debug:
+            msg: "Your configured firewall service is {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false. We cannot audit control RHEL-07-040810. Please set the variable rhel7stig_start_firewall_service to true in the defaults file of this role and re-run the playbook."
+        changed_when: true
+        when: not rhel7stig_start_firewall_service
+  when:
+      - rhel_07_040810
+      - rhel7stig_disruptive
+  tags:
+      - RHEL-07-040810
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204628r603261_rule
+      - V-204628
+      - firewall
+      - disruption-high
 
-# - name: "MEDIUM | RHEL-07-040830 | PATCH | The Red Hat Enterprise Linux operating system must not forward IPv6 source-routed packets."
-#   sysctl:
-#     name: net.ipv6.conf.all.accept_source_route
-#     state: present
-#     value: '0'
-#     reload: "{{ rhel7stig_sysctl_reload }}"
-#     ignoreerrors: yes
-#   when: 
-#   - rhel_07_040830
-#   tags:
-#   - RHEL-07-040830
-#   - ipv6
+- name: "MEDIUM | RHEL-07-040820 | PATCH | The Red Hat Enterprise Linux operating system must not have unauthorized IP tunnels configured."
+  package:
+      name:
+          - libreswan
+      state: absent
+  vars:
+      ansible_python_interpreter: "{{ python2_bin }}"
+  when:
+      - "'libreswan' not in ansible_facts.packages"
+      - rhel_07_040820
+  tags:
+      - RHEL-07-040820
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204629r603261_rule
+      - V-204629
 
-# - name: "MEDIUM | RHEL-07-041001 | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
-#   block:
-#   - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
-#     package:
-#       name:
-#       - esc
-#       - authconfig-gtk
-#       state: present
-#     vars:
-#       ansible_python_interpreter: "{{ python2_bin }}"
-#     when: 
-#     - rhel7stig_gui
+- name: "MEDIUM | RHEL-07-040830 | PATCH | The Red Hat Enterprise Linux operating system must not forward IPv6 source-routed packets."
+  sysctl:
+      name: net.ipv6.conf.all.accept_source_route
+      state: present
+      value: '0'
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      ignoreerrors: yes
+  when:
+      - rhel_07_040830
+  tags:
+      - RHEL-07-040830
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204630r603261_rule
+      - V-204630
+      - ipv6
 
-#   - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
-#     package:
-#       name: pam_pkcs11
-#       state: present
-#     vars:
-#       ansible_python_interpreter: "{{ python2_bin }}"
-#     when:
-#     - "'pam_pkcs11' not in ansible_facts.packages"
+- name: "MEDIUM | RHEL-07-041001 | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
+  block:
+      - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
+        package:
+            name:
+                - esc
+                - authconfig-gtk
+            state: present
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
+        when:
+            - rhel7stig_gui
 
-#   when: 
-#   - rhel_07_041001
-#   tags:
-#   - RHEL-07-041001
-#   - multifactor
+      - name: "MEDIUM | RHEL-07-041001 | PATCH | The Red Hat Enterprise Linux operating system must have the required packages for multifactor authentication installed."
+        package:
+            name: pam_pkcs11
+            state: present
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
+        when: "'pam_pkcs11' not in ansible_facts.packages"
+  when:
+      - rhel_07_041001
+  tags:
+      - RHEL-07-041001
+      - CAT2
+      - CCI-001953
+      - CCI-001954
+      - CCI-001948
+      - SRG-OS-000375-GPOS-00160
+      - SV-204631r603261_rule
+      - V-204631
+      - multifactor
 
-# - name: "MEDIUM | RHEL-07-041002 | The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
-#   block:
-#   - name: "MEDIUM | RHEL-07-041002 | AUDIT | Check if pam service is configured in sssd file"
-#     command: 'grep -E "^\s*services\s*=.*pam" /etc/sssd/sssd.conf'
-#     check_mode: no
-#     changed_when:
-#     - sssd_services_check.rc == 1
-#     - not rhel7stig_skip_for_travis
-#     failed_when: no
-#     # todo: only run if sssd installed and config file present
-#     # failed_when: sssd_services_check.rc > 1
-#     register: sssd_services_check
+- name: "MEDIUM | RHEL-07-041002 | The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
+  block:
+      - name: "MEDIUM | RHEL-07-041002 | AUDIT | Check if pam service is configured in sssd file"
+        command: 'grep -E "^\s*services\s*=.*pam" /etc/sssd/sssd.conf'
+        check_mode: false
+        changed_when:
+            - sssd_services_check.rc == 1
+            - not rhel7stig_skip_for_travis
+        failed_when: false
+        # todo: only run if sssd installed and config file present
+        # failed_when: sssd_services_check.rc > 1
+        register: sssd_services_check
 
-#   - name: "MEDIUM | RHEL-07-041002 | PATCH | The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
-#     debug:
-#       msg: "WARNING: SSSD is in use and /etc/sssd/sssd.conf is not configured to use the PAM service (services = nss, pam)"
-#     changed_when:
-#     - rhel7stig_audit_complex
-#     when: sssd_services_check.rc == 1
-#   when:
-#   - rhel7stig_auth_settings.use_sssd
-#   - rhel7stig_complex
-#   - rhel_07_041002
-#   tags:
-#   - RHEL-07-041002
-#   - complexity-high
-#   - sssd
+      - name: "MEDIUM | RHEL-07-041002 | PATCH | The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
+        debug:
+            msg: "WARNING: SSSD is in use and /etc/sssd/sssd.conf is not configured to use the PAM service (services = nss, pam)"
+        changed_when: rhel7stig_audit_complex
+        when: sssd_services_check.rc == 1
+  when:
+      - rhel7stig_auth_settings.use_sssd
+      - rhel7stig_complex
+      - rhel_07_041002
+  tags:
+      - RHEL-07-041002
+      - CAT2
+      - CCI-001948
+      - CCI-001954
+      - CCI-001953
+      - SRG-OS-000375-GPOS-00160
+      - SV-204632r603261_rule
+      - V-204632
+      - complexity-high
+      - sssd
 
-# - name: "MEDIUM | RHEL-07-041003 | The Red Hat Enterprise Linux operating system must implement certificate status checking for PKI authentication."
-#   replace:
-#     path: /etc/pam_pkcs11/pam_pkcs11.conf
-#     regexp: (?im)^([ \t]*cert_policy[ \t]*=(?:[^ \t\n]|[ \t](?!ocsp_on,))*?)(?:[ \t]ocsp_on,[ \t]*)?[ \t]*((?:[^,\n]|,(?![ \t]*ocsp_on,))*?)(?:,[ \t]*ocsp_on)?;$
-#     replace: '\1 ocsp_on, \2;'
-#   when: 
-#   - rhel_07_041003
-#   tags:
-#   - RHEL-07-041003
+- name: "MEDIUM | RHEL-07-041003 | The Red Hat Enterprise Linux operating system must implement certificate status checking for PKI authentication."
+  replace:
+      path: /etc/pam_pkcs11/pam_pkcs11.conf
+      regexp: (?im)^([ \t]*cert_policy[ \t]*=(?:[^ \t\n]|[ \t](?!ocsp_on,))*?)(?:[ \t]ocsp_on,[ \t]*)?[ \t]*((?:[^,\n]|,(?![ \t]*ocsp_on,))*?)(?:,[ \t]*ocsp_on)?;$
+      replace: '\1 ocsp_on, \2;'
+  when:
+      - rhel_07_041003
+  tags:
+      - RHEL-07-041003
+      - CAT2
+      - CCI-001954
+      - CCI-001953
+      - CCI-001948
+      - SRG-OS-000375-GPOS-00160
+      - SV-204633r603261_rule
+      - V-204633
+      - certificates
 
 # - name: "MEDIUM | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
 #   block:
