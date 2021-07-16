@@ -423,8 +423,6 @@ rhel7stig_ssh_required: true
 rhel7stig_ssh_ciphers: "{{ rhel7stig_FIPS_ciphers }}"
 rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
 
-
-
 # RHEL-07-040490
 # If not required, remove vsftpd.
 rhel7stig_vsftpd_required: false
@@ -693,13 +691,12 @@ ol7stig_ipv4_tcp_invalid_ratelimit: 500
 # With this toggle off it will list all world-writable files not owned by system accounts
 rhel7stig_world_write_files_owner_root: false
 
-
 #### Goss Configuration Settings ####
 
 ### Goss binary settings ###
 goss_version:
-  release: v0.3.16
-  checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+    release: v0.3.16
+    checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
 goss_path: /usr/local/bin/
 goss_bin: "{{ goss_path }}goss"
 goss_format: documentation
