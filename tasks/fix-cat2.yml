@@ -3733,8 +3733,8 @@
   lineinfile:
       path: /etc/xinetd.d/tftp
       regexp: "(?i)^.*server_args.*="
-      line: "\tserver_args\t\t= -s /var/lib/tftpboot"
-      insertafter: "\tserver\t\t\t="
+      line: "        server_args             = -s /var/lib/tftpboot"
+      insertafter: "        server_args             ="
       state: present
   failed_when:
       - result is failed
