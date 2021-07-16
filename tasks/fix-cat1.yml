@@ -70,7 +70,7 @@
         command: yum reinstall -y {{ item }}
         args:
             warn: false
-        ignore_errors: true
+        failed_when: false
         with_items:
             - "{{ rhel_07_010020_audit.stdout_lines }}"
         when: rhel_07_010020_audit.stdout_lines | length > 0
@@ -582,7 +582,7 @@
             name: "{{ rhel7stig_av_package.service }}"
             state: "{{ rhel7stig_service_started }}"
             enabled: yes
-        ignore_errors: true
+        failed_when: false
   when:
       - rhel7stig_antivirus_required
       - rhel_07_032000

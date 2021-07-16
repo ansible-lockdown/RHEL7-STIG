@@ -92,19 +92,6 @@
       - V-204397
       - dconf
 
-# - name: "MEDIUM | RHEL-07-010062 | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-enabled setting for the graphical user interface."
-#   copy:
-#     dest: /etc/dconf/db/local.d/locks/session_rhel_07_010062
-#     content: |
-#       /org/gnome/desktop/screensaver/lock-enabled
-#     mode: '0644'
-#   notify: dconf update
-#   when:
-#   - rhel7stig_dconf_available
-#   - rhel_07_010062
-#   tags:
-#   - RHEL-07-010062
-
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The Red Hat Enterprise Linux operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
   copy:
       dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010070
@@ -955,18 +942,6 @@
 # #########   20000  ###########
 # ##############################
 
-# - name: "MEDIUM | RHEL-07-020019 | AUDIT | The Red Hat Enterprise Linux operating system must have a host-based intrusion detection tool installed."
-#   debug:
-#       msg:
-#       - "Please install and enable the latest McAfee HIPS package, available from USCYBERCOM."
-#       - "If the system does not support the McAfee HIPS package, install and enable a supported intrusion detection system application and document its use with the Authorizing Official."
-#   when:
-#   - rhel_07_020019
-#   tags:
-#   - audit
-#   - RHEL-07-020019
-
-
 - name: "MEDIUM | RHEL-07-020020 | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
   block:
       # is a HBSS installed?
@@ -1128,22 +1103,6 @@
       - SV-204451r603261_rule
       - V-204451
       - mount
-
-# - name: "MEDIUM | RHEL-07-020111 | PATCH | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
-#   copy:
-#     dest: /etc/dconf/db/local.d/00-No-Automount
-#     content: |
-#       [org/gnome/desktop/media-handling]
-#       automount=false
-#       automount-open=false
-#       automount-never=true
-#     mode: '0644'
-#   notify: dconf update
-#   when:
-#   - rhel7stig_dconf_available
-#   - rhel_07_020111
-#   tags:
-#   - RHEL-07-020111
 
 - name: |
     "MEDIUM | RHEL-07-020210 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux."
@@ -1981,50 +1940,6 @@
       - SV-204487r603261_rule
       - V-204487
       - disruption-high
-
-# - name: "MEDIUM | RHEL-07-021031 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user."
-#   block:
-#   - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Get world-writable files"
-#     shell: "find {{ item.mount }} -xdev -type d -perm -0002 -uid +999 -print"
-#     changed_when: false
-#     failed_when: false
-#     register: rhel_07_021031_world_writable_files
-#     with_items:
-#     - "{{ ansible_facts.mounts }}"
-
-#   - name: "MEDIUM | RHEL-07-021031 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Flatten results"
-#     set_fact:
-#       rhel_07_021031_world_writable_files_flat: "{{ rhel_07_021031_world_writable_files.results | map(attribute='stdout_lines') | flatten }}"
-
-#   - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | List world-writable files"
-#     debug:
-#       msg:
-#         - "Below are the world-writable files"
-#         - "{{ rhel_07_021031_world_writable_files_flat }}"
-#     when:
-#     - rhel_07_021031_world_writable_files_flat != []
-
-#   - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Alert on no world-writable files"
-#     debug:
-#       msg:
-#         - "Good News! No world-writable files detected"
-#     when:
-#     - rhel_07_021031_world_writable_files_flat == []
-
-#   - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Adjust world-writable files"
-#     file:
-#       path: "{{ item }}"
-#       owner: root
-#     with_items:
-#     - "{{ rhel_07_021031_world_writable_files_flat }}"
-#     when:
-#     - rhel7stig_world_write_files_owner_root
-#     - rhel_07_021031_world_writable_files_flat != []
-#   when:
-#   - rhel_07_021031
-#   tags:
-#   - RHEL-07-021031
-#   - fileperms
 
 - name: "MEDIUM | RHEL-07-021040 | PATCH | The Red Hat Enterprise Linux operating system must set the umask value to 077 for all local interactive user accounts."
   file:
@@ -3814,22 +3729,6 @@
       - V-204622
       - ssh
 
-# - name: "MEDIUM | RHEL-07-040711 | PATCH | The Red Hat Enterprise Linux operating system must prevent remote hosts from connecting to the proxy display."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?X11UseLocalhost"
-#     line: X11UseLocalhost yes
-#     validate: /usr/sbin/sshd -t -f %s
-#     mode: 0600
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040711
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040711
-#   - ssh
-
 - name: "MEDIUM | RHEL-07-040720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that if the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon is configured to operate in secure mode."
   lineinfile:
       path: /etc/xinetd.d/tftp
@@ -4073,52 +3972,336 @@
       - V-204633
       - certificates
 
-# - name: "MEDIUM | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
-#   block:
-#   - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if nmcli command is available"
-#     command: rpm -q NetworkManager
-#     args:
-#       warn: no
-#     check_mode: no
-#     changed_when: no
-#     register: rhel_07_nmcli_available
-#     failed_when: no
+- name: "MEDIUM | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
+  block:
+      - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if nmcli command is available"
+        command: rpm -q NetworkManager
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        args:
+            warn: false
+        register: rhel_07_nmcli_available
 
-#   - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if wifi is enabled"
-#     command: nmcli radio wifi
-#     register: rhel_07_wifi_enabled
-#     check_mode: no
-#     changed_when: rhel_07_wifi_enabled.stdout != "disabled"
-#     when: rhel_07_nmcli_available.rc == 0
+      - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if wifi is enabled"
+        command: nmcli radio wifi
+        changed_when: rhel_07_wifi_enabled.stdout != "disabled"
+        check_mode: false
+        register: rhel_07_wifi_enabled
+        when: rhel_07_nmcli_available.rc == 0
 
-#   - name: "MEDIUM | RHEL-07-041010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
-#     command: nmcli radio wifi off
-#     when: 
-#     - rhel_07_wifi_enabled is changed
-#   when: 
-#   - rhel_07_041010
-#   tags:
-#   - RHEL-07-041010
+      - name: "MEDIUM | RHEL-07-041010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
+        command: nmcli radio wifi off
+        when:
+            - rhel_07_wifi_enabled is changed
+  when:
+      - rhel_07_041010
+  tags:
+      - RHEL-07-041010
+      - CAT2
+      - CCI-001443
+      - CCI-001444
+      - CCI-002418
+      - SRG-OS-000424-GPOS-00188
+      - SV-204634r603261_rule
+      - V-204634
+      - wifi
+      - networking
 
-# - name: "MEDIUM | RHEL-07-910055 | PATCH | The Red Hat Enterprise Linux operating system must protect audit information from unauthorized read, modification, or deletion"
-#   block:
-#   - name: "MEDIUM | RHEL-07-910055 | AUDIT | The Red Hat EnterpriseLinux operating system must protect audit information from unauthorized read, modification, or deletion | Get log files"
-#     find:
-#       paths: /var/log/audit 
-#     register: rhel_07_910055_audit_log_files
+- name: "MEDIUM | RHEL-07-020019 | AUDIT | The Red Hat Enterprise Linux operating system must have a host-based intrusion detection tool installed."
+  debug:
+      msg:
+          - "Please install and enable the latest McAfee HIPS package, available from USCYBERCOM."
+          - "If the system does not support the McAfee HIPS package, install and enable a supported intrusion detection system application and document its use with the Authorizing Official."
+  when:
+      - rhel_07_020019
+  tags:
+      - audit
+      - RHEL-07-020019
+      - CAT2
+      - CCI-001263
+      - SRG-OS-000480-GPOS-00227
+      - SV-214800r603261_rule
+      - V-214800
+      - antivirus
 
-#   - name: "MEDIUM | RHEL-07-910055 | PATCH | The Red Hat EnterpriseLinux operating system must protect audit information from unauthorized read, modification, or deletion | Apply permissions"
-#     file:
-#       path: "{{ item.path }}"
-#       owner: root
-#       group: root
-#       mode: 0600
-#     with_items:
-#     - "{{ rhel_07_910055_audit_log_files.files }}"
-#     when:
-#     - item.mode is not search '(0[4,6]00)'
-#   when:
-#   - rhel_07_910055
-#   tags:
-#   - RHEL-07-910055
-#   - logs
+- name: "MEDIUM | RHEL-07-010062 | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-enabled setting for the graphical user interface."
+  copy:
+      dest: /etc/dconf/db/local.d/locks/session_rhel_07_010062
+      content: |
+        /org/gnome/desktop/screensaver/lock-enabled
+      mode: '0644'
+  notify: dconf update
+  when:
+      - rhel7stig_dconf_available
+      - rhel_07_010062
+  tags:
+      - RHEL-07-010062
+      - CAT2
+      - CCI-001263
+      - SV-214800r603261_rule
+      - V-214800
+      - dconf
+
+- name: "MEDIUM | RHEL-07-020111 | PATCH | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
+  copy:
+      dest: /etc/dconf/db/local.d/00-No-Automount
+      content: |
+        [org/gnome/desktop/media-handling]
+        automount=false
+        automount-open=false
+        automount-never=true
+      mode: '0644'
+  notify: dconf update
+  when:
+      - rhel7stig_dconf_available
+      - rhel_07_020111
+  tags:
+      - RHEL-07-020111
+      - CAT2
+      - CCI-001958
+      - CCI-000778
+      - CCI-000366
+      - SRG-OS-000114-GPOS-00059
+      - SV-219059r603261_rule
+      - V-219059
+      - dconf
+
+- name: "MEDIUM | RHEL-07-021031 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user."
+  block:
+      - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Get world-writable files"
+        shell: "find {{ item.mount }} -xdev -type d -perm -0002 -uid +999 -print"
+        changed_when: false
+        failed_when: false
+        register: rhel_07_021031_world_writable_files
+        with_items:
+            - "{{ ansible_facts.mounts }}"
+
+      - name: "MEDIUM | RHEL-07-021031 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Flatten results"
+        set_fact:
+            rhel_07_021031_world_writable_files_flat: "{{ rhel_07_021031_world_writable_files.results | map(attribute='stdout_lines') | flatten }}"
+
+      - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | List world-writable files"
+        debug:
+            msg:
+                - "Below are the world-writable files"
+                - "{{ rhel_07_021031_world_writable_files_flat }}"
+        when:
+            - rhel_07_021031_world_writable_files_flat != []
+
+      - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Alert on no world-writable files"
+        debug:
+            msg:
+                - "Good News! No world-writable files detected"
+        when:
+            - rhel_07_021031_world_writable_files_flat == []
+
+      - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Adjust world-writable files"
+        file:
+            path: "{{ item }}"
+            owner: root
+        with_items:
+            - "{{ rhel_07_021031_world_writable_files_flat }}"
+        when:
+            - rhel7stig_world_write_files_owner_root
+            - rhel_07_021031_world_writable_files_flat != []
+  when:
+      - rhel_07_021031
+  tags:
+      - RHEL-07-021031
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-228563r606406_rule
+      - V-228563
+      - fileperms
+      - permissions
+
+- name: "MEDIUM | RHEL-07-910055 | PATCH | The Red Hat Enterprise Linux operating system must protect audit information from unauthorized read, modification, or deletion"
+  block:
+      - name: "MEDIUM | RHEL-07-910055 | AUDIT | The Red Hat EnterpriseLinux operating system must protect audit information from unauthorized read, modification, or deletion | Get log files"
+        find:
+            paths: /var/log/audit
+        register: rhel_07_910055_audit_log_files
+
+      - name: "MEDIUM | RHEL-07-910055 | PATCH | The Red Hat EnterpriseLinux operating system must protect audit information from unauthorized read, modification, or deletion | Apply permissions"
+        file:
+            path: "{{ item.path }}"
+            owner: root
+            group: root
+            mode: 0600
+        with_items:
+            - "{{ rhel_07_910055_audit_log_files.files }}"
+        when: item.mode is not search '(0[4,6]00)'
+  when:
+      - rhel_07_910055
+  tags:
+      - RHEL-07-910055
+      - CAT2
+      - CCI-001314
+      - CCI-000162
+      - CCI-000163
+      - CCI-000164
+      - SRG-OS-000057-GPOS-00027
+      - SV-228564r606407_rule
+      - V-228564
+      - logs
+
+- name: "MEDIUM | RHEL-07-040711 | PATCH | The Red Hat Enterprise Linux operating system must prevent remote hosts from connecting to the proxy display."
+  lineinfile:
+      create: yes
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?X11UseLocalhost"
+      line: X11UseLocalhost yes
+      validate: /usr/sbin/sshd -t -f %s
+      mode: 0600
+  notify: restart sshd
+  when:
+      - rhel_07_040711
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040711
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-233307r603301_rule
+      - V-233307
+      - ssh
+
+- name: "MEDIUM | RHEL-07-010341 | PATCH | The Red Hat Enterprise Linux operating system must restrict privilege elevation to authorized personnel."
+  block:
+      - name: "MEDIUM | RHEL-07-010341 | AUDIT | The Red Hat Enterprise Linux operating system must restrict privilege elevation to authorized personnel. | Get ALL settings"
+        shell: grep -iws 'ALL' /etc/sudoers /etc/sudoers.d/* | cut -d":" -f1 | uniq | sort
+        changed_when: false
+        failed_when: false
+        register: rhel_07_010341_sudoers_all
+
+      - name: "MEDIUM | RHEL-07-010341 | PATCH | The Red Hat Enterprise Linux operating system must restrict privilege elevation to authorized personnel. | Remove format 1"
+        lineinfile:
+            path: "{{ item }}"
+            regexp: 'ALL ALL=(ALL) ALL'
+            state: absent
+            validate: '/usr/sbin/visudo -cf %s'
+        with_items:
+            - "{{ rhel_07_010341_sudoers_all.stdout_lines }}"
+        when: rhel_07_010341_sudoers_all.stdout | length > 0
+
+      - name: "MEDIUM | RHEL-07-010341 | PATCH | The Red Hat Enterprise Linux operating system must restrict privilege elevation to authorized personnel. | Remove format 2"
+        lineinfile:
+            path: "{{ item }}"
+            regexp: 'ALL ALL=(ALL:ALL) ALL'
+            state: absent
+            validate: '/usr/sbin/visudo -cf %s'
+        with_items:
+            - "{{ rhel_07_010341_sudoers_all.stdout_lines }}"
+        when: rhel_07_010341_sudoers_all.stdout | length > 0
+  when:
+      - rhel_07_010341
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-010341
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-237633r646850_rule
+      - V-237633
+      - sudo
+
+- name: "MEDIUM | RHEL-07-010342 | PATCH | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo."
+  block:
+      - name: "MEDIUM | RHEL-07-010342 | AUDIT | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo. | Get privilege escalation"
+        shell: egrep -is '(!rootpw|!targetpw|!runaspw)' /etc/sudoers /etc/sudoers.d/* | grep -v '#' | cut -d":" -f1 | sort --unique
+        changed_when: false
+        failed_when: false
+        register: rhel_07_010342_priv_escalation
+
+      - name: "MEDIUM | RHEL-07-010342 | PATCH | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo. | Set privilege escalation for no findings"
+        lineinfile:
+            path: /etc/sudoers
+            line: "{{ item }}"
+            validate: '/usr/sbin/visudo -cf %s'
+        with_items:
+            - Defaults !targetpw
+            - Defaults !rootpw
+            - Defaults !runaspw
+        when: rhel_07_010342_priv_escalation.stdout | length == 0
+
+      - name: "MEDIUM | RHEL-07-010342 | PATCH | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo. | Set privilege escalation for targetpw with findings"
+        lineinfile:
+            path: "{{ item }}"
+            regexp: 'Defaults !targetpw'
+            line: 'Defaults !targetpw'
+            validate: '/usr/sbin/visudo -cf %s'
+        with_items:
+            - "{{ rhel_07_010342_priv_escalation.stdout_lines }}"
+        when:
+            - rhel_07_010342_priv_escalation.stdout | length > 0
+
+      - name: "MEDIUM | RHEL-07-010342 | PATCH | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo. | Set privilege escalation for rootpw with findings"
+        lineinfile:
+            path: "{{ item }}"
+            regexp: 'Defaults !rootpw'
+            line: 'Defaults !rootpw'
+            validate: '/usr/sbin/visudo -cf %s'
+        with_items:
+            - "{{ rhel_07_010342_priv_escalation.stdout_lines }}"
+        when:
+            - rhel_07_010342_priv_escalation.stdout | length > 0
+
+      - name: "MEDIUM | RHEL-07-010342 | PATCH | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo. | Set privilege escalation for runaspw with findings"
+        lineinfile:
+            path: "{{ item }}"
+            regexp: 'Defaults !runaspw'
+            line: 'Defaults !runaspw'
+            validate: '/usr/sbin/visudo -cf %s'
+        with_items:
+            - "{{ rhel_07_010342_priv_escalation.stdout_lines }}"
+        when:
+            - rhel_07_010342_priv_escalation.stdout | length > 0
+  when:
+      - rhel_07_010342
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-010342
+      - CAT2
+      - CCI-002227
+      - SRG-OS-000480-GPOS-00227
+      - SV-237634r646853_rule
+      - V-237634
+      - sudo
+
+- name: "MEDIUM | RHEL-07-010343 | PATCH | The Red Hat Enterprise Linux operating system must require re-authentication when using the sudo command."
+  block:
+      - name: "MEDIUM | RHEL-07-010343 | PATCH | The Red Hat Enterprise Linux operating system must require re-authentication when using the sudo command. | Get files with timeout set"
+        shell: grep -is 'timestamp_timeout' /etc/sudoers /etc/sudoers.d/* | cut -d":" -f1 | uniq | sort
+        changed_when: false
+        failed_when: false
+        register: rhel_07_010343_timeout_files
+
+      - name: "MEDIUM | RHEL-07-010343 | PATCH | The Red Hat Enterprise Linux operating system must require re-authentication when using the sudo command. | Set value if no results"
+        lineinfile:
+            path: /etc/sudoers
+            regexp: 'Defaults timestamp_timeout='
+            line: "Defaults timestamp_timeout={{ rhel7stig_sudo_timestamp_timeout }}"
+            validate: '/usr/sbin/visudo -cf %s'
+        when: rhel_07_010343_timeout_files.stdout | length == 0
+
+      - name: "MEDIUM | RHEL-07-010343 | PATCH | The Red Hat Enterprise Linux operating system must require re-authentication when using the sudo command. | Set value if has results"
+        lineinfile:
+            path: "{{ item }}"
+            regexp: 'Defaults timestamp_timeout='
+            line: "Defaults timestamp_timeout={{ rhel7stig_sudo_timestamp_timeout }}"
+            validate: '/usr/sbin/visudo -cf %s'
+        with_items:
+            - "{{ rhel_07_010343_timeout_files.stdout_lines }}"
+        when: rhel_07_010343_timeout_files.stdout | length > 0
+  when:
+      - rhel_07_010343
+      - rhel7stig_disruption_high
+  tags:
+      - RHEL-07-010343
+      - CAT2
+      - CCI-002038
+      - SRG-OS-000373-GPOS-00156
+      - SV-237635r646856_rule
+      - V-237635
+      - sudo
