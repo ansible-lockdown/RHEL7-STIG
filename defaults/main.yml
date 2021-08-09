@@ -309,6 +309,9 @@ rhel_07_041002: true
 rhel_07_041003: true
 rhel_07_041010: true
 rhel_07_910055: true
+rhel_07_010341: true
+rhel_07_010342: true
+rhel_07_010343: true
 # CAT 3 rules
 rhel_07_020200: true
 rhel_07_020300: true
@@ -419,8 +422,6 @@ rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
 rhel7stig_ssh_required: true
 rhel7stig_ssh_ciphers: "{{ rhel7stig_FIPS_ciphers }}"
 rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
-
-
 
 # RHEL-07-040490
 # If not required, remove vsftpd.
@@ -535,10 +536,10 @@ rhel7stig_password_complexity:
 
 # RHEL-07-040160
 # Session timeout setting file (TMOUT setting can be set in multiple files)
-# Timeout value is in seconds. (60 seconds * 10 = 600)
+# Timeout value is in seconds. (60 seconds * 15 = 600)
 rhel7stig_shell_session_timeout:
     file: /etc/profile.d/tmout.sh
-    timeout: 600
+    timeout: 900
 
 # RHEL-07-040320 | All network connections associated with SSH traffic must
 # terminate at the end of the session or after 10 minutes of inactivity, except
@@ -690,13 +691,12 @@ ol7stig_ipv4_tcp_invalid_ratelimit: 500
 # With this toggle off it will list all world-writable files not owned by system accounts
 rhel7stig_world_write_files_owner_root: false
 
-
 #### Goss Configuration Settings ####
 
 ### Goss binary settings ###
 goss_version:
-  release: v0.3.16
-  checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+    release: v0.3.16
+    checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
 goss_path: /usr/local/bin/
 goss_bin: "{{ goss_path }}goss"
 goss_format: documentation
@@ -739,3 +739,7 @@ Audit_results: |
       The post remediation results are: {{ post_audit_summary }}.
       Full breakdown can be found in {{ goss_out_dir }}
 
+# RHEL-07-010343
+# The value given to Defaults timestamp timeout= in the sudo file.
+# Value must be greater than 0 to conform to STIG standards
+rhel7stig_sudo_timestamp_timeout: 1

@@ -1,315 +1,388 @@
 ---
 - name: "HIGH | RHEL-07-010010 | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
   block:
-  - name: "HIGH | RHEL-07-010010 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
-    shell: |
-        rpm -Va --nolinkto --nofiledigest --nosize --nomtime --nodigest --nosignature | grep -E '^(.M|.....U|......G)' | tee /dev/stderr | cut -c13- | sed 's/^ //' | xargs rpm -qf --qf='%{name}\n' | sort -u
-    args:
-        warn: no
-    check_mode: no
-    failed_when: no
-    changed_when: rhel_07_010010_audit.stdout|length > 0 
-    register: rhel_07_010010_audit
+      - name: "HIGH | RHEL-07-010010 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
+        shell: |
+            rpm -Va --nolinkto --nofiledigest --nosize --nomtime --nodigest --nosignature | grep -E '^(.M|.....U|......G)' | tee /dev/stderr | cut -c13- | sed 's/^ //' | xargs rpm -qf --qf='%{name}\n' | sort -u
+        args:
+            warn: false
+        check_mode: false
+        failed_when: false
+        changed_when: rhel_07_010010_audit.stdout|length > 0
+        register: rhel_07_010010_audit
 
-  - name: "HIGH | RHEL-07-010010 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
-    debug:
-        msg: "{{ rhel_07_010010_audit.stderr_lines }}"
-    changed_when: yes
-    when: rhel_07_010010_audit.stdout|length > 0 
+      - name: "HIGH | RHEL-07-010010 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
+        debug:
+            msg: "{{ rhel_07_010010_audit.stderr_lines }}"
+        changed_when: true
+        when: rhel_07_010010_audit.stdout|length > 0
 
-  - name: "HIGH | RHEL-07-010010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
-    shell: >
-            ( rpm --setugids {{ item }}; rpm --setperms {{ item }} )
-            2>&1 1>&2 | grep -v ': No such file or directory$'
-    args:
-        warn: no
-    register: rhel_07_010010_patch
-    failed_when: rhel_07_010010_audit.stdout|length > 0 
-    ignore_errors: yes
-    with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
+      - name: "HIGH | RHEL-07-010010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
+        shell: >
+                ( rpm --setugids {{ item }}; rpm --setperms {{ item }} )
+                2>&1 1>&2 | grep -v ': No such file or directory$'
+        args:
+            warn: false
+        register: rhel_07_010010_patch
+        failed_when: rhel_07_010010_audit.stdout|length > 0
+        ignore_errors: true
+        with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
 
-  - name: "HIGH | RHEL-07-010010 | AUDIT | WARNING: error during remediation"
-    debug:
-      msg: "{{ item.stdout_lines }}"
-    changed_when: yes
-    with_items: "{{ rhel_07_010010_patch.results }}"
-    loop_control:
-      label: "{{ item.item }}"
-    when:
-    - rhel_07_010010_patch is changed
-    - item is failed
-  when: 
-  - rhel_07_010010
+      - name: "HIGH | RHEL-07-010010 | AUDIT | WARNING: error during remediation"
+        debug:
+            msg: "{{ item.stdout_lines }}"
+        changed_when: true
+        with_items: "{{ rhel_07_010010_patch.results }}"
+        loop_control:
+            label: "{{ item.item }}"
+        when:
+            - rhel_07_010010_patch is changed
+            - item is failed
+  when:
+      - rhel_07_010010
   tags:
-  - RHEL-07-010010
+      - RHEL-07-010010
+      - CAT1
+      - CCI-001494
+      - SRG-OS-000257-GPOS-00098
+      - SV-204392r646841_rule
+      - V-204392
+      - permissions
 
 - name: "HIGH | RHEL-07-010020 | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
   block:
-  - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-    shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
-    args:
-      warn: no
-    check_mode: no
-    failed_when: no
-    changed_when: rhel_07_010020_audit.stdout| length > 0
-    register: rhel_07_010020_audit
+      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+        shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
+        args:
+            warn: false
+        check_mode: false
+        failed_when: false
+        changed_when: rhel_07_010020_audit.stdout| length > 0
+        register: rhel_07_010020_audit
 
-  - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-    debug:
-      msg: "{{ rhel_07_010020_audit.stderr_lines }}"
-    changed_when: yes
-    when: rhel_07_010020_audit.stdout | length > 0
+      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+        debug:
+            msg: "{{ rhel_07_010020_audit.stderr_lines }}"
+        changed_when: true
+        when: rhel_07_010020_audit.stdout | length > 0
 
-  - name: "HIGH | RHEL-07-010020 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-    command: yum reinstall -y {{ item }}
-    args:
-      warn: no
-    with_items: "{{ rhel_07_010020_audit.stdout_lines }}"
-    ignore_errors: yes
-    when: rhel_07_010020_audit.stdout_lines | length > 0
-  when: 
-  - rhel_07_010020
+      - name: "HIGH | RHEL-07-010020 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+        command: yum reinstall -y {{ item }}
+        args:
+            warn: false
+        failed_when: false
+        with_items:
+            - "{{ rhel_07_010020_audit.stdout_lines }}"
+        when: rhel_07_010020_audit.stdout_lines | length > 0
+  when:
+      - rhel_07_010020
   tags:
-  - RHEL-07-010020
+      - RHEL-07-010020
+      - CAT1
+      - CCI-001749
+      - SV-214799r603261_rule
+      - V-214799
+      - packages
 
 - name: "HIGH | RHEL-07-010290 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
   replace:
-    dest: "{{ item }}"
-    regexp: 'nullok ?'
+      dest: "{{ item }}"
+      regexp: 'nullok ?'
   when:
-  - rhel_07_010290
+      - rhel_07_010290
   with_items:
-  - /etc/pam.d/system-auth
-  - /etc/pam.d/password-auth
+      - /etc/pam.d/system-auth
+      - /etc/pam.d/password-auth
   tags:
-  - RHEL-07-010290
+      - RHEL-07-010290
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204424r603261_rule
+      - V-204424
+      - accounts
 
 - name: "HIGH | RHEL-07-010300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using an empty password."
   lineinfile:
-    state: present
-    dest: /etc/ssh/sshd_config
-    regexp: "(?i)^#?PermitEmptyPasswords"
-    line: PermitEmptyPasswords no
-    validate: /usr/sbin/sshd -tf %s
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?PermitEmptyPasswords"
+      line: PermitEmptyPasswords no
+      validate: /usr/sbin/sshd -tf %s
   notify: restart sshd
   when:
-  - rhel_07_010300
-  - rhel7stig_ssh_required
+      - rhel_07_010300
+      - rhel7stig_ssh_required
   tags:
-  - RHEL-07-010300
-  - ssh
+      - RHEL-07-010300
+      - CAT1
+      - CCI-000766
+      - SRG-OS-000106-GPOS-00053
+      - SV-204425r603261_rule
+      - V-204425
+      - ssh
 
 - name: "HIGH | RHEL-07-010440 | PATCH | The Red Hat Enterprise Linux operating system must not allow an unattended or automatic logon to the system via a graphical user interface."
   lineinfile:
-    dest: /etc/gdm/custom.conf
-    regexp: (?i)automaticloginenable
-    line: AutomaticLoginEnable=false
-    insertafter: '\[daemon\]'
+      dest: /etc/gdm/custom.conf
+      regexp: (?i)automaticloginenable
+      line: AutomaticLoginEnable=false
+      insertafter: '\[daemon\]'
   when:
-  - rhel7stig_gui
-  - rhel_07_010440
+      - rhel7stig_gui
+      - rhel_07_010440
   tags:
-  - RHEL-07-010440
-  - gui
+      - RHEL-07-010440
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00229
+      - SV-204432r603261_rule
+      - V-204432
+      - gui
 
 - name: "HIGH | RHEL-07-010450 | PATCH | The Red Hat Enterprise Linux operating system must not allow an unrestricted logon to the system."
   lineinfile:
-    dest: /etc/gdm/custom.conf
-    regexp: (?i)timedloginenable
-    line: TimedLoginEnable=false
-    insertafter: '\[daemon\]'
+      dest: /etc/gdm/custom.conf
+      regexp: (?i)timedloginenable
+      line: TimedLoginEnable=false
+      insertafter: '\[daemon\]'
   when:
-  - rhel7stig_gui
-  - rhel_07_010450
+      - rhel7stig_gui
+      - rhel_07_010450
   tags:
-  - RHEL-07-010450
+      - RHEL-07-010450
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00229
+      - SV-204433r603261_rule
+      - V-204433
 
 - name: |
     "HIGH | RHEL-07-010480 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
     "HIGH | RHEL-07-010490 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   lineinfile:
-    dest: /etc/grub.d/40_custom
-    insertafter: EOF
-    regexp: "{{ item.regex }}"
-    line: "{{ item.line }}"
+      dest: /etc/grub.d/40_custom
+      insertafter: EOF
+      regexp: "{{ item.regex }}"
+      line: "{{ item.line }}"
   with_items:
-  - regexp: ^\s*set superusers=
-    line: '    set superusers="root"'
-  - regexp: ^password_pbkdf2
-    line: "^password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}"
+      - regexp: ^\s*set superusers=
+        line: '    set superusers="root"'
+      - regexp: ^password_pbkdf2
+        line: "^password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}"
   no_log: true
-  notify: 
-  - make grub2 config
+  notify:
+      - make grub2 config
   when:
-  - rhel_07_010480 or
-    rhel_07_010490
-  - ansible_distribution_version is version_compare('7.2', '<')
+      - rhel_07_010480 or
+        rhel_07_010490
+      - ansible_distribution_version is version_compare('7.2', '<')
   tags:
-  - RHEL-07-010480
-  - RHEL-07-010490
-  - grub
-  - bootloader
+      - CAT1
+      - RHEL-07-010480
+      - CCI-000213
+      - SRG-OS-000080-GPOS-00048
+      - SV-204436r603261_rule
+      - V-204436
+      - RHEL-07-010490
+      - CCI-000213
+      - SRG-OS-000080-GPOS-00048
+      - SV-204439r603261_rule
+      - V-204439
+      - grub
+      - bootloader
 
 - name: |
     "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
     "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   block:
-  - name: "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-    lineinfile:
-      path: /boot/grub2/user.cfg
-      create: yes
-      mode: '0644'
-      regexp: "{{ item.regexp }}"
-      line: "{{ item.line }}"
-    notify: 
-    - confirm grub2 user cfg
-    - make grub2 config
-    with_items:
-    - regexp: ^GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-      line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-    no_log: true
-    when:
-    - not rhel7stig_machine_uses_uefi
+      - name: "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+        lineinfile:
+            path: /boot/grub2/user.cfg
+            create: yes
+            mode: '0644'
+            regexp: "{{ item.regexp }}"
+            line: "{{ item.line }}"
+        notify:
+            - confirm grub2 user cfg
+            - make grub2 config
+        with_items:
+            - regexp: ^GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+              line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+        no_log: true
+        when:
+            - not rhel7stig_machine_uses_uefi
 
-  - name: "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-    lineinfile:
-      path: /boot/efi/EFI/redhat/user.cfg
-      create: yes
-      mode: '0644'
-      regexp: "{{ item.regexp }}"
-      line: "{{ item.line }}"
-    with_items:
-    - regexp: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }}
-      line: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}
-    no_log: true
-    notify:
-    - confirm grub2 user cfg
-    - make grub2 config
-    when:
-    - rhel7stig_machine_uses_uefi
+      - name: "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+        lineinfile:
+            path: /boot/efi/EFI/redhat/user.cfg
+            create: yes
+            mode: '0644'
+            regexp: "{{ item.regexp }}"
+            line: "{{ item.line }}"
+        with_items:
+            - regexp: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }}
+              line: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}
+        no_log: true
+        notify:
+            - confirm grub2 user cfg
+            - make grub2 config
+        when:
+            - rhel7stig_machine_uses_uefi
 
-  - name: |
-      "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-      "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-    lineinfile:
-      path: /etc/grub.d/01_users
-      regexp: "{{ item.regexp }}"
-      line: "{{ item.line }}"
-    notify: 
-    - make grub2 config
-    with_items:
-    - regexp: ^\s*set superusers=
-      line: '    set superusers="{{ rhel7stig_boot_superuser }}"'
-    - regexp: ^\s*export superusers
-      line: '    export superusers'
+      - name: |
+          "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+          "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+        lineinfile:
+            path: /etc/grub.d/01_users
+            regexp: "{{ item.regexp }}"
+            line: "{{ item.line }}"
+        notify:
+            - make grub2 config
+        with_items:
+            - regexp: ^\s*set superusers=
+              line: '    set superusers="{{ rhel7stig_boot_superuser }}"'
+            - regexp: ^\s*export superusers
+              line: '    export superusers'
   when:
-  - rhel_07_010482 or
-    rhel_07_010491
-  - ansible_distribution_version is version_compare('7.2', '>=')
+      - rhel_07_010482 or
+        rhel_07_010491
+      - ansible_distribution_version is version_compare('7.2', '>=')
   tags:
-  - RHEL-07-010482
-  - RHEL-07-010491
-  - grub
-  - bootloader
+      - CAT1
+      - RHEL-07-010482
+      - CCI-000213
+      - SRG-OS-000080-GPOS-00048
+      - SV-204438r603261_rule
+      - V-204438
+      - RHEL-07-010491
+      - CCI-000213
+      - SRG-OS-000080-GPOS-00048
+      - SV-204440r603261_rule
+      - V-204440
+      - grub
+      - bootloader
 
 - name: "HIGH | RHEL-07-020000 | PATCH | The Red Hat Enterprise Linux operating system must not have the rsh-server package installed."
   package:
-    name: rsh-server
-    state: absent
+      name: rsh-server
+      state: absent
   vars:
-    ansible_python_interpreter: "{{ python2_bin }}"
-  when: 
-  - "'rsh-server' in ansible_facts.packages"
-  - rhel_07_020000
+      ansible_python_interpreter: "{{ python2_bin }}"
+  when:
+      - "'rsh-server' in ansible_facts.packages"
+      - rhel_07_020000
   tags:
-  - RHEL-07-020000
-  - rsh
+      - RHEL-07-020000
+      - CAT1
+      - CCI-000381
+      - SRG-OS-000095-GPOS-00049
+      - SV-204442r603261_rule
+      - V-204442
+      - rsh
 
 - name: "HIGH | RHEL-07-020010 | PATCH | The Red Hat Enterprise Linux operating system must not have the ypserv package installed."
   package:
-    name: ypserv
-    state: absent
+      name: ypserv
+      state: absent
   vars:
-    ansible_python_interpreter: "{{ python2_bin }}"
-  when: 
-  - "'ypserv' in ansible_facts.packages"
-  - rhel_07_020010
-  tags:
-  - RHEL-07-020010
-  - ypserv
-
-- name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have bee
-n digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
-  block:
-  - name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have b
-een digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
-    lineinfile:
-      dest: /etc/yum.conf
-      regexp: ^gpgcheck
-      line: gpgcheck=1
-      insertafter: '\[main\]'
-
-  - name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have b
-een digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
-    lineinfile:
-      dest: /etc/yum.conf
-      regexp: ^gpgcheck
-      line: gpgcheck=1
-      insertafter: '\[main\]'
-  when: rhel_07_020050
-  tags:
-  - RHEL-07-020050
-  - yum
-
-- name: "HIGH | RHEL-07-020060 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have bee
-n digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
-  lineinfile:
-    dest: /etc/yum.conf
-    regexp: ^localpkg_gpgcheck
-    line: localpkg_gpgcheck=1
-    insertafter: '\[main\]'
-  when: rhel_07_020060
-  tags:
-  - RHEL-07-020060
-  - yum
-
-- name: |
-    "HIGH | RHEL-07-020210 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux."
-    "HIGH | RHEL-07-020220 | PATCH | The Red Hat Enterprise Linux operating system must enable the SELinux targeted policy."
-  selinux:
-    state: enforcing
-    policy: targeted
-  check_mode: "{{ ansible_check_mode or rhel7stig_system_is_chroot }}"
+      ansible_python_interpreter: "{{ python2_bin }}"
   when:
-  - rhel_07_020210 or rhel_07_020220
-  - not rhel7stig_system_is_container
-  - ansible_distribution_file_variety == "RedHat"
+      - "'ypserv' in ansible_facts.packages"
+      - rhel_07_020010
   tags:
-  - RHEL-07-020210
-  - RHEL-07-020220
-  - selinux
+      - RHEL-07-020010
+      - CAT1
+      - CCI-000381
+      - SRG-OS-000095-GPOS-00049
+      - SV-204443r603261_rule
+      - V-204443
+      - ypserv
 
-- name: "HIGH | RHEL-07-020230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled."
+- name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+  lineinfile:
+      dest: /etc/yum.conf
+      regexp: ^gpgcheck
+      line: gpgcheck=1
+      insertafter: '\[main\]'
+  when:
+      - rhel_07_020050
+  tags:
+      - RHEL-07-020050
+      - CAT1
+      - CCI-001749
+      - SRG-OS-000366-GPOS-00153
+      - SV-204447r603261_rule
+      - V-204447
+      - yum
+
+- name: "HIGH | RHEL-07-020060 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
+  lineinfile:
+      dest: /etc/yum.conf
+      regexp: ^localpkg_gpgcheck
+      line: localpkg_gpgcheck=1
+      insertafter: '\[main\]'
+  when:
+      - rhel_07_020060
+  tags:
+      - RHEL-07-020060
+      - CAT1
+      - CCI-001749
+      - SRG-OS-000366-GPOS-00153
+      - SV-204448r603261_rule
+      - V-204448
+      - yum
+
+# - name: |
+#     "HIGH | RHEL-07-020210 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux."
+#     "HIGH | RHEL-07-020220 | PATCH | The Red Hat Enterprise Linux operating system must enable the SELinux targeted policy."
+#   selinux:
+#     state: enforcing
+#     policy: targeted
+#   check_mode: "{{ ansible_check_mode or rhel7stig_system_is_chroot }}"
+#   when:
+#   - rhel_07_020210 or rhel_07_020220
+#   - not rhel7stig_system_is_container
+#   - ansible_distribution_file_variety == "RedHat"
+#   tags:
+#   - RHEL-07-020210
+#   - RHEL-07-020220
+#   - selinux
+
+- name: "HIGH | RHEL-07-020230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled on the command line."
   systemd:
-    name: ctrl-alt-del
-    masked: yes
-  when: rhel_07_020230
+      name: ctrl-alt-del
+      masked: yes
+  when:
+      - rhel_07_020230
   tags:
       - RHEL-07-020230
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204455r603261_rule
+      - V-204455
+      - systemctl
 
-- name: "HIGH | RHEL-07-020231 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled in the GUI."
+- name: "HIGH | RHEL-07-020231 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled in the Graphical User Interface."
   copy:
-    dest: /etc/dconf/db/local.d/00-disable-ctrl-alt-del
-    content: |
-      [org/gnome/settings-daemon/plugins/media-keys]
-      logout=''
-    mode: '0644'
+      dest: /etc/dconf/db/local.d/00-disable-ctrl-alt-del
+      content: |
+        [org/gnome/settings-daemon/plugins/media-keys]
+        logout=''
+      mode: '0644'
   notify: dconf update
   when:
-  - rhel7stig_dconf_available
-  - rhel_07_020231
+      - rhel7stig_dconf_available
+      - rhel_07_020231
   tags:
-  - RHEL-07-020231
+      - RHEL-07-020231
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204456r603261_rule
+      - V-204456
+      - gui
 
 # RHEL-07-020250 | PATCH | The operating system must be a supported release."
 # Not automated since current end of life for RHEL 7 is 2024-06-30
@@ -317,288 +390,352 @@ n digitally signed using a certificate that is issued by a Certificate Authority
 # Maintainance RHEL7.9 30th April 2021
 - name: "HIGH | RHEL-07-020250 | PATCH | The Red Hat Enterprise Linux operating system must be a vendor supported release."
   debug:
-    msg: Minimum supported version of {{ ansible_distribution }} is {{ rhel7stig_min_supported_os_ver[ansible_distribution] }}
+      msg: Minimum supported version of {{ ansible_distribution }} is {{ rhel7stig_min_supported_os_ver[ansible_distribution] }}
   changed_when:
-  - rhel7stig_audit_complex
-  - ansible_distribution_version is not version_compare(rhel7stig_min_supported_os_ver[ansible_distribution], '>=')
+      - rhel7stig_audit_complex
+      - ansible_distribution_version is not version_compare(rhel7stig_min_supported_os_ver[ansible_distribution], '>=')
   when:
-  - rhel_07_020250
-  - rhel7stig_complex
+      - rhel_07_020250
+      - rhel7stig_complex
   tags:
-  - RHEL-07-020250
-  - complexity-high
+      - RHEL-07-020250
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204458r603261_rule
+      - V-204458
+      - complexity-high
 
 - name: "HIGH | RHEL-07-020310 | The Red Hat Enterprise Linux operating system must be configured so that the root account must be the only account having unrestricted access to the system."
   block:
       # Currently just locks user account
-  - name: "HIGH | RHEL-07-020310 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the root account must be the only account having unrestricted access to the system."
-    shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
-    check_mode: no
-    changed_when: no
-    failed_when: no
-    register: rhel_07_020310_audit
+      - name: "HIGH | RHEL-07-020310 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the root account must be the only account having unrestricted access to the system."
+        shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
+        check_mode: false
+        changed_when: false
+        failed_when: false
+        register: rhel_07_020310_audit
 
-  - name: "HIGH | RHEL-07-020310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the root account must be the only account having unrestricted access to the system."
-    command: "passwd -l {{ item }}"
-    with_items: "{{ rhel_07_020310_audit.stdout_lines }}"
-    when: rhel_07_020310_audit.rc
-  when: rhel_07_020310
+      - name: "HIGH | RHEL-07-020310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the root account must be the only account having unrestricted access to the system."
+        command: "passwd -l {{ item }}"
+        with_items: "{{ rhel_07_020310_audit.stdout_lines }}"
+        when: rhel_07_020310_audit.rc
+  when:
+      - rhel_07_020310
   tags:
-  - RHEL-07-020310
+      - RHEL-07-020310
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204462r603261_rule
+      - V-204462
+      - accounts
 
-- name: "HIGH | RHEL-07-021350 | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-re
-st protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+- name: "HIGH | RHEL-07-021350 | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
   block:
-  - name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring 
-data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
-    package:
-      name: dracut-fips
-      state: present
-    vars:
-      ansible_python_interpreter: "{{ python2_bin }}"
-    when:
-    - "'dracut-fips' not in ansible_facts.packages"
-    notify: rebuild initramfs
+      - name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+        package:
+            name: dracut-fips
+            state: present
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
+        notify: rebuild initramfs
+        when:
+            - "'dracut-fips' not in ansible_facts.packages"
 
-  - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
-    lineinfile:
-      dest: /etc/sysconfig/prelink
-      regexp: ^#?PRELINKING
-      line: PRELINKING=no
-    when:
-    - "'prelink' in ansible_facts.packages"
-    notify: undo existing prelinking
+      - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
+        lineinfile:
+            dest: /etc/sysconfig/prelink
+            regexp: ^#?PRELINKING
+            line: PRELINKING=no
+        notify: undo existing prelinking
+        when:
+            - "'prelink' in ansible_facts.packages"
 
-  - name: "HIGH | RHEL-07-021350 | AUDIT | Check /etc/default/grub exists"
-    stat:
-      path: /etc/default/grub
-    register: rhel7_stig_default_grub 
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Check /etc/default/grub exists"
+        stat:
+            path: /etc/default/grub
+        register: rhel7_stig_default_grub
 
-  - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
-    block:
-    - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
-      command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
-      check_mode: no
-      changed_when: no
-      register: rhel_07_021350_grub_cmdline_linux_audit
-      failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
-  
-    - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
-      template:
-        src: etc_default_grub.j2
-        dest: /etc/default/grub
-        owner: root
-        group: root
-        mode: 0644
-      register: rhel7_stig_grub_template
-      vars:
-        grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
-    when: not rhel7_stig_default_grub.stat.exists
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
+        block:
+            - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
+              command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
+              check_mode: false
+              changed_when: false
+              failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
+              register: rhel_07_021350_grub_cmdline_linux_audit
 
-  - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
-    replace:
-      path: /etc/default/grub
-      regexp: "{{ rhel7stig_regexp_quoted_params }}"
-      replace: "{{ rhel7stig_replace_quoted_params }}"
-    vars:
-      key: GRUB_CMDLINE_LINUX
-      param: fips
-      value: "{{ fips_value }}"
-      append: yes  # this is the default
-    when:
-    - not ansible_check_mode or
-      rhel7_stig_grub_template is not changed
-    notify: confirm grub2 user cfg
+            - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
+              template:
+                  src: etc_default_grub.j2
+                  dest: /etc/default/grub
+                  owner: root
+                  group: root
+                  mode: 0644
+              register: rhel7_stig_grub_template
+              vars:
+                  grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
+        when: not rhel7_stig_default_grub.stat.exists
 
-  - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
-    block:
-    - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
-      replace:
-        path: /etc/default/grub
-        regexp: "{{ rhel7stig_regexp_quoted_params }}"
-        replace: "{{ rhel7stig_replace_quoted_params }}"
-      with_items:
-      - "{{ ansible_mounts | json_query(query) }}"
-      vars:
-        query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
-        key: GRUB_CMDLINE_LINUX
-        param: boot
-        value: UUID={{ item.uuid }}
-        insert: yes
-      when:
-      - not ansible_check_mode or
-        rhel7_stig_grub_template is not changed
-      notify: confirm grub2 user cfg
-      register: result
+      - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
+        replace:
+            path: /etc/default/grub
+            regexp: "{{ rhel7stig_regexp_quoted_params }}"
+            replace: "{{ rhel7stig_replace_quoted_params }}"
+        vars:
+            key: GRUB_CMDLINE_LINUX
+            param: fips
+            value: "{{ fips_value }}"
+            append: yes  # this is the default
+        notify: confirm grub2 user cfg
+        when:
+            - not ansible_check_mode or
+              rhel7_stig_grub_template is not changed
 
-    - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
-      command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
-      check_mode: no
-      with_items:
-      - "fips={{ fips_value }}" 
-      - boot=UUID={{ ansible_mounts | json_query(query) }}
-      vars:
-        query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
-      register: rhel_07_021350_audit
-      when:
-      - not ansible_check_mode or
-        rhel7_stig_grub_template is not changed
-      - rhel7stig_boot_part not in ['/', ''] or
-        'boot=' not in item
-      changed_when:
-      - ansible_check_mode
-      - rhel_07_021350_audit is failed
-      failed_when:
-      - rhel_07_021350_audit is failed
-      - not ansible_check_mode or
-        rhel_07_021350_audit.rc > 1
-  when: 
-  - rhel_07_021350
-  - rhel7stig_use_fips
+      - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
+        block:
+            - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
+              replace:
+                  path: /etc/default/grub
+                  regexp: "{{ rhel7stig_regexp_quoted_params }}"
+                  replace: "{{ rhel7stig_replace_quoted_params }}"
+              with_items:
+                  - "{{ ansible_mounts | json_query(query) }}"
+              vars:
+                  query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
+                  key: GRUB_CMDLINE_LINUX
+                  param: boot
+                  value: UUID={{ item.uuid }}
+                  insert: yes
+              when:
+                  - not ansible_check_mode or
+                    rhel7_stig_grub_template is not changed
+              notify: confirm grub2 user cfg
+              register: result
+
+            - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
+              command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
+              check_mode: false
+              with_items:
+                  - "fips={{ fips_value }}"
+                  - boot=UUID={{ ansible_mounts | json_query(query) }}
+              vars:
+                  query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
+              register: rhel_07_021350_audit
+              changed_when:
+                  - ansible_check_mode
+                  - rhel_07_021350_audit is failed
+              failed_when:
+                  - rhel_07_021350_audit is failed
+                  - not ansible_check_mode or
+                    rhel_07_021350_audit.rc > 1
+              when:
+                  - not ansible_check_mode or
+                    rhel7_stig_grub_template is not changed
+                  - rhel7stig_boot_part not in ['/', ''] or
+                    'boot=' not in item
+  when:
+      - rhel_07_021350
+      - rhel7stig_use_fips
   tags:
-  - RHEL-07-021350
+      - RHEL-07-021350
+      - CAT1
+      - CCI-001199
+      - CCI-000068
+      - CCI-002450
+      - CCI-002476
+      - SRG-OS-000033-GPOS-00014
+      - SV-204497r603261_rule
+      - V-204497
+      - fips
 
 - name: "HIGH | RHEL-07-021710 | PATCH | The Red Hat Enterprise Linux operating system must not have the telnet-server package installed."
   package:
-    name: telnet-server
-    state: absent
+      name: telnet-server
+      state: absent
   vars:
-    ansible_python_interpreter: "{{ python2_bin }}"
-  when: 
-  - rhel_07_021710
-  - "'telnet-server' in ansible_facts.packages"
+      ansible_python_interpreter: "{{ python2_bin }}"
+  when:
+      - rhel_07_021710
+      - "'telnet-server' in ansible_facts.packages"
   tags:
-  - RHEL-07-021710
-  - telnet
-
+      - RHEL-07-021710
+      - CAT1
+      - CCI-000381
+      - SRG-OS-000095-GPOS-00049
+      - SV-204502r603261_rule
+      - V-204502
+      - telnet
 
 - name: "HIGH | RHEL-07-032000 | The Red Hat Enterprise Linux operating system must use a virus scan program."
   block:
-  - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
-    package:
-      name: "{{ rhel7stig_av_package.package }}"
-      state: present
-    vars:
-      ansible_python_interpreter: "{{ python2_bin }}"
-  - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
-    service:
-      name: "{{ rhel7stig_av_package.service }}"
-      state: "{{ rhel7stig_service_started }}"
-      enabled: yes
-    ignore_errors: yes
+      - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
+        package:
+            name: "{{ rhel7stig_av_package.package }}"
+            state: present
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
+
+      - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
+        service:
+            name: "{{ rhel7stig_av_package.service }}"
+            state: "{{ rhel7stig_service_started }}"
+            enabled: yes
+        failed_when: false
   when:
-  - rhel7stig_antivirus_required
-  - rhel_07_032000
+      - rhel7stig_antivirus_required
+      - rhel_07_032000
   tags:
-  - RHEL-07-032000
-  - antivirus
+      - RHEL-07-032000
+      - CAT1
+      - CCI-001668
+      - SV-214801r603261_rule
+      - V-214801
+      - antivirus
 
 - name: "HIGH | RHEL-07-040390 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon is configured to only use the SSHv2 protocol."
   lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: "(?i)^#?Protocol"
-    line: Protocol 2
-    validate: /usr/sbin/sshd -t -f %s
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?Protocol"
+      line: Protocol 2
+      validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
   when:
-  - rhel_07_040390
-  - rhel7stig_ssh_required
-  - ansible_distribution_version is not version_compare('7.4', '>=')
+      - rhel_07_040390
+      - rhel7stig_ssh_required
+      - ansible_distribution_version is not version_compare('7.4', '>=')
   tags:
-  - RHEL-07-040390
-  - ssh
+      - RHEL-07-040390
+      - CAT1
+      - CCI-000366
+      - CCI-000197
+      - SRG-OS-000074-GPOS-00042
+      - SV-204594r603261_rule
+      - V-204594
+      - ssh
 
 - name: "HIGH | RHEL-07-040540 | The Red Hat Enterprise Linux operating system must not contain .shosts files."
   block:
-  - name: "HIGH | RHEL-07-040540 | AUDIT | The Red Hat Enterprise Linux operating system must not contain .shosts files."
-    command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name '.shosts'
-    check_mode: no
-    changed_when: no
-    register: rhel_07_040540_audit
+      - name: "HIGH | RHEL-07-040540 | AUDIT | The Red Hat Enterprise Linux operating system must not contain .shosts files."
+        command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name '.shosts'
+        check_mode: false
+        changed_when: false
+        register: rhel_07_040540_audit
 
-  - name: "HIGH | RHEL-07-040540 | PATCH | The Red Hat Enterprise Linux operating system must not contain .shosts files."
-    file:
-      path: "{{ item }}"
-      state: absent
-    with_items: "{{ rhel_07_040540_audit.stdout_lines }}"
-  when: 
-  - rhel_07_040540
+      - name: "HIGH | RHEL-07-040540 | PATCH | The Red Hat Enterprise Linux operating system must not contain .shosts files."
+        file:
+            path: "{{ item }}"
+            state: absent
+        with_items:
+            - "{{ rhel_07_040540_audit.stdout_lines }}"
+  when:
+      - rhel_07_040540
   tags:
-  - RHEL-07-040540
-  - shosts
+      - RHEL-07-040540
+      - CAT1
+      - CCI-000366
+      - SV-204606r603261_rule
+      - V-204606
+      - shosts
 
 - name: "HIGH | RHEL-07-040550 | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
   block:
-  - name: "HIGH | RHEL-07-040550 | AUDIT | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
-    command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name 'shosts.equiv'
-    check_mode: no
-    changed_when: no
-    register: rhel_07_040550_audit
+      - name: "HIGH | RHEL-07-040550 | AUDIT | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
+        command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name 'shosts.equiv'
+        check_mode: false
+        changed_when: false
+        register: rhel_07_040550_audit
 
-  - name: "HIGH | RHEL-07-040550 | PATCH | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
-    file:
-      path: "{{ item }}"
-      state: absent
-    with_items: "{{ rhel_07_040550_audit.stdout_lines }}"
-  when: 
-  - rhel_07_040550
+      - name: "HIGH | RHEL-07-040550 | PATCH | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
+        file:
+            path: "{{ item }}"
+            state: absent
+        with_items:
+            - "{{ rhel_07_040550_audit.stdout_lines }}"
+  when:
+      - rhel_07_040550
   tags:
-  - RHEL-07-040550
-  - shosts
+      - RHEL-07-040550
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204607r603261_rule
+      - V-204607
+      - shosts
 
 - name: "HIGH | RHEL-07-040690 | PATCH | The Red Hat Enterprise Linux operating system must not have a File Transfer Protocol (FTP) server package installed unless needed."
   package:
-    name: vsftpd
-    state: absent
+      name: vsftpd
+      state: absent
   vars:
-    ansible_python_interpreter: "{{ python2_bin }}"
+      ansible_python_interpreter: "{{ python2_bin }}"
   when:
-  - not rhel7stig_vsftpd_required
-  - rhel_07_040690
-  - "'vsftpd' not in ansible_facts.packages"
+      - not rhel7stig_vsftpd_required
+      - rhel_07_040690
+      - "'vsftpd' not in ansible_facts.packages"
   tags:
-  - RHEL-07-040690
-  - ftp
+      - RHEL-07-040690
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204620r603261_rule
+      - V-204620
+      - ftp
 
 - name: "HIGH | RHEL-07-040700 | PATCH | The Red Hat Enterprise Linux operating system must not have the Trivial File Transfer Protocol (TFTP) server package installed if not required for operational support."
   package:
-    name:
-    - tftp
-    - tftp-server
-    state: absent
+      name:
+          - tftp
+          - tftp-server
+      state: absent
   vars:
-    ansible_python_interpreter: "{{ python2_bin }}"
+      ansible_python_interpreter: "{{ python2_bin }}"
   when:
-  - "('tftp' in ansible_facts.packages or 'tftp-server' in ansible_facts.packages)"
-  - not rhel7stig_tftp_required
-  - rhel_07_040700
+      - "('tftp' in ansible_facts.packages or 'tftp-server' in ansible_facts.packages)"
+      - not rhel7stig_tftp_required
+      - rhel_07_040700
   tags:
-  - RHEL-07-040700
-  - tftp
+      - RHEL-07-040700
+      - CAT1
+      - CCI-000368
+      - CCI-001813
+      - CCI-001814
+      - CCI-001812
+      - CCI-000318
+      - SRG-OS-000480-GPOS-00227
+      - SV-204621r603261_rule
+      - V-204621
+      - tftp
 
 - name: "HIGH | RHEL-07-040800 | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
   block:
-  - name: "HIGH | RHEL-07-040800 | AUDIT | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
-    command: grep {{ item }} /etc/snmp/snmpd.conf
-    check_mode: no
-    failed_when: no
-    changed_when: no
-    with_items:
-    - public
-    - private
-    register: rhel_07_040800_audit
+      - name: "HIGH | RHEL-07-040800 | AUDIT | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
+        command: grep {{ item }} /etc/snmp/snmpd.conf
+        check_mode: false
+        failed_when: false
+        changed_when: false
+        register: rhel_07_040800_audit
+        with_items:
+            - public
+            - private
 
-  - name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
-    replace:
-      dest: /etc/snmp/snmpd.conf
-      regexp: (^com2sec.*default\s+)(public|private)
-      replace: \1{{ rhel7stig_snmp_community }}
-    with_items: "{{ rhel_07_040800_audit.results }}"
-    notify: restart snmpd
-    when: item.stdout_lines | length > 0
-  when: 
-  - rhel_07_040800
+      - name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
+        replace:
+            dest: /etc/snmp/snmpd.conf
+            regexp: (^com2sec.*default\s+)(public|private)
+            replace: \1{{ rhel7stig_snmp_community }}
+        notify: restart snmpd
+        with_items:
+            - "{{ rhel_07_040800_audit.results }}"
+        when: item.stdout_lines | length > 0
+  when:
+      - rhel_07_040800
   tags:
-  - RHEL-07-040800
-  - snmp
-  
+      - RHEL-07-040800
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-204627r603261_rule
+      - V-204627
+      - snmp
