@@ -422,3 +422,40 @@
         when: not rhel7stig_ssh_host_rsa_key_stat.stat.exists
   when:
       -rhel7stig_ssh_required
+
+- name: "PRELIM | Check whether machine is UEFI-based"
+  stat:
+    path: /sys/firmware/efi
+  register: rhel7_efi_boot
+  tags:
+  - goss_template
+
+- name: set bootloader type
+  block:
+  - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
+    set_fact:
+      rhel7stig_bootloader_path: /boot/efi/EFI/redhat
+      rhel7stig_legacy_boot: false
+    when:
+    - rhel7_efi_boot.stat.exists
+    - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
+
+  - name: "PRELIM | set fact if UEFI boot | CentOS "
+    set_fact:
+      rhel7stig_bootloader_path: /boot/efi/EFI/centos
+      rhel7stig_legacy_boot: false
+    when:
+    - rhel7_efi_boot.stat.exists
+    - ansible_distribution == 'CentOS'
+
+  - name: "PRELIM | set if not UEFI boot"
+    set_fact:
+      rhel7stig_bootloader_path: /boot/grub2/
+      rhel7stig_legacy_boot: true
+    when: not rhel7_efi_boot.stat.exists
+
+  - name: PRELIM | output bootloader and efi state
+    debug:
+      msg:
+      - "bootloader path set to {{ rhel7stig_bootloader_path }}"
+      - "legacy boot equals {{ rhel7stig_legacy_boot }}"
