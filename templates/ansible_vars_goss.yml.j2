@@ -1,5 +1,12 @@
-### Variables for for stig options
+## metadata for Audit benchmark
+rhel7stig_benchmark:
+- "type: STIG"
+- "version: '3.3'"
+- "os: RHEL 7"
+- "epoch: {{ ansible_date_time.epoch }}"
+- "hostname: {{ ansible_hostname }}"
 
+### Variables for for stig options
 run_heavy_tests: true
 
 
