@@ -54,7 +54,7 @@
 
 - name: Pre Audit Setup | Check Goss is available
   block:
-  - name: Check for goss file
+  - name: Pre Audit Setup | Check for goss file
     stat:
       path: "{{ audit_bin }}"
     register: goss_available
