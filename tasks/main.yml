@@ -96,6 +96,6 @@
 
 - name: Show Audit Summary
   debug:
-      msg: "{{ Audit_results.split('\n') }}"
+      msg: "{{ audit_results.split('\n') }}"
   when:
       - run_audit
