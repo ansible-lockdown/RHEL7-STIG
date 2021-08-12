@@ -1,0 +1,49 @@
+---
+
+- name: "Post Audit | Run post_remediation {{ benchmark }} audit"
+  goss:
+      goss_path: "{{ audit_bin }}"
+      path: "{{ audit_control_file }}"
+      vars_path: "{{ audit_vars_path }}"
+      format: "{{ audit_format }}"
+      output_file: "{{ post_audit_outfile }}"
+  failed_when: false
+  environment:
+      GOSS_FMT_OPTIONS: Pretty
+
+- name: Post Audit | ensure audit files readable by users
+  file:
+      path: "{{ item }}"
+      mode: 0644
+      state: file
+  loop:
+      - "{{ post_audit_outfile }}"
+      - "{{ pre_audit_outfile }}"
+
+- name: Post Audit | Capture audit data if json format
+  block:
+      - name: "capture data {{ post_audit_outfile }}"
+        command: "cat {{ post_audit_outfile }}"
+        register: post_audit
+        changed_when: false
+
+      - name: Capture post-audit result
+        set_fact:
+            post_audit_summary: "{{ post_audit.stdout | from_json |json_query(summary) }}"
+        vars:
+            summary: 'summary."summary-line"'
+  when:
+      - audit_format == "json"
+
+- name: Post Audit | Capture audit data if documentation format
+  block:
+      - name: "Post Audit | capture data {{ post_audit_outfile }}"
+        command: "tail -2 {{ post_audit_outfile }}"
+        register: post_audit
+        changed_when: false
+
+      - name: Post Audit | Capture post-audit result
+        set_fact:
+            post_audit_summary: "{{ post_audit.stdout_lines }}"
+  when:
+      - audit_format == "documentation"

@@ -5,6 +5,8 @@
 ## What's new
 - Updated tags on each control with more control data (Vul ID, CCI, Group Title, and Rule ID)
 - Updated to match Version 3 Release 3 benchmarks from Apr 2021
+- Audit controls standardised
+- optional reboot added - default no reboot
 
 ### Release 1.1.1
 # release Stig Jan 2021

@@ -13,7 +13,7 @@
 
       - name: "HIGH | RHEL-07-010010 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
         debug:
-            msg: "{{ rhel_07_010010_audit.stderr_lines }}"
+            msg: "{{ rhel_07_010010_audit.stdout_lines }}"
         changed_when: true
         when: rhel_07_010010_audit.stdout|length > 0
 
