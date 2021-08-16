@@ -215,14 +215,14 @@
 
       - name: "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
         lineinfile:
-            path: /boot/efi/EFI/redhat/user.cfg
+            path: "{{ rhel7stig_bootloader_path }}/user.cfg"
             create: yes
             mode: '0644'
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
         with_items:
             - regexp: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }}
-              line: ^GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}
+              line: GRUB2_PASSWORD=password_pbkdf2 {{ rhel7stig_bootloader_password_hash }}
         no_log: true
         notify:
             - confirm grub2 user cfg
@@ -351,7 +351,7 @@
 
 - name: "HIGH | RHEL-07-020230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled on the command line."
   systemd:
-      name: ctrl-alt-del
+      name: ctrl-alt-del.target
       masked: yes
   when:
       - rhel_07_020230
