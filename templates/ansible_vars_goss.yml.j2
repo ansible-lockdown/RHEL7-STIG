@@ -1,7 +1,16 @@
+## metadata for Audit benchmark
+rhel7stig_benchmark:
+- "type: STIG"
+- "version: '3.3'"
+- "os: RHEL 7"
+- "epoch: {{ ansible_date_time.epoch }}"
+- "hostname: {{ ansible_hostname }}"
+
 ### Variables for for stig options
+run_heavy_tests: {{ audit_run_heavy_tests }}
+timeout_ms: {{ audit_cmd_timeout }}
 
-run_heavy_tests: true
-
+rhel7stig_os_distribution: {{ ansible_distribution | lower }}
 
 # If running on RHEL7 <= 7.2
 rhel7stig_legacyOS: {% if ansible_distribution_version > '7.2' %} false {% else %} true {% endif %}
@@ -83,6 +92,9 @@ RHEL_07_010310: true
 RHEL_07_010320: true
 RHEL_07_010330: true
 RHEL_07_010340: true
+RHEL_07_010341: true
+RHEL_07_010342: true
+RHEL_07_010343: true
 RHEL_07_010350: true
 RHEL_07_010430: true
 RHEL_07_010460: true
@@ -122,6 +134,7 @@ RHEL_07_021010: true
 RHEL_07_021020: true
 RHEL_07_021021: true
 RHEL_07_021030: true
+RHEL_07_021031: true
 RHEL_07_021040: true
 RHEL_07_021100: true
 RHEL_07_021110: true
@@ -295,23 +308,20 @@ rhel7stig_time_service: {{ rhel7stig_time_service }}
 rhel7stig_auditd: true
 rhel7stig_tftp_required: {{ rhel7stig_tftp_required }}
 
-
 rhel7stig_nameservers: {{ rhel_07_040600_dns_servers | to_json }}
-
 
 # RHEL_07_010050
 # Ability to use own banner if set to false
 rhel7stig_use_disa_banner: true
 
 rhel7stig_disa_logon_banner: 
--  You are accessing a U.S. Government (USG) Information System (IS) that is
--  By using this IS (which includes any device attached to this IS), you consent
--  -The USG routinely intercepts and monitors communications on this IS for 
--  -At any time, the USG may inspect and seize data stored on this IS.
--  -Communications using, or data stored on, this IS are not private, are subject 
--  -This IS includes security measures (e.g., authentication and access controls)
--  -Notwithstanding the above, using this IS does not constitute consent to PM, LE
--  communications and work product are private and confidential. See User 
+- 'You are accessing a U.S. Government (USG) Information System (IS) that is provided for USG-authorized use only.'
+- 'By using this IS (which includes any device attached to this IS), you consent to the following conditions:'
+- '-The USG routinely intercepts and monitors communications on this IS for purposes including, but not limited to, penetration testing, COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI) investigations.'
+- '-At any time, the USG may inspect and seize data stored on this IS.'
+- '-Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be disclosed or used for any USG-authorized purpose.'
+- '-This IS includes security measures (e.g., authentication and access controls) to protect USG interests--not for your personal benefit or privacy.'
+- '-notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details'
 
 rhel7stig_logon_banner: Restricted System. Only use if you have been authorised to do so.
 

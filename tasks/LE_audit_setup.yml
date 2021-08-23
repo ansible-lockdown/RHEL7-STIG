@@ -1,23 +1,22 @@
 ---
 
-- name: Download goss binary
+- name: Download audit binary
   get_url:
-    url: "{{ goss_url }}"
-    dest: "{{ goss_bin }}"
-    owner: root
-    group: root
-    checksum: "{{ goss_version.checksum }}"
-    mode: 0555
+      url: "{{ audit_bin_url }}"
+      dest: "{{ audit_bin }}"
+      owner: root
+      group: root
+      checksum: "{{ audit_bin_version.checksum }}"
+      mode: 0555
   when:
-  - get_goss_file == 'download'
+      - get_audit_binary_method == 'download'
 
-- name: copy goss binary
+- name: copy audit binary
   copy:
-    src: "{{ copy_goss_from_path }}"
-    dest: "{{ goss_bin }}"
-    mode: 0555
-    owner: root
-    group: root
+      src: "{{ audit_bin_copy_location }}"
+      dest: "{{ audit_bin }}"
+      mode: 0555
+      owner: root
+      group: root
   when:
-  - get_goss_file == 'copy'
-    
+      - get_audit_binary_method == 'copy'

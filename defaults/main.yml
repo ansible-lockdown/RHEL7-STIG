@@ -13,24 +13,29 @@ python2_bin: /bin/python2.7
 # audit variable found at the base
 benchmark: RHEL7-STIG
 
-#### Basic external goss audit enablement settings ####
-#### Precise details - per setting can be found at the bottom of this file ####
+# Whether to skip the reboot
+rhel7stig_skip_reboot: true
 
-### Goss is required on the remote host
-rhel7stig_setup_audit: false
-# How to retrive goss
+### Audit Binary is required on the remote host
+setup_audit: false
+# How to retrieve audit binary
 # Options are copy or download - detailed settings at the bottom of this file
 # you will need to access to either github or the file already dowmloaded
-get_goss_file: download
+get_audit_binary_method: download
 
 # how to get audit files onto host options
-# options are git/copy/get_url
-rhel7stig_audit_content: git
+# options are git/copy/get_url other e.g. if you wish to run from already downloaded conf
+audit_content: git
 
 # enable audits to run - this  runs the audit and get the latest content
-rhel7stig_run_audit: false
+run_audit: false
 
-### End Goss enablements ####
+# Run heavy tests - some tests can have more impact on a system enabling these can have greater impact on a system
+audit_run_heavy_tests: true
+# Timeout for those cmds that take longer to run where timeout set
+audit_cmd_timeout: 30000
+
+### End Audit enablements ####
 #### Detailed settings found at the end of this document ####
 
 
@@ -309,6 +314,9 @@ rhel_07_041002: true
 rhel_07_041003: true
 rhel_07_041010: true
 rhel_07_910055: true
+rhel_07_010341: true
+rhel_07_010342: true
+rhel_07_010343: true
 # CAT 3 rules
 rhel_07_020200: true
 rhel_07_020300: true
@@ -419,8 +427,6 @@ rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
 rhel7stig_ssh_required: true
 rhel7stig_ssh_ciphers: "{{ rhel7stig_FIPS_ciphers }}"
 rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
-
-
 
 # RHEL-07-040490
 # If not required, remove vsftpd.
@@ -535,10 +541,10 @@ rhel7stig_password_complexity:
 
 # RHEL-07-040160
 # Session timeout setting file (TMOUT setting can be set in multiple files)
-# Timeout value is in seconds. (60 seconds * 10 = 600)
+# Timeout value is in seconds. (60 seconds * 15 = 600)
 rhel7stig_shell_session_timeout:
     file: /etc/profile.d/tmout.sh
-    timeout: 600
+    timeout: 900
 
 # RHEL-07-040320 | All network connections associated with SSH traffic must
 # terminate at the end of the session or after 10 minutes of inactivity, except
@@ -690,52 +696,57 @@ ol7stig_ipv4_tcp_invalid_ratelimit: 500
 # With this toggle off it will list all world-writable files not owned by system accounts
 rhel7stig_world_write_files_owner_root: false
 
+# RHEL-07-010343
+# The value given to Defaults timestamp timeout= in the sudo file.
+# Value must be greater than 0 to conform to STIG standards
+rhel7stig_sudo_timestamp_timeout: 1
 
-#### Goss Configuration Settings ####
+#### Audit Configuration Settings ####
 
-### Goss binary settings ###
-goss_version:
-  release: v0.3.16
-  checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
-goss_path: /usr/local/bin/
-goss_bin: "{{ goss_path }}goss"
-goss_format: documentation
+### Audit binary settings ###
+audit_bin_version:
+    release: v0.3.16
+    checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+audit_bin_path: /usr/local/bin/
+audit_bin: "{{ audit_bin_path }}goss"
+audit_format: json
 
-# if get_goss_file == download change accordingly
-goss_url: "https://github.com/aelsabbahy/goss/releases/download/{{ goss_version.release }}/goss-linux-amd64"
+# if get_audit_binary_method == download change accordingly
+audit_bin_url: "https://github.com/aelsabbahy/goss/releases/download/{{ audit_bin_version.release }}/goss-linux-amd64"
 
-## if get_goss_file - copy the following needs to be updated for your environment
+## if get_audit_binary_method - copy the following needs to be updated for your environment
 ## it is expected that it will be copied from somewhere accessible to the control node
 ## e.g copy from ansible control node to remote host
-copy_goss_from_path: /some/accessible/path
+audit_bin_copy_location: /some/accessible/path
 
 ### Goss Audit Benchmark file ###
-## manged by the control rhel7stig_audit_content
+## managed by the control audit_content
 # git
-rhel7stig_audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
-rhel7stig_audit_git_version: main
+audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
+audit_git_version: main
 
 # copy:
-rhel7stig_audit_local_copy: "some path to copy from"
+audit_local_copy: "some path to copy from"
 
 # get_url:
-rhel7stig_audit_files_url: "some url maybe s3?"
-
-# Where the goss audit configuration will be stored
-rhel7stig_audit_files: "/var/tmp/{{ benchmark }}-Audit/"
+audit_files_url: "some url maybe s3?"
 
 ## Goss configuration information
 # Where the goss configs and outputs are stored
-goss_out_dir: '/var/tmp'
-goss_audit_dir: "{{ goss_out_dir }}/{{ benchmark }}-Audit/"
-pre_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}"
-post_audit_outfile: "{{ goss_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}"
+audit_out_dir: '/var/tmp'
+# Where the goss audit configuration will be stored
+audit_conf_dir: "{{ audit_out_dir }}/{{ benchmark }}-Audit/"
+
+# If changed these can affect other products
+pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
+post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
 
 ## The following should not need changing
-goss_file: "{{ goss_audit_dir }}goss.yml"
-goss_vars_path: "{{ goss_audit_dir }}/vars/{{ ansible_hostname }}.yml"
-Audit_results: |
+audit_control_file: "{{ audit_conf_dir }}goss.yml"
+audit_vars_path: "{{ audit_conf_dir }}/vars/{{ ansible_hostname }}.yml"
+audit_results: |
       The pre remediation results are: {{ pre_audit_summary }}.
       The post remediation results are: {{ post_audit_summary }}.
-      Full breakdown can be found in {{ goss_out_dir }}
+      Full breakdown can be found in {{ audit_out_dir }}
+
 

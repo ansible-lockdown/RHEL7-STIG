@@ -13,7 +13,7 @@
   command: firewall-cmd --list-all --zone="{{ rhel_07_040810_firewalld_zone_audit.stdout }}"
   register: rhel_07_040810_firewalld_zone_default_audit
   when:
-      - rhel_07_040810_firewalld_zone_audit.stdout is defined
+      - rhel_07_040810_firewalld_zone_audit.stdout | length > 0
       - rhel7stig_start_firewall_service
   tags:
       - RHEL-07-040810
@@ -23,7 +23,7 @@
       msg: "The following task output is the firewalld settings for zone {{ rhel_07_040810_firewalld_zone_audit.stdout }} from {{ ansible_hostname }}:"
   changed_when: true
   when:
-      - rhel_07_040810_firewalld_zone_default_audit.stdout_lines is defined
+      - rhel_07_040810_firewalld_zone_audit.stdout | length > 0
       - rhel7stig_start_firewall_service
   tags:
       - RHEL-07-040810
@@ -32,7 +32,7 @@
   debug: var=rhel_07_040810_firewalld_zone_default_audit.stdout_lines
   changed_when: true
   when:
-      - rhel_07_040810_firewalld_zone_default_audit.stdout_lines is defined
+      - rhel_07_040810_firewalld_zone_audit.stdout | length > 0
       - rhel7stig_start_firewall_service
   tags:
       - RHEL-07-040810
@@ -42,7 +42,7 @@
       msg: "WARNING! We could pull no configured rules for {{ rhel7stig_firewall_service }} on {{ ansible_hostname }}! This is a finding per RHEL-07-040810 - The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
   changed_when: true
   when:
-      - rhel_07_040810_firewalld_zone_default_audit.stdout_lines is not defined
+      - rhel_07_040810_firewalld_zone_audit.stdout | length == 0
       - rhel7stig_start_firewall_service
   tags:
       - RHEL-07-040810
