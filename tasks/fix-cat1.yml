@@ -333,22 +333,6 @@
       - V-204448
       - yum
 
-# - name: |
-#     "HIGH | RHEL-07-020210 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux."
-#     "HIGH | RHEL-07-020220 | PATCH | The Red Hat Enterprise Linux operating system must enable the SELinux targeted policy."
-#   selinux:
-#     state: enforcing
-#     policy: targeted
-#   check_mode: "{{ ansible_check_mode or rhel7stig_system_is_chroot }}"
-#   when:
-#   - rhel_07_020210 or rhel_07_020220
-#   - not rhel7stig_system_is_container
-#   - ansible_distribution_file_variety == "RedHat"
-#   tags:
-#   - RHEL-07-020210
-#   - RHEL-07-020220
-#   - selinux
-
 - name: "HIGH | RHEL-07-020230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled on the command line."
   systemd:
       name: ctrl-alt-del.target
