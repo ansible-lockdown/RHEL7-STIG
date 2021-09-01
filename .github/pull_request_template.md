@@ -4,7 +4,7 @@ A general description of the changes made that are being requested for merge
 **Issue Fixes:**
 Please list (using linking) any open issues this PR addresses.
 
-**Enhancements:***
+**Enhancements:**
 Please all enhancments/feature additions that are not related to issue fixes
 
 **How has this been tested?:**
