@@ -100,6 +100,8 @@ RHEL_07_010430: true
 RHEL_07_010460: true
 RHEL_07_010470: true
 RHEL_07_010481: true
+RHEL_07_010483: {{ rhel_07_010483 }}
+RHEL_07_010492: {{ rhel_07_010492 }}
 RHEL_07_010500: true
 RHEL_07_020019: true
 RHEL_07_020020: true
@@ -335,7 +337,10 @@ rhel7stig_staff_u:
 # host intrision protection e.g. Mcafee HIPS
 rhel7stig_hip_enabled: false
 rhel7stig_hip_pkg: 
-rhel7stig_hip_proc: 
+rhel7stig_hip_proc:
+
+# RHEL-07-010483 & RHEL-07-010492
+rhel7stig_grub_superusers: {{ rhel7stig_grub_superusers }}
 
 # RHEL_07_020040 - if notify by mail
 rhel7stig_aide_cron:

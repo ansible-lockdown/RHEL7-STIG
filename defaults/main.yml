@@ -144,6 +144,8 @@ rhel_07_010430: true
 rhel_07_010460: true
 rhel_07_010470: true
 rhel_07_010481: true
+rhel_07_010483: true
+rhel_07_010492: true
 rhel_07_010500: true
 rhel_07_020019: true
 rhel_07_020020: true
@@ -472,6 +474,9 @@ rhel7stig_overwrite_aide_db: true
 # AIDE database file locations
 rhel7stig_aide_temp_db_file: /var/lib/aide/aide.db.new.gz
 rhel7stig_aide_db_file: /var/lib/aide/aide.db.gz
+
+# RHEL-07-010483 & RHEL-07-010492
+rhel7stig_grub_superusers: su_mode_superuser
 
 rhel7stig_aide_cron:
     user: root
