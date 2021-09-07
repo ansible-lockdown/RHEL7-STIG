@@ -44,6 +44,9 @@
       - RHEL-07-010010
       - CAT1
       - CCI-001494
+      - CCI-001496
+      - CCI-002165
+      - CCI-002235
       - SRG-OS-000257-GPOS-00098
       - SV-204392r646841_rule
       - V-204392
@@ -80,6 +83,7 @@
       - RHEL-07-010020
       - CAT1
       - CCI-001749
+      - SRG-OS-000480-GPOS-00227
       - SV-214799r603261_rule
       - V-214799
       - packages
@@ -230,20 +234,20 @@
         when:
             - rhel7stig_machine_uses_uefi
 
-      - name: |
-          "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-          "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-        lineinfile:
-            path: /etc/grub.d/01_users
-            regexp: "{{ item.regexp }}"
-            line: "{{ item.line }}"
-        notify:
-            - make grub2 config
-        with_items:
-            - regexp: ^\s*set superusers=
-              line: '    set superusers="{{ rhel7stig_boot_superuser }}"'
-            - regexp: ^\s*export superusers
-              line: '    export superusers'
+      # - name: |
+      #     "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+      #     "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+      #   lineinfile:
+      #       path: /etc/grub.d/01_users
+      #       regexp: "{{ item.regexp }}"
+      #       line: "{{ item.line }}"
+      #   notify:
+      #       - make grub2 config
+      #   with_items:
+      #       - regexp: ^\s*set superusers=
+      #         line: '    set superusers="{{ rhel7stig_boot_superuser }}"'
+      #       - regexp: ^\s*export superusers
+      #         line: '    export superusers'
   when:
       - rhel_07_010482 or
         rhel_07_010491
@@ -253,12 +257,12 @@
       - RHEL-07-010482
       - CCI-000213
       - SRG-OS-000080-GPOS-00048
-      - SV-204438r603261_rule
+      - SV-204438r744095_rule
       - V-204438
       - RHEL-07-010491
       - CCI-000213
       - SRG-OS-000080-GPOS-00048
-      - SV-204440r603261_rule
+      - SV-204440r744098_rule
       - V-204440
       - grub
       - bootloader
@@ -386,7 +390,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204458r603261_rule
+      - SV-204458r744100_rule
       - V-204458
       - complexity-high
 
@@ -574,6 +578,7 @@
       - RHEL-07-032000
       - CAT1
       - CCI-001668
+      - SRG-OS-000480-GPOS-00227
       - SV-214801r603261_rule
       - V-214801
       - antivirus
@@ -619,6 +624,7 @@
       - RHEL-07-040540
       - CAT1
       - CCI-000366
+      - SRG-OS-000480-GPOS-00227
       - SV-204606r603261_rule
       - V-204606
       - shosts
