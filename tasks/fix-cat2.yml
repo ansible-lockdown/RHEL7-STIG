@@ -23,8 +23,6 @@
       - SV-204393r603261_rule
       - V-204393
       - RHEL_07_010040
-      - CCI-000048
-      - SRG-OS-000023-GPOS-00006
       - SV-204394r603261_rule
       - V-204394
       - dod_logon_banner
@@ -863,6 +861,59 @@
       - SV-204437r603261_rule
       - V-204437
       - rescue
+
+- name: |
+      "MEDIUM | RHEL-07-010483 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with a BIOS must have a unique name for the grub superusers account when booting into single-user and maintenance modes."
+      "MEDIUM | RHEL-07-010492 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with United Extensible Firmware Interface (UEFI) must have a unique name for the grub superusers account when booting into single-user mode and maintenance."
+  block:
+      - name: "MEDIUM | RHEL-07-010483 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with a BIOS must have a unique name for the grub superusers account when booting into single-user and maintenance modes. | Set grub unique name BIOS"
+        lineinfile:
+            path: /etc/grub.d/01_users
+            regexp: "{{ item.regexp }}"
+            line: "{{ item.line }}"
+        notify:
+            - make grub2 config
+        with_items:
+            - regexp: ^\s*set superusers=
+              line: '    set superusers="{{ rhel7stig_grub_superusers }}"'
+            - regexp: ^\s*export superusers
+              line: '    export superusers'
+            - regexp: ^\s*password_pbkdf2
+              line: '    password_pbkdf2 {{ rhel7stig_grub_superusers }} \${GRUB2_PASSWORD}'
+        when: not rhel7stig_machine_uses_uefi
+
+      - name: "MEDIUM | RHEL-07-010492 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with United Extensible Firmware Interface (UEFI) must have a unique name for the grub superusers account when booting into single-user mode and maintenance. | Set grub unique name UEFI"
+        lineinfile:
+            path: /boot/efi/EFI/redhat/grub.cfg
+            regexp: "{{ item.regexp }}"
+            line: "{{ item.line }}"
+        notify:
+            - make grub2 config
+        with_items:
+            - regexp: ^\s*set superusers=
+              line: '    set superusers="{{ rhel7stig_grub_superusers }}"'
+            - regexp: ^\s*export superusers
+              line: '    export superusers'
+            - regexp: ^\s*password_pbkdf2
+              line: '    password_pbkdf2 {{ rhel7stig_grub_superusers }} \${GRUB2_PASSWORD}'
+        when: rhel7stig_machine_uses_uefi
+  when:
+      - rhel_07_010483 or
+        rhel_07_010492
+  tags:
+      - RHEL-07-010483
+      - CAT2
+      - CCI-000213
+      - SRG-OS-000080-GPOS-00048
+      - SV-244557r744063_rule
+      - V-244557
+      - RHEL-07-01092
+      - SV-244558r744066_rule
+      - V-244558
+      - grub
+      - bootloader
+
+
 
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
   block:
