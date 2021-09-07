@@ -33,7 +33,7 @@ run_audit: false
 # Run heavy tests - some tests can have more impact on a system enabling these can have greater impact on a system
 audit_run_heavy_tests: true
 # Timeout for those cmds that take longer to run where timeout set
-audit_cmd_timeout: 30000
+audit_cmd_timeout: 60000
 
 ### End Audit enablements ####
 #### Detailed settings found at the end of this document ####
