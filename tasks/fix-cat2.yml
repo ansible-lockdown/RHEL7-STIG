@@ -85,6 +85,8 @@
       - RHEL-07-010061
       - CAT2
       - CCI-001948
+      - CCI-001953
+      - CCI-001954
       - SRG-OS-000375-GPOS-00160
       - SV-204397r603261_rule
       - V-204397
@@ -288,6 +290,11 @@
   when:
       - rhel_07_010140
   tags:
+      - RHEL-07-010140
+      - CAT2
+      - CCI-000194
+      - SV-204409r603261_rule
+      - V-204409
       - RHELsality
 
 - name: "MEDIUM | RHEL-07-010150 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one special character."
@@ -618,7 +625,7 @@
       - CCI-000795
       - SRG-OS-000118-GPOS-00060
       - SV-204426r603261_rule
-      - V-20442
+      - V-204426
       - accounts
 
 - name: |
@@ -736,7 +743,6 @@
       - V-204427
       - RHEL-07-010330
       - CCI-002238
-      - SRG-OS-000329-GPOS-00128
       - SV-204428r603261_rule
       - V-204428
       - pamd
@@ -913,8 +919,6 @@
       - grub
       - bootloader
 
-
-
 - name: "MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication."
   block:
       # This task checks to test if pamd is enabled for pkcs11
@@ -985,6 +989,7 @@
       - RHEL-07-010500
       - CAT2
       - CCI-000766
+      - SRG-OS-000104-GPOS-00051
       - SV-204441r603261_rule
       - V-204441
       - authentication
@@ -1021,7 +1026,7 @@
       - CCI-002235
       - CCI-002165
       - SRG-OS-000324-GPOS-00125
-      - SV-204444r603261_rule
+      - SV-204444r754744_rule
       - V-204444
 
 - name: |
@@ -1058,7 +1063,6 @@
       - SV-204445r603261_rule
       - V-204445
       - RHEL-07-020040
-      - CCI-001744
       - SRG-OS-000363-GPOS-00150
       - SV-204446r603261_rule
       - V-204446
@@ -1172,12 +1176,10 @@
       - CCI-002696
       - CCI-002165
       - SRG-OS-000445-GPOS-00199
-      - SV-204453r603261_rule
+      - SV-204453r754746_rule
       - V-204453
       - RHEL-07-020220
-      - CCI-002165
-      - CCI-002696
-      - SV-204454r603261_rule
+      - SV-204454r754748_rule
       - V-204454
       - selinux
 
@@ -1350,6 +1352,7 @@
       - RHEL-07-020620
       - CAT2
       - CCI-000366
+      - SRG-OS-000480-GPOS-00227
       - SV-204467r603826_rule
       - V-204467
       - users
@@ -1413,7 +1416,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204470r603832_rule
+      - SV-204470r744102_rule
       - V-204470
       - users
 
@@ -1747,6 +1750,7 @@
       - RHEL-07-020730
       - CAT2
       - CCI-000366
+      - SRG-OS-000480-GPOS-00227
       - SV-204478r603261_rule
       - V-204478
       - complexity-high
@@ -2012,7 +2016,6 @@
       - SV-204490r603261_rule
       - V-204490
       - RHEL-07-021120
-      - CCI-000366
       - SV-204491r603261_rule
       - V-204491
       - cron
@@ -2327,7 +2330,7 @@
       - CAT2
       - CCI-001855
       - SRG-OS-000343-GPOS-00134
-      - SV-204514r603261_rule
+      - SV-204513r744112_rule
       - V-204514
       - auditd
       - logging
@@ -2792,7 +2795,7 @@
       - CCI-000803
       - CCI-000068
       - SRG-OS-000033-GPOS-00014
-      - SV-204578r603843_rule
+      - SV-204578r744116_rule
       - V-204578
       - ssh
 
@@ -2902,13 +2905,9 @@
       - SV-204581r603261_rule
       - V-204581
       - RHEL-07-040190
-      - CCI-001453
-      - SRG-OS-000250-GPOS-00093
       - SV-204582r603261_rule
       - V-204582
       - RHEL-07-040200
-      - CCI-001453
-      - SRG-OS-000250-GPOS-00093
       - SV-204583r603261_rule
       - V-204583
       - ldap
@@ -3133,7 +3132,7 @@
       - CAT2
       - CCI-001453
       - SRG-OS-000250-GPOS-00093
-      - SV-204595r603846_rule
+      - SV-204595r744117_rule
       - V-204595
       - ssh
 
@@ -3604,24 +3603,17 @@
 
 - name: "MEDIUM | RHEL-07-040680 | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
   block:
-      - name: "MEDIUM | RHEL-07-040680 | AUDIT | Check if postfix is installed."
-        command: rpm -q postfix
-        changed_when: false
-        failed_when: false
-        check_mode: false
-        register: rhel_07_040680_rpm_audit
-
       - name: "MEDIUM | RHEL-07-040680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
         command: "/usr/sbin/postconf -n smtpd_client_restrictions"
         check_mode: false
         changed_when: false
         register: rhel_07_040680_postconf_audit
-        when: rhel_07_040680_rpm_audit.rc == 0
+        when: "'postfix' in ansible_facts.packages"
 
       - name: "MEDIUM | RHEL-07-040680 | PATCH | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
         command: "/usr/sbin/postconf -e 'smtpd_client_restrictions=permit_mynetworks, reject'"
         when:
-            - rhel_07_040680_rpm_audit.rc == 0
+            - "'postfix' in ansible_facts.packages"
             - rhel_07_040680_postconf_audit.stdout != 'smtpd_client_restrictions = permit_mynetworks, reject'
   when:
       - rhel_07_040680
@@ -3632,22 +3624,6 @@
       - SRG-OS-000480-GPOS-00227
       - SV-204619r603261_rule
       - V-204619
-
-# - name: "MEDIUM | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections for interactive users are encrypted."
-#   lineinfile:
-#     create: yes
-#     dest: /etc/ssh/sshd_config
-#     regexp: "(?i)^#?X11Forwarding"
-#     line: X11Forwarding yes
-#     validate: /usr/sbin/sshd -t -f %s
-#     mode: 0600
-#   notify: restart sshd
-#   when:
-#   - rhel_07_040710
-#   - rhel7stig_ssh_required
-#   tags:
-#   - RHEL-07-040710
-#   - ssh
 
 - name: "MEDIUM | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections are disabled except to fulfill documented and validated mission requiremen"
   lineinfile:
@@ -3794,8 +3770,7 @@
 
 - name: "MEDIUM | RHEL-07-040820 | PATCH | The Red Hat Enterprise Linux operating system must not have unauthorized IP tunnels configured."
   package:
-      name:
-          - libreswan
+      name: libreswan
       state: absent
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
@@ -3915,26 +3890,17 @@
 
 - name: "MEDIUM | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
   block:
-      - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if nmcli command is available"
-        command: rpm -q NetworkManager
-        changed_when: false
-        failed_when: false
-        check_mode: false
-        args:
-            warn: false
-        register: rhel_07_nmcli_available
-
       - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if wifi is enabled"
         command: nmcli radio wifi
-        changed_when: rhel_07_wifi_enabled.stdout != "disabled"
+        changed_when: false
         check_mode: false
         register: rhel_07_wifi_enabled
-        when: rhel_07_nmcli_available.rc == 0
+        when: "'NetworkManager' in ansible_facts.packages"
 
       - name: "MEDIUM | RHEL-07-041010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
         command: nmcli radio wifi off
         when:
-            - rhel_07_wifi_enabled is changed
+            - "'enabled' in rhel_07_wifi_enabled.stdout"
   when:
       - rhel_07_041010
   tags:
@@ -3979,9 +3945,10 @@
   tags:
       - RHEL-07-010062
       - CAT2
-      - CCI-001263
-      - SV-214800r603261_rule
-      - V-214800
+      - CCI-000057
+      - SRG-OS-000029-GPOS-00010
+      - SV-214937r603261_rule
+      - V-214937
       - dconf
 
 - name: "MEDIUM | RHEL-07-020111 | PATCH | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
