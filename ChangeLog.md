@@ -1,3 +1,11 @@
+### Release 1.3.0
+# Release STIG Version
+[Version 3, Rel 4 released on Jul 23, 2021](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R4_STIG.zip)
+
+## What's new
+- Updated to match Version 3 release 4 benchmarks from Jul 2021
+- Refined controls to use package_facts to shorten blocks
+
 ### Release 1.2.0
 # Release STIG Version
 [Version 3, Rel 3 released on Jan 22, 2021](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R3_STIG.zip)
