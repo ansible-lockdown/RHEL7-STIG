@@ -139,6 +139,9 @@ rhel_07_010310: true
 rhel_07_010320: true
 rhel_07_010330: true
 rhel_07_010340: true
+rhel_07_010341: true
+rhel_07_010342: true
+rhel_07_010343: true
 rhel_07_010350: true
 rhel_07_010430: true
 rhel_07_010460: true
@@ -316,9 +319,7 @@ rhel_07_041002: true
 rhel_07_041003: true
 rhel_07_041010: true
 rhel_07_910055: true
-rhel_07_010341: true
-rhel_07_010342: true
-rhel_07_010343: true
+
 # CAT 3 rules
 rhel_07_020200: true
 rhel_07_020300: true
@@ -456,9 +457,6 @@ rhel7stig_force_exact_packages: "{{ rhel7stig_disruption_high }}"
 
 rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispassword'
 rhel7stig_boot_superuser: root
-
-# RHEL-07-010483 and RHEL-07-010492
-rhel7stig_grub_superusers: su_mode_superuser
 
 # RHEL-07-021700 set the value for correctly configured grub bootloader sequence
 rhel7stig_grub_bootloader_validorder: " set root='hd0,msdos1'"

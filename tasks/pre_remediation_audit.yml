@@ -19,7 +19,7 @@
     package:
       name: git
       state: present
-    when: ansible_distribution_major_version == 8
+    when: ansible_distribution_major_version == '8'
   
   - name: Pre Audit Setup | Install git (rh7 python2)
     package:
@@ -27,7 +27,7 @@
       state: present
     vars:
       ansible_python_interpreter: "{{ python2_bin }}"
-    when: ansible_distribution_major_version == 7
+    when: ansible_distribution_major_version == '7'
 
   - name: Pre Audit Setup | retrieve audit content files from git
     git:
@@ -97,11 +97,11 @@
     
   - name: Pre Audit | Capture pre-audit result
     set_fact: 
-      pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
+        pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
     vars:
-      summary: 'summary."summary-line"'
-  when:
-  - audit_format == "json"
+        summary: 'summary."summary-line"'
+    when:
+        - audit_format == "json"
 
 - name: Pre Audit | Capture audit data if documentation format
   block:
@@ -112,6 +112,6 @@
 
   - name: Pre Audit | Capture pre-audit result
     set_fact:
-      pre_audit_summary: "{{ pre_audit.stdout_lines }}"
-  when:
-  - audit_format == "documentation"
+        pre_audit_summary: "{{ pre_audit.stdout_lines }}"
+    when:
+        - audit_format == "documentation"
