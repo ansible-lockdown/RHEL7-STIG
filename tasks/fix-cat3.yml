@@ -13,6 +13,7 @@
       - CCI-002617
       - SRG-OS-000437-GPOS-00194
       - SV-204452r603261_rule
+      - V-204452
       - yum
 
 - name: "LOW | RHEL-07-020300 | The Red Hat Enterprise Linux operating system must be configured so that all Group Identifiers (GIDs) referenced in the /etc/passwd file are defined in the /etc/group file."
@@ -36,6 +37,7 @@
       - RHEL-07-020300
       - CAT3
       - CCI-000764
+      - SRG-OS-000104-GPOS-00051
       - SV-204461r603261_rule
       - V-204461
       - complexity-high
@@ -98,6 +100,7 @@
       - RHEL-07-021320
       - CAT3
       - CCI-000366
+      - SRG-OS-000480-GPOS-00227
       - SV-204494r603261_rule
       - V-204494
       - complexity-high
