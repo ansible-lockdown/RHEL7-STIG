@@ -4,7 +4,7 @@ galaxy_info:
     description: "Apply the DISA RHEL 7 STIG"
     company: "MindPoint Group"
     license: MIT
-    role_name: rhel8_stig
+    role_name: rhel7_stig
     min_ansible_version: 2.9
     platforms:
     - name: EL
