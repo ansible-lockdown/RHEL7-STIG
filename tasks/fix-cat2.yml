@@ -890,7 +890,7 @@
 
       - name: "MEDIUM | RHEL-07-010492 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with United Extensible Firmware Interface (UEFI) must have a unique name for the grub superusers account when booting into single-user mode and maintenance. | Set grub unique name UEFI"
         lineinfile:
-            path: /boot/efi/EFI/redhat/grub.cfg
+            path: "{{ rhel7stig_bootloader_path }}/grub.cfg"
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
         notify:
