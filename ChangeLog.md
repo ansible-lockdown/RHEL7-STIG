@@ -3,7 +3,7 @@
 ## Release 1.3.2
 ----------------
 
-issues fixec:
+issues fixed:
 
 - #385 - efi path fix - Thanks to danbarr
 - #386 - meta/main.yml typo correction - Thanks to Yeroc
