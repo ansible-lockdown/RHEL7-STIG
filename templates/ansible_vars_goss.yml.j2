@@ -1,16 +1,12 @@
 ## metadata for Audit benchmark
-rhel7stig_benchmark:
-- "type: STIG"
-- "version: '3.3'"
-- "os: RHEL 7"
-- "epoch: {{ ansible_date_time.epoch }}"
-- "hostname: {{ ansible_hostname }}"
+benchmark_version: '3.5'
+
+# Set if genuine RHEL (subscription manager check) not for derivatives e.g. CentOS
+is_redhat_os: {% if ansible_distribution == "RedHat" %}true{% else %}false{% endif %}
 
 ### Variables for for stig options
 run_heavy_tests: {{ audit_run_heavy_tests }}
 timeout_ms: {{ audit_cmd_timeout }}
-
-rhel7stig_os_distribution: {{ ansible_distribution | lower }}
 
 # If running on RHEL7 <= 7.2
 rhel7stig_legacyOS: {% if ansible_distribution_version > '7.2' %} false {% else %} true {% endif %}

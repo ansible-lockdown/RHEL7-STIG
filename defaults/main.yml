@@ -754,5 +754,3 @@ audit_results: |
       The pre remediation results are: {{ pre_audit_summary }}.
       The post remediation results are: {{ post_audit_summary }}.
       Full breakdown can be found in {{ audit_out_dir }}
-
-
