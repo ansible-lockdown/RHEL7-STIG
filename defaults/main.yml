@@ -152,6 +152,9 @@ rhel_07_010492: true
 rhel_07_010500: true
 rhel_07_020019: true
 rhel_07_020020: true
+rhel_07_020021: true
+rhel_07_020022: true
+rhel_07_020023: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
 rhel_07_020040: "{{ rhel7stig_disruption_high }}"
