@@ -161,40 +161,40 @@
       - SV-204433r603261_rule
       - V-204433
 
-- name: |
-    "HIGH | RHEL-07-010480 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-    "HIGH | RHEL-07-010490 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-  lineinfile:
-      dest: /etc/grub.d/40_custom
-      insertafter: EOF
-      regexp: "{{ item.regex }}"
-      line: "{{ item.line }}"
-  with_items:
-      - regexp: ^\s*set superusers=
-        line: '    set superusers="root"'
-      - regexp: ^password_pbkdf2
-        line: "^password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}"
-  no_log: true
-  notify:
-      - make grub2 config
-  when:
-      - rhel_07_010480 or
-        rhel_07_010490
-      - ansible_distribution_version is version_compare('7.2', '<')
-  tags:
-      - CAT1
-      - RHEL-07-010480
-      - CCI-000213
-      - SRG-OS-000080-GPOS-00048
-      - SV-204436r603261_rule
-      - V-204436
-      - RHEL-07-010490
-      - CCI-000213
-      - SRG-OS-000080-GPOS-00048
-      - SV-204439r603261_rule
-      - V-204439
-      - grub
-      - bootloader
+# - name: |
+#     "HIGH | RHEL-07-010480 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
+#     "HIGH | RHEL-07-010490 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
+#   lineinfile:
+#       dest: /etc/grub.d/40_custom
+#       insertafter: EOF
+#       regexp: "{{ item.regex }}"
+#       line: "{{ item.line }}"
+#   with_items:
+#       - regexp: ^\s*set superusers=
+#         line: '    set superusers="root"'
+#       - regexp: ^password_pbkdf2
+#         line: "^password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}"
+#   no_log: true
+#   notify:
+#       - make grub2 config
+#   when:
+#       - rhel_07_010480 or
+#         rhel_07_010490
+#       - ansible_distribution_version is version_compare('7.2', '<')
+#   tags:
+#       - CAT1
+#       - RHEL-07-010480
+#       - CCI-000213
+#       - SRG-OS-000080-GPOS-00048
+#       - SV-204436r603261_rule
+#       - V-204436
+#       - RHEL-07-010490
+#       - CCI-000213
+#       - SRG-OS-000080-GPOS-00048
+#       - SV-204439r603261_rule
+#       - V-204439
+#       - grub
+#       - bootloader
 
 - name: |
     "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
