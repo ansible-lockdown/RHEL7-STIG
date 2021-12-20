@@ -154,17 +154,17 @@
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
-      - rhel_07_010480 or
+      - rhel_07_010481 or
         rhel_07_010482 or
-        rhel_07_010490 or
+        rhel_07_010483 or
         rhel_07_010491 or
         rhel_07_021350
   tags:
       - cat1
       - high
-      - RHEL-07-010480
+      - RHEL-07-010481
       - RHEL-07-010482
-      - RHEL-07-010490
+      - RHEL-07-010483
       - RHEL-07-010491
       - RHEL-07-021350
 
@@ -173,9 +173,9 @@
       path: /sys/firmware/efi
   register: rhel_07_sys_firmware_efi
   when:
-      - rhel_07_010480 or
+      - rhel_07_010481 or
         rhel_07_010482 or
-        rhel_07_010490 or
+        rhel_07_010483 or
         rhel_07_010491 or
         rhel_07_021350 or
         rhel_07_021700
@@ -184,9 +184,9 @@
       - high
       - cat2
       - medium
-      - RHEL-07-010480
+      - RHEL-07-010481
       - RHEL-07-010482
-      - RHEL-07-010490
+      - RHEL-07-010483
       - RHEL-07-010491
       - RHEL-07-021350
       - RHEL-07-021700
