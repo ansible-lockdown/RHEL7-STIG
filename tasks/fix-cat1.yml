@@ -497,6 +497,7 @@
                   value: UUID={{ item.uuid }}
                   insert: yes
               when:
+                  - - rhel7stig_boot_part not in ['/', '']
                   - not ansible_check_mode or
                     rhel7_stig_grub_template is not changed
               notify: confirm grub2 user cfg
