@@ -17,8 +17,11 @@ gzip_dbout=yes
 # Default.
 verbose=5
 
-report_url=file:@@{LOGDIR}/aide.log
-report_url=stdout
+# One line per timestamp for better external logger support
+syslog_format = true
+report_url=syslog:LOG_AUTH
+#report_url=file:@@{LOGDIR}/aide.log
+#report_url=stdout
 #report_url=stderr
 #NOT IMPLEMENTED report_url=mailto:root@foo.com
 #NOT IMPLEMENTED report_url=syslog:LOG_AUTH
