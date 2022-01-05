@@ -880,12 +880,9 @@
         notify:
             - make grub2 config
         with_items:
-            - regexp: ^\s*set superusers=
-              line: '    set superusers="{{ rhel7stig_grub_superusers }}"'
-            - regexp: ^\s*export superusers
-              line: '    export superusers'
-            - regexp: ^\s*password_pbkdf2
-              line: '    password_pbkdf2 {{ rhel7stig_grub_superusers }} \${GRUB2_PASSWORD}'
+            - { regexp: '^\s*set superusers=', line: '    set superusers="{{ rhel7stig_grub_superusers }}"' }
+            - { regexp: '^\s*export superusers', line: '    export superusers'}
+            - { regexp: '^\s*password_pbkdf2', line: '    password_pbkdf2 {{ rhel7stig_grub_superusers }} \${GRUB2_PASSWORD}' }
         when: not rhel7stig_machine_uses_uefi
 
       - name: "MEDIUM | RHEL-07-010492 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with United Extensible Firmware Interface (UEFI) must have a unique name for the grub superusers account when booting into single-user mode and maintenance. | Set grub unique name UEFI"
@@ -896,12 +893,9 @@
         notify:
             - make grub2 config
         with_items:
-            - regexp: ^\s*set superusers=
-              line: '    set superusers="{{ rhel7stig_grub_superusers }}"'
-            - regexp: ^\s*export superusers
-              line: '    export superusers'
-            - regexp: ^\s*password_pbkdf2
-              line: '    password_pbkdf2 {{ rhel7stig_grub_superusers }} \${GRUB2_PASSWORD}'
+            - { regexp: '^\s*set superusers=', line: '    set superusers="{{ rhel7stig_grub_superusers }}"' }
+            - { regexp: '^\s*export superusers', line: '    export superusers' }
+            - { regexp: '^\s*password_pbkdf2', line: '    password_pbkdf2 {{ rhel7stig_grub_superusers }} \${GRUB2_PASSWORD}' }
         when: rhel7stig_machine_uses_uefi
   when:
       - rhel_07_010483 or
@@ -998,28 +992,31 @@
 # #########   20000  ###########
 # ##############################
 
-- name: "MEDIUM | RHEL-07-020020 | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+# This control should be manually implemented
+- name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
   block:
-      # is a HBSS installed?
-      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-        stat:
-            path: "{{ rhel_07_020020_HBSS_path }}"
-        register: rhel_07_020020_HBSS_check
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Get SELinux authorized users"
+        shell: semanage login -l
+        changed_when: false
+        failed_when: false
+        register: rhel_07_020020_sel_auth_users
 
-      # is a HIPS installed?
-      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-        stat:
-            path: "{{ rhel_07_020020_HIPS_path }}"
-        register: rhel_07_020020_HIPS_check
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Show SELinux authorized users"
+        debug:
+            msg:
+                - "Warning! Below is your SELinux user/group list. Please review and make sure all of the following are met:"
+                - "1) All administrators are mapped to staff_u or an appropriately tailored confined SELinux user as defined by the organization"
+                - "2) All authorized non-administrative users must be mapped to the user_u SELinux user"
+                - "{{ rhel_07_020020_sel_auth_users.stdout_lines }}"
+        when: rhel_07_020020_sel_auth_users.stdout | length > 0
 
-      # This is an include to conditionally loop through users to selinux mappings
-      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-        include_tasks: audit_selinuxlocaluserdefs.yml
-        when: not rhel_07_020020_HBSS_check.stat.exists and not rhel_07_020020_HIPS_check.stat.exists
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Warn that semanage is not installed"
+        debug:
+            msg:
+                - "Alert! You do not have semanage installed! Please installed the needed packages"
+        when: "'command not found' in rhel_07_020020_sel_auth_users.stderr"
   when:
       - rhel_07_020020
-      - rhel7stig_disruption_high
-      - rhel7stig_audit_disruptive
   tags:
       - RHEL-07-020020
       - CAT2
@@ -4213,3 +4210,80 @@
       - SV-237635r646856_rule
       - V-237635
       - sudo
+
+- name: "MEDIUM | RHEL-07-020021 | AUDIT | The Red Hat Enterprise Linux operating system must confine SELinux users to roles that conform to least privilege."
+  block:
+      - name: "MEDIUM | RHEL-07-020021 | AUDIT | The Red Hat Enterprise Linux operating system must confine SELinux users to roles that conform to least privilege. | Get SELinux Role mappings"
+        shell: semanage user -l
+        changed_when: false
+        failed_when: false
+        register: rhel_07_020021_sel_role_mappings
+
+      - name: "MEDIUM | RHEL-07-020021 | AUDIT | The Red Hat Enterprise Linux operating system must confine SELinux users to roles that conform to least privilege. | Show SELinux Role mappings"
+        debug:
+            msg: "Warning! Below are your SELinux Role mappings. Please review the mappings with your SA to determine validity of the mappings"
+        when: rhel_07_020021_sel_role_mappings.stdout | length > 0
+      
+      - name: "MEDIUM | RHEL-07-020021 | AUDIT | The Red Hat Enterprise Linux operating system must confine SELinux users to roles that conform to least privilege. | Alert that semanage is not installed"
+        debug:
+            msg: "Alert! You do not have semanage installed! Please installed the needed packages"
+        when: "'command not found' in rhel_07_020021_sel_role_mappings.stderr"
+  when:
+      - rhel_07_020021
+  tags:
+      - RHEL-07-020021
+      - CAT2
+      - CCI-002165
+      - CCI-002235
+      - SRG-OS-000324-GPOS-00125
+      - SV-250312r792843_rule
+      - V-250312
+
+- name: "MEDIUM | RHEL-07-020022 | PATCH | The Red Hat Enterprise Linux operating system must not allow privileged accounts to utilize SSH."
+  seboolean:
+      name: ssh_sysadm_login
+      persistent: true
+      state: "{{ rhel7stig_ssh_sysadm_login_state }}"
+  when:
+      - rhel_07_020022
+  tags:
+      - RHEL-07-020022
+      - CAT2
+      - CCI-002165
+      - CI-002235
+      - SRG-OS-000324-GPOS-00125
+      - SV-250313r792846_rule
+      - V-250313
+
+- name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
+  block:
+      - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command | Get sysadm_r sudoers status"
+        shell: grep -s sysadm_r /etc/sudoers.d/* /etc/sudoers
+        changed_when: false
+        failed_when: false
+        register: rhel_07_020023_sel_admin_sudo_status
+
+      - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
+        debug:
+            msg:
+                - "Warning! Below is your sysadm_r settings in your sudoers file."
+                - "Please review to confirm a designated sudoers admin group or account(s) is not configured to eleveate the SELinux type and role to sysadm_t and sysadm_r with the use of the sudo command | Display if entry exists"
+                - "{{ rhel_07_020023_sel_admin_sudo_status.stdout_lines }}"
+        when: rhel_07_020023_sel_admin_sudo_status.stdout | length > 0
+
+      - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
+        debug:
+            msg:
+                - "Alert! You do not have sysadm_r configured in your sudoers file(s_"
+                - "Please configure to designate sudoers administrator group or account(s) is not configured to elevate the SELinux type and role to sysadm_t and sysadm_r with the use of the sudo command | Alert that on entry exists"
+        when: rhel_07_020023_sel_admin_sudo_status.stdout | length == 0
+  when:
+      - rhel_07_020023
+  tags:
+      - RHEL-07-020023
+      - CAT2
+      - CCI-002165
+      - CCI-002235
+      - SRG-OS-000324-GPOS-00125
+      - SV-250314r792849_rule
+      - V-250314

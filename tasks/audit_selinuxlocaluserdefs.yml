@@ -10,6 +10,42 @@
   tags:
       - RHEL-07-020020
 
+# find the local interactive staff
+- name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+  shell: "awk -F: '/^{{ rhel_07_020020_selinux_local_interactive_staff_group }}/ {print $4;}' /etc/group | tr ',' '\n'"
+  register: rhel_07_020020_local_interactive_staff
+  when:
+      - rhel_07_020020
+      - rhel7stig_disruption_high
+      - rhel7stig_audit_disruptive
+  tags:
+      - RHEL-07-020020
+
+- name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+  debug:
+      msg: "WARNING: There are no users configured to be part of the specified local interactive staff group {{ rhel_07_020020_selinux_local_interactive_staff_group }}. You must configure this group to satisfy requirements of this control."
+  changed_when:
+      - rhel7stig_audit_complex
+  when:
+      - not rhel_07_020020_local_interactive_staff.stdout_lines | length > 0
+      - rhel_07_020020
+      - rhel7stig_disruption_high
+      - rhel7stig_audit_disruptive
+  tags:
+      - RHEL-07-020020
+
+- name: "MEDIUM | RHEL-07-020020 | PATCH | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+  shell: semanage login -m -s user_u "{{ item }}"
+  with_items:
+      - "{{ rhel_07_020020_local_interactive_staff.stdout_lines }}"
+  when:
+      - rhel_07_020020_local_interactive_staff.stdout_lines | length > 0
+      - rhel_07_020020
+      - rhel7stig_disruption_high
+      - rhel7stig_audit_disruptive
+  tags:
+      - RHEL-07-020020
+
 # find the local interactive users
 - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
   shell: "awk -F: '/^{{ rhel_07_020020_selinux_local_interactive_users_group }}/ {print $4;}' /etc/group | tr ',' '\n'"
@@ -23,7 +59,7 @@
 
 - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
   debug:
-      msg: "WARNING: There are no users configured to be part of the specified local interactive uesr group {{ rhel_07_020020_selinux_local_interactive_users_group }}. You must configure this group to satisfy requirements of this control."
+      msg: "WARNING: There are no users configured to be part of the specified local interactive user group {{ rhel_07_020020_selinux_local_interactive_users_group }}. You must configure this group to satisfy requirements of this control."
   changed_when:
       - rhel7stig_audit_complex
   when:
@@ -46,38 +82,3 @@
   tags:
       - RHEL-07-020020
 
-# find the local interactive admins
-- name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-  shell: "awk -F: '/^{{ rhel_07_020020_selinux_local_interactive_admin_group }}/ {print $4;}' /etc/group | tr ',' '\n'"
-  register: rhel_07_020020_local_interactive_admins
-  when:
-      - rhel_07_020020
-      - rhel7stig_disruption_high
-      - rhel7stig_audit_disruptive
-  tags:
-      - RHEL-07-020020
-
-- name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-  debug:
-      msg: "WARNING: There are no users configured to be part of the specified local interactive admin group {{ rhel_07_020020_selinux_local_interactive_admin_group }}. You must configure this group to satisfy requirements of this control."
-  changed_when:
-      - rhel7stig_audit_complex
-  when:
-      - not rhel_07_020020_local_interactive_users.stdout_lines | length > 0
-      - rhel_07_020020
-      - rhel7stig_disruption_high
-      - rhel7stig_audit_disruptive
-  tags:
-      - RHEL-07-020020
-
-- name: "MEDIUM | RHEL-07-020020 | PATCH | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
-  shell: semanage login -m -s sysadm_u "{{ item }}"
-  with_items:
-      - "{{ rhel_07_020020_local_interactive_admins.stdout_lines }}"
-  when:
-      - rhel_07_020020_local_interactive_users.stdout_lines | length > 0
-      - rhel_07_020020
-      - rhel7stig_disruption_high
-      - rhel7stig_audit_disruptive
-  tags:
-      - RHEL-07-020020
