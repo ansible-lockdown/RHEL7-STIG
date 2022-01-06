@@ -3898,6 +3898,7 @@
         command: nmcli radio wifi off
         when:
             - "'enabled' in rhel_07_wifi_enabled.stdout"
+            - "'NetworkManager' in ansible_facts.packages"
   when:
       - rhel_07_041010
   tags:
