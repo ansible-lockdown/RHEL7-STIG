@@ -3892,7 +3892,6 @@
         changed_when: false
         check_mode: false
         register: rhel_07_wifi_enabled
-        when: "'NetworkManager' in ansible_facts.packages"
 
       - name: "MEDIUM | RHEL-07-041010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
         command: nmcli radio wifi off
@@ -3900,6 +3899,7 @@
             - "'enabled' in rhel_07_wifi_enabled.stdout"
   when:
       - rhel_07_041010
+      - "'NetworkManager' in ansible_facts.packages"
   tags:
       - RHEL-07-041010
       - CAT2
