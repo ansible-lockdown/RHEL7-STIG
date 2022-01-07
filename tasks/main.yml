@@ -34,14 +34,14 @@
       that: rhel7stig_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispassword'
       msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set"
   when:
-      - rhel_07_010480 or
-        rhel_07_010490 or
+      - rhel_07_010481 or
         rhel_07_010482 or
+        rhel_07_010483 or
         rhel_07_010491
   tags:
-      - RHEL-07-010480
+      - RHEL-07-010481
       - RHEL-07-010482
-      - RHEL-07-010490
+      - RHEL-07-010483
       - RHEL-07-010491
       - cat1
 

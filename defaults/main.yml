@@ -80,9 +80,11 @@ rhel_07_010290: true
 rhel_07_010300: true
 rhel_07_010440: true
 rhel_07_010450: true
-rhel_07_010480: true
+# possibly removed
+# rhel_07_010480: true
 rhel_07_010482: true
-rhel_07_010490: true
+# possibly removed
+# rhel_07_010490: true
 rhel_07_010491: true
 rhel_07_020000: true
 rhel_07_020010: true
@@ -152,6 +154,9 @@ rhel_07_010492: true
 rhel_07_010500: true
 rhel_07_020019: true
 rhel_07_020020: true
+rhel_07_020021: true
+rhel_07_020022: true
+rhel_07_020023: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
 rhel_07_020040: "{{ rhel7stig_disruption_high }}"
@@ -355,8 +360,9 @@ rhel_07_020020_selinux_change_users: true
 rhel_07_020020_HBSS_path: /opt/McAfee/Agent/bin
 rhel_07_020020_HIPS_path: /opt/McAfee/Agent/bin
 rhel_07_020020_selinux_ldap_maps: false
-rhel_07_020020_selinux_local_interactive_admin_group: wheel
+# rhel_07_020020_selinux_local_interactive_admin_group: wheel
 rhel_07_020020_selinux_local_interactive_users_group: users
+rhel_07_020020_selinux_local_interactive_staff_group: staff
 
 # RHEL-07-020710
 # Set standard user paths here
@@ -544,6 +550,14 @@ rhel7stig_password_complexity:
     maxrepeat: 3
     maxclassrepeat: 4
     minlen: 15
+
+# RHEL-07-020022
+# rhel7stig_ssh_sysadm_login_state is the state for the ssh_sysadmin_login boolean. 
+# The value False will set the value to off, which does not allow privileged accounts to utilize SSH
+# The value True will set the value to on, which allows privileged accounts to utilize SSH
+# To confrom to STIG requirements use the value of false
+# If set to True this needs to be documented with your ISSO as an operational requirement to be STIG compliant
+rhel7stig_ssh_sysadm_login_state: false
 
 # RHEL-07-040160
 # Session timeout setting file (TMOUT setting can be set in multiple files)
@@ -754,5 +768,3 @@ audit_results: |
       The pre remediation results are: {{ pre_audit_summary }}.
       The post remediation results are: {{ post_audit_summary }}.
       Full breakdown can be found in {{ audit_out_dir }}
-
-

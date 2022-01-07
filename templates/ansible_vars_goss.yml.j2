@@ -1,16 +1,12 @@
 ## metadata for Audit benchmark
-rhel7stig_benchmark:
-- "type: STIG"
-- "version: '3.3'"
-- "os: RHEL 7"
-- "epoch: {{ ansible_date_time.epoch }}"
-- "hostname: {{ ansible_hostname }}"
+benchmark_version: '3.5'
+
+# Set if genuine RHEL (subscription manager check) not for derivatives e.g. CentOS
+is_redhat_os: {% if ansible_distribution == "RedHat" %}true{% else %}false{% endif %}
 
 ### Variables for for stig options
 run_heavy_tests: {{ audit_run_heavy_tests }}
 timeout_ms: {{ audit_cmd_timeout }}
-
-rhel7stig_os_distribution: {{ ansible_distribution | lower }}
 
 # If running on RHEL7 <= 7.2
 rhel7stig_legacyOS: {% if ansible_distribution_version > '7.2' %} false {% else %} true {% endif %}
@@ -32,9 +28,7 @@ RHEL_07_010290: {{ rhel_07_010290 }}
 RHEL_07_010300: {{ rhel_07_010300 }}
 RHEL_07_010440: {{ rhel_07_010440 }}
 RHEL_07_010450: {{ rhel_07_010450 }}
-RHEL_07_010480: {{ rhel_07_010480 }}
 RHEL_07_010482: {{ rhel_07_010482 }}
-RHEL_07_010490: {{ rhel_07_010490 }}
 RHEL_07_010491: {{ rhel_07_010491 }}
 RHEL_07_020000: {{ rhel_07_020000 }}
 RHEL_07_020010: {{ rhel_07_020010 }}
@@ -105,6 +99,9 @@ RHEL_07_010492: {{ rhel_07_010492 }}
 RHEL_07_010500: {{ rhel_07_010500 }}
 RHEL_07_020019: {{ rhel_07_020019 }}
 RHEL_07_020020: {{ rhel_07_020020 }}
+RHEL_07_020021: {{ rhel_07_020021 }}
+RHEL_07_020022: {{ rhel_07_020022 }}
+RHEL_07_020023: {{ rhel_07_020023 }}
 RHEL_07_020030: {{ rhel_07_020030 }}
 RHEL_07_020040: {{ rhel_07_020040 }} # see rhel7stig_notify_command
 RHEL_07_020100: {{ rhel_07_020100 }}
