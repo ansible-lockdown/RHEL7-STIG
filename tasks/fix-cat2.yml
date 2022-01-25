@@ -2805,9 +2805,7 @@
       marker: "# {mark} ANSIBLE MANAGED"
       block: |
         # Set session timeout - STIG ID RHEL-07-040160
-        TMOUT={{ rhel7stig_shell_session_timeout.timeout }}
-        readonly TMOUT
-        export TMOUT
+        declare -xr TMOUT={{ rhel7stig_shell_session_timeout.timeout }}
   with_items:
       - dest: "{{ rhel7stig_shell_session_timeout.file }}"
         state: present
