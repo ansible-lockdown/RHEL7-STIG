@@ -230,7 +230,7 @@
   lineinfile:
       create: yes
       dest: /etc/pam.d/system-auth
-      regexp: '^#?password\s+required\s+pam_pwquality.so\s+retry'
+      regexp: '^#?password\s+required pam_pwquality.so retry'
       line: password required pam_pwquality.so retry=3
       mode: 0644
   when:
