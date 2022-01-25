@@ -213,7 +213,7 @@
 - name: "MEDIUM | RHEL-07-010118 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that /etc/pam.d/passwd implements /etc/pam.d/system-auth when changing passwords."
   lineinfile:
       path: /etc/pam.d/passwd
-      regexp: '^password   substack     system-auth'
+      regexp: '^password\s+substack\s+system-auth'
       line: 'password   substack     system-auth'
   when:
       - rhel_07_010118
@@ -230,7 +230,7 @@
   lineinfile:
       create: yes
       dest: /etc/pam.d/system-auth
-      regexp: '^#?password required pam_pwquality.so retry'
+      regexp: '^#?password\s+required\s+pam_pwquality.so\s+retry'
       line: password required pam_pwquality.so retry=3
       mode: 0644
   when:
@@ -4091,7 +4091,7 @@
       - name: "MEDIUM | RHEL-07-010341 | PATCH | The Red Hat Enterprise Linux operating system must restrict privilege elevation to authorized personnel. | Remove format 2"
         lineinfile:
             path: "{{ item }}"
-            regexp: 'ALL ALL=(ALL:ALL) ALL'
+            regexp: 'ALL\s+ALL=(ALL:ALL)\s+ALL'
             state: absent
             validate: '/usr/sbin/visudo -cf %s'
         with_items:
