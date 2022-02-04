@@ -478,3 +478,6 @@
         set_fact:
             rhel7stig_interactive_uid_start: "{{ rhel7stig_min_uid.stdout }}"
             rhel7stig_interactive_uid_stop: "{{ rhel7stig_max_uid.stdout }}"
+  tags:
+      - always
+      - auditd
