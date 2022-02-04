@@ -1391,7 +1391,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020620
-      - item.uid >= rhel7stig_int_gid
+      - rhel7stig_interactive_uid_start | int <= item.uid
   tags:
       - RHEL-07-020620
       - CAT2
@@ -1412,7 +1412,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020630
-      - item.uid >= rhel7stig_int_gid
+      - rhel7stig_interactive_uid_start | int <= item.uid
   tags:
       - RHEL-07-020630
       - CAT2
@@ -1433,7 +1433,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020640
-      - item.uid >= rhel7stig_int_gid
+      - rhel7stig_interactive_uid_start | int <= item.uid
   tags:
       - RHEL-07-020640
       - CAT2
@@ -1454,7 +1454,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020650
-      - item.uid >= rhel7stig_int_gid
+      - rhel7stig_interactive_uid_start |int <= item.uid
   tags:
       - RHEL-07-020650
       - CAT2
@@ -1474,7 +1474,7 @@
         with_items: "{{ rhel7stig_passwd }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: this_item.uid >= rhel7stig_int_gid
+        when: rhel7stig_interactive_uid_start | int <= this_item.uid
         vars:
             this_item: "{{ item }}"
 
@@ -1556,7 +1556,7 @@
       - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
         stat:
             path: "{{ item }}"
-        with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', rhel7stig_int_gid) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
+        with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', rhel7stig_interactive_uid_start | int ) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
         register: rhel_07_020680_audit
 
       - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
@@ -1609,7 +1609,7 @@
   when:
       - rhel_07_020680
   tags:
-      - RHEL-07-020680
+      -  RHEL-07-020680 
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
@@ -1628,7 +1628,7 @@
             - "{{ rhel7stig_passwd }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: this_item.uid >= rhel7stig_int_gid
+        when: rhel7stig_interactive_uid_start | int <= this_item.uid
         vars:
             this_item: "{{ item }}"
 
@@ -1666,7 +1666,7 @@
             - "{{ rhel7stig_passwd }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: this_item.uid >= rhel7stig_int_gid
+        when: rhel7stig_interactive_uid_start | int <= this_item.uid
         vars:
             this_item: "{{ item }}"
 
