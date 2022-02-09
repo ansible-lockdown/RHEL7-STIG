@@ -15,5 +15,8 @@ galaxy_info:
     - security
     - stig
     - hardening
-
+collections:
+  - community.general
+  - community.crypto
+  - ansible.posix
 dependencies: []
