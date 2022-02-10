@@ -2,3 +2,5 @@
 
 collections:
 - name: community.general
+- community.crypto
+- ansible.posix
