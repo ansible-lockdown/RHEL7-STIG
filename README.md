@@ -134,3 +134,27 @@ We encourage you (the community) to contribute to this role. Please read the rul
 - All community Pull Requests are pulled into the devel branch
 - Pull Requests into devel will confirm your commits have a GPG signature, Signed-off, and a functional test before being approved
 - Once your changes are merged and a more detailed review is complete, an authorized member will merge your changes into the main branch for a new release.
+
+Pipeline Testing
+----------------
+
+uses:
+
+- ansible-core 2.12
+- ansible collections - pulls in the latest version based on requirements file
+- runs the audit using the devel branch
+
+Support
+-------
+
+This is a community project at its core and will be managed as such.
+
+If you would are interested in dedicated support to assist or provide bespoke setups
+
+- [Ansible Counselor](https://www.mindpointgroup.com/products/ansible-counselor-on-demand-ansible-services-and-consulting/)
+- [Try us out](https://engage.mindpointgroup.com/try-ansible-counselor)
+
+Credits
+-------
+
+This repo originated from work done by [Sam Doran](https://github.com/samdoran/ansible-role-stig)
