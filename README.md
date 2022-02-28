@@ -135,7 +135,7 @@ uses:
 - Ansible-core 2.12
 - Ansible collections - pulls in the latest version based on requirements file
 - Runs the audit using the devel branch
-- This is an automated test that occurs on pull requests into devel.
+- This is an automated test that occurs on pull requests into devel
 
 ## Support
 
