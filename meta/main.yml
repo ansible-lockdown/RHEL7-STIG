@@ -7,16 +7,20 @@ galaxy_info:
     role_name: rhel7_stig
     min_ansible_version: 2.9
     platforms:
-    - name: EL
-      versions:
-      - 7
+        - name: EL
     galaxy_tags:
-    - system
-    - security
-    - stig
-    - hardening
+        - system
+        - security
+        - stig
+        - hardening
+        - benchmark
+        - compliance
+        - redhat
+        - complianceascode
+        - disa
+        - rhel7
 collections:
-  - community.general
-  - community.crypto
-  - ansible.posix
+    - community.general
+    - community.crypto
+    - ansible.posix
 dependencies: []
