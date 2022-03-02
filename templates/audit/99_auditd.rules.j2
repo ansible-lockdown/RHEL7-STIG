@@ -1,0 +1,169 @@
+# This template will set all of the auditd configurations via a handler in the role in one task instead of individually
+
+{% if rhel_07_030360 %}
+-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k setuid
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid
+-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k setgid
+-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid
+{% endif %}
+
+{% if rhel_07_030370 %}
+-a always,exit -F arch=b32 -S chown,fchown,fchownat,lchown -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k perm_mod
+-a always,exit -F arch=b64 -S chown,fchown,fchownat,lchown -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k perm_mod
+{% endif %}
+
+{% if rhel_07_030410 %}
+-a always,exit -F arch=b32 -S chmod,fchmod,fchmodat -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k perm_mod
+-a always,exit -F arch=b64 -S chmod,fchmod,fchmodat -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k perm_mod
+{% endif %}
+
+{% if rhel_07_030440 %}
+-a always,exit -F arch=b32 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k perm_mod
+-a always,exit -F arch=b64 -S setxattr,fsetxattr,lsetxattr,removexattr,fremovexattr,lremovexattr -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k perm_mod
+{% endif %}
+
+{% if rhel_07_030510 %}
+-a always,exit -F arch=b32 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EPERM -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k access
+-a always,exit -F arch=b32 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EACCES -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k access
+-a always,exit -F arch=b64 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EPERM -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k access
+-a always,exit -F arch=b64 -S creat,open,openat,open_by_handle_at,truncate,ftruncate -F exit=-EACCES -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k access
+{% endif %}
+
+{% if rhel_07_030560 %}
+-a always,exit -F path=/usr/sbin/semanage -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-priv_change
+{% endif %}
+
+{% if rhel_07_030570 %}
+-a always,exit -F path=/usr/sbin/setsebool -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-priv_change
+{% endif %}
+
+{% if rhel_07_030580 %}
+-a always,exit -F path=/usr/bin/chcon -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-priv_change
+{% endif %}
+
+{% if rhel_07_030590 %}
+-a always,exit -F path=/usr/sbin/setfiles -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-priv_change
+{% endif %}
+
+{% if rhel_07_030610 %}
+-w /var/run/faillock -p wa -k logins
+{% endif %}
+
+{% if rhel_07_030620 %}
+-w /var/log/lastlog -p wa -k logins 
+{% endif %}
+
+{% if rhel_07_030630 %}
+-a always,exit -F path=/usr/bin/passwd -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-passwd
+{% endif %}
+
+{% if rhel_07_030640 %}
+-a always,exit -F path=/usr/sbin/unix_chkpwd -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-passwd
+{% endif %}
+
+{% if rhel_07_030650 %}
+-a always,exit -F path=/usr/bin/gpasswd -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-passwd
+{% endif %}
+
+{% if rhel_07_030660 %}
+-a always,exit -F path=/usr/bin/chage -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-passwd
+{% endif %}
+
+{% if rhel_07_030670 %}
+-a always,exit -F path=/usr/sbin/userhelper -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-passwd
+{% endif %}
+
+{% if rhel_07_030680 %}
+-a always,exit -F path=/usr/bin/su -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-priv_change
+{% endif %}
+
+{% if rhel_07_030690 %}
+-a always,exit -F path=/usr/bin/sudo -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-priv_change
+{% endif %}
+
+{% if rhel_07_030700 %}
+-w /etc/sudoers -p wa -k privileged-actions
+-w /etc/sudoers.d/ -p wa -k privileged-actions
+{% endif %}
+
+{% if rhel_07_030710 %}
+-a always,exit -F path=/usr/bin/newgrp -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-priv_change
+{% endif %}
+
+{% if rhel_07_030720 %}
+-a always,exit -F path=/usr/bin/chsh -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-priv_change
+{% endif %}
+
+{% if rhel_07_030740 %}
+-a always,exit -F arch=b32 -S mount -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-mount
+-a always,exit -F arch=b64 -S mount -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-mount
+-a always,exit -F path=/usr/bin/mount -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-mount
+{% endif %}
+
+{% if rhel_07_030750 %}
+-a always,exit -F path=/usr/bin/umount -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-mount
+{% endif %}
+
+{% if rhel_07_030760 %}
+-a always,exit -F path=/usr/sbin/postdrop -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-postfix
+{% endif %}
+
+{% if rhel_07_030770 %}
+-a always,exit -F path=/usr/sbin/postqueue -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-postfix
+{% endif %}
+
+{% if rhel_07_030780 %}
+-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-ssh
+{% endif %}
+
+{% if rhel_07_030800 %}
+-a always,exit -F path=/usr/bin/crontab -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-cron
+{% endif %}
+
+{% if rhel_07_030810 %}
+-a always,exit -F path=/usr/sbin/pam_timestamp_check -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k privileged-pam
+{% endif %}
+
+{% if rhel_07_030819 %}
+-a always,exit -F arch=b32 -S create_module -k module-change
+-a always,exit -F arch=b64 -S create_module -k module-change
+{% endif %}
+
+{% if rhel_07_030820 %}
+-a always,exit -F arch=b32 -S init_module,finit_module -k modulechange
+-a always,exit -F arch=b64 -S init_module,finit_module -k modulechange
+{% endif %}
+
+{% if rhel_07_030830 %}
+-a always,exit -F arch=b32 -S delete_module -k module-change
+-a always,exit -F arch=b64 -S delete_module -k module-change
+{% endif %}
+
+{% if rhel_07_030840 %}
+-w /usr/bin/kmod -p x -F auid!=unset -k module-change
+{% endif %}
+
+{% if rhel_07_030870 %}
+-w /etc/passwd -p wa -k identity
+{% endif %}
+
+{% if rhel_07_030871 %}
+-w /etc/group -p wa -k identity
+{% endif %}
+
+{% if rhel_07_030872 %}
+-w /etc/gshadow -p wa -k identity
+{% endif %}
+
+{% if rhel_07_030873 %}
+-w /etc/shadow -p wa -k identity
+{% endif %}
+
+{% if rhel_07_030874 %}
+-w /etc/security/opasswd -p wa -k identity
+{% endif %}
+
+{% if rhel_07_030910 %}
+-a always,exit -F arch=b32 -S unlink,unlinkat,rename,renameat,rmdir -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k delete
+-a always,exit -F arch=b64 -S unlink,unlinkat,rename,renameat,rmdir -F auid>={{ rhel7stig_min_uid.stdout}} -F auid!=unset -k delete
+{% endif %}

@@ -77,6 +77,7 @@ rhel7stig_system_is_container: false
 rhel_07_010010: true
 rhel_07_010020: true
 rhel_07_010290: true
+rhel_07_010291: true
 rhel_07_010300: true
 rhel_07_010440: true
 rhel_07_010450: true
@@ -140,10 +141,12 @@ rhel_07_010280: true
 rhel_07_010310: true
 rhel_07_010320: true
 rhel_07_010330: true
+rhel_07_010339: true
 rhel_07_010340: true
 rhel_07_010341: true
 rhel_07_010342: true
 rhel_07_010343: true
+rhel_07_010344: true
 rhel_07_010350: true
 rhel_07_010430: true
 rhel_07_010460: true
@@ -157,6 +160,7 @@ rhel_07_020020: true
 rhel_07_020021: true
 rhel_07_020022: true
 rhel_07_020023: true
+rhel_07_020029: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
 rhel_07_020040: "{{ rhel7stig_disruption_high }}"
@@ -214,24 +218,9 @@ rhel_07_030340: true
 rhel_07_030350: true
 rhel_07_030360: true
 rhel_07_030370: true
-rhel_07_030380: true
-rhel_07_030390: true
-rhel_07_030400: true
 rhel_07_030410: true
-rhel_07_030420: true
-rhel_07_030430: true
 rhel_07_030440: true
-rhel_07_030450: true
-rhel_07_030460: true
-rhel_07_030470: true
-rhel_07_030480: true
-rhel_07_030490: true
-rhel_07_030500: true
 rhel_07_030510: true
-rhel_07_030520: true
-rhel_07_030530: true
-rhel_07_030540: true
-rhel_07_030550: true
 rhel_07_030560: true
 rhel_07_030570: true
 rhel_07_030580: true

@@ -1,5 +1,4 @@
-RHEL 7 DISA STIG
-================
+# RHEL 7 DISA STIG
 
 ![Build Status](https://img.shields.io/github/workflow/status/ansible-lockdown/RHEL7-STIG/CommunityToDevel?label=Devel%20Build%20Status&style=plastic)
 ![Build Status](https://img.shields.io/github/workflow/status/ansible-lockdown/RHEL7-STIG/DevelToMain?label=Main%20Build%20Status&style=plastic)
@@ -7,10 +6,13 @@ RHEL 7 DISA STIG
 
 Configure a RHEL 7 system to be DISA STIG compliant. All findings will be audited by default. Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default. Disruptive finding remediation can be enabled by setting `rhel7stig_disruption_high` to `yes`.
 
-This role is based on RHEL 7 DISA STIG: [Version 3, Rel 5 released on Oct 27, 2021](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R5_STIG.zip).
+This role is based on RHEL 7 DISA STIG: [Version 3, Rel 6 released on Jan 27, 2022](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R6_STIG.zip).
 
-Updating
---------
+## Join us
+
+On our [Discord Server](https://discord.gg/JFxpSgPFEJ) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
+
+## Updating
 
 Coming from a previous release.
 
@@ -23,8 +25,7 @@ This contains rewrites and ID reference changes as per STIG documentation.
 
 More information can be found in the [ChangeLog](./ChangeLog.md)
 
-Auditing (new)
---------------
+## Auditing (new)
 
 This can be turned on or off within the defaults/main.yml file with the variable rhel7stig_run_audit. The value is false by default, please refer to the wiki for more details.
 
@@ -37,8 +38,7 @@ Refer to
 
 - [RHEL7-STIG-Audit](https://github.com/ansible-lockdown/RHEL7-STIG-Audit).
 
-Requirements
-------------
+## Requirements
 
 RHEL 7 or CentOS 7 - Other versions are not supported.
 Access to download or add the goss binary and content to the system if using auditing. options are available on how to get the content to the system.
@@ -55,8 +55,7 @@ Access to download or add the goss binary and content to the system if using aud
 - Please read through the tasks in this role to gain an understanding of what each control is doing. Some of the tasks are disruptive and can have unintended consiquences in a live production system. Also familiarize yourself with the variables in the defaults/main.yml file or the [Main Variables Wiki Page](https://github.com/ansible-lockdown/RHEL7-STIG/wiki/Main-Variables).
 - While check_mode may work, This is not supported.
 
-Documentation
--------------
+## Documentation
 
 - [Repo GitHub Page](https://ansible-lockdown.github.io/RHEL7-STIG/)
 - [Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown)
@@ -65,8 +64,7 @@ Documentation
 - [Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise)
 - [Wiki](https://github.com/ansible-lockdown/RHEL7-STIG/wiki)
 
-Dependencies
-------------
+## Dependencies
 
 - Python3 (preferred)
 - Ansible 2.9+
@@ -75,13 +73,11 @@ Ansible is set to run in a python3 environment.
 
 Dependencies required for the playbook are installed on the endpoint if required.
 
-Role Variables
---------------
+## Role Variables
 
 This role is designed that the end user should not have to edit the tasks themselves. All customizing should be done via the defaults/main.yml file or with extra vars within the project, job, workflow, etc. These variables can be found [here](https://github.com/ansible-lockdown/RHEL7-STIG/wiki/Main-Variables) in the Main Variables Wiki page. All variables are listed there along with descriptions.
 
-Tags
-----
+## Tags
 
 There are many tags available for added control precision. Each control has it's own set of tags noting the control number as well as what parts of the system that control addresses.
 
@@ -95,8 +91,7 @@ tags:
     - dod_logon_banner
 ```
 
-Example Audit Summary
----------------------
+## Example Audit Summary
 
 This is based on a vagrant image with selections enabled. e.g. No Gui or firewall.
 Note: More tests are run during audit as we check config and running state.
@@ -116,8 +111,7 @@ PLAY RECAP *********************************************************************
 rhel7test         : ok=369  changed=192  unreachable=0  failed=0  skipped=125  rescued=0  ignored=0  
 ```
 
-Branches
--------
+## Branches
 
 - **devel** - This is the default branch and the working development branch. Community pull requests will pull into this branch
 - **main** - This is the release branch
@@ -125,8 +119,7 @@ Branches
 - **gh_pages** - github pages
 - **all other branches** - Individual community member branches
 
-Community Contribution
-----------------------
+## Community Contribution
 
 We encourage you (the community) to contribute to this role. Please read the rules below.
 
@@ -134,3 +127,25 @@ We encourage you (the community) to contribute to this role. Please read the rul
 - All community Pull Requests are pulled into the devel branch
 - Pull Requests into devel will confirm your commits have a GPG signature, Signed-off, and a functional test before being approved
 - Once your changes are merged and a more detailed review is complete, an authorized member will merge your changes into the main branch for a new release.
+
+## Pipeline Testing
+
+uses:
+
+- Ansible-core 2.12
+- Ansible collections - pulls in the latest version based on requirements file
+- Runs the audit using the devel branch
+- This is an automated test that occurs on pull requests into devel
+
+## Support
+
+This is a community project at its core and will be managed as such.
+
+If you would are interested in dedicated support to assist or provide bespoke setups
+
+- [Ansible Counselor](https://www.mindpointgroup.com/products/ansible-counselor-on-demand-ansible-services-and-consulting/)
+- [Try us out](https://engage.mindpointgroup.com/try-ansible-counselor)
+
+## Credits
+
+This repo originated from work done by [Sam Doran](https://github.com/samdoran/ansible-role-stig)
