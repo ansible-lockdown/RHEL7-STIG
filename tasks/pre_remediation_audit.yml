@@ -78,7 +78,7 @@
   - goss_template
   
 - name: "Pre Audit | Run pre_remediation {{ benchmark }} audit"
-  shell: "{{ audit_conf_dir }}/run_audit.sh -v {{ audit_vars_path }} -o {{ pre_audit_outfile }} -g {{ group_names }}"
+  shell: "{{ audit_conf_dir }}run_audit.sh -v {{ audit_vars_path }} -o {{ pre_audit_outfile }} -g {{ group_names }}"
   vars:
       warn: false
 

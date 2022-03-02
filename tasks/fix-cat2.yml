@@ -194,7 +194,7 @@
       dest: /etc/dconf/db/local.d/00-screensaver_rhel_07_010110
       content: |
           [org/gnome/desktop/screensaver]
-          lock-delay=uint32 900
+          lock-delay=uint32 5
       mode: '0644'
   register: rhel_07_010110
   notify: dconf update
@@ -213,7 +213,7 @@
 - name: "MEDIUM | RHEL-07-010118 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that /etc/pam.d/passwd implements /etc/pam.d/system-auth when changing passwords."
   lineinfile:
       path: /etc/pam.d/passwd
-      regexp: '^password   substack     system-auth'
+      regexp: '^password\s+substack\s+system-auth'
       line: 'password   substack     system-auth'
   when:
       - rhel_07_010118
@@ -230,7 +230,7 @@
   lineinfile:
       create: yes
       dest: /etc/pam.d/system-auth
-      regexp: '^#?password required pam_pwquality.so retry'
+      regexp: '^#?password\s+required pam_pwquality.so retry'
       line: password required pam_pwquality.so retry=3
       mode: 0644
   when:
@@ -383,7 +383,7 @@
       - CAT2
       - CCI-000195
       - SRG-OS-000072-GPOS-00040
-      - SV-204414r603261_rule
+      - SV-204414r809186_rule
       - V-204414
       - pwquality
 
@@ -616,7 +616,7 @@
   lineinfile:
       dest: /etc/default/useradd
       regexp: ^#?INACTIVE
-      line: INACTIVE=0
+      line: INACTIVE=35
   when:
       - rhel_07_010310
   tags:
@@ -624,7 +624,7 @@
       - CAT2
       - CCI-000795
       - SRG-OS-000118-GPOS-00060
-      - SV-204426r603261_rule
+      - SV-204426r809190_rule
       - V-204426
       - accounts
 
@@ -746,6 +746,22 @@
       - SV-204428r603261_rule
       - V-204428
       - pamd
+- name: "MEDIUM | RHEL-08-010339 | PATCH | The Red Hat Enterprise Linux operating system must specify the default 'include' directory for the /etc/sudoers file."
+  lineinfile:
+      path: /etc/sudoers
+      regex: '^#includedir'
+      line: '#includedir /etc/sudoers.d'
+      validate: '/usr/sbin/visudo -cf %s'
+  when:
+      - rhel_07_010339
+  tags:
+      - RHEL-07-010339
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-251703r809566_rule
+      - V-251703
+      - sudoers
 
 - name: "MEDIUM | RHEL-07-010340 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must provide a password for privilege escalation."
   replace:
@@ -766,6 +782,21 @@
       - SV-204429r603261_rule
       - V-204429
       - sudoers
+
+- name: "MEDIUM | RHEL-07-010344 | PATCH | The Red Hat Enterprise Linux operating system must not be configured to bypass password requirements for privilege escalation."
+  lineinfile:
+      path: /etc/pam.d/sudo
+      regex: 'pam_succeed_if'
+      state: absent
+  when:
+      - rhel_07_010344
+  tags:
+      - RHEL-07-010344
+      - CAT2
+      - CCI-002038
+      - SRG-OS-000373-GPOS-00156
+      - SV-251704r809568_rule
+      - V-251704
 
 - name: "MEDIUM | RHEL-07-010350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must re-authenticate for privilege escalation."
   replace:
@@ -1025,6 +1056,22 @@
       - SRG-OS-000324-GPOS-00125
       - SV-204444r754744_rule
       - V-204444
+
+- name: "MEDIUM | RHEL-07-020029 | PATCH | The Red Hat Enterprise Linux operating system must use a file integrity tool to verify correct operation of all security functions."
+  package:
+      name: aide
+      state: present
+  when:
+      - rhel_07_020029
+      - "'aide' not in ansible_facts.packages"
+  tags:
+      - RHEL-07-020029
+      - CAT2
+      - CCI-002696
+      - SRG-OS-000445-GPOS-00199
+      - SV-251705r809229_rule
+      - V-251705
+      - aide
 
 - name: |
     "MEDIUM | RHEL-07-020030 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that a file integrity tool verifies the baseline operating system configuration at least weekly."
@@ -1344,7 +1391,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020620
-      - item.uid >= rhel7stig_int_gid
+      - rhel7stig_interactive_uid_start | int <= item.uid
   tags:
       - RHEL-07-020620
       - CAT2
@@ -1365,7 +1412,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020630
-      - item.uid >= rhel7stig_int_gid
+      - rhel7stig_interactive_uid_start | int <= item.uid
   tags:
       - RHEL-07-020630
       - CAT2
@@ -1386,7 +1433,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020640
-      - item.uid >= rhel7stig_int_gid
+      - rhel7stig_interactive_uid_start | int <= item.uid
   tags:
       - RHEL-07-020640
       - CAT2
@@ -1407,7 +1454,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020650
-      - item.uid >= rhel7stig_int_gid
+      - rhel7stig_interactive_uid_start |int <= item.uid
   tags:
       - RHEL-07-020650
       - CAT2
@@ -1427,7 +1474,7 @@
         with_items: "{{ rhel7stig_passwd }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: this_item.uid >= rhel7stig_int_gid
+        when: rhel7stig_interactive_uid_start | int <= this_item.uid
         vars:
             this_item: "{{ item }}"
 
@@ -1509,7 +1556,7 @@
       - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
         stat:
             path: "{{ item }}"
-        with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', rhel7stig_int_gid) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
+        with_items: "{{ rhel7stig_passwd | selectattr('uid', '>=', rhel7stig_interactive_uid_start | int ) | selectattr('uid', '!=', 65534) | map(attribute='dir') | list }}"
         register: rhel_07_020680_audit
 
       - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
@@ -1562,7 +1609,7 @@
   when:
       - rhel_07_020680
   tags:
-      - RHEL-07-020680
+      -  RHEL-07-020680 
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
@@ -1581,7 +1628,7 @@
             - "{{ rhel7stig_passwd }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: this_item.uid >= rhel7stig_int_gid
+        when: rhel7stig_interactive_uid_start | int <= this_item.uid
         vars:
             this_item: "{{ item }}"
 
@@ -1619,7 +1666,7 @@
             - "{{ rhel7stig_passwd }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: this_item.uid >= rhel7stig_int_gid
+        when: rhel7stig_interactive_uid_start | int <= this_item.uid
         vars:
             this_item: "{{ item }}"
 
@@ -2353,28 +2400,10 @@
       - auditd
       - logging
 
-- name: "MEDIUM | RHEL-07-030360 | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions."
-  block:
-      - name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions. (Delete obsolete suid/sgid rules)"
-        file:
-            path: "/etc/audit/rules.d/rhel7stig_suid_sgid_commands.rules"
-            state: absent
-
-      - name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions. (Audit rules for execve calls)"
-        lineinfile:
-            path: "/etc/audit/rules.d/rhel7stig_execve_calls.rules"
-            create: yes
-            owner: root
-            group: root
-            mode: 0600
-            line: "{{ item }}"
-            state: present
-        notify: restart auditd
-        with_items:
-            - "-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k setuid"
-            - "-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid"
-            - "-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k setgid"
-            - "-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid"
+- name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
   when:
       - rhel_07_030360
   tags:
@@ -2384,262 +2413,617 @@
       - SRG-OS-000327-GPOS-00127
       - SV-204516r603261_rule
       - V-204516
-      - audit-rules
+      - auditd
 
-- name: "MEDIUM | Auditing system calls"
-  include_tasks: audit_system_call.yml
-  with_items:
-      - id: "030370"
-        call: "chown"
-        key: "perm_mod"
-      - id: "030380"
-        call: "fchown"
-        key: "perm_mod"
-      - id: "030390"
-        call: "lchown"
-        key: "perm_mod"
-      - id: "030400"
-        call: "fchownat"
-        key: "perm_mod"
-      - id: "030410"
-        call: "chmod"
-        key: "perm_mod"
-      - id: "030420"
-        call: "fchmod"
-        key: "perm_mod"
-      - id: "030430"
-        call: "fchmodat"
-        key: "perm_mod"
-      - id: "030440"
-        call: "setxattr"
-        key: "perm_mod"
-      - id: "030450"
-        call: "fsetxattr"
-        key: "perm_mod"
-      - id: "030460"
-        call: "lsetxattr"
-        key: "perm_mod"
-      - id: "030470"
-        call: "removexattr"
-        key: "perm_mod"
-      - id: "030480"
-        call: "fremovexattr"
-        key: "perm_mod"
-      - id: "030490"
-        call: "lremovexattr"
-        key: "perm_mod"
-      - id: "030500"
-        call: "creat"
-        extra_fields: "-F exit=-EPERM"
-        key: "access"
-      - id: "030500"
-        call: "creat"
-        extra_fields: "-F exit=-EACCES"
-        key: "access"
-      - id: "030510"
-        call: "open"
-        extra_fields: "-F exit=-EPERM"
-        key: "access"
-      - id: "030510"
-        call: "open"
-        extra_fields: "-F exit=-EACCES"
-        key: "access"
-      - id: "030520"
-        call: "openat"
-        extra_fields: "-F exit=-EPERM"
-        key: "access"
-      - id: "030520"
-        call: "openat"
-        extra_fields: "-F exit=-EACCES"
-        key: "access"
-      - id: "030530"
-        call: "open_by_handle_at"
-        extra_fields: "-F exit=-EPERM"
-        key: "access"
-      - id: "030530"
-        call: "open_by_handle_at"
-        extra_fields: "-F exit=-EACCES"
-        key: "access"
-      - id: "030540"
-        call: "truncate"
-        extra_fields: "-F exit=-EACCES"
-        key: "access"
-      - id: "030540"
-        call: "truncate"
-        extra_fields: "-F exit=-EPERM"
-        key: "access"
-      - id: "030550"
-        call: "ftruncate"
-        extra_fields: "-F exit=-EACCES"
-        key: "access"
-      - id: "030550"
-        call: "ftruncate"
-        extra_fields: "-F exit=-EPERM"
-        key: "access"
-      - id: "030740"
-        call: "mount"
-        key: "privileged-mount"
-      - id: "030819"
-        call: "create_module"
-        include_all_auids: yes
-        key: "module-change"
-      - id: "030820"
-        call: "init_module"
-        include_all_auids: yes
-        key: "module-change"
-      - id: "030821"
-        call: "finit_module"
-        include_all_auids: yes
-        key: "module-change"
-      - id: "030830"
-        call: "delete_module"
-        include_all_auids: yes
-        key: "module-change"
-      - id: "030880"
-        call: "rename"
-        key: "delete"
-      - id: "030890"
-        call: "renameat"
-        key: "delete"
-      - id: "030900"
-        call: "rmdir"
-        key: "delete"
-      - id: "030910"
-        call: "unlink"
-        key: "delete"
-      - id: "030920"
-        call: "unlinkat"
-        key: "delete"
+- name: "MEDIUM | RHEL-07-030370 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chown, fchown, fchownat, and lchown syscalls."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030370
   tags:
-      - audit-rules
+      - RHEL-07-030370
+      - CAT2
+      - CCI-000126
+      - SRG-OS-000064-GPOS-00033
+      - SV-204517r809570_rule
+      - V-204517
+      - auditd
 
-- name: "MEDIUM | Auditing commands"
-  include_tasks: audit_command.yml
-  with_items:
-      - id: "030560"
-        path: "/usr/sbin/semanage"
-        key: "privileged-priv_change"
-        no_perm_x_filter: true
-      - id: "030570"
-        path: "/usr/sbin/setsebool"
-        key: "privileged-priv_change"
-        no_perm_x_filter: true
-      - id: "030580"
-        path: "/usr/bin/chcon"
-        key: "privileged-priv_change"
-        no_perm_x_filter: true
-      - id: "030590"
-        path: "/usr/sbin/setfiles"
-        key: "privileged-priv_change"
-        no_perm_x_filter: true
-      - id: "030630"
-        path: "/usr/bin/passwd"
-        key: "privileged-passwd"
-      - id: "030640"
-        path: "/usr/sbin/unix_chkpwd"
-        key: "privileged-passwd"
-        no_perm_x_filter: true
-      - id: "030650"
-        path: "/usr/bin/gpasswd"
-        key: "privileged-passwd"
-      - id: "030660"
-        path: "/usr/bin/chage"
-        key: "privileged-passwd"
-      - id: "030670"
-        path: "/usr/sbin/userhelper"
-        key: "privileged-passwd"
-      - id: "030680"
-        path: "/usr/bin/su"
-        key: "privileged-priv_change"
-        no_perm_x_filter: true
-      - id: "030690"
-        path: "/usr/bin/sudo"
-        key: "privileged-priv_change"
-        no_perm_x_filter: true
-      - id: "030710"
-        path: "/usr/bin/newgrp"
-        key: "privileged-priv_change"
-        no_perm_x_filter: true
-      - id: "030720"
-        path: "/usr/bin/chsh"
-        key: "privileged-priv_change"
-        no_perm_x_filter: true
-      - id: "030740"
-        path: "/usr/bin/mount"
-        key: "privileged-mount"
-        no_perm_x_filter: true
-      - id: "030750"
-        path: "/usr/bin/umount"
-        key: "privileged-mount"
-        no_perm_x_filter: true
-      - id: "030760"
-        path: "/usr/sbin/postdrop"
-        key: "privileged-postfix"
-        no_perm_x_filter: true
-      - id: "030770"
-        path: "/usr/sbin/postqueue"
-        key: "privileged-postfix"
-        no_perm_x_filter: true
-      - id: "030780"
-        path: "/usr/libexec/openssh/ssh-keysign"
-        key: "privileged-ssh"
-        no_perm_x_filter: true
-      - id: "030800"
-        path: "/usr/bin/crontab"
-        key: "privileged-cron"
-        no_perm_x_filter: true
-      - id: "030810"
-        path: "/usr/sbin/pam_timestamp_check"
-        key: "privileged-pam"
-        no_perm_x_filter: true
-      - id: "030840"
-        path: "/usr/bin/kmod"
-        trivial: yes
-        key: "module-change"
+- name: "MEDIUM | RHEL-07-030410 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chmod, fchmod, and fchmodat syscalls."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030410
   tags:
-      - audit-rules
+      - RHEL-07-030410
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000458-GPOS-00203
+      - SV-204521r809772_rule
+      - V-204521
+      - auditd
 
-- name: "MEDIUM | Auditing files"
-  include_tasks: audit_file.yml
-  with_items:
-      - id: "030610"
-        path: "/var/run/faillock"
-        description: "unsuccessful account access events"
-        key: "logins"
-      - id: "030620"
-        path: "/var/log/lastlog"
-        description: "successful account access events"
-        key: "logins"
-      - id: "030700"
-        path: "/etc/sudoers"
-        description: "modifications to sudoers"
-        key: "privileged-actions"
-      - id: "030700"
-        path: "/etc/sudoers.d/"
-        description: "modifications to sudoers"
-        key: "privileged-actions"
-      - id: "030870"
-        path: "/etc/passwd"
-        description: "account creations, modifications, disabling, and termination events that affect /etc/passwd"
-        key: "identity"
-      - id: "030871"
-        path: "/etc/group"
-        description: "account creations, modifications, disabling, and termination events that affect /etc/group"
-        key: "identity"
-      - id: "030872"
-        path: "/etc/gshadow"
-        description: "account creations, modifications, disabling, and termination events that affect /etc/gshadow"
-        key: "identity"
-      - id: "030873"
-        path: "/etc/shadow"
-        description: "account creations, modifications, disabling, and termination events that affect /etc/shadow"
-        key: "identity"
-      - id: "030874"
-        path: "/etc/security/opasswd"
-        description: "account creations, modifications, disabling, and termination events that affect /etc/security/opasswd"
-        key: "identity"
+- name: "MEDIUM | RHEL-07-030440 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chmod, fchmod, and fchmodat syscalls."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030440
   tags:
-      - audit-rules
+      - RHEL-07-030440
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000458-GPOS-00203
+      - SV-204524r809775_rule
+      - V-204524
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030510 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the creat, open, openat, open_by_handle_at, truncate, and ftruncate syscalls."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030510
+  tags:
+      - RHEL-07-030510
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000064-GPOS-00033
+      - SV-204531r809815_rule
+      - V-204531
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030560 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the semanage command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030560
+  tags:
+      - RHEL-07-030560
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000392-GPOS-00172
+      - SV-204536r603261_rule
+      - V-204536
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030570 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the setsebool command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030570
+  tags:
+      - RHEL-07-030570
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000392-GPOS-00172
+      - SV-204537r603261_rule
+      - V-204537
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030580 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chcon command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030580
+  tags:
+      - RHEL-07-030580
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000392-GPOS-00172
+      - SV-204538r603261_rule
+      - V-204538
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030590 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the setfiles command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030590
+  tags:
+      - RHEL-07-030590
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000392-GPOS-00172
+      - SV-204539r603261_rule
+      - V-204539
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030610 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all unsuccessful account access events."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030610
+  tags:
+      - RHEL-07-030610
+      - CAT2
+      - CCI-000126
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000392-GPOS-00172
+      - SV-204540r603261_rule
+      - V-204540
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030620 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all successful account access events."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030620
+  tags:
+      - RHEL-07-030620
+      - CAT2
+      - CCI-000126
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000392-GPOS-00172
+      - SV-204541r603261_rule
+      - V-204541
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030630 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the passwd command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030630
+  tags:
+      - RHEL-07-030630
+      - CAT2
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204542r603261_rule
+      - V-204542
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030640 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the unix_chkpwd command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030640
+  tags:
+      - RHEL-07-030640
+      - CAT2
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204543r603261_rule
+      - V-204543
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030650 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the gpasswd command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030650
+  tags:
+      - RHEL-07-030650
+      - CAT2
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204544r603261_rule
+      - V-204544
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030660 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chage command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030660
+  tags:
+      - RHEL-07-030660
+      - CAT2
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204545r603261_rule
+      - V-204545
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030670 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the userhelper command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030670
+  tags:
+      - RHEL-07-030670
+      - CAT2
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204546r603261_rule
+      - V-204546
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030680 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the su command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030680
+  tags:
+      - RHEL-07-030680
+      - CAT2
+      - CCI-000130
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000037-GPOS-00015
+      - SV-204547r603261_rule
+      - V-204547
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030690 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the sudo command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030690
+  tags:
+      - RHEL-07-030690
+      - CAT2
+      - CCI-000130
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000037-GPOS-00015
+      - SV-204548r603261_rule
+      - V-204548
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030700 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the sudo command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030700
+  tags:
+      - RHEL-07-030700
+      - CAT2
+      - CCI-000130
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000037-GPOS-00015
+      - SV-204549r603261_rule
+      - V-204549
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030710 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the newgrp command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030710
+  tags:
+      - RHEL-07-030710
+      - CAT2
+      - CCI-000130
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000037-GPOS-00015
+      - SV-204550r603261_rule
+      - V-204550
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030720 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chsh command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030720
+  tags:
+      - RHEL-07-030720
+      - CAT2
+      - CCI-000130
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000037-GPOS-00015
+      - SV-204551r603261_rule
+      - V-204551
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030740 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the mount command and syscall."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030740
+  tags:
+      - RHEL-07-030740
+      - CAT2
+      - CCI-000135
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204552r603261_rule
+      - V-204552
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030750 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the umount command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030750
+  tags:
+      - RHEL-07-030750
+      - CAT2
+      - CCI-000135
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204553r603261_rule
+      - V-204553
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030760 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the postdrop command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030760
+  tags:
+      - RHEL-07-030760
+      - CAT2
+      - CCI-000135
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204554r603261_rule
+      - V-204554
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030770 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the postqueue command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030770
+  tags:
+      - RHEL-07-030770
+      - CAT2
+      - CCI-000135
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204555r603261_rule
+      - V-204555
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030780 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the ssh-keysign command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030780
+  tags:
+      - RHEL-07-030780
+      - CAT2
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204556r603261_rule
+      - V-204556
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030800 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the crontab command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030800
+  tags:
+      - RHEL-07-030800
+      - CAT2
+      - CCI-000135
+      - CCI-000172
+      - CCI-002884
+      - SRG-OS-000042-GPOS-00020
+      - SV-204557r603261_rule
+      - V-204557
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030810 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the pam_timestamp_check command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030810
+  tags:
+      - RHEL-07-030810
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000471-GPOS-00215
+      - SV-204558r603261_rule
+      - V-204558
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030819 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the create_module syscall."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030819
+  tags:
+      - RHEL-07-030819
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000471-GPOS-00216
+      - SV-204559r603261_rule
+      - V-204559
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030820 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the init_module and finit_module syscall."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030820
+  tags:
+      - RHEL-07-030820
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000471-GPOS-00216
+      - SV-204560r603261_rule
+      - V-204560
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030830 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the delete_module syscall."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030830
+  tags:
+      - RHEL-07-030830
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000471-GPOS-00216
+      - SV-204562r603261_rule
+      - V-204562
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030840 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the kmod command."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030840
+  tags:
+      - RHEL-07-030840
+      - CAT2
+      - CCI-000172
+      - SRG-OS-000471-GPOS-00216
+      - SV-204563r603261_rule
+      - V-204563
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030870 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/passwd."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030870
+  tags:
+      - RHEL-07-030870
+      - CAT2
+      - CCI-000018
+      - CCI-000172
+      - CCI-001403
+      - CCI-002130
+      - SRG-OS-000004-GPOS-00004
+      - SV-204564r603261_rule
+      - V-204564
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030871 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/group."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030871
+  tags:
+      - RHEL-07-030871
+      - CAT2
+      - CCI-000018
+      - CCI-000172
+      - CCI-001403
+      - CCI-002130
+      - SRG-OS-000004-GPOS-00004
+      - SV-204565r603261_rule
+      - V-204565
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030872 | PATCH | he Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/gshadow."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030872
+  tags:
+      - RHEL-07-030872
+      - CAT2
+      - CCI-000018
+      - CCI-000172
+      - CCI-001403
+      - CCI-002130
+      - SRG-OS-000004-GPOS-00004
+      - SV-204566r603261_rule
+      - V-204566
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030873 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/shadow."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030873
+  tags:
+      - RHEL-07-030873
+      - CAT2
+      - CCI-000018
+      - CCI-000172
+      - CCI-001403
+      - CCI-002130
+      - SRG-OS-000004-GPOS-00004
+      - SV-204567r603261_rule
+      - V-204567
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030874 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/security/opasswd."
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030874
+  tags:
+      - RHEL-07-030874
+      - CAT2
+      - CCI-000018
+      - CCI-000172
+      - CCI-001403
+      - CCI-002130
+      - SRG-OS-000004-GPOS-00004
+      - SV-204568r603261_rule
+      - V-204568
+      - auditd
+
+- name: "MEDIUM | RHEL-07-030910 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the unlink, unlinkat, rename, renameat, and rmdir syscalls"
+  debug:
+      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
+  notify: restart auditd
+  when:
+      - rhel_07_030910
+  tags:
+      - RHEL-07-030910
+      - CAT2
+      - CCI-000018
+      - CCI-000172
+      - CCI-001403
+      - CCI-002130
+      - SRG-OS-000466-GPOS-00210
+      - SV-204572r809825_rule
+      - V-204572
+      - auditd
 
 - name: "MEDIUM | RHEL-07-031000 | PATCH | The Red Hat Enterprise Linux operating system must send rsyslog output to a log aggregation server."
   blockinfile:
@@ -2805,9 +3189,7 @@
       marker: "# {mark} ANSIBLE MANAGED"
       block: |
         # Set session timeout - STIG ID RHEL-07-040160
-        TMOUT={{ rhel7stig_shell_session_timeout.timeout }}
-        readonly TMOUT
-        export TMOUT
+        declare -xr TMOUT={{ rhel7stig_shell_session_timeout.timeout }}
   with_items:
       - dest: "{{ rhel7stig_shell_session_timeout.file }}"
         state: present
@@ -4093,7 +4475,7 @@
       - name: "MEDIUM | RHEL-07-010341 | PATCH | The Red Hat Enterprise Linux operating system must restrict privilege elevation to authorized personnel. | Remove format 2"
         lineinfile:
             path: "{{ item }}"
-            regexp: 'ALL ALL=(ALL:ALL) ALL'
+            regexp: 'ALL\s+ALL=(ALL:ALL)\s+ALL'
             state: absent
             validate: '/usr/sbin/visudo -cf %s'
         with_items:
@@ -4170,7 +4552,7 @@
       - CAT2
       - CCI-002227
       - SRG-OS-000480-GPOS-00227
-      - SV-237634r646853_rule
+      - SV-237634r809213_rule
       - V-237634
       - sudo
 
@@ -4207,7 +4589,7 @@
       - CAT2
       - CCI-002038
       - SRG-OS-000373-GPOS-00156
-      - SV-237635r646856_rule
+      - SV-237635r809215_rule
       - V-237635
       - sudo
 
@@ -4285,5 +4667,5 @@
       - CCI-002165
       - CCI-002235
       - SRG-OS-000324-GPOS-00125
-      - SV-250314r792849_rule
+      - SV-250314r809217_rule
       - V-250314

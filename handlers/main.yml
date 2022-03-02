@@ -56,6 +56,15 @@
       - not rhel7stig_system_is_chroot
       - not rhel7stig_system_is_container
 
+- name: update auditd
+  template:
+      src: audit/99_auditd.rules.j2
+      dest: /etc/audit/rules.d/99_auditd.rules
+      owner: root
+      group: root
+      mode: 0600
+  notify: restart auditd
+
 - name: restart auditd
   command: /usr/sbin/service auditd restart
   args:

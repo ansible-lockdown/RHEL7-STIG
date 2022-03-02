@@ -88,7 +88,7 @@
       - V-214799
       - packages
 
-- name: "HIGH | RHEL-07-010290 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
+- name: "HIGH | RHEL-07-010290 | PATCH |  The Red Hat Enterprise Linux operating system must not allow accounts configured with blank or null passwords."
   replace:
       dest: "{{ item }}"
       regexp: 'nullok ?'
@@ -102,8 +102,36 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204424r603261_rule
+      - SV-204424r809187_rule
       - V-204424
+      - accounts
+
+- name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
+  block:
+      - name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Get users with no pw set"
+        command: "awk -F: '!$2 {print $1}' /etc/shadow"
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: rhel_07_010291_no_pw_users
+
+      - name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Warn on accounts with no passwords"
+        debug:
+            msg:
+                - "Alert! You have users that are not using passwords. Please either set a password, lock, or remove the accounts below:"
+                - "{{ rhel_07_010291_no_pw_users.stdout_lines }}"
+        when:
+            - rhel_07_010291_no_pw_users.stdout | length > 0
+            - not rhel7stig_disruption_high
+  when:
+      - rhel_07_010291
+  tags:
+      - RHEL-07-010290
+      - CAT1
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-251702r809220_rule
+      - V-251702
       - accounts
 
 - name: "HIGH | RHEL-07-010300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using an empty password."

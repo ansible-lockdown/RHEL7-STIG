@@ -459,3 +459,25 @@
       msg:
       - "bootloader path set to {{ rhel7stig_bootloader_path }}"
       - "legacy boot equals {{ rhel7stig_legacy_boot }}"
+
+- name: "PRELIM | Gather interactive user ID min"
+  block:
+      - name: "PRELIM | Gather interactive user ID min"
+        shell: grep ^UID_MIN /etc/login.defs | awk '{print $2}'
+        changed_when: false
+        failed_when: false
+        register: rhel7stig_min_uid
+
+      - name: "PRELIM | Gather interactive user ID max"
+        shell: grep ^UID_MAX /etc/login.defs | awk '{print $2}'
+        changed_when: false
+        failed_when: false
+        register: rhel7stig_max_uid
+
+      - name: "PRELIM | Setting the fact"
+        set_fact:
+            rhel7stig_interactive_uid_start: "{{ rhel7stig_min_uid.stdout }}"
+            rhel7stig_interactive_uid_stop: "{{ rhel7stig_max_uid.stdout }}"
+  tags:
+      - always
+      - auditd
