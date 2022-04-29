@@ -521,7 +521,7 @@ rhel7stig_logon_banner_nice: |
     -This IS includes security measures (e.g., authentication and access controls)
     to protect USG interests--not for your personal benefit or privacy.
 
-    -notwithstanding the above, using this IS does not constitute consent to PM, LE
+    -Notwithstanding the above, using this IS does not constitute consent to PM, LE
     or CI investigative searching or monitoring of the content of privileged
     communications, or work product, related to personal representation or services
     by attorneys, psychotherapists, or clergy, and their assistants. Such
@@ -550,7 +550,7 @@ rhel7stig_ssh_sysadm_login_state: false
 
 # RHEL-07-040160
 # Session timeout setting file (TMOUT setting can be set in multiple files)
-# Timeout value is in seconds. (60 seconds * 15 = 600)
+# Timeout value is in seconds. (60 seconds * 15 = 900)
 rhel7stig_shell_session_timeout:
     file: /etc/profile.d/tmout.sh
     timeout: 900
