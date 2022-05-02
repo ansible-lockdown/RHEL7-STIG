@@ -901,7 +901,7 @@
 
 - name: |
       "MEDIUM | RHEL-07-010483 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with a BIOS must have a unique name for the grub superusers account when booting into single-user and maintenance modes."
-      "MEDIUM | RHEL-07-010492 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with United Extensible Firmware Interface (UEFI) must have a unique name for the grub superusers account when booting into single-user mode and maintenance."
+      "MEDIUM | RHEL-07-010492 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with Unified Extensible Firmware Interface (UEFI) must have a unique name for the grub superusers account when booting into single-user mode and maintenance."
   block:
       - name: "MEDIUM | RHEL-07-010483 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with a BIOS must have a unique name for the grub superusers account when booting into single-user and maintenance modes. | Set grub unique name BIOS"
         lineinfile:
@@ -916,7 +916,7 @@
             - { regexp: '^\s*password_pbkdf2', line: '    password_pbkdf2 {{ rhel7stig_grub_superusers }} \${GRUB2_PASSWORD}' }
         when: not rhel7stig_machine_uses_uefi
 
-      - name: "MEDIUM | RHEL-07-010492 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with United Extensible Firmware Interface (UEFI) must have a unique name for the grub superusers account when booting into single-user mode and maintenance. | Set grub unique name UEFI"
+      - name: "MEDIUM | RHEL-07-010492 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with Unified Extensible Firmware Interface (UEFI) must have a unique name for the grub superusers account when booting into single-user mode and maintenance. | Set grub unique name UEFI"
         lineinfile:
             path: "{{ rhel7stig_bootloader_path }}/grub.cfg"
             regexp: "{{ item.regexp }}"
