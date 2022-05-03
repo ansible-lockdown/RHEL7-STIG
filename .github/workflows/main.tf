@@ -78,6 +78,6 @@ resource "local_file" "inventory" {
         run_audit: true
         system_is_ec2: true
         audit_git_version: devel
+        rhel7stig_bootloader_password_hash: thishasbeenchangedfortesting
     EOF
 }
-
