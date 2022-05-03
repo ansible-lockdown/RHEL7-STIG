@@ -711,6 +711,11 @@ rhel7stig_world_write_files_owner_root: false
 rhel7stig_sudo_timestamp_timeout: 1
 
 #### Audit Configuration Settings ####
+# Set correct env for the run_audit.sh script from https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
+audit_run_script_environment:
+    AUDIT_BIN: "{{ audit_bin }}"
+    AUDIT_FILE: 'goss.yml'
+    AUDIT_CONTENT_LOCATION: "{{ audit_out_dir }}"
 
 ### Audit binary settings ###
 audit_bin_version:
