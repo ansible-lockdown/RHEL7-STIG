@@ -65,7 +65,7 @@
     when: 
     - not goss_available.stat.exists
   when:
-  - run_audit
+  - rhel7stig_run_audit
 
 - name: Pre Audit Setup | Copy ansible default vars values to test audit
   template:
@@ -73,7 +73,7 @@
     dest: "{{ audit_vars_path }}"
     mode: 0600
   when:
-  - run_audit
+  - rhel7stig_run_audit
   tags:
   - goss_template
   

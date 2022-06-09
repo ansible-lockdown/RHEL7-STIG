@@ -53,7 +53,7 @@
 
 - import_tasks: pre_remediation_audit.yml
   when:
-      - run_audit
+      - rhel7stig_run_audit
   tags:
       - run_audit
 
@@ -104,13 +104,13 @@
 
 - import_tasks: post_remediation_audit.yml
   when:
-      - run_audit
+      - rhel7stig_run_audit
 
 - name: Show Audit Summary
   debug:
       msg: "{{ audit_results.split('\n') }}"
   when:
-      - run_audit
+      - rhel7stig_run_audit
   tags:
       - run_audit
 
