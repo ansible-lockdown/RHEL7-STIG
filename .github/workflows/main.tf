@@ -78,6 +78,6 @@ resource "local_file" "inventory" {
         run_audit: true
         system_is_ec2: true
         audit_git_version: devel
-        rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.thishasbeenchangedfortesting'
+        rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.10000.222B96F1DE956C712CE287FA5257E6344EFED2CF83C4232F9F497FDC9B294CC9783F9F27CC4CD74582262FAE63BDFCCF50D6BA2542A6B774C50BCE9E28A3EB1F.DDF132BFF869485A5B4F9B2B53AE8E1A429E87F31BC863DB18DB5ED1AE4E5B8AED1EAE86F0073AFED3D9E01B7137A192D7D61F40EAE4806BBD172B0B1979DAE1'
     EOF
 }
