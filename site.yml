@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: ansible-lockdown
   become: true
   vars:
       is_container: false
