@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.6.0
+- Update to STIG v3r7 Apr 27th 2022
+- Removed unnecessary local.yml
+
 ## Release 1.3.3
 
 - update to STIG v3r6 Jan 27th 2022
