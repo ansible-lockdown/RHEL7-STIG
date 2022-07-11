@@ -84,16 +84,6 @@
       - cat3
       - low
 
-- name: trigger update auditd
-  shell: /bin/true
-  args:
-      warn: false
-  notify: update auditd
-  changed_when: true
-  check_mode: false
-  tags:
-      - auditd
-
 - name: flush handlers
   meta: flush_handlers
 
