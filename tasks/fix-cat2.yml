@@ -228,7 +228,7 @@
 
 - name: "MEDIUM | RHEL-07-010119 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, pwquality must be used."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/pam.d/system-auth
       regexp: '^#?password\s+required pam_pwquality.so retry'
       line: password required pam_pwquality.so retry=3
@@ -246,7 +246,7 @@
 
 - name: "MEDIUM | RHEL-07-010120 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one upper-case character."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ucredit'
       line: "ucredit = {{ rhel7stig_password_complexity.ucredit | default('-1') }}"
@@ -264,7 +264,7 @@
 
 - name: "MEDIUM | RHEL-07-010130 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one lower-case character."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*lcredit'
       line: "lcredit = {{ rhel7stig_password_complexity.lcredit | default('-1') }}"
@@ -282,7 +282,7 @@
 
 - name: "MEDIUM | RHEL-07-010140 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are assigned, the new password must contain at least one numeric character."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*dcredit'
       line: "dcredit = {{ rhel7stig_password_complexity.dcredit | default('-1') }}"
@@ -299,7 +299,7 @@
 
 - name: "MEDIUM | RHEL-07-010150 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed or new passwords are established, the new password must contain at least one special character."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ocredit'
       line: "ocredit = {{ rhel7stig_password_complexity.ocredit | default('-1') }}"
@@ -317,7 +317,7 @@
 
 - name: "MEDIUM | RHEL-07-010160 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed a minimum of eight of the total number of characters must be changed."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*difok'
       line: "difok = {{ rhel7stig_password_complexity.difok | default('8') }}"
@@ -335,7 +335,7 @@
 
 - name: "MEDIUM | RHEL-07-010170 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed a minimum of four character classes must be changed."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minclass'
       line: "minclass = {{ rhel7stig_password_complexity.minclass | default('4') }}"
@@ -353,7 +353,7 @@
 
 - name: "MEDIUM | RHEL-07-010180 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed the number of repeating consecutive characters must not be more than three characters."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxrepeat'
       line: "maxrepeat = {{ rhel7stig_password_complexity.maxrepeat | default('3') }}"
@@ -371,7 +371,7 @@
 
 - name: "MEDIUM | RHEL-07-010190 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that when passwords are changed the number of repeating characters of the same character class must not be more than four characters."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxclassrepeat'
       line: "maxclassrepeat = {{ rhel7stig_password_complexity.maxclassrepeat | default('4') }}"
@@ -452,7 +452,7 @@
 
 - name: "MEDIUM | RHEL-07-010230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords for new users are restricted to a 24 hours/1 day minimum lifetime."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/login.defs
       regexp: ^#?PASS_MIN_DAYS
       line: "PASS_MIN_DAYS {{ rhel7stig_login_defaults.pass_min_days | default('1') }}"
@@ -493,7 +493,7 @@
 
 - name: "MEDIUM | RHEL-07-010250 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords for new users are restricted to a 60-day maximum lifetime."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/login.defs
       regexp: ^#?PASS_MAX_DAYS
       line: "PASS_MAX_DAYS {{ rhel7stig_login_defaults.pass_max_days | default('60') }}"
@@ -513,7 +513,7 @@
   block:
       - name: "MEDIUM | RHEL-07-010260 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
         shell: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $5 > 60 {print $1}' /etc/shadow"
-        check_mode: no
+        check_mode: false
         changed_when: rhel_07_010260_audit.stdout| length > 0
         register: rhel_07_010260_audit
 
@@ -596,7 +596,7 @@
 
 - name: "MEDIUM | RHEL-07-010280 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are a minimum of 15 characters in length."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minlen'
       line: "minlen = {{ rhel7stig_password_complexity.minlen | default('15') }}"
@@ -989,7 +989,7 @@
       # This remediates the screensaver settings for smartcard authentication
       - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
         lineinfile:
-            create: yes
+            create: true
             dest: /etc/pam_pkcs11/pkcs11_eventmgr.conf
             regexp: '^#?/usr/X11R6/bin/xscreensaver-command -lock'
             line: "/usr/X11R6/bin/xscreensaver-command -lock"
@@ -1118,7 +1118,7 @@
       insertafter: "{{ item.insertafter }}"
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
-      create: yes
+      create: true
       owner: root
       group: root
       mode: "0644"
@@ -1150,7 +1150,7 @@
       insertafter: "{{ item.insertafter }}"
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
-      create: yes
+      create: true
       owner: root
       group: root
       mode: "0644"
@@ -1185,7 +1185,7 @@
       - name: "MEDIUM | RHEL-07-020110 | PATCH | The Red Hat Enterprise Linux operating system must disable the file system automounter unless required."
         service:
             name: autofs
-            enabled: no
+            enabled: false
             state: stopped
         when:
             - rhel_07_020110_autofs_service_status == "loaded"
@@ -1576,7 +1576,7 @@
       - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
         file:
             path: "{{ item.0 }}"
-            recurse: yes
+            recurse: true
             mode: a-st,g-w,o-rwx
         register: rhel_07_020680_patch
         with_together:
@@ -1592,9 +1592,9 @@
       - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
         acl:
             path: "{{ item.0 }}"
-            default: yes
+            default: true
             state: present
-            recursive: yes
+            recursive: true
             etype: "{{ item.1.etype }}"
             permissions: "{{ item.1.mode }}"
         with_nested:
@@ -1609,7 +1609,7 @@
   when:
       - rhel_07_020680
   tags:
-      -  RHEL-07-020680 
+      -  RHEL-07-020680
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
@@ -2075,7 +2075,7 @@
       - name: "MEDIUM | RHEL-07-021300 | PATCH | The Red Hat Enterprise Linux operating system must disable Kernel core dumps unless needed."
         service:
             name: kdump
-            enabled: no
+            enabled: false
             state: stopped
         when:
             - rhel_07_021300_kdump_service_status.stdout == "loaded"
@@ -2173,7 +2173,7 @@
         service:
             name: auditd
             state: "{{ rhel7stig_service_started }}"
-            enabled: yes
+            enabled: true
         when:
             - not rhel7stig_system_is_container
   when:
@@ -2212,7 +2212,7 @@
       path: /etc/audisp/plugins.d/au-remote.conf
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
-      create: yes
+      create: true
       mode: 0640
   notify: restart auditd
   with_items:
@@ -3101,7 +3101,7 @@
                   msg: "Warning!! Firewalld is accepting the following port/protocols that are not in the accepted list: {{ item }}."
               changed_when: false
               with_items: "{{ rhel7stig_PPSM_CLSA_check_firewalld.stdout }}"
-              when: 
+              when:
                   - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
                   - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines | length > 0
         when:
@@ -3175,7 +3175,7 @@
 
 - name: "MEDIUM | RHEL-07-040160 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with a communication session are terminated at the end of the session or after 15 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
   blockinfile:
-      create: yes
+      create: true
       mode: 0644
       dest: "{{ item.dest }}"
       state: "{{ item.state }}"
@@ -3262,7 +3262,7 @@
                 ldap_tls_cacert = "{{ rhel_07_040200_cabundle_path }}"
             path: /etc/sssd/sssd.conf
             insertafter: "^ldap_search_base*"
-            create: yes
+            create: true
             mode: 0600
         when: rhel_07_040180_audit.stdout == "Active"
   when:
@@ -3290,8 +3290,8 @@
       value: '2'
       state: present
       reload: "{{ rhel7stig_sysctl_reload }}"
-      sysctl_set: yes
-      ignoreerrors: yes
+      sysctl_set: true
+      ignoreerrors: true
   when:
       - rhel_07_040201
   tags:
@@ -3330,7 +3330,7 @@
   service:
       name: sshd
       state: "{{ rhel7stig_service_started }}"
-      enabled: yes
+      enabled: true
   when:
       - rhel_07_040310
       - rhel7stig_ssh_required
@@ -3345,7 +3345,7 @@
 
 - name: "MEDIUM | RHEL-07-040320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with SSH traffic are terminated at the end of the session or after 10 minutes of inactivity, except to fulfill documented and validated mission requirements."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?ClientAliveInterval"
       line: ClientAliveInterval {{ rhel7stig_ssh_session_timeout }}
@@ -3387,7 +3387,7 @@
 
 - name: "MEDIUM | RHEL-07-040340 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with SSH traffic terminate after a period of inactivity."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?ClientAliveCountMax"
       line: ClientAliveCountMax 0
@@ -3447,7 +3447,7 @@
 
 - name: "MEDIUM | RHEL-07-040370 | PATCH | The Red Hat Enterprise Linux operating system must not permit direct logons to the root account using remote access via SSH."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?PermitRootLogin"
       line: PermitRootLogin no
@@ -3468,7 +3468,7 @@
 
 - name: "MEDIUM | RHEL-07-040380 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using known hosts authentication."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?IgnoreUserKnownHosts"
       line: IgnoreUserKnownHosts yes
@@ -3489,7 +3489,7 @@
 
 - name: "MEDIUM | RHEL-07-040400 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon is configured to only use Message Authentication Codes (MACs) employing FIPS 140-2 approved cryptographic hash algorithms."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?MACs"
       line: "MACs {{ rhel7stig_ssh_macs }}"
@@ -3513,7 +3513,7 @@
       - name: "MEDIUM | RHEL-07-040410 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the SSH public host key files have mode 0644 or less permissive."
         find:
             paths: /etc/ssh
-            recurse: yes
+            recurse: true
             file_type: file
             patterns: 'ssh_host*_key.pub'
             hidden: true
@@ -3544,7 +3544,7 @@
       - name: "MEDIUM | RHEL-07-040420 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the SSH private host key files have mode 0640 or less permissive."
         find:
             paths: /etc/ssh
-            recurse: yes
+            recurse: true
             file_type: file
             patterns: 'ssh_host*_key'
             hidden: true
@@ -3573,7 +3573,7 @@
 
 - name: "MEDIUM | RHEL-07-040430 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Generic Security Service Application Program Interface (GSSAPI) authentication unless needed."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?GSSAPIAuthentication"
       line: GSSAPIAuthentication no
@@ -3696,7 +3696,7 @@
 
       - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
         lineinfile:
-            create: yes
+            create: true
             dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
@@ -3791,7 +3791,7 @@
       state: present
       value: '0'
       reload: "{{ rhel7stig_sysctl_reload }}"
-      ignoreerrors: yes
+      ignoreerrors: true
   when:
       - rhel_07_040610
   tags:
@@ -3845,7 +3845,7 @@
       state: present
       value: '0'
       reload: "{{ rhel7stig_sysctl_reload }}"
-      ignoreerrors: yes
+      ignoreerrors: true
   when:
       - rhel_07_040620
   tags:
@@ -3862,9 +3862,9 @@
       name: net.ipv4.icmp_echo_ignore_broadcasts
       state: present
       value: '1'
-      sysctl_set: yes
+      sysctl_set: true
       reload: "{{ rhel7stig_sysctl_reload }}"
-      ignoreerrors: yes
+      ignoreerrors: true
   when:
       - rhel_07_040630
   tags:
@@ -3882,7 +3882,7 @@
       state: present
       value: '0'
       reload: "{{ rhel7stig_sysctl_reload }}"
-      ignoreerrors: yes
+      ignoreerrors: true
   when:
       - rhel_07_040640
   tags:
@@ -3900,7 +3900,7 @@
       state: present
       value: '0'
       reload: "{{ rhel7stig_sysctl_reload }}"
-      ignoreerrors: yes
+      ignoreerrors: true
   when:
       - rhel_07_040641
   tags:
@@ -3918,7 +3918,7 @@
       state: present
       value: '0'
       reload: "{{ rhel7stig_sysctl_reload }}"
-      ignoreerrors: yes
+      ignoreerrors: true
   when:
       - rhel_07_040650
   tags:
@@ -3936,7 +3936,7 @@
       state: present
       value: '0'
       reload: "{{ rhel7stig_sysctl_reload }}"
-      ignoreerrors: yes
+      ignoreerrors: true
   when:
       - rhel_07_040660
   tags:
@@ -3955,7 +3955,7 @@
         changed_when: rhel_07_040670_promisc_check.stdout| length > 0
         failed_when: false
         check_mode: false
-        ignore_errors: yes
+        ignore_errors: true
         register: rhel_07_040670_promisc_check
 
       - name: "MEDIUM | RHEL-07-040670 | PATCH | Network interfaces configured on the Red Hat Enterprise Linux operating system must not be in promiscuous mode."
@@ -3999,7 +3999,7 @@
 
 - name: "MEDIUM | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections are disabled except to fulfill documented and validated mission requiremen"
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?X11Forwarding"
       line: X11Forwarding no
@@ -4067,7 +4067,7 @@
       state: present
       value: '0'
       reload: "{{ rhel7stig_sysctl_reload }}"
-      ignoreerrors: yes
+      ignoreerrors: true
   when:
       - not rhel7stig_system_is_router
       - rhel_07_040740
@@ -4163,7 +4163,7 @@
       state: present
       value: '0'
       reload: "{{ rhel7stig_sysctl_reload }}"
-      ignoreerrors: yes
+      ignoreerrors: true
   when:
       - rhel_07_040830
   tags:
@@ -4429,7 +4429,7 @@
 
 - name: "MEDIUM | RHEL-07-040711 | PATCH | The Red Hat Enterprise Linux operating system must prevent remote hosts from connecting to the proxy display."
   lineinfile:
-      create: yes
+      create: true
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?X11UseLocalhost"
       line: X11UseLocalhost yes
@@ -4598,7 +4598,7 @@
         debug:
             msg: "Warning! Below are your SELinux Role mappings. Please review the mappings with your SA to determine validity of the mappings"
         when: rhel_07_020021_sel_role_mappings.stdout | length > 0
-      
+
       - name: "MEDIUM | RHEL-07-020021 | AUDIT | The Red Hat Enterprise Linux operating system must confine SELinux users to roles that conform to least privilege. | Alert that semanage is not installed"
         debug:
             msg: "Alert! You do not have semanage installed! Please installed the needed packages"

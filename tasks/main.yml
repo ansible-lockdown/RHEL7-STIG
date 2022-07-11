@@ -46,7 +46,7 @@
       - cat1
 
 - import_tasks: prelim.yml
-  become: yes
+  become: true
   tags:
       - prelim_tasks
       - run_audit

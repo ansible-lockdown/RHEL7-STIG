@@ -222,7 +222,7 @@
       - name: "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
         lineinfile:
             path: /boot/grub2/user.cfg
-            create: yes
+            create: true
             mode: '0644'
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
@@ -239,7 +239,7 @@
       - name: "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
         lineinfile:
             path: "{{ rhel7stig_bootloader_path }}/user.cfg"
-            create: yes
+            create: true
             mode: '0644'
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
@@ -252,21 +252,6 @@
             - make grub2 config
         when:
             - rhel7stig_machine_uses_uefi
-
-      # - name: |
-      #     "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-      #     "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-      #   lineinfile:
-      #       path: /etc/grub.d/01_users
-      #       regexp: "{{ item.regexp }}"
-      #       line: "{{ item.line }}"
-      #   notify:
-      #       - make grub2 config
-      #   with_items:
-      #       - regexp: ^\s*set superusers=
-      #         line: '    set superusers="{{ rhel7stig_boot_superuser }}"'
-      #       - regexp: ^\s*export superusers
-      #         line: '    export superusers'
   when:
       - rhel_07_010482 or
         rhel_07_010491
@@ -359,7 +344,7 @@
 - name: "HIGH | RHEL-07-020230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled on the command line."
   systemd:
       name: ctrl-alt-del.target
-      masked: yes
+      masked: true
   when:
       - rhel_07_020230
   tags:
@@ -494,7 +479,7 @@
             key: GRUB_CMDLINE_LINUX
             param: fips
             value: "{{ fips_value }}"
-            append: yes  # this is the default
+            append: true  # this is the default
         notify: confirm grub2 user cfg
         when:
             - not ansible_check_mode or
@@ -589,7 +574,7 @@
         service:
             name: "{{ rhel7stig_av_package.service }}"
             state: "{{ rhel7stig_service_started }}"
-            enabled: yes
+            enabled: true
         failed_when: false
   when:
       - rhel7stig_antivirus_required

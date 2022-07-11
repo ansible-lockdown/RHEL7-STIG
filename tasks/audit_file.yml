@@ -4,7 +4,7 @@
 - name: "MEDIUM | RHEL-07-{{ item.id }} | {{ audit_present | ternary('PATCH', 'REVERT') }} | The Red Hat Enterprise Linux operating system must generate audit records for all {{ item.description }}."
   lineinfile:
       path: "/etc/audit/rules.d/rhel7stig_files.rules"
-      create: yes
+      create: true
       owner: root
       group: root
       mode: 0600
