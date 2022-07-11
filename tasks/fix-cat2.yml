@@ -1609,7 +1609,7 @@
   when:
       - rhel_07_020680
   tags:
-      -  RHEL-07-020680
+      - RHEL-07-020680
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
@@ -2123,7 +2123,7 @@
   block:
       # Let's see what is configured in grub.
       - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
-        shell: grep -o "set root=.*" "{{rhel7stig_grub_cfg_path }}" | grep -v "{{ rhel7stig_grub_bootloader_validorder }}" | uniq
+        shell: grep -o "set root=.*" "{{ rhel7stig_grub_cfg_path }}" | grep -v "{{ rhel7stig_grub_bootloader_validorder }}" | uniq
         register: rhel7stig_grub_cfg_mediacheck
         changed_when: false
         failed_when: false
@@ -3248,7 +3248,7 @@
         stat:
             path: /etc/sssd/sssd.conf
         changed_when: false
-        register: rhel_07_040180_LDAPconf_audit
+        register: rhel_07_040180_ldapconf_audit
         when: rhel_07_040180_audit.stdout == "Active"
 
       - name: |

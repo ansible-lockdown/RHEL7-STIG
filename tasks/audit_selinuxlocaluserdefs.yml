@@ -81,4 +81,3 @@
       - rhel7stig_audit_disruptive
   tags:
       - RHEL-07-020020
-

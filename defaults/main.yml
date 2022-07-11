@@ -413,9 +413,9 @@ rhel7stig_firewall_service: firewalld
 rhel7stig_start_firewall_service: true
 
 # allowed firewall ports and protocols as found in the command used to discover
-rhel7stig_firewall_ports_protocols: 
-- '22/tcp'
-- '546/udp'
+rhel7stig_firewall_ports_protocols:
+    - '22/tcp'
+    - '546/udp'
 
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
@@ -547,7 +547,7 @@ rhel7stig_password_complexity:
     minlen: 15
 
 # RHEL-07-020022
-# rhel7stig_ssh_sysadm_login_state is the state for the ssh_sysadmin_login boolean. 
+# rhel7stig_ssh_sysadm_login_state is the state for the ssh_sysadmin_login boolean.
 # The value False will set the value to off, which does not allow privileged accounts to utilize SSH
 # The value True will set the value to on, which allows privileged accounts to utilize SSH
 # To confrom to STIG requirements use the value of false
