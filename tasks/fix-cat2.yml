@@ -3089,23 +3089,21 @@
       - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
         block:
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-              shell: firewall-cmd --list-all | grep services | cut -d ':' -f 2 | tr " " "\n" | sed '/^$/d' | sort -u
+              shell: for p in `firewall-cmd --list-services`; do firewall-cmd --permanent --service $p --get-ports | grep -Ev '{{ rhel7stig_firewall_ports_protocols|flatten|join('|') }}'; done;
               changed_when: false
               failed_when: false
               check_mode: false
               register: rhel7stig_PPSM_CLSA_check_firewalld
+              when: rhel7stig_firewall_ports_protocols is defined
 
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
               debug:
-                  msg: "The following task output is what firewalld is accepting on service ports to {{ ansible_hostname }}."
-              changed_when: true
-              when: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
-
-            - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-              debug:
-                  var: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines
-              changed_when: true
-              when: rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
+                  msg: "Warning!! Firewalld is accepting the following port/protocols that are not in the accepted list: {{ item }}."
+              changed_when: false
+              with_items: "{{ rhel7stig_PPSM_CLSA_check_firewalld.stdout }}"
+              when: 
+                  - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
+                  - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines | length > 0
         when:
             - rhel7stig_firewall_service == "firewalld"
             - rhel7stig_start_firewall_service

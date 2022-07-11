@@ -412,6 +412,11 @@ rhel7stig_firewall_service: firewalld
 # The toggle to start the firewall service. Set to true the role will start the service for you where needed
 rhel7stig_start_firewall_service: true
 
+# allowed firewall ports and protocols as found in the command used to discover
+rhel7stig_firewall_ports_protocols: 
+- '22/tcp'
+- '546/udp'
+
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
 
