@@ -454,7 +454,8 @@ rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispassword'
 rhel7stig_boot_superuser: root
 
 # RHEL-07-021700 set the value for correctly configured grub bootloader sequence
-rhel7stig_grub_bootloader_validorder: " set root='hd0,msdos1'"
+# note this is different for bios and EFI boot types. so can be changed via the inventory or alternate vars
+rhel7stig_grub_bootloader_validorder: "set root='hd0,msdos1'"
 
 # RHEL-07-040200 Path for cacrt bundle that holds LDAP certs for tls transport
 rhel_07_040200_cabundle_path: etc/pki/tls/certs/ca-bundle.crt

@@ -512,19 +512,19 @@
 - name: "MEDIUM | RHEL-07-010260 | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
   block:
       - name: "MEDIUM | RHEL-07-010260 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
-        command: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $5 > 60 {print $1}' /etc/shadow"
+        shell: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $5 > 60 {print $1}' /etc/shadow"
         check_mode: no
         changed_when: rhel_07_010260_audit.stdout| length > 0
         register: rhel_07_010260_audit
 
       - name: "MEDIUM | RHEL-07-010260 | PATCH | Reset password timeout to prevent locking out user."
-        command: chage -d '-1 day' {{ item }}
+        shell: chage -d '-1 day' {{ item }}
         check_mode: "{{ rhel7stig_disruptive_check_mode }}"
         with_items:
             - "{{ rhel_07_010260_audit.stdout_lines }}"
 
       - name: "MEDIUM | RHEL-07-010260 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
-        command: chage -M 60 {{ item }}
+        shell: "chage -M 60 {{ item }}"
         check_mode: "{{ rhel7stig_disruptive_check_mode }}"
         with_items:
             - "{{ rhel_07_010260_audit.stdout_lines }}"
@@ -2123,24 +2123,19 @@
   block:
       # Let's see what is configured in grub.
       - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
-        shell: grep "set root" "{{ rhel7stig_grub_cfg_path }}"
+        shell: grep -o "set root=.*" "{{rhel7stig_grub_cfg_path }}" | grep -v "{{ rhel7stig_grub_bootloader_validorder }}" | uniq
         register: rhel7stig_grub_cfg_mediacheck
         changed_when: false
         failed_when: false
 
-      # Set the fact, even if the return was empty/nonexistant
-      - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
-        set_fact:
-            rhel7stig_grub_bootloader_checkorder: "{{ rhel7stig_grub_cfg_mediacheck.stdout_lines | default(rhel7stig_grub_bootloader_validorder | list) | unique }}"
-
       # Report on the bootloader list
       - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
         debug:
-            msg: "The grub2 bootloader is configured to set root for menu entries as follows: {{ item }}. The configured expected entry is \"{{ rhel7stig_grub_bootloader_validorder }}\". If the system is using an alternate boot loader on removable media, and documentation does not exist approving the alternate configuration, this is a finding. You can set this comparison list in default vars as 'rhel7stig_grub_bootloader_validorder'"
+            msg: "Warning!! The grub2 bootloader potentially has some invalid entries that contain {{ item }}"
         changed_when: true
         with_items:
-            - "{{ rhel7stig_grub_bootloader_checkorder }}"
-        when: rhel7stig_grub_bootloader_validorder != rhel7stig_grub_bootloader_checkorder
+            - "{{ rhel7stig_grub_cfg_mediacheck.stdout }}"
+        when: rhel7stig_grub_cfg_mediacheck.stdout | length > 0
   when:
       - rhel_07_021700
       - not rhel7stig_system_is_chroot
