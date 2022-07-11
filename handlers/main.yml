@@ -66,9 +66,7 @@
   register: auditd_file
   notify: restart auditd
   when:
-      - not rhel7stig_skip_for_travis
-      - not rhel7stig_system_is_chroot
-      - not rhel7stig_system_is_container
+      - update_audit_template
 
 - name: restart auditd
   command: /usr/sbin/service auditd restart

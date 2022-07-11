@@ -2396,9 +2396,8 @@
       - logging
 
 - name: "MEDIUM | RHEL-07-030360 | PATCH | The Red Hat Enterprise Linux operating system must audit all executions of privileged functions."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030360
   tags:
@@ -2411,9 +2410,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030370 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chown, fchown, fchownat, and lchown syscalls."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030370
   tags:
@@ -2426,9 +2424,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030410 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chmod, fchmod, and fchmodat syscalls."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030410
   tags:
@@ -2441,9 +2438,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030440 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chmod, fchmod, and fchmodat syscalls."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030440
   tags:
@@ -2456,9 +2452,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030510 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the creat, open, openat, open_by_handle_at, truncate, and ftruncate syscalls."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030510
   tags:
@@ -2471,9 +2466,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030560 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the semanage command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030560
   tags:
@@ -2486,9 +2480,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030570 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the setsebool command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030570
   tags:
@@ -2501,9 +2494,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030580 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chcon command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030580
   tags:
@@ -2516,9 +2508,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030590 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the setfiles command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030590
   tags:
@@ -2531,9 +2522,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030610 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all unsuccessful account access events."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030610
   tags:
@@ -2548,9 +2538,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030620 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all successful account access events."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030620
   tags:
@@ -2565,9 +2554,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030630 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the passwd command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030630
   tags:
@@ -2582,9 +2570,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030640 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the unix_chkpwd command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030640
   tags:
@@ -2599,9 +2586,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030650 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the gpasswd command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030650
   tags:
@@ -2616,9 +2602,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030660 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chage command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030660
   tags:
@@ -2633,9 +2618,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030670 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the userhelper command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030670
   tags:
@@ -2650,9 +2634,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030680 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the su command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030680
   tags:
@@ -2668,9 +2651,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030690 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the sudo command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030690
   tags:
@@ -2686,9 +2668,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030700 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the sudo command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030700
   tags:
@@ -2704,9 +2685,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030710 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the newgrp command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030710
   tags:
@@ -2722,9 +2702,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030720 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the chsh command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030720
   tags:
@@ -2740,9 +2719,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030740 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the mount command and syscall."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030740
   tags:
@@ -2756,9 +2734,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030750 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the umount command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030750
   tags:
@@ -2772,9 +2749,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030760 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the postdrop command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030760
   tags:
@@ -2788,9 +2764,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030770 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the postqueue command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030770
   tags:
@@ -2804,9 +2779,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030780 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the ssh-keysign command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030780
   tags:
@@ -2821,9 +2795,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030800 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the crontab command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030800
   tags:
@@ -2838,9 +2811,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030810 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the pam_timestamp_check command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030810
   tags:
@@ -2853,9 +2825,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030819 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the create_module syscall."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030819
   tags:
@@ -2868,9 +2839,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030820 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the init_module and finit_module syscall."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030820
   tags:
@@ -2883,9 +2853,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030830 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the delete_module syscall."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030830
   tags:
@@ -2898,9 +2867,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030840 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the kmod command."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030840
   tags:
@@ -2913,9 +2881,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030870 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/passwd."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030870
   tags:
@@ -2931,9 +2898,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030871 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/group."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030871
   tags:
@@ -2949,9 +2915,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030872 | PATCH | he Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/gshadow."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030872
   tags:
@@ -2967,9 +2932,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030873 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/shadow."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030873
   tags:
@@ -2985,9 +2949,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030874 | PATCH | The Red Hat Enterprise Linux operating system must generate audit records for all account creations, modifications, disabling, and termination events that affect /etc/security/opasswd."
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030874
   tags:
@@ -3003,9 +2966,8 @@
       - auditd
 
 - name: "MEDIUM | RHEL-07-030910 | PATCH | The Red Hat Enterprise Linux operating system must audit all uses of the unlink, unlinkat, rename, renameat, and rmdir syscalls"
-  debug:
-      msg: "Control being set via Handler 'update auditd' which writes to /etc/audit.d/99_auditd.rules"
-  notify: restart auditd
+  set_fact:
+      update_audit_template: true
   when:
       - rhel_07_030910
   tags:
