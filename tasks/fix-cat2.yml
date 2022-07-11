@@ -2213,7 +2213,7 @@
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
       create: yes
-      mode: 0644
+      mode: 0640
   notify: restart auditd
   with_items:
       - { regexp: '^active =', line: 'active = yes'}
