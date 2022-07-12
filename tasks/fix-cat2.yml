@@ -3731,9 +3731,17 @@
       - chronyd
 
 - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
-  package:
-      name: "{{ rhel7stig_firewall_service }}"
-      state: present
+  block:
+      - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
+        package:
+            name: "{{ rhel7stig_firewall_service }}"
+            state: present
+
+      - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
+        service: 
+           name: "{{ rhel7stig_firewall_service }}"
+           enabled: true
+           started: true
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
