@@ -339,6 +339,7 @@ rhel7stig_aide_cron:
     # Disable the notification check rule to disable mailing notifications
     notify_by_mail: {{ rhel_07_020040 }}
     notify_cmd: ' {{ rhel7stig_aide_cron.notify_cmd }}'
+rhel7stig_notify_cmd: ' {{ rhel7stig_aide_cron.notify_cmd }}'
 
 rhel7stig_unnecessary_accounts:
 - gopher
