@@ -394,8 +394,13 @@ rhel7stig_shell_session_timeout:
 # RHEL_07_040180
 # Whether the system should be using LDAP for authentication
 rhel7stig_auth_settings:
+{% if rhel7stig_complex %}
     use_ldap: {{ rhel7stig_auth_settings.use_ldap }}
     use_sssd: {{ rhel7stig_auth_settings.use_sssd }}
+{% else %}
+    use_ldap: false
+    use_sssd: false
+{% endif %}
 
 # RHEL-07-040740
 rhel7stig_system_is_router: {{ rhel7stig_system_is_router }}
