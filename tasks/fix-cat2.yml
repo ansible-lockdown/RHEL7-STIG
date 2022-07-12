@@ -1035,7 +1035,7 @@
       - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Show SELinux authorized users"
         debug:
             msg:
-                - "Warning! Below is your SELinux user/group list. Please review and make sure all of the following are met:"
+                - "Warning!! Below is your SELinux user/group list. Please review and make sure all of the following are met:"
                 - "1) All administrators are mapped to staff_u or an appropriately tailored confined SELinux user as defined by the organization"
                 - "2) All authorized non-administrative users must be mapped to the user_u SELinux user"
                 - "{{ rhel_07_020020_sel_auth_users.stdout_lines }}"
@@ -1044,7 +1044,7 @@
       - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Warn that semanage is not installed"
         debug:
             msg:
-                - "Alert! You do not have semanage installed! Please installed the needed packages"
+                - "Warning!! You do not have semanage installed! Please installed the needed packages"
         when: "'command not found' in rhel_07_020020_sel_auth_users.stderr"
   when:
       - rhel_07_020020
@@ -4561,9 +4561,9 @@
             msg: "Warning! Below are your SELinux Role mappings. Please review the mappings with your SA to determine validity of the mappings"
         when: rhel_07_020021_sel_role_mappings.stdout | length > 0
 
-      - name: "MEDIUM | RHEL-07-020021 | AUDIT | The Red Hat Enterprise Linux operating system must confine SELinux users to roles that conform to least privilege. | Alert that semanage is not installed"
+      - name: "MEDIUM | RHEL-07-020021 | AUDIT | The Red Hat Enterprise Linux operating system must confine SELinux users to roles that conform to least privilege. | Warning!! that semanage is not installed"
         debug:
-            msg: "Alert! You do not have semanage installed! Please installed the needed packages"
+            msg: "Warning!! You do not have semanage installed! Please installed the needed packages"
         when: "'command not found' in rhel_07_020021_sel_role_mappings.stderr"
   when:
       - rhel_07_020021
@@ -4603,7 +4603,7 @@
       - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
         debug:
             msg:
-                - "Warning! Below is your sysadm_r settings in your sudoers file."
+                - "Warning!! Below is your sysadm_r settings in your sudoers file."
                 - "Please review to confirm a designated sudoers admin group or account(s) is not configured to eleveate the SELinux type and role to sysadm_t and sysadm_r with the use of the sudo command | Display if entry exists"
                 - "{{ rhel_07_020023_sel_admin_sudo_status.stdout_lines }}"
         when: rhel_07_020023_sel_admin_sudo_status.stdout | length > 0
@@ -4611,8 +4611,8 @@
       - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
         debug:
             msg:
-                - "Alert! You do not have sysadm_r configured in your sudoers file(s_"
-                - "Please configure to designate sudoers administrator group or account(s) is not configured to elevate the SELinux type and role to sysadm_t and sysadm_r with the use of the sudo command | Alert that on entry exists"
+                - "Warning!! You do not have sysadm_r configured in your sudoers file(s_"
+                - "Please configure to designate sudoers administrator group or account(s) is not configured to elevate the SELinux type and role to sysadm_t and sysadm_r with the use of the sudo command | Warning!! that on entry exists"
         when: rhel_07_020023_sel_admin_sudo_status.stdout | length == 0
   when:
       - rhel_07_020023
