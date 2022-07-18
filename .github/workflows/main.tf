@@ -79,6 +79,6 @@ resource "local_file" "inventory" {
         system_is_ec2: true
         audit_git_version: devel
         rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.thishasbeenchangedfortesting'
-        rhel_07_010340: false  #turned off as requires passwd for sudo on ec2 images it breaks
+        rhel_07_010340: false # turned off as requires passwd for sudo on ec2 images it breaks
     EOF
 }
