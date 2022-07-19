@@ -101,7 +101,7 @@
 
 - name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
   block:
-      - name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Get users with no pw set"
+      - name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Get users with no pw set"
         command: "awk -F: '!$2 {print $1}' /etc/shadow"
         changed_when: false
         failed_when: false
