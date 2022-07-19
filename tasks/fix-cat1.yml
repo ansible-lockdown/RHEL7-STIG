@@ -12,7 +12,9 @@
         register: rhel_07_010010_audit
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
-        shell: ( rpm --setugids {{ item }} && rpm --setperms {{ item }} )
+        shell: > 
+                ( rpm --setugids {{ item }}; rpm --setperms {{ item }} )
+                2>&1 1>&2 | grep -v ': No such file or directory$'
         args:
             warn: false
         register: rhel_07_010010_patch
