@@ -18,6 +18,7 @@
         args:
             warn: false
         register: rhel_07_010010_patch
+        ignore_errors: true
         with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
         when: rhel_07_010010_audit.stdout_lines | length > 0
 
