@@ -100,16 +100,16 @@
       - V-204424
       - accounts
 
-- name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
+- name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
   block:
-      - name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Get users with no pw set"
+      - name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Get users with no pw set"
         command: "awk -F: '!$2 {print $1}' /etc/shadow"
         changed_when: false
         failed_when: false
         check_mode: false
         register: rhel_07_010291_no_pw_users
 
-      - name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Warn on accounts with no passwords"
+      - name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Warn on accounts with no passwords"
         debug:
             msg:
                 - "Alert! You have users that are not using passwords. Please either set a password, lock, or remove the accounts below:"
