@@ -60,8 +60,6 @@
   command: /usr/sbin/service auditd restart
   args:
       warn: no
-  when:
-      - auditd_file.changed
 
 - name: rebuild initramfs
   command: dracut -f
