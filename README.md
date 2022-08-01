@@ -6,11 +6,11 @@
 
 Configure a RHEL 7 system to be DISA STIG compliant. All findings will be audited by default. Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default. Disruptive finding remediation can be enabled by setting `rhel7stig_disruption_high` to `yes`.
 
-This role is based on RHEL 7 DISA STIG: [Version 3, Rel 7 released on Apr 27, 2022](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R7_STIG.zip).
+This role is based on RHEL 7 DISA STIG: [Version 3, Rel 8 released on Jul 27, 2022](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R8_STIG.zip).
 
 ## Join us
 
-On our [Discord Server](https://discord.gg/JFxpSgPFEJ) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
+On our [Discord Server](https://discord.io/ansible-lockdown) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
 
 ## Updating
 
