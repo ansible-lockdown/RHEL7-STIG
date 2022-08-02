@@ -73,6 +73,7 @@ Access to download or add the goss binary and content to the system if using aud
 
 - Python3 (preferred)
 - Ansible 2.9+
+- jmespath
 
 Ansible is set to run in a python3 environment.
 
