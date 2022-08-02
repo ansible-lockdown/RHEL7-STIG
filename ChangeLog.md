@@ -2,7 +2,7 @@
 
 ## Relase 1.7.0
 
-- Update to STIG V3R8 Jul 27th 2022
+- Update to STIG V3R8 Jul 27th 2022 - rule ID changes
 - update to README and requirements
 - thanks to @dirtyharrycallahan
   - [ansible-lockdown/RHEL7-STIG#410](https://github.com/ansible-lockdown/RHEL7-STIG/issues/410)
