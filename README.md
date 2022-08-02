@@ -55,6 +55,11 @@ Access to download or add the goss binary and content to the system if using aud
 - Please read through the tasks in this role to gain an understanding of what each control is doing. Some of the tasks are disruptive and can have unintended consiquences in a live production system. Also familiarize yourself with the variables in the defaults/main.yml file or the [Main Variables Wiki Page](https://github.com/ansible-lockdown/RHEL7-STIG/wiki/Main-Variables).
 - While check_mode may work, This is not supported.
 
+### Please be aware
+
+- This does set the single user password for grub this does need to be defined - You can create the hash on a RHEL 7.9 system using the command 'grub2-mkpasswd-pbkdf2'
+- Some controls make changes to sudo, please ensure a sudo password is set for the user and it is added to the way to run your playbook.
+
 ## Documentation
 
 - [Repo GitHub Page](https://ansible-lockdown.github.io/RHEL7-STIG/)
