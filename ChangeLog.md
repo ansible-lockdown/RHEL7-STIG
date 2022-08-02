@@ -4,13 +4,15 @@
 
 - Update to STIG V3R8 Jul 27th 2022
 - update to README and requirements
+- thanks to @dirtyharrycallahan
+  - [ansible-lockdown/RHEL7-STIG#410](https://github.com/ansible-lockdown/RHEL7-STIG/issues/410)
+- thanks to @dtm966
+  - #404 updated clamav packages and service name
 - thanks to @bordentit
+  - [ansible-lockdown/RHEL7-STIG#412](https://github.com/ansible-lockdown/RHEL7-STIG/issues/412) addressed slightly differently
   - 010340 added disruption is high
   - updated audit restart control
   - README jmespath added back in
-- thanks to @dtm966
-  - updated clamav packages and service name
-
 
 ## Release 1.6.0
 
