@@ -4,7 +4,12 @@
 
 - Update to STIG V3R8 Jul 27th 2022
 - update to README and requirements
-- 010340 added disruption is high
+- thanks to @bordentit
+  - 010340 added disruption is high
+  - updated audit restart control
+  - README jmespath added back in
+- thanks to @dtm966
+  - updated clamav packages and service name
 
 
 ## Release 1.6.0
