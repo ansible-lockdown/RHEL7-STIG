@@ -773,6 +773,7 @@
       - "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when:
       - rhel7stig_using_password_auth
+      - rhel7stig_disruption_high
       - rhel_07_010340
   tags:
       - RHEL-07-010340
@@ -790,7 +791,6 @@
       state: absent
   when:
       - rhel_07_010344
-      - rhel7stig_disruption_high
   tags:
       - RHEL-07-010344
       - CAT2

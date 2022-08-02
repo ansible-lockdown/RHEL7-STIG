@@ -1,6 +1,14 @@
 # Changelog
 
+## Relase 1.7.0
+
+- Update to STIG V3R8 Jul 27th 2022
+- update to README and requirements
+- 010340 added disruption is high
+
+
 ## Release 1.6.0
+
 - Update to STIG v3r7 Apr 27th 2022
 - Removed unnecessary local.yml
 
