@@ -227,14 +227,11 @@
             path: /boot/grub2/user.cfg
             create: true
             mode: '0644'
-            regexp: "{{ item.regexp }}"
-            line: "{{ item.line }}"
+            regexp: ^GRUB2_PASSWORD=
+            line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
         notify:
             - confirm grub2 user cfg
             - make grub2 config
-        with_items:
-            - regexp: ^GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-              line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
         no_log: true
         when:
             - not rhel7stig_machine_uses_uefi
@@ -244,11 +241,8 @@
             path: "{{ rhel7stig_bootloader_path }}/user.cfg"
             create: true
             mode: '0644'
-            regexp: "{{ item.regexp }}"
-            line: "{{ item.line }}"
-        with_items:
-            - regexp: ^GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-              line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+            regexp: ^GRUB2_PASSWORD=
+            line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
         no_log: true
         notify:
             - confirm grub2 user cfg
