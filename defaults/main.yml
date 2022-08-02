@@ -388,9 +388,9 @@ rhel7stig_antivirus_required: false
 rhel7stig_av_package:
     package:
         - clamav
-        - clamav-scanner
-        - clamav-server
-    service: clamav-daemon
+        - clamav-update
+        - clamd
+    service: clamd
 
 rhel7stig_time_service: chronyd
 rhel7stig_time_service_configs:
