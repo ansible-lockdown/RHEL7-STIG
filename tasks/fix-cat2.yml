@@ -790,6 +790,7 @@
       state: absent
   when:
       - rhel_07_010344
+      - rhel7stig_disruption_high
   tags:
       - RHEL-07-010344
       - CAT2
