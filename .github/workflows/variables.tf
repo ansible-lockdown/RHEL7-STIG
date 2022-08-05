@@ -6,6 +6,12 @@ variable "aws_region" {
   type        = string
 }
 
+variable "availability_zone" {
+  description = "List of availability zone in the region"
+  default     = "us-east-1b"
+  type        = string
+}
+
 variable "instance_type" {
   description = "EC2 Instance Type"
   default     = "t3.micro"
@@ -44,6 +50,11 @@ variable "ami_user_home" {
 
 variable "namespace" {
   description = "Name used across all tags"
+  type        = string
+}
+
+variable "environment" {
+  description = "Env Name used across all tags"
   type        = string
 }
 
