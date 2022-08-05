@@ -5,9 +5,6 @@ provider "aws" {
 
 // Create a security group with access to port 22 and port 80 open to serve HTTP traffic
 
-data "aws_vpc" "default" {
-  default = true
-}
 
 resource "random_id" "server" {
   keepers = {
@@ -19,8 +16,8 @@ resource "random_id" "server" {
 }
 
 resource "aws_security_group" "github_actions" {
-  name   = "${var.namespace}-${random_id.server.hex}"
-  vpc_id = data.aws_vpc.default.id
+  name   = "${var.namespace}-${random_id.server.hex}-SG"
+  vpc_id = aws_vpc.Main.id
 
   ingress {
     from_port   = 22
@@ -43,6 +40,7 @@ resource "aws_security_group" "github_actions" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
+    Environment = "${var.environment}"
     Name = "${var.namespace}-SG"
  }
 }
@@ -51,11 +49,13 @@ resource "aws_security_group" "github_actions" {
 
 resource "aws_instance" "testing_vm" {
   ami                         = var.ami_id
+  availability_zone           = var.availability_zone
   associate_public_ip_address = true
   key_name                    = var.ami_key_pair_name # This is the key as known in the ec2 key_pairs
   instance_type               = var.instance_type
   tags                        = var.instance_tags
   vpc_security_group_ids      = [aws_security_group.github_actions.id]
+  subnet_id                   = aws_subnet.Main.id
   root_block_device {
         delete_on_termination = true
   }
@@ -78,7 +78,6 @@ resource "local_file" "inventory" {
         run_audit: true
         system_is_ec2: true
         audit_git_version: devel
-        rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.thishasbeenchangedfortesting'
-        rhel_07_010340: false # turned off as requires passwd for sudo on ec2 images it breaks
     EOF
 }
+
