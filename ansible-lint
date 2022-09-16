@@ -4,7 +4,6 @@ skip_list:
   - 'schema'
   - 'no-changed-when'
   - 'fqcn-builtins'
-  - 'var-naming'  # Older playbook no new release
   - '204'
   - '305'
   - '303'

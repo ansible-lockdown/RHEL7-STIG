@@ -36,7 +36,7 @@
   copy:
       src: "{{ rhel7stig_grub_cfg_path | dirname }}/{{ item }}"
       dest: "{{ rhel7stig_grub_cfg_path_invalid | dirname }}/{{ item }}"
-      remote_src: yes
+      remote_src: true
       mode: 0600
   with_items:
       - grub.cfg
@@ -59,7 +59,7 @@
 - name: restart auditd
   command: /usr/sbin/service auditd restart
   args:
-      warn: no
+      warn: false
 
 - name: rebuild initramfs
   command: dracut -f
@@ -69,7 +69,7 @@
 
 - name: update running audit failure mode
   command: auditctl -f {{ rhel7stig_auditd_failure_flag }}
-  failed_when: no
+  failed_when: false
 
 - name: clean up ssh host key
   file:

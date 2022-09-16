@@ -20,4 +20,3 @@
       group: root
   when:
       - get_audit_binary_method == 'copy'
-

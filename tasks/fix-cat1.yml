@@ -12,7 +12,7 @@
         register: rhel_07_010010_audit
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
-        shell: > 
+        shell: >
                 ( rpm --setugids {{ item }}; rpm --setperms {{ item }} )
                 2>&1 1>&2 | grep -v ': No such file or directory$'
         args:
@@ -502,7 +502,7 @@
                   key: GRUB_CMDLINE_LINUX
                   param: boot
                   value: UUID={{ item.uuid }}
-                  insert: yes
+                  insert: true
               when:
                   - rhel7stig_boot_part not in ['/', '']
                   - not ansible_check_mode or
