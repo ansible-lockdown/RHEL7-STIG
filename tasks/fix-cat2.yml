@@ -1,7 +1,7 @@
 ---
 ### RHEL-07-010030 | RHEL-07-010040 combined as related tasks in regards to a config file no other content will be in.
 - name: "MEDIUM | RHEL-07-010030 | RHEL-07-010040 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
-  copy:
+  copy:  # noqa: template-instead-of-copy
       dest: /etc/dconf/db/local.d/01-banner-message
       content: |
           [org/gnome/login-screen]
@@ -29,7 +29,7 @@
 
 - name: "MEDIUM | RHEL-07-010050 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon."
   copy:
-      content: "{{ rhel7stig_logon_banner }}"
+      content: "{{ rhel7stig_logon_banner }}"  # noqa: template-instead-of-copy
       dest: "{{ item }}"
       owner: root
       group: root
@@ -3739,10 +3739,10 @@
             state: present
 
       - name: "MEDIUM | RHEL-07-040520 | PATCH | The Red Hat Enterprise Linux operating system must enable an application firewall, if available."
-        service: 
-           name: "{{ rhel7stig_firewall_service }}"
-           enabled: true
-           state: started
+        service:
+            name: "{{ rhel7stig_firewall_service }}"
+            enabled: true
+            state: started
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
