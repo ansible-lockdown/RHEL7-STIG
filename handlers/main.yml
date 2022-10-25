@@ -36,7 +36,7 @@
   copy:
       src: "{{ rhel7stig_grub_cfg_path | dirname }}/{{ item }}"
       dest: "{{ rhel7stig_grub_cfg_path_invalid | dirname }}/{{ item }}"
-      remote_src: yes
+      remote_src: true
       mode: 0600
   with_items:
       - grub.cfg
@@ -56,23 +56,10 @@
       - not rhel7stig_system_is_chroot
       - not rhel7stig_system_is_container
 
-- name: update auditd
-  template:
-      src: audit/99_auditd.rules.j2
-      dest: /etc/audit/rules.d/99_auditd.rules
-      owner: root
-      group: root
-      mode: 0600
-  notify: restart auditd
-
 - name: restart auditd
   command: /usr/sbin/service auditd restart
   args:
-      warn: no
-  when:
-      - not rhel7stig_skip_for_travis
-      - not rhel7stig_system_is_chroot
-      - not rhel7stig_system_is_container
+      warn: false
 
 - name: rebuild initramfs
   command: dracut -f
@@ -82,7 +69,7 @@
 
 - name: update running audit failure mode
   command: auditctl -f {{ rhel7stig_auditd_failure_flag }}
-  failed_when: no
+  failed_when: false
 
 - name: clean up ssh host key
   file:

@@ -131,8 +131,8 @@
   systemd:
       name: tmp.mount
       daemon_reload: "{{ rhel7stig_systemd_daemon_reload }}"
-      enabled: yes
-      masked: no
+      enabled: true
+      masked: false
       state: "{{ rhel7stig_service_started }}"
   when:
       - rhel_07_021340

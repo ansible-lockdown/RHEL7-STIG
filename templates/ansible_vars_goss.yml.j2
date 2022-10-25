@@ -339,6 +339,7 @@ rhel7stig_aide_cron:
     # Disable the notification check rule to disable mailing notifications
     notify_by_mail: {{ rhel_07_020040 }}
     notify_cmd: ' {{ rhel7stig_aide_cron.notify_cmd }}'
+rhel7stig_notify_cmd: ' {{ rhel7stig_aide_cron.notify_cmd }}'
 
 rhel7stig_unnecessary_accounts:
 - gopher
@@ -394,8 +395,13 @@ rhel7stig_shell_session_timeout:
 # RHEL_07_040180
 # Whether the system should be using LDAP for authentication
 rhel7stig_auth_settings:
+{% if rhel7stig_complex %}
     use_ldap: {{ rhel7stig_auth_settings.use_ldap }}
     use_sssd: {{ rhel7stig_auth_settings.use_sssd }}
+{% else %}
+    use_ldap: false
+    use_sssd: false
+{% endif %}
 
 # RHEL-07-040740
 rhel7stig_system_is_router: {{ rhel7stig_system_is_router }}

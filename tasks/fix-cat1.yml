@@ -8,14 +8,8 @@
             warn: false
         check_mode: false
         failed_when: false
-        changed_when: rhel_07_010010_audit.stdout|length > 0
+        changed_when: false
         register: rhel_07_010010_audit
-
-      - name: "HIGH | RHEL-07-010010 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
-        debug:
-            msg: "{{ rhel_07_010010_audit.stdout_lines }}"
-        changed_when: true
-        when: rhel_07_010010_audit.stdout|length > 0
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
         shell: >
@@ -24,15 +18,15 @@
         args:
             warn: false
         register: rhel_07_010010_patch
-        failed_when: rhel_07_010010_audit.stdout|length > 0
         ignore_errors: true
         with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
+        when: rhel_07_010010_audit.stdout_lines | length > 0
 
-      - name: "HIGH | RHEL-07-010010 | AUDIT | WARNING: error during remediation"
+      - name: "HIGH | RHEL-07-010010 | AUDIT | Error during remediation"
         debug:
-            msg: "{{ item.stdout_lines }}"
+            msg: "Warning!! The following package files have been reset to default {{ item }}"
         changed_when: true
-        with_items: "{{ rhel_07_010010_patch.results }}"
+        loop: "{{ rhel_07_010010_patch.results }}"
         loop_control:
             label: "{{ item.item }}"
         when:
@@ -106,16 +100,16 @@
       - V-204424
       - accounts
 
-- name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
+- name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
   block:
-      - name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Get users with no pw set"
+      - name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Get users with no pw set"
         command: "awk -F: '!$2 {print $1}' /etc/shadow"
         changed_when: false
         failed_when: false
         check_mode: false
         register: rhel_07_010291_no_pw_users
 
-      - name: "MEDIUM | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Warn on accounts with no passwords"
+      - name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Warn on accounts with no passwords"
         debug:
             msg:
                 - "Alert! You have users that are not using passwords. Please either set a password, lock, or remove the accounts below:"
@@ -231,7 +225,7 @@
       - name: "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
         lineinfile:
             path: /boot/grub2/user.cfg
-            create: yes
+            create: true
             mode: '0644'
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
@@ -248,7 +242,7 @@
       - name: "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
         lineinfile:
             path: "{{ rhel7stig_bootloader_path }}/user.cfg"
-            create: yes
+            create: true
             mode: '0644'
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
@@ -261,21 +255,6 @@
             - make grub2 config
         when:
             - rhel7stig_machine_uses_uefi
-
-      # - name: |
-      #     "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-      #     "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-      #   lineinfile:
-      #       path: /etc/grub.d/01_users
-      #       regexp: "{{ item.regexp }}"
-      #       line: "{{ item.line }}"
-      #   notify:
-      #       - make grub2 config
-      #   with_items:
-      #       - regexp: ^\s*set superusers=
-      #         line: '    set superusers="{{ rhel7stig_boot_superuser }}"'
-      #       - regexp: ^\s*export superusers
-      #         line: '    export superusers'
   when:
       - rhel_07_010482 or
         rhel_07_010491
@@ -368,7 +347,7 @@
 - name: "HIGH | RHEL-07-020230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled on the command line."
   systemd:
       name: ctrl-alt-del.target
-      masked: yes
+      masked: true
   when:
       - rhel_07_020230
   tags:
@@ -503,7 +482,7 @@
             key: GRUB_CMDLINE_LINUX
             param: fips
             value: "{{ fips_value }}"
-            append: yes  # this is the default
+            append: true  # this is the default
         notify: confirm grub2 user cfg
         when:
             - not ansible_check_mode or
@@ -523,7 +502,7 @@
                   key: GRUB_CMDLINE_LINUX
                   param: boot
                   value: UUID={{ item.uuid }}
-                  insert: yes
+                  insert: true
               when:
                   - rhel7stig_boot_part not in ['/', '']
                   - not ansible_check_mode or
@@ -598,7 +577,7 @@
         service:
             name: "{{ rhel7stig_av_package.service }}"
             state: "{{ rhel7stig_service_started }}"
-            enabled: yes
+            enabled: true
         failed_when: false
   when:
       - rhel7stig_antivirus_required

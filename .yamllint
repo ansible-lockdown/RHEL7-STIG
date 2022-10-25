@@ -21,4 +21,15 @@ rules:
   brackets:
     max-spaces-inside: 1
     level: error
+  indentation:
+    indent-sequences: consistent
+    level: error
   line-length: disable
+  key-duplicates: enable
+  new-line-at-end-of-file: enable
+  new-lines:
+    type: unix
+  trailing-spaces: enable
+  truthy:
+    allowed-values: ['true', 'false']
+    check-keys: false

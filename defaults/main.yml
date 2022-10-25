@@ -369,7 +369,7 @@ rhel_07_020730_WWP_Change: true
 # (Red Hat has support for older versions if you pay extra for it.)
 rhel7stig_min_supported_os_ver:
     RedHat: "7.9"
-    CentOS: "7.9.2009"
+    CentOS: "7.9"
     OracleLinux: "7.9"
 
 # RHEL-07-040740
@@ -411,6 +411,11 @@ rhel7stig_time_service_configs:
 rhel7stig_firewall_service: firewalld
 # The toggle to start the firewall service. Set to true the role will start the service for you where needed
 rhel7stig_start_firewall_service: true
+
+# allowed firewall ports and protocols as found in the command used to discover
+rhel7stig_firewall_ports_protocols:
+    - '22/tcp'
+    - '546/udp'
 
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
@@ -454,7 +459,8 @@ rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispassword'
 rhel7stig_boot_superuser: root
 
 # RHEL-07-021700 set the value for correctly configured grub bootloader sequence
-rhel7stig_grub_bootloader_validorder: " set root='hd0,msdos1'"
+# note this is different for bios and EFI boot types. so can be changed via the inventory or alternate vars
+rhel7stig_grub_bootloader_validorder: "set root='hd0,msdos1'"
 
 # RHEL-07-040200 Path for cacrt bundle that holds LDAP certs for tls transport
 rhel_07_040200_cabundle_path: etc/pki/tls/certs/ca-bundle.crt
@@ -541,7 +547,7 @@ rhel7stig_password_complexity:
     minlen: 15
 
 # RHEL-07-020022
-# rhel7stig_ssh_sysadm_login_state is the state for the ssh_sysadmin_login boolean. 
+# rhel7stig_ssh_sysadm_login_state is the state for the ssh_sysadmin_login boolean.
 # The value False will set the value to off, which does not allow privileged accounts to utilize SSH
 # The value True will set the value to on, which allows privileged accounts to utilize SSH
 # To confrom to STIG requirements use the value of false
@@ -627,6 +633,9 @@ rhel7stig_login_defaults:
     fail_delay_secs: 4
     umask: '077'
     create_home: 'yes'
+
+# Default value - if control is enabled this will run for the valid controls.
+update_audit_template: false
 
 # RHEL-07-030300 uncomment and set the value to a remote IP address that can receive audit logs
 # rhel7stig_audisp_remote_server: 10.10.10.10
