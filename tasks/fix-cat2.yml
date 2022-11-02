@@ -594,6 +594,20 @@
       - V-204422
       - pamd
 
+- name: "MEDIUM | AUDIT | RHEL-07-010271 | The Red Hat Enterprise Linux operating system emergency accounts must be automatically removed or disabled after the crisis is resolved or within 72 hours."
+  debug:
+      msg:
+          - "Warning!! Verify every existing emergency account and make sure it has an expiration date set within 72 hours."
+  when:
+      - rhel_07_010271
+  tags:
+      - RHEL-07-010271
+      - CAT2
+      - CCI-001682
+      - SRG-OS-000123-GPOS-00064
+      - SV-254523r858501_rule
+      - V-254523
+
 - name: "MEDIUM | RHEL-07-010280 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are a minimum of 15 characters in length."
   lineinfile:
       create: true
@@ -1990,7 +2004,7 @@
 - name: "MEDIUM | RHEL-07-021040 | PATCH | The Red Hat Enterprise Linux operating system must set the umask value to 077 for all local interactive user accounts."
   file:
       path: "{{ item }}"
-      mode: '0700'
+      mode: '077'
       state: touch
   changed_when: false
   with_items:
@@ -2877,7 +2891,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00216
-      - SV-204563r603261_rule
+      - SV-204563r858498_rule
       - V-204563
       - auditd
 
@@ -3151,6 +3165,8 @@
         state: present
       - dest: /etc/profile
         state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/profile') | ternary('present', 'absent') }}"
+      - dest:  /etc/bashrc
+        state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/bashrc') | ternary('present', 'absent') }}"
   when:
       - rhel_07_040160
   tags:
@@ -3159,7 +3175,7 @@
       - CCI-001133
       - CCI-002361
       - SRG-OS-000163-GPOS-00072
-      - SV-204579r646844_rule
+      - SV-204579r861070_rule
       - V-204579
       - profile
 
@@ -3300,9 +3316,12 @@
   tags:
       - RHEL-07-040310
       - CAT2
+      - CCI-002418
+      - CCI-002420
       - CCI-002421
+      - CCI-002422
       - SRG-OS-000423-GPOS-00187
-      - SV-204586r603261_rule
+      - SV-204586r861071_rule
       - V-204586
       - ssh
 
@@ -3402,9 +3421,9 @@
   tags:
       - RHEL-07-040360
       - CAT2
-      - CCI-000366
+      - CCI-000052
       - SRG-OS-000480-GPOS-00227
-      - SV-204591r603261_rule
+      - SV-204591r858477_rule
       - V-204591
       - ssh
 
@@ -4460,7 +4479,7 @@
 - name: "MEDIUM | RHEL-07-010342 | PATCH | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo."
   block:
       - name: "MEDIUM | RHEL-07-010342 | AUDIT | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo. | Get privilege escalation"
-        shell: egrep -is '(!rootpw|!targetpw|!runaspw)' /etc/sudoers /etc/sudoers.d/* | grep -v '#' | cut -d":" -f1 | sort --unique
+        shell: egrep -irs '(!rootpw|!targetpw|!runaspw)' /etc/sudoers /etc/sudoers.d/* | grep -v '#' | cut -d":" -f1 | sort --unique
         changed_when: false
         failed_when: false
         register: rhel_07_010342_priv_escalation
@@ -4523,7 +4542,7 @@
 - name: "MEDIUM | RHEL-07-010343 | PATCH | The Red Hat Enterprise Linux operating system must require re-authentication when using the sudo command."
   block:
       - name: "MEDIUM | RHEL-07-010343 | PATCH | The Red Hat Enterprise Linux operating system must require re-authentication when using the sudo command. | Get files with timeout set"
-        shell: grep -is 'timestamp_timeout' /etc/sudoers /etc/sudoers.d/* | cut -d":" -f1 | uniq | sort
+        shell: grep -irs 'timestamp_timeout' /etc/sudoers /etc/sudoers.d/* | cut -d":" -f1 | uniq | sort
         changed_when: false
         failed_when: false
         register: rhel_07_010343_timeout_files
@@ -4604,7 +4623,7 @@
 - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
   block:
       - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command | Get sysadm_r sudoers status"
-        shell: grep -s sysadm_r /etc/sudoers.d/* /etc/sudoers
+        shell: grep -rs sysadm_r /etc/sudoers /etc/sudoers.d/*
         changed_when: false
         failed_when: false
         register: rhel_07_020023_sel_admin_sudo_status

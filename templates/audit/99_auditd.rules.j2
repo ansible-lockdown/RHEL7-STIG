@@ -140,7 +140,7 @@
 {% endif %}
 
 {% if rhel_07_030840 %}
--w /usr/bin/kmod -p x -F auid!=unset -k module-change
+-a always,exit -F path=/usr/bin/kmod -F perm=x -F auid>=1000 -F auid!=unset -k modules
 {% endif %}
 
 {% if rhel_07_030870 %}

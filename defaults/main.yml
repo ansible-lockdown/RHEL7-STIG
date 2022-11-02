@@ -137,6 +137,7 @@ rhel_07_010240: true
 rhel_07_010250: true
 rhel_07_010260: true
 rhel_07_010270: true
+rhel_07_010271: true
 rhel_07_010280: true
 rhel_07_010310: true
 rhel_07_010320: true
@@ -460,7 +461,7 @@ rhel7stig_boot_superuser: root
 
 # RHEL-07-021700 set the value for correctly configured grub bootloader sequence
 # note this is different for bios and EFI boot types. so can be changed via the inventory or alternate vars
-rhel7stig_grub_bootloader_validorder: "set root='hd0,msdos1'"
+rhel7stig_grub_bootloader_validorder: "set root='hd0,1'"
 
 # RHEL-07-040200 Path for cacrt bundle that holds LDAP certs for tls transport
 rhel_07_040200_cabundle_path: etc/pki/tls/certs/ca-bundle.crt
@@ -761,8 +762,8 @@ audit_out_dir: '/var/tmp'
 audit_conf_dir: "{{ audit_out_dir }}/{{ benchmark }}-Audit/"
 
 # If changed these can affect other products
-pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}-{{ benchmark }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
-post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}-{{ benchmark }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
+pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
+post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
 
 ## The following should not need changing
 audit_control_file: "{{ audit_conf_dir }}goss.yml"
