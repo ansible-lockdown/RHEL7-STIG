@@ -2019,9 +2019,9 @@
       - CCI-000368
       - CCI-001813
       - CCI-001814
-      - CCI-00181
+      - CCI-001812
       - SRG-OS-000480-GPOS-00227
-      - SV-204488r603261_rule
+      - SV-204488r861006_rule
       - V-204488
       - permissions
       - accounts
