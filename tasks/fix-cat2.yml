@@ -478,6 +478,8 @@
 
       - name: "MEDIUM | RHEL-07-010240 | PATCH | Passwords must be restricted to a 24 hours/1 day minimum lifetime."
         command: chage -m 1 {{ item }}
+        check_mode: false
+        changed_when: true
         with_items:
             - "{{ rhel_07_010240_audit.stdout_lines }}"
   when:
@@ -1400,6 +1402,7 @@
   file:
       path: "{{ item.dir }}"
       state: directory
+      mode: 0700
   with_items:
       - "{{ rhel7stig_passwd }}"
   loop_control:
@@ -1441,6 +1444,7 @@
   file:
       path: "{{ item.dir }}"
       owner: "{{ item.id }}"
+      mode: 0700
       state: directory
   with_items:
       - "{{ rhel7stig_passwd }}"
@@ -1461,8 +1465,9 @@
 - name: "MEDIUM | RHEL-07-020650 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user home directories are group-owned by the home directory owners primary group."
   file:
       path: "{{ item.dir }}"
-      group: "{{ item.gid }}"
+      group: "{{ item.gid }}"  # noqa risky-file-permissions
       state: directory
+      mode: 0700
   with_items:
       - "{{ rhel7stig_passwd }}"
   loop_control:
@@ -3057,16 +3062,16 @@
       - V-204575
       - rsyslog
 
-# ######################
-# ####### 040000 #######
-# ######################
+#######################
+######## 040000 #######
+#######################
 
 - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
   block:
       - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
         block:
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
-              shell: for p in `firewall-cmd --list-services`; do firewall-cmd --permanent --service $p --get-ports | grep -Ev '{{ rhel7stig_firewall_ports_protocols|flatten|join('|') }}'; done;
+              shell: for p in `firewall-cmd --list-services`; do firewall-cmd --permanent --service $p --get-ports | grep -Ev '{{ rhel7stig_firewall_ports_protocols | flatten | join('|') }}'; done;
               changed_when: false
               failed_when: false
               check_mode: false
@@ -3092,7 +3097,7 @@
               changed_when: false
               failed_when: false
               check_mode: false
-              register: rhel7stig_PPSM_CLSA_check_iptables
+              register: rhel7stig_PPSM_CLSA_check_iptables  # noqa var-naming
 
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
               debug:
@@ -3102,7 +3107,7 @@
 
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
               debug:
-                  var: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines
+                  var: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines  # noqa var-naming
               changed_when: true
               when: rhel7stig_PPSM_CLSA_check_iptables.stdout_lines is defined
         when:

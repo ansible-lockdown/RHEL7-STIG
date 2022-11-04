@@ -49,6 +49,9 @@
   get_url:
       url: "{{ audit_files_url }}"
       dest: "{{ audit_conf_dir }}"
+      owner: root
+      group: root
+      mode: 0755
   when:
       - audit_content == 'get_url'
 
@@ -79,7 +82,7 @@
 
 - name: "Pre Audit | Run pre_remediation {{ benchmark }} audit"
   shell: "{{ audit_conf_dir }}run_audit.sh -v {{ audit_vars_path }} -o {{ pre_audit_outfile }} -g {{ group_names }}"
-  environment: "{{ audit_run_script_environment|default({}) }}"
+  environment: "{{ audit_run_script_environment | default({}) }}"
   changed_when: audit_run_pre_remediation.rc == 0
   register: audit_run_pre_remediation
   vars:
@@ -94,7 +97,7 @@
 
       - name: Pre Audit | Capture pre-audit result
         set_fact:
-            pre_audit_summary: "{{ pre_audit.stdout | from_json |json_query(summary) }}"
+            pre_audit_summary: "{{ pre_audit.stdout | from_json | json_query(summary) }}"
         vars:
             summary: 'summary."summary-line"'
         when:
