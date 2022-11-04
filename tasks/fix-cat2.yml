@@ -3165,7 +3165,7 @@
         state: present
       - dest: /etc/profile
         state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/profile') | ternary('present', 'absent') }}"
-      - dest:  /etc/bashrc
+      - dest: /etc/bashrc
         state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/bashrc') | ternary('present', 'absent') }}"
   when:
       - rhel_07_040160
