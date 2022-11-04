@@ -1,14 +1,15 @@
 # Changelog
 
 ## Release 1.9.0
+
 - RHEL-07-010271 - New Control Added 
-- Update to STIG V3R9 Oct 27th 2022
-  	· RHEL-07-010342, RHEL-07-010343, RHEL- 07-020023, RHEL-07-030201 - Updated fix text.
-    · RHEL-07-021040, RHEL-07-021700 - Updated check text command to eliminate false positives.
-    · RHEL-07-030840 - Updated check and fix text.
-    · RHEL-07-040160 - Updated check text.
-    · RHEL-07-040310 - Corrected typo in the Vulnerability Discussion.
-    · RHEL-07-040360, RHEL-07-040530 - Updated CCI. 
+- Update to STIG V3R9 Oct 27th 2022 - Changes Listed Below
+  - RHEL-07-010342, RHEL-07-010343, RHEL- 07-020023, RHEL-07-030201 - Updated fix text.
+  - RHEL-07-021040, RHEL-07-021700 - Updated check text command to eliminate false positives.
+  - RHEL-07-030840 - Updated check and fix text.
+  - RHEL-07-040160 - Updated check text.
+  - RHEL-07-040310 - Corrected typo in the Vulnerability Discussion.
+  - RHEL-07-040360, RHEL-07-040530 - Updated CCI. 
 - Update to README and requirements
 
 ## Relase 1.7.0
