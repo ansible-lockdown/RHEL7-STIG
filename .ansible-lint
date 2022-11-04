@@ -5,6 +5,8 @@ skip_list:
   - 'no-changed-when'
   - 'fqcn-builtins'
   - 'experimental'
+  - 'fqcn[action-core]'
+  - 'fqcn[action]'
   - 'name[casing]'
   - 'name[template]'
   - 'jinja[spacing]'
