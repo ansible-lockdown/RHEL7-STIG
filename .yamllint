@@ -14,7 +14,6 @@ rules:
     spaces: 4
     # Requiring consistent indentation within a file, either indented or not
     indent-sequences: consistent
-  truthy: disable
   braces:
     max-spaces-inside: 1
     level: error
@@ -33,3 +32,6 @@ rules:
   truthy:
     allowed-values: ['true', 'false']
     check-keys: false
+
+
+

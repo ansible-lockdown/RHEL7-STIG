@@ -66,13 +66,15 @@
       - RHEL-07-010491
       - cat1
 
-- import_tasks: prelim.yml
+- name: include prelim tasks
+  import_tasks: prelim.yml
   become: true
   tags:
       - prelim_tasks
       - run_audit
 
-- import_tasks: pre_remediation_audit.yml
+- name: include pre-remediation audit
+  import_tasks: pre_remediation_audit.yml
   when:
       - run_audit
   tags:
@@ -125,7 +127,8 @@
   when:
       - not rhel7stig_skip_reboot
 
-- import_tasks: post_remediation_audit.yml
+- name: include post-remediation audit
+  import_tasks: post_remediation_audit.yml
   when:
       - run_audit
 

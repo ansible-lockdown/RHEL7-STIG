@@ -192,7 +192,7 @@
 
 - name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
   block:
-      - name: "LOW | RHEL-07-040530 | Update pam_lastlog control to satisfy benchmark."
+      - name: "LOW | RHEL-07-040530 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon | Update pam_lastlog control to satisfy benchmark."
         pamd:
             name: postlogin
             type: session
@@ -201,7 +201,7 @@
             module_path: pam_lastlog.so
             state: updated
 
-      - name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
+      - name: "LOW | RHEL-07-040530 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon | Update pam_lastlog when line absent."
         pamd:
             name: postlogin
             state: args_absent
@@ -213,7 +213,7 @@
             - '[default=1]'
             - "{{ default_control }}"
 
-      - name: "MEDIUM | RHEL-07-010270 | PATCH | Remove old remediation"
+      - name: "LOW | RHEL-07-040530 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon | Remove old remediation."
         blockinfile:
             state: absent
             path: /etc/pam.d/postlogin
@@ -229,9 +229,9 @@
   tags:
       - RHEL-07-040530
       - CAT3
-      - CCI-000366
+      - CCI-000052
       - SRG-OS-000480-GPOS-00227
-      - SV-204605r603261_rule
+      - SV-204605r858478_rule
       - V-204605
 
 # NOTE: The following does not address that /etc/resolv.conf can be modified by DHCP when running networkmanager, and thus having two DNS servers may be a config setting not on the hosts, but on the DHCP service.

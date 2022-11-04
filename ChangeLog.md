@@ -1,6 +1,34 @@
 # Changelog
 
+## Release 1.9.0
+
+- RHEL-07-010271 - New Control Added 
+- Update to STIG V3R9 Oct 27th 2022 - Changes Listed Below
+  - RHEL-07-010342, RHEL-07-010343, RHEL- 07-020023, RHEL-07-030201 - Updated fix text.
+  - RHEL-07-021040, RHEL-07-021700 - Updated check text command to eliminate false positives.
+  - RHEL-07-030840 - Updated check and fix text.
+  - RHEL-07-040160 - Updated check text.
+  - RHEL-07-040310 - Corrected typo in the Vulnerability Discussion.
+  - RHEL-07-040360, RHEL-07-040530 - Updated CCI. 
+- Update to README and requirements
+- RHEL-07-010010, RHEL-07-010020, RHEL-07-010291, RHEL-07-021030,RHEL-07-021040 - Updated Tag Information
+
+## Relase 1.7.0
+
+- Update to STIG V3R8 Jul 27th 2022 - rule ID changes
+- update to README and requirements
+- thanks to @dirtyharrycallahan
+  - [ansible-lockdown/RHEL7-STIG#410](https://github.com/ansible-lockdown/RHEL7-STIG/issues/410)
+- thanks to @dtm966
+  - #404 updated clamav packages and service name
+- thanks to @bordentit
+  - [ansible-lockdown/RHEL7-STIG#412](https://github.com/ansible-lockdown/RHEL7-STIG/issues/412) addressed slightly differently
+  - 010340 added disruption is high
+  - updated audit restart control
+  - README jmespath added back in
+
 ## Release 1.6.0
+
 - Update to STIG v3r7 Apr 27th 2022
 - Removed unnecessary local.yml
 

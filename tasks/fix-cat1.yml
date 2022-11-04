@@ -42,7 +42,7 @@
       - CCI-002165
       - CCI-002235
       - SRG-OS-000257-GPOS-00098
-      - SV-204392r646841_rule
+      - SV-204392r853878_rule
       - V-204392
       - permissions
 
@@ -78,7 +78,7 @@
       - CAT1
       - CCI-001749
       - SRG-OS-000480-GPOS-00227
-      - SV-214799r603261_rule
+      - SSV-214799r854001_rule
       - V-214799
       - packages
 
@@ -120,7 +120,7 @@
   when:
       - rhel_07_010291
   tags:
-      - RHEL-07-010290
+      - RHEL-07-010291
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
@@ -227,14 +227,11 @@
             path: /boot/grub2/user.cfg
             create: true
             mode: '0644'
-            regexp: "{{ item.regexp }}"
-            line: "{{ item.line }}"
+            regexp: ^GRUB2_PASSWORD=
+            line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
         notify:
             - confirm grub2 user cfg
             - make grub2 config
-        with_items:
-            - regexp: ^GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-              line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
         no_log: true
         when:
             - not rhel7stig_machine_uses_uefi
@@ -244,11 +241,8 @@
             path: "{{ rhel7stig_bootloader_path }}/user.cfg"
             create: true
             mode: '0644'
-            regexp: "{{ item.regexp }}"
-            line: "{{ item.line }}"
-        with_items:
-            - regexp: ^GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
-              line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+            regexp: ^GRUB2_PASSWORD=
+            line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
         no_log: true
         notify:
             - confirm grub2 user cfg
@@ -355,7 +349,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204455r603261_rule
+      - SV-204455r833106_rule
       - V-204455
       - systemctl
 

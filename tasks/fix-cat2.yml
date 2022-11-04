@@ -1,7 +1,7 @@
 ---
 ### RHEL-07-010030 | RHEL-07-010040 combined as related tasks in regards to a config file no other content will be in.
 - name: "MEDIUM | RHEL-07-010030 | RHEL-07-010040 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
-  copy:
+  copy:  # noqa: template-instead-of-copy
       dest: /etc/dconf/db/local.d/01-banner-message
       content: |
           [org/gnome/login-screen]
@@ -29,7 +29,7 @@
 
 - name: "MEDIUM | RHEL-07-010050 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a command line user logon."
   copy:
-      content: "{{ rhel7stig_logon_banner }}"
+      content: "{{ rhel7stig_logon_banner }}"  # noqa: template-instead-of-copy
       dest: "{{ item }}"
       owner: root
       group: root
@@ -596,6 +596,20 @@
       - V-204422
       - pamd
 
+- name: "MEDIUM | AUDIT | RHEL-07-010271 | The Red Hat Enterprise Linux operating system emergency accounts must be automatically removed or disabled after the crisis is resolved or within 72 hours."
+  debug:
+      msg:
+          - "Warning!! Verify every existing emergency account and make sure it has an expiration date set within 72 hours."
+  when:
+      - rhel_07_010271
+  tags:
+      - RHEL-07-010271
+      - CAT2
+      - CCI-001682
+      - SRG-OS-000123-GPOS-00064
+      - SV-254523r858501_rule
+      - V-254523
+
 - name: "MEDIUM | RHEL-07-010280 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are a minimum of 15 characters in length."
   lineinfile:
       create: true
@@ -761,7 +775,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-251703r809566_rule
+      - SV-251703r833183_rule
       - V-251703
       - sudoers
 
@@ -775,13 +789,14 @@
       - "{{ rhel7stig_sudoers_files.stdout_lines }}"
   when:
       - rhel7stig_using_password_auth
+      - rhel7stig_disruption_high
       - rhel_07_010340
   tags:
       - RHEL-07-010340
       - CAT2
       - CCI-002038
       - SRG-OS-000373-GPOS-00156
-      - SV-204429r603261_rule
+      - SV-204429r833190_rule
       - V-204429
       - sudoers
 
@@ -938,10 +953,10 @@
       - CAT2
       - CCI-000213
       - SRG-OS-000080-GPOS-00048
-      - SV-244557r744063_rule
+      - SV-244557r833185_rule
       - V-244557
       - RHEL-07-010492
-      - SV-244558r744066_rule
+      - SV-244558r833187_rule
       - V-244558
       - grub
       - bootloader
@@ -1071,7 +1086,7 @@
       - CAT2
       - CCI-002696
       - SRG-OS-000445-GPOS-00199
-      - SV-251705r809229_rule
+      - SV-251705r833192_rule
       - V-251705
       - aide
 
@@ -1987,14 +2002,14 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204487r603261_rule
+      - SV-204487r744106_rule
       - V-204487
       - disruption-high
 
 - name: "MEDIUM | RHEL-07-021040 | PATCH | The Red Hat Enterprise Linux operating system must set the umask value to 077 for all local interactive user accounts."
   file:
       path: "{{ item }}"
-      mode: '0700'
+      mode: '077'
       state: touch
   changed_when: false
   with_items:
@@ -2009,9 +2024,9 @@
       - CCI-000368
       - CCI-001813
       - CCI-001814
-      - CCI-00181
+      - CCI-001812
       - SRG-OS-000480-GPOS-00227
-      - SV-204488r603261_rule
+      - SV-204488r861006_rule
       - V-204488
       - permissions
       - accounts
@@ -2480,7 +2495,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000392-GPOS-00172
-      - SV-204536r603261_rule
+      - SV-204536r833109_rule
       - V-204536
       - auditd
 
@@ -2494,7 +2509,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000392-GPOS-00172
-      - SV-204537r603261_rule
+      - SV-204537r833112_rule
       - V-204537
       - auditd
 
@@ -2508,7 +2523,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000392-GPOS-00172
-      - SV-204538r603261_rule
+      - SV-204538r833115_rule
       - V-204538
       - auditd
 
@@ -2522,7 +2537,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000392-GPOS-00172
-      - SV-204539r603261_rule
+      - SV-204539r833118_rule
       - V-204539
       - auditd
 
@@ -2570,7 +2585,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204542r603261_rule
+      - SV-204542r833121_rule
       - V-204542
       - auditd
 
@@ -2586,7 +2601,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204543r603261_rule
+      - SV-204543r833124_rule
       - V-204543
       - auditd
 
@@ -2602,7 +2617,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204544r603261_rule
+      - SV-204544r833127_rule
       - V-204544
       - auditd
 
@@ -2618,7 +2633,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204545r603261_rule
+      - SV-204545r833130_rule
       - V-204545
       - auditd
 
@@ -2634,7 +2649,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204546r603261_rule
+      - SV-204546r833133_rule
       - V-204546
       - auditd
 
@@ -2651,7 +2666,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000037-GPOS-00015
-      - SV-204547r603261_rule
+      - SV-204547r833136_rule
       - V-204547
       - auditd
 
@@ -2668,7 +2683,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000037-GPOS-00015
-      - SV-204548r603261_rule
+      - SV-204548r833139_rule
       - V-204548
       - auditd
 
@@ -2702,7 +2717,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000037-GPOS-00015
-      - SV-204550r603261_rule
+      - SV-204550r833142_rule
       - V-204550
       - auditd
 
@@ -2719,7 +2734,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000037-GPOS-00015
-      - SV-204551r603261_rule
+      - SV-204551r833145_rule
       - V-204551
       - auditd
 
@@ -2734,7 +2749,7 @@
       - CCI-000135
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204552r603261_rule
+      - SV-204552r833148_rule
       - V-204552
       - auditd
 
@@ -2749,7 +2764,7 @@
       - CCI-000135
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204553r603261_rule
+      - SV-204553r833151_rule
       - V-204553
       - auditd
 
@@ -2764,7 +2779,7 @@
       - CCI-000135
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204554r603261_rule
+      - SV-204554r833154_rule
       - V-204554
       - auditd
 
@@ -2779,7 +2794,7 @@
       - CCI-000135
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204555r603261_rule
+      - SV-204555r833157_rule
       - V-204555
       - auditd
 
@@ -2795,7 +2810,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204556r603261_rule
+      - SV-204556r833160_rule
       - V-204556
       - auditd
 
@@ -2811,7 +2826,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204557r603261_rule
+      - SV-204557r833163_rule
       - V-204557
       - auditd
 
@@ -2825,7 +2840,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00215
-      - SV-204558r603261_rule
+      - SV-204558r833166_rule
       - V-204558
       - auditd
 
@@ -2839,7 +2854,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00216
-      - SV-204559r603261_rule
+      - SV-204559r833169_rule
       - V-204559
       - auditd
 
@@ -2853,7 +2868,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00216
-      - SV-204560r603261_rule
+      - SV-204560r833172_rule
       - V-204560
       - auditd
 
@@ -2867,7 +2882,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00216
-      - SV-204562r603261_rule
+      - SV-204562r833175_rule
       - V-204562
       - auditd
 
@@ -2881,7 +2896,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00216
-      - SV-204563r603261_rule
+      - SV-204563r858498_rule
       - V-204563
       - auditd
 
@@ -3155,6 +3170,8 @@
         state: present
       - dest: /etc/profile
         state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/profile') | ternary('present', 'absent') }}"
+      - dest: /etc/bashrc
+        state: "{{ (rhel7stig_shell_session_timeout.file == '/etc/bashrc') | ternary('present', 'absent') }}"
   when:
       - rhel_07_040160
   tags:
@@ -3163,7 +3180,7 @@
       - CCI-001133
       - CCI-002361
       - SRG-OS-000163-GPOS-00072
-      - SV-204579r646844_rule
+      - SV-204579r861070_rule
       - V-204579
       - profile
 
@@ -3304,9 +3321,12 @@
   tags:
       - RHEL-07-040310
       - CAT2
+      - CCI-002418
+      - CCI-002420
       - CCI-002421
+      - CCI-002422
       - SRG-OS-000423-GPOS-00187
-      - SV-204586r603261_rule
+      - SV-204586r861071_rule
       - V-204586
       - ssh
 
@@ -3406,9 +3426,9 @@
   tags:
       - RHEL-07-040360
       - CAT2
-      - CCI-000366
+      - CCI-000052
       - SRG-OS-000480-GPOS-00227
-      - SV-204591r603261_rule
+      - SV-204591r858477_rule
       - V-204591
       - ssh
 
@@ -4464,7 +4484,7 @@
 - name: "MEDIUM | RHEL-07-010342 | PATCH | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo."
   block:
       - name: "MEDIUM | RHEL-07-010342 | AUDIT | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo. | Get privilege escalation"
-        shell: egrep -is '(!rootpw|!targetpw|!runaspw)' /etc/sudoers /etc/sudoers.d/* | grep -v '#' | cut -d":" -f1 | sort --unique
+        shell: egrep -irs '(!rootpw|!targetpw|!runaspw)' /etc/sudoers /etc/sudoers.d/* | grep -v '#' | cut -d":" -f1 | sort --unique
         changed_when: false
         failed_when: false
         register: rhel_07_010342_priv_escalation
@@ -4520,14 +4540,14 @@
       - CAT2
       - CCI-002227
       - SRG-OS-000480-GPOS-00227
-      - SV-237634r809213_rule
+      - SV-237634r861074_rule
       - V-237634
       - sudo
 
 - name: "MEDIUM | RHEL-07-010343 | PATCH | The Red Hat Enterprise Linux operating system must require re-authentication when using the sudo command."
   block:
       - name: "MEDIUM | RHEL-07-010343 | PATCH | The Red Hat Enterprise Linux operating system must require re-authentication when using the sudo command. | Get files with timeout set"
-        shell: grep -is 'timestamp_timeout' /etc/sudoers /etc/sudoers.d/* | cut -d":" -f1 | uniq | sort
+        shell: grep -irs 'timestamp_timeout' /etc/sudoers /etc/sudoers.d/* | cut -d":" -f1 | uniq | sort
         changed_when: false
         failed_when: false
         register: rhel_07_010343_timeout_files
@@ -4557,7 +4577,7 @@
       - CAT2
       - CCI-002038
       - SRG-OS-000373-GPOS-00156
-      - SV-237635r809215_rule
+      - SV-237635r833179_rule
       - V-237635
       - sudo
 
@@ -4608,7 +4628,7 @@
 - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
   block:
       - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command | Get sysadm_r sudoers status"
-        shell: grep -s sysadm_r /etc/sudoers.d/* /etc/sudoers
+        shell: grep -rs sysadm_r /etc/sudoers /etc/sudoers.d/*
         changed_when: false
         failed_when: false
         register: rhel_07_020023_sel_admin_sudo_status
@@ -4635,5 +4655,5 @@
       - CCI-002165
       - CCI-002235
       - SRG-OS-000324-GPOS-00125
-      - SV-250314r809217_rule
+      - SV-250314r861076_rule
       - V-250314
