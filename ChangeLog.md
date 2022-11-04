@@ -11,6 +11,7 @@
   - RHEL-07-040310 - Corrected typo in the Vulnerability Discussion.
   - RHEL-07-040360, RHEL-07-040530 - Updated CCI. 
 - Update to README and requirements
+- RHEL-07-010010, RHEL-07-010020, RHEL-07-010291, RHEL-07-021030,RHEL-07-021040 - Updated Tag Information
 
 ## Relase 1.7.0
 
