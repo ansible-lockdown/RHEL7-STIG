@@ -78,7 +78,7 @@
       - CAT1
       - CCI-001749
       - SRG-OS-000480-GPOS-00227
-      - SV-214799r603261_rule
+      - SSV-214799r854001_rule
       - V-214799
       - packages
 
@@ -120,7 +120,7 @@
   when:
       - rhel_07_010291
   tags:
-      - RHEL-07-010290
+      - RHEL-07-010291
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
