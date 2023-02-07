@@ -1127,6 +1127,7 @@
   package:
       name: aide
       state: present
+  notify: "{{ rhel7stig_aide_handler }}"
   when:
       - rhel_07_020029
       - "'aide' not in ansible_facts.packages"
@@ -1135,7 +1136,7 @@
       - CAT2
       - CCI-002696
       - SRG-OS-000445-GPOS-00199
-      - SV-251705r833192_rule
+      - SV-251705r880854_rule
       - V-251705
       - aide
 
