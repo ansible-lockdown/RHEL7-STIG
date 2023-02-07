@@ -4069,7 +4069,7 @@
       create: true
       dest: /etc/ssh/sshd_config
       regexp: "(?i)^#?KexAlgorithms"
-      line: KexAlgorithms "{{ rhel7_stig_ssh_kex }}"
+      line: KexAlgorithms "{{ rhel7stig_ssh_kex }}"
       validate: /usr/sbin/sshd -t -f %s
       mode: 0600
   notify: restart sshd
