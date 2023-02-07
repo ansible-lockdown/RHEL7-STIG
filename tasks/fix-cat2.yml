@@ -3710,7 +3710,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204602r603261_rule
+      - SV-204602r880758_rule
       - V-204602
       - ssh
 
@@ -3862,7 +3862,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204610r603261_rule
+      - SV-204610r880800_rule
       - V-204610
       - sysctl
       - ipv4
@@ -4062,6 +4062,27 @@
       - SRG-OS-000480-GPOS-00227
       - SV-204622r603849_rule
       - V-204622
+      - ssh
+
+- name: "MEDIUM | RHEL-07-040712 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections are disabled except to fulfill documented and validated mission requiremen"
+  lineinfile:
+      create: true
+      dest: /etc/ssh/sshd_config
+      regexp: "(?i)^#?KexAlgorithms"
+      line: KexAlgorithms "{{ rhel7_stig_ssh_kex }}"
+      validate: /usr/sbin/sshd -t -f %s
+      mode: 0600
+  notify: restart sshd
+  when:
+      - rhel_07_040712
+      - rhel7stig_ssh_required
+  tags:
+      - RHEL-07-040712
+      - CAT2
+      - CCI-001453
+      - SRG-OS-000033-GPOS-00014
+      - SV-255925r880749_rule
+      - V-255925
       - ssh
 
 - name: "MEDIUM | RHEL-07-040720 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that if the Trivial File Transfer Protocol (TFTP) server is required, the TFTP daemon is configured to operate in secure mode."

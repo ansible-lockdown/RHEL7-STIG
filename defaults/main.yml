@@ -305,6 +305,7 @@ rhel_07_040670: true
 rhel_07_040680: true
 rhel_07_040710: true
 rhel_07_040711: true
+rhel_07_040712: true
 rhel_07_040720: true
 rhel_07_040730: true
 rhel_07_040740: true
@@ -429,12 +430,14 @@ rhel7stig_use_fips: true
 fips_value: '0'
 rhel7stig_FIPS_ciphers: aes256-ctr,aes192-ctr,aes128-ctr
 rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
+rhel7stig_FIPS_KEX: ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256
 # RHEL-07-040300
 # RHEL-07-040310
 # Install and enable ssh on networked systems
 rhel7stig_ssh_required: true
 rhel7stig_ssh_ciphers: "{{ rhel7stig_FIPS_ciphers }}"
 rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
+rhel7_stig_ssh_kex: "{{ rhel7stig_FIPS_KEX }}"
 
 # RHEL-07-040490
 # If not required, remove vsftpd.
