@@ -57,7 +57,7 @@
       - not rhel7stig_system_is_container
 
 - name: restart auditd
-  command: /usr/sbin/service auditd restart
+  command: /usr/sbin/service "{{ rhel7stig_audit_daemon }}" restart
   args:
       warn: false
 
