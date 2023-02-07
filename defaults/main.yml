@@ -12,6 +12,8 @@ python2_bin: /bin/python2.7
 ## Benchmark name used by auditing control role
 # audit variable found at the base
 benchmark: RHEL7-STIG
+## metadata for Audit benchmark
+benchmark_version: 'v3r10'
 
 # Whether to skip the reboot
 rhel7stig_skip_reboot: true
