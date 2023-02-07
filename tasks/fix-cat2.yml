@@ -3604,7 +3604,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204597r603261_rule
+      - SV-204597r880743_rule
       - V-204597
       - ssh
 
@@ -3704,6 +3704,7 @@
   when:
       - rhel_07_040470
       - rhel7stig_ssh_required
+      - ansible_facts['distribution_version'] <= "7.4"
   tags:
       - RHEL-07-040470
       - CAT2
