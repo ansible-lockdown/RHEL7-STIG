@@ -28,6 +28,11 @@ variable "ami_key_pair_name" {
   type        = string
 }
 
+variable "private_key" {
+  description = "path to private key for ssh"
+  type        = string
+}
+
 variable "ami_os" {
   description = "AMI OS Type"
   type        = string
@@ -35,7 +40,7 @@ variable "ami_os" {
 
 variable "ami_id" {
   description = "AMI ID reference"
-  type = string
+  type        = string
 }
 
 variable "ami_username" {
@@ -74,4 +79,3 @@ variable "private_subnets" {
   description = "private subnet cidr block"
   type        = string
 }
-
