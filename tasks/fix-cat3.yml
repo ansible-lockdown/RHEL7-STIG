@@ -1,4 +1,24 @@
 ---
+
+- name: "LOW | RHEL-07-010375 | PATCH | The Red Hat Enterprise Linux operating system must restrict access to the kernel message buffer."
+  sysctl:
+      name: kernel.dmesg_restrict
+      value: '1'
+      state: present
+      reload: "{{ rhel7stig_sysctl_reload }}"
+      sysctl_set: true
+      ignoreerrors: true
+  when:
+      - rhel_07_010375
+  tags:
+      - RHEL-07-010375
+      - CAT3
+      - CCI-001090
+      - SRG-OS-000138-GPOS-00069
+      - SV-255927r880791_rule
+      - V-255927
+      - sysctl
+
 - name: "LOW | RHEL-07-020200 | PATCH | The Red Hat Enterprise Linux operating system must remove all software components after updated versions have been installed."
   lineinfile:
       dest: /etc/yum.conf
