@@ -66,7 +66,7 @@
       - CAT2
       - CCI-000056
       - SRG-OS-000028-GPOS-00009
-      - SV-204396r603261_rule
+      - SV-204396r880746_rule
       - V-204396
       - dconf
 
@@ -108,7 +108,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204398r603261_rule
+      - SV-204398r880770_rule
       - V-204398
       - dconf
 
@@ -127,7 +127,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204399r603261_rule
+      - SV-204399r880773_rule
       - V-204399
       - dconf
 
@@ -146,9 +146,26 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204400r603261_rule
+      - SV-204400r880776_rule
       - V-204400
       - dconf
+
+- name: "MEDIUM | RHEL-07-010090 | PATCH | The Red Hat Enterprise Linux operating system must have the screen package installed."
+  package:
+      name: screen
+      state: present
+  when:
+      - rhel_07_010090
+      - "'screen' not in ansible_facts.packages" 
+      - "'tmux' not in ansible_facts.packages"
+  tags:
+      - RHEL-07-010090
+      - CAT2
+      - CCI-000057
+      - SRG-OS-000029-GPOS-00010
+      - SV-255926r880779_rule
+      - V-255926
+      - screen
 
 - name: "MEDIUM | RHEL-07-010100 | PATCH | The Red Hat Enterprise Linux operating system must initiate a session lock for the screensaver after a period of inactivity for graphical user interfaces."
   copy:
@@ -166,7 +183,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204402r603261_rule
+      - SV-204402r880782_rule
       - V-204402
       - dconf
 
@@ -185,7 +202,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204403r603261_rule
+      - SV-204403r880785_rule
       - V-204403
       - dconf
 
@@ -206,7 +223,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204404r603261_rule
+      - SV-204404r880788_rule
       - V-204404
       - dconf
 
@@ -4314,7 +4331,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-214937r603261_rule
+      - SV-214937r880767_rule
       - V-214937
       - dconf
 
