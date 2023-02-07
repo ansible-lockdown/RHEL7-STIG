@@ -404,26 +404,14 @@
       - V-204414
       - pwquality
 
-- name: "MEDIUM | RHEL-07-010199 | PATCH |  The Red Hat Enterprise Linux operating system must be configured to prevent overwriting of custom authentication configuration settings by the authconfig utility."
-  block:
-      - name: "MEDIUM | RHEL-07-010199 | PATCH |  The Red Hat Enterprise Linux operating system must be configured to prevent overwriting of custom authentication configuration settings by the authconfig utility. | stat"
-        stat:
-            path: "{{ item }}"
-        register: rhel7cis_010199_auth_symlinks
-        loop:
-            - '/etc/pam.d/password-auth-local'
-            - '/etc/pam.d/system-auth-local'
-
-      - name: "MEDIUM | RHEL-07-010199 | PATCH |  The Red Hat Enterprise Linux operating system must be configured to prevent overwriting of custom authentication configuration settings by the authconfig utility. | symlink"
-        file:
-            src: "{{ item.src }}"
-            dest: "{{ item.dest }}"
-            state: link
-        loop:
-            - { 'src': '/etc/pam.d/password-auth', 'dest': '/etc/pam.d/password-auth-local' }
-            - { 'src': '/etc/pam.d/system-auth', 'dest': '/etc/pam.d/system-auth-local' }
-        when:
-            - item.dest not in rhel7cis_010199_auth_symlinks.stat.exists
+- name: "MEDIUM | RHEL-07-010199 | PATCH |  The Red Hat Enterprise Linux operating system must be configured to prevent overwriting of custom authentication configuration settings by the authconfig utility. | symlink"
+  file:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      state: link
+  loop:
+      - { 'src': '/etc/pam.d/password-auth', 'dest': '/etc/pam.d/password-auth-local' }
+      - { 'src': '/etc/pam.d/system-auth', 'dest': '/etc/pam.d/system-auth-local' }
   when:
       - rhel_07_010199
   tags:
