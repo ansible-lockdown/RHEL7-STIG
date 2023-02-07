@@ -3397,7 +3397,7 @@
 - name: "MEDIUM | RHEL-07-040350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using rhosts authentication."
   lineinfile:
       dest: /etc/ssh/sshd_config
-      regexp: "(?i)^#?IgnoreRhosts"
+      regexp: '(?i)^#?\s*IgnoreRhosts'
       line: IgnoreRhosts yes
       validate: /usr/sbin/sshd -t -f %s
   notify: restart sshd
