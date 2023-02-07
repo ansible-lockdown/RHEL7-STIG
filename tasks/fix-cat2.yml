@@ -462,7 +462,7 @@
       - CAT2
       - CCI-000196
       - SRG-OS-000073-GPOS-00041
-      - SV-204415r603261_rule
+      - SV-204415r880833_rule
       - V-204415
       - pamd
 
@@ -640,7 +640,7 @@
       - CAT2
       - CCI-000200
       - SRG-OS-000077-GPOS-00045
-      - SV-204422r603261_rule
+      - SV-204422r880836_rule
       - V-204422
       - pamd
 
@@ -803,13 +803,14 @@
       - CCI-002237
       - CCI-002238
       - SRG-OS-000329-GPOS-00128
-      - SV-204427r603824_rule
+      - SV-204427r880842_rule
       - V-204427
       - RHEL-07-010330
       - CCI-002238
-      - SV-204428r603261_rule
+      - SV-204428r880845_rule
       - V-204428
       - pamd
+
 - name: "MEDIUM | RHEL-08-010339 | PATCH | The Red Hat Enterprise Linux operating system must specify the default 'include' directory for the /etc/sudoers file."
   lineinfile:
       path: /etc/sudoers
@@ -4532,7 +4533,7 @@
 - name: "MEDIUM | RHEL-07-010342 | PATCH | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo."
   block:
       - name: "MEDIUM | RHEL-07-010342 | AUDIT | The Red Hat Enterprise Linux operating system must use the invoking user's password for privilege escalation when using sudo. | Get privilege escalation"
-        shell: egrep -irs '(!rootpw|!targetpw|!runaspw)' /etc/sudoers /etc/sudoers.d/* | grep -v '#' | cut -d":" -f1 | sort --unique
+        shell: grep -Eirs '(!rootpw|!targetpw|!runaspw)' /etc/sudoers /etc/sudoers.d/* | grep -v '#' | cut -d":" -f1 | sort --unique
         changed_when: false
         failed_when: false
         register: rhel_07_010342_priv_escalation
@@ -4588,7 +4589,7 @@
       - CAT2
       - CCI-002227
       - SRG-OS-000480-GPOS-00227
-      - SV-237634r861074_rule
+      - SV-237634r880755_rule
       - V-237634
       - sudo
 
