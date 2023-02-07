@@ -737,14 +737,14 @@ audit_run_script_environment:
 
 ### Audit binary settings ###
 audit_bin_version:
-    release: v0.3.20
-    checksum: 'sha256:459bc14662967d07795234374a04d611cd2f821140eb4225e7d9ba4572630e11'
+    release: v0.3.21
+    checksum: 'sha256:9a9200779603acf0353d2c0e85ae46e083596c10838eaf4ee050c924678e4fe3'
 audit_bin_path: /usr/local/bin/
 audit_bin: "{{ audit_bin_path }}goss"
 audit_format: json
 
 # if get_audit_binary_method == download change accordingly
-audit_bin_url: "https://github.com/aelsabbahy/goss/releases/download/{{ audit_bin_version.release }}/goss-linux-amd64"
+audit_bin_url: "https://github.com/goss-org/goss/releases/download/{{ audit_bin_version.release }}/goss-linux-amd64"
 
 ## if get_audit_binary_method - copy the following needs to be updated for your environment
 ## it is expected that it will be copied from somewhere accessible to the control node
