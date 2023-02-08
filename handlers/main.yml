@@ -25,8 +25,9 @@
   notify: make grub2 config
 
 - name: make grub2 config
-  command: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_grub2_user_cfg.stat.exists | ternary('/boot/grub2/user.cfg', rhel7stig_grub_cfg_path) }}
+  command: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
   when:
+      - rhel7stig_grub2_user_cfg.stat.exists
       - not rhel7stig_skip_for_travis
       - not rhel7stig_system_is_container
 
