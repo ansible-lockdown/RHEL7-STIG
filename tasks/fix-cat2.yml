@@ -552,7 +552,7 @@
       - name: "MEDIUM | RHEL-07-010260 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that existing passwords are restricted to a 60-day maximum lifetime."
         shell: "awk -F: '$1 !~ /^root$/ && $2 !~ /^[!*]/ && $5 > 60 {print $1}' /etc/shadow"
         check_mode: false
-        changed_when: rhel_07_010260_audit.stdout| length > 0
+        changed_when: false
         register: rhel_07_010260_audit
 
       - name: "MEDIUM | RHEL-07-010260 | PATCH | Reset password timeout to prevent locking out user."
@@ -4179,7 +4179,7 @@
 
       - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
         debug:
-            msg: "Your configured firewall service is {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false. We cannot audit control RHEL-07-040810. Please set the variable rhel7stig_start_firewall_service to true in the defaults file of this role and re-run the playbook."
+            msg: "Could not pull configuration rules for RHEL-07-040810 {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false."
         changed_when: true
         when: not rhel7stig_start_firewall_service
   when:
