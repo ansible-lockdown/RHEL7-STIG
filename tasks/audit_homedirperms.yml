@@ -1,6 +1,6 @@
 ---
 - name: "MEDIUM | RHEL-07-020680 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-  find:
+  ansible.builtin.find:
       paths:
           - "{{ homedir }}"
       recurse: true
@@ -14,7 +14,7 @@
       - complexity-high
 
 - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-  file:
+  ansible.builtin.file:
       path: "{{ line_item.path }}"
       mode: 0640
   loop: "{{ rhel_07_020680_results.files }}"
@@ -30,7 +30,7 @@
       - complexity-high
 
 - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-  file:
+  ansible.builtin.file:
       path: "{{ line_item.path }}"
       mode: 0750
   loop: "{{ rhel_07_020680_results.files }}"
