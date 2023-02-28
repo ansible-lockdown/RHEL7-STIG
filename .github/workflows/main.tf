@@ -77,6 +77,7 @@ resource "local_file" "inventory" {
         setup_audit: true
         run_audit: true
         system_is_ec2: true
+        rhel_07_010340: false
     EOF
 }
 
