@@ -401,7 +401,7 @@
             - "'prelink' in ansible_facts.packages"
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Check /etc/default/grub exists"
-        stat:
+        ansible.builtin.stat:
             path: /etc/default/grub
         register: rhel7_stig_default_grub
 
