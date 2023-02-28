@@ -99,15 +99,16 @@ tags:
 
 ## Example Audit Summary
 
-This is based on a vagrant image with selections enabled. e.g. No Gui or firewall.
+This is based on a vagrant image with selections enabled. e.g. No Gui iptables firewall
+
 Note: More tests are run during audit as we check config and running state.
 
 ```sh
-ok: [rhel7test] => {
+ok: [cent7_bios] => {
     "msg": [
-        "The pre remediation results are: Count: 308, Failed: 156, Duration: 44.108s.",
-        "The post remediation results are: Count: 308, Failed: 14, Duration: 37.647s.",
-        "Full breakdown can be found in /var/tmp",
+        "The pre remediation results are: Count: 505, Failed: 214, Duration: 14.808s.",
+        "The post remediation results are: Count: 505, Failed: 34, Duration: 43.593s.",
+        "Full breakdown can be found in /opt",
         ""
     ]
 }
