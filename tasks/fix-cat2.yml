@@ -156,7 +156,7 @@
       state: present
   when:
       - rhel_07_010090
-      - "'screen' not in ansible_facts.packages" 
+      - "'screen' not in ansible_facts.packages"
       - "'tmux' not in ansible_facts.packages"
   tags:
       - RHEL-07-010090
