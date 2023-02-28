@@ -1,7 +1,7 @@
 ---
 
 - name: "LOW | RHEL-07-010375 | PATCH | The Red Hat Enterprise Linux operating system must restrict access to the kernel message buffer."
-  sysctl:
+  ansible.posix.sysctl:
       name: kernel.dmesg_restrict
       value: '1'
       state: present
@@ -20,7 +20,7 @@
       - sysctl
 
 - name: "LOW | RHEL-07-020200 | PATCH | The Red Hat Enterprise Linux operating system must remove all software components after updated versions have been installed."
-  lineinfile:
+  ansible.builtin.lineinfile:
       dest: /etc/yum.conf
       regexp: ^#?clean_requirements_on_remove
       line: clean_requirements_on_remove=1
@@ -39,14 +39,14 @@
 - name: "LOW | RHEL-07-020300 | The Red Hat Enterprise Linux operating system must be configured so that all Group Identifiers (GIDs) referenced in the /etc/passwd file are defined in the /etc/group file."
   block:
       - name: "LOW | RHEL-07-020300 | PATCH | Check /etc/passwd entries"
-        shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
+        ansible.builtin.shell: pwck -r | grep 'no group' | awk '{ gsub("[:\47]",""); print $2}'
         changed_when: false
         failed_when: false
         check_mode: false
         register: passwd_gid_check
 
       - name: "LOW | RHEL-07-020300 | PATCH | Print warning about users with invalid GIDs missing GID entries in /etc/group"
-        debug:
+        ansible.builtin.debug:
             msg: "WARNING: The following users have non-existent GIDs: {{ passwd_gid_check.stdout_lines | join (', ') }}"
         changed_when: rhel7stig_audit_complex
         when: passwd_gid_check.stdout_lines
@@ -64,7 +64,7 @@
       - passwd
 
 - name: "LOW | RHEL-07-021024 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with secure options."
-  mount:
+  ansible.builtin.mount:
       path: /dev/shm
       state: mounted
       src: "{{ dev_shm_mount.device | default('tmpfs') }}"
@@ -86,7 +86,7 @@
       - mount
 
 - name: "LOW | RHEL-07-021310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that a separate file system is used for user home directories (such as /home or an equivalent)."
-  debug:
+  ansible.builtin.debug:
       msg: "WARNING: /home is not mounted on a separate partition"
   changed_when:
       - rhel7stig_audit_complex
@@ -107,7 +107,7 @@
       - home
 
 - name: "LOW | RHEL-07-021320 | PATCH | The Red Hat Enterprise Linux operating system must use a separate file system for /var."
-  debug:
+  ansible.builtin.debug:
       msg: "WARNING: /var is not mounted on a separate partition"
   changed_when:
       - rhel7stig_audit_complex
@@ -128,7 +128,7 @@
       - var
 
 - name: "LOW | RHEL-07-021330 | PATCH | The Red Hat Enterprise Linux operating system must use a separate file system for the system audit data path."
-  debug:
+  ansible.builtin.debug:
       msg: "WARNING: /var/log/audit is not mounted on a separate partition"
   changed_when: rhel7stig_audit_complex
   when:
@@ -148,7 +148,7 @@
       - auditd
 
 - name: "LOW | RHEL-07-021340 | PATCH | The Red Hat Enterprise Linux operating system must use a separate file system for /tmp (or equivalent)."
-  systemd:
+  ansible.builtin.systemd:
       name: tmp.mount
       daemon_reload: "{{ rhel7stig_systemd_daemon_reload }}"
       enabled: true
@@ -170,7 +170,7 @@
 - name: |
     "LOW | RHEL-07-021600 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify Access Control Lists (ACLs)."
     "LOW | RHEL-07-021610 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file integrity tool is configured to verify extended attributes."
-  template:
+  ansible.builtin.template:
       src: aide.conf.j2
       dest: /etc/aide.conf
       owner: root
@@ -194,7 +194,7 @@
       - aide
 
 - name: "LOW | RHEL-07-040000 | PATCH | The Red Hat Enterprise Linux operating system must limit the number of concurrent sessions to 10 for all accounts and/or account types."
-  lineinfile:
+  ansible.builtin.lineinfile:
       state: present
       dest: /etc/security/limits.conf
       insertbefore: '^# End of file'
@@ -213,7 +213,7 @@
 - name: "LOW | RHEL-07-040530 | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon."
   block:
       - name: "LOW | RHEL-07-040530 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon | Update pam_lastlog control to satisfy benchmark."
-        pamd:
+        community.general.pamd:
             name: postlogin
             type: session
             control: "{{ old_control }}"
@@ -222,7 +222,7 @@
             state: updated
 
       - name: "LOW | RHEL-07-040530 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon | Update pam_lastlog when line absent."
-        pamd:
+        community.general.pamd:
             name: postlogin
             state: args_absent
             type: session
@@ -234,7 +234,7 @@
             - "{{ default_control }}"
 
       - name: "LOW | RHEL-07-040530 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon logon | Remove old remediation."
-        blockinfile:
+        ansible.builtin.blockinfile:
             state: absent
             path: /etc/pam.d/postlogin
             insertafter: '^# User changes will be destroyed'
@@ -259,7 +259,7 @@
   block:
       # Audit the /etc/nsswitch.conf config
       - name: "LOW | RHEL-07-040600 | AUDIT | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        shell: grep "dns" /etc/nsswitch.conf | grep -v "#"
+        ansible.builtin.shell: grep "dns" /etc/nsswitch.conf | grep -v "#"
         changed_when: false
         failed_when: false
         check_mode: false
@@ -267,7 +267,7 @@
 
       # Determine if networkmanager is setting /etc/resolv.conf
       - name: "LOW | RHEL-07-040600 | AUDIT | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        command: grep "# Generated by NetworkManager" /etc/resolv.conf
+        ansible.builtin.shell: grep "# Generated by NetworkManager" /etc/resolv.conf
         changed_when: false
         failed_when: false
         check_mode: false
@@ -275,7 +275,7 @@
 
       # Determine number of nameserver lines in /etc/resolv.conf
       - name: "LOW | RHEL-07-040600 | AUDIT | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        shell: grep -i "nameserver" /etc/resolv.conf | grep -v "#" | wc -l
+        ansible.builtin.shell: grep -i "nameserver" /etc/resolv.conf | grep -v "#" | wc -l
         changed_when: false
         failed_when: false
         check_mode: false
@@ -283,12 +283,12 @@
 
       # Change resolv.conf if dns is not present in nsswitch.conf
       - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        shell: echo -n > /etc/resolv.conf && chattr +i /etc/resolv.conf
+        ansible.builtin.shell: echo -n > /etc/resolv.conf && chattr +i /etc/resolv.conf
         when:
             - "'dns' not in rhel_07_040600_nsswitch_check.stdout"
       # Set resolv.conf if dns is set in nsswitch.conf
       - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        lineinfile:
+        ansible.builtin.lineinfile:
             dest: /etc/resolv.conf
             regexp: '^nameserver {{ item }}'
             line: nameserver {{ item }}
@@ -301,7 +301,7 @@
 
       # If networkmanager is setting resolv.conf, debug msg to audit/change DNS settings in dhcp.
       - name: "LOW | RHEL-07-040600 | PATCH | For Red Hat Enterprise Linux operating systems using DNS resolution, at least two name servers must be configured."
-        debug:
+        ansible.builtin.debug:
             msg: "The file /etc/resolv.conf is managed by network manager and shows less than two DNS servers configured. Please correct this in your DHCP configurations."
         changed_when: true
         when:
