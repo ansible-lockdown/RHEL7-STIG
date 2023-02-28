@@ -2,6 +2,13 @@
 
 ## Release 2.0.0
 
+Lint work
+FQCN
+Testing
+workflow updates
+audit version alignment
+README
+
 ### Issues
 
 - Thanks to @Joseph Hoffman
