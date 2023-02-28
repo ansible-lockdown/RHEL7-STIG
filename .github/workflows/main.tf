@@ -78,6 +78,7 @@ resource "local_file" "inventory" {
         run_audit: true
         system_is_ec2: true
         rhel_07_010340: false
+        rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.somethingnewhere'
     EOF
 }
 
