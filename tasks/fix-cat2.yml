@@ -4180,7 +4180,7 @@
 
       - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
         ansible.builtin.debug:
-            msg: "Could not pull configuration rules for RHEL-07-040810 {{ rhel7stig_firewall_service }}, but you have set the variable rhel7stig_start_firewall_service to false."
+            msg: "Warning!! The variable rhel7stig_start_firewall_service to false, but unable to pull configuration rules for RHEL-07-040810 {{ rhel7stig_firewall_service }}"
         changed_when: true
         when: not rhel7stig_start_firewall_service
   when:
@@ -4279,7 +4279,7 @@
 
       - name: "MEDIUM | RHEL-07-041002 | PATCH | The Red Hat Enterprise Linux operating system must implement multifactor authentication for access to privileged accounts via pluggable authentication modules (PAM)."
         ansible.builtin.debug:
-            msg: "WARNING: SSSD is in use and /etc/sssd/sssd.conf is not configured to use the PAM service (services = nss, pam)"
+            msg: "Warning!! SSSD is in use and /etc/sssd/sssd.conf is not configured to use the PAM service (services = nss, pam)"
         changed_when: rhel7stig_audit_complex
         when: sssd_services_check.rc == 1
   when:
@@ -4652,7 +4652,7 @@
 
       - name: "MEDIUM | RHEL-07-020021 | AUDIT | The Red Hat Enterprise Linux operating system must confine SELinux users to roles that conform to least privilege. | Show SELinux Role mappings"
         ansible.builtin.debug:
-            msg: "Warning! Below are your SELinux Role mappings. Please review the mappings with your SA to determine validity of the mappings"
+            msg: "Warning!! Below are your SELinux Role mappings. Please review the mappings with your SA to determine validity of the mappings"
         when: rhel_07_020021_sel_role_mappings.stdout | length > 0
 
       - name: "MEDIUM | RHEL-07-020021 | AUDIT | The Red Hat Enterprise Linux operating system must confine SELinux users to roles that conform to least privilege. | Warning!! that semanage is not installed"
