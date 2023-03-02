@@ -1,7 +1,7 @@
 ---
 
 - name: Download audit binary
-  get_url:
+  ansible.builtin.get_url:
       url: "{{ audit_bin_url }}"
       dest: "{{ audit_bin }}"
       owner: root
@@ -12,7 +12,7 @@
       - get_audit_binary_method == 'download'
 
 - name: copy audit binary
-  copy:
+  ansible.builtin.copy:
       src: "{{ audit_bin_copy_location }}"
       dest: "{{ audit_bin }}"
       mode: 0555

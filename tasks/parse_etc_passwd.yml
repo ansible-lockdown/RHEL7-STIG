@@ -2,13 +2,13 @@
 - name: "PRELIM | {{ rhel7stig_passwd_tasks }} | Parse /etc/passwd"
   block:
       - name: "PRELIM | {{ rhel7stig_passwd_tasks }} | Parse /etc/passwd"
-        command: cat /etc/passwd
+        ansible.builtin.shell: cat /etc/passwd
         changed_when: false
         check_mode: false
         register: rhel7stig_passwd_file_audit
 
       - name: "PRELIM | {{ rhel7stig_passwd_tasks }} | Split passwd entries"
-        set_fact:
+        ansible.builtin.set_fact:
             rhel7stig_passwd: "{{ rhel7stig_passwd_file_audit.stdout_lines | map('regex_replace', ld_passwd_regex, ld_passwd_yaml) | map('from_yaml') | list }}"
 
         with_items: "{{ rhel7stig_passwd_file_audit.stdout_lines }}"

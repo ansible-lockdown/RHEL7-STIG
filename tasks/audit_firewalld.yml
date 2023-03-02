@@ -1,7 +1,7 @@
 ---
 
 - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-  command: firewall-cmd --get-default-zone
+  ansible.builtin.shell: firewall-cmd --get-default-zone
   register: rhel_07_040810_firewalld_zone_audit
   changed_when: false
   failed_when: false
@@ -12,7 +12,7 @@
       - firewall
 
 - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-  command: firewall-cmd --list-all --zone="{{ rhel_07_040810_firewalld_zone_audit.stdout }}"
+  ansible.builtin.shell: firewall-cmd --list-all --zone="{{ rhel_07_040810_firewalld_zone_audit.stdout }}"
   register: rhel_07_040810_firewalld_zone_default_audit
   changed_when: false
   when:
@@ -22,7 +22,7 @@
       - RHEL-07-040810
       - firewall
 - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-  debug:
+  ansible.builtin.debug:
       msg: "The following task output is the firewalld settings for zone {{ rhel_07_040810_firewalld_zone_audit.stdout }} from {{ ansible_hostname }}:"
   when:
       - rhel_07_040810_firewalld_zone_audit.stdout | length > 0
@@ -31,7 +31,7 @@
       - RHEL-07-040810
       - firewall
 - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-  debug: var=rhel_07_040810_firewalld_zone_default_audit.stdout_lines
+  ansible.builtin.debug: var=rhel_07_040810_firewalld_zone_default_audit.stdout_lines
   changed_when: true
   when:
       - rhel_07_040810_firewalld_zone_audit.stdout | length > 0
@@ -40,7 +40,7 @@
       - RHEL-07-040810
       - firewall
 - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-  debug:
+  ansible.builtin.debug:
       msg: "Warning!! We could pull no configured rules for {{ rhel7stig_firewall_service }} on {{ ansible_hostname }}! This is a finding per RHEL-07-040810 - The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
   changed_when: true
   when:

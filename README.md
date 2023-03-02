@@ -6,7 +6,7 @@
 
 Configure a RHEL 7 system to be DISA STIG compliant. All findings will be audited by default. Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default. Disruptive finding remediation can be enabled by setting `rhel7stig_disruption_high` to `yes`.
 
-This role is based on RHEL 7 DISA STIG: [Version 3, Rel 9 released on Oct 11, 2022](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R9_STIG.zip).
+This role is based on RHEL 7 DISA STIG: [Version 3, Rel 10 released on Jan 26, 2023](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R10_STIG.zip).
 
 ## Join us
 
@@ -99,15 +99,16 @@ tags:
 
 ## Example Audit Summary
 
-This is based on a vagrant image with selections enabled. e.g. No Gui or firewall.
+This is based on a vagrant image with selections enabled. e.g. No Gui iptables firewall
+
 Note: More tests are run during audit as we check config and running state.
 
 ```sh
-ok: [rhel7test] => {
+ok: [cent7_bios] => {
     "msg": [
-        "The pre remediation results are: Count: 308, Failed: 156, Duration: 44.108s.",
-        "The post remediation results are: Count: 308, Failed: 14, Duration: 37.647s.",
-        "Full breakdown can be found in /var/tmp",
+        "The pre remediation results are: Count: 505, Failed: 214, Duration: 14.808s.",
+        "The post remediation results are: Count: 505, Failed: 34, Duration: 43.593s.",
+        "Full breakdown can be found in /opt",
         ""
     ]
 }

@@ -12,6 +12,8 @@ python2_bin: /bin/python2.7
 ## Benchmark name used by auditing control role
 # audit variable found at the base
 benchmark: RHEL7-STIG
+## metadata for Audit benchmark
+benchmark_version: 'v3r10'
 
 # Whether to skip the reboot
 rhel7stig_skip_reboot: true
@@ -129,6 +131,7 @@ rhel_07_010160: true
 rhel_07_010170: true
 rhel_07_010180: true
 rhel_07_010190: true
+rhel_07_010199: true
 rhel_07_010200: true
 rhel_07_010210: true
 rhel_07_010220: true
@@ -302,6 +305,7 @@ rhel_07_040670: true
 rhel_07_040680: true
 rhel_07_040710: true
 rhel_07_040711: true
+rhel_07_040712: true
 rhel_07_040720: true
 rhel_07_040730: true
 rhel_07_040740: true
@@ -316,6 +320,7 @@ rhel_07_041010: true
 rhel_07_910055: true
 
 # CAT 3 rules
+rhel_07_010375: true
 rhel_07_020200: true
 rhel_07_020300: true
 rhel_07_021024: true
@@ -425,12 +430,14 @@ rhel7stig_use_fips: true
 fips_value: '0'
 rhel7stig_FIPS_ciphers: aes256-ctr,aes192-ctr,aes128-ctr
 rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
+rhel7stig_FIPS_KEX: ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256
 # RHEL-07-040300
 # RHEL-07-040310
 # Install and enable ssh on networked systems
 rhel7stig_ssh_required: true
 rhel7stig_ssh_ciphers: "{{ rhel7stig_FIPS_ciphers }}"
 rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
+rhel7stig_ssh_kex: "{{ rhel7stig_FIPS_KEX }}"
 
 # RHEL-07-040490
 # If not required, remove vsftpd.
@@ -490,7 +497,7 @@ rhel7stig_aide_cron:
     special_time: daily
     # Disable the notification check rule to disable mailing notifications
     notify_by_mail: "{{ rhel_07_020040 }}"
-    notify_cmd: ' | /bin/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
+    notify_cmd: ' | /var/spool/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
 
 rhel7stig_cron_special_disable: "{{
         rhel7stig_workaround_for_disa_benchmark or
@@ -646,6 +653,7 @@ rhel7stig_auditd_space_left: "{{ ( ansible_mounts | json_query(rhel7stig_audit_d
 rhel7stig_audit_disk_size_query: "[?mount=='{{ rhel7stig_audit_part }}'].size_total | [0]"
 
 # RHEL-07-030350
+rhel7stig_audit_daemon: auditd
 rhel7stig_auditd_mail_acct: root
 
 # RHEL-07-020630
@@ -729,14 +737,14 @@ audit_run_script_environment:
 
 ### Audit binary settings ###
 audit_bin_version:
-    release: v0.3.20
-    checksum: 'sha256:459bc14662967d07795234374a04d611cd2f821140eb4225e7d9ba4572630e11'
+    release: v0.3.21
+    checksum: 'sha256:9a9200779603acf0353d2c0e85ae46e083596c10838eaf4ee050c924678e4fe3'
 audit_bin_path: /usr/local/bin/
 audit_bin: "{{ audit_bin_path }}goss"
 audit_format: json
 
 # if get_audit_binary_method == download change accordingly
-audit_bin_url: "https://github.com/aelsabbahy/goss/releases/download/{{ audit_bin_version.release }}/goss-linux-amd64"
+audit_bin_url: "https://github.com/goss-org/goss/releases/download/{{ audit_bin_version.release }}/goss-linux-amd64"
 
 ## if get_audit_binary_method - copy the following needs to be updated for your environment
 ## it is expected that it will be copied from somewhere accessible to the control node
@@ -747,7 +755,7 @@ audit_bin_copy_location: /some/accessible/path
 ## managed by the control audit_content
 # git
 audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
-audit_git_version: main
+audit_git_version: "benchmark_{{ benchmark_version }}_rh7"
 
 # copy:
 audit_local_copy: "some path to copy from"

@@ -2,7 +2,7 @@
 - name: "HIGH | RHEL-07-010010 | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
   block:
       - name: "HIGH | RHEL-07-010010 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
-        shell: |
+        ansible.builtin.shell: |
             rpm -Va --nolinkto --nofiledigest --nosize --nomtime --nodigest --nosignature | grep -E '^(.M|.....U|......G)' | tee /dev/stderr | cut -c13- | sed 's/^ //' | xargs rpm -qf --qf='%{name}\n' | sort -u
         args:
             warn: false
@@ -12,18 +12,16 @@
         register: rhel_07_010010_audit
 
       - name: "HIGH | RHEL-07-010010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
-        shell: >
+        ansible.builtin.shell: >
                 ( rpm --setugids {{ item }}; rpm --setperms {{ item }} )
                 2>&1 1>&2 | grep -v ': No such file or directory$'
-        args:
-            warn: false
         register: rhel_07_010010_patch
         ignore_errors: true
         with_items: "{{ rhel_07_010010_audit.stdout_lines }}"
         when: rhel_07_010010_audit.stdout_lines | length > 0
 
       - name: "HIGH | RHEL-07-010010 | AUDIT | Error during remediation"
-        debug:
+        ansible.builtin.debug:
             msg: "Warning!! The following package files have been reset to default {{ item }}"
         changed_when: true
         loop: "{{ rhel_07_010010_patch.results }}"
@@ -42,31 +40,27 @@
       - CCI-002165
       - CCI-002235
       - SRG-OS-000257-GPOS-00098
-      - SV-204392r853878_rule
+      - SV-204392r880752_rule
       - V-204392
       - permissions
 
 - name: "HIGH | RHEL-07-010020 | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
   block:
       - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-        shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
-        args:
-            warn: false
+        ansible.builtin.shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
         check_mode: false
         failed_when: false
         changed_when: rhel_07_010020_audit.stdout| length > 0
         register: rhel_07_010020_audit
 
       - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-        debug:
+        ansible.builtin.debug:
             msg: "{{ rhel_07_010020_audit.stderr_lines }}"
         changed_when: true
         when: rhel_07_010020_audit.stdout | length > 0
 
       - name: "HIGH | RHEL-07-010020 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
-        command: yum reinstall -y {{ item }}
-        args:
-            warn: false
+        ansible.builtin.shell: yum reinstall -y {{ item }}
         failed_when: false
         with_items:
             - "{{ rhel_07_010020_audit.stdout_lines }}"
@@ -83,7 +77,7 @@
       - packages
 
 - name: "HIGH | RHEL-07-010290 | PATCH |  The Red Hat Enterprise Linux operating system must not allow accounts configured with blank or null passwords."
-  replace:
+  ansible.builtin.replace:
       dest: "{{ item }}"
       regexp: 'nullok ?'
   when:
@@ -96,21 +90,21 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204424r809187_rule
+      - SV-204424r880839_rule
       - V-204424
       - accounts
 
 - name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords."
   block:
       - name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Get users with no pw set"
-        command: "awk -F: '!$2 {print $1}' /etc/shadow"
+        ansible.builtin.shell: "awk -F: '!$2 {print $1}' /etc/shadow"
         changed_when: false
         failed_when: false
         check_mode: false
         register: rhel_07_010291_no_pw_users
 
       - name: "HIGH | RHEL-07-010291 | PATCH | The Red Hat Enterprise Linux operating system must not have accounts configured with blank or null passwords. | Warn on accounts with no passwords"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "Alert! You have users that are not using passwords. Please either set a password, lock, or remove the accounts below:"
                 - "{{ rhel_07_010291_no_pw_users.stdout_lines }}"
@@ -129,12 +123,12 @@
       - accounts
 
 - name: "HIGH | RHEL-07-010300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using an empty password."
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?PermitEmptyPasswords"
       line: PermitEmptyPasswords no
       validate: /usr/sbin/sshd -tf %s
+      state: present
   notify: restart sshd
   when:
       - rhel_07_010300
@@ -149,8 +143,8 @@
       - ssh
 
 - name: "HIGH | RHEL-07-010440 | PATCH | The Red Hat Enterprise Linux operating system must not allow an unattended or automatic logon to the system via a graphical user interface."
-  lineinfile:
-      dest: /etc/gdm/custom.conf
+  ansible.builtin.lineinfile:
+      path: /etc/gdm/custom.conf
       regexp: (?i)automaticloginenable
       line: AutomaticLoginEnable=false
       insertafter: '\[daemon\]'
@@ -167,8 +161,8 @@
       - gui
 
 - name: "HIGH | RHEL-07-010450 | PATCH | The Red Hat Enterprise Linux operating system must not allow an unrestricted logon to the system."
-  lineinfile:
-      dest: /etc/gdm/custom.conf
+  ansible.builtin.lineinfile:
+      path: /etc/gdm/custom.conf
       regexp: (?i)timedloginenable
       line: TimedLoginEnable=false
       insertafter: '\[daemon\]'
@@ -183,52 +177,17 @@
       - SV-204433r603261_rule
       - V-204433
 
-# - name: |
-#     "HIGH | RHEL-07-010480 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-#     "HIGH | RHEL-07-010490 | PATCH | Red Hat Enterprise Linux operating systems prior to version 7.2 using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-#   lineinfile:
-#       dest: /etc/grub.d/40_custom
-#       insertafter: EOF
-#       regexp: "{{ item.regex }}"
-#       line: "{{ item.line }}"
-#   with_items:
-#       - regexp: ^\s*set superusers=
-#         line: '    set superusers="root"'
-#       - regexp: ^password_pbkdf2
-#         line: "^password_pbkdf2 {{ rhel7stig_boot_superuser }} {{ rhel7stig_bootloader_password_hash }}"
-#   no_log: true
-#   notify:
-#       - make grub2 config
-#   when:
-#       - rhel_07_010480 or
-#         rhel_07_010490
-#       - ansible_distribution_version is version_compare('7.2', '<')
-#   tags:
-#       - CAT1
-#       - RHEL-07-010480
-#       - CCI-000213
-#       - SRG-OS-000080-GPOS-00048
-#       - SV-204436r603261_rule
-#       - V-204436
-#       - RHEL-07-010490
-#       - CCI-000213
-#       - SRG-OS-000080-GPOS-00048
-#       - SV-204439r603261_rule
-#       - V-204439
-#       - grub
-#       - bootloader
-
 - name: |
     "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
     "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
   block:
       - name: "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
-        lineinfile:
+        ansible.builtin.lineinfile:
             path: /boot/grub2/user.cfg
-            create: true
-            mode: '0644'
             regexp: ^GRUB2_PASSWORD=
             line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+            create: true
+            mode: '0644'
         notify:
             - confirm grub2 user cfg
             - make grub2 config
@@ -237,12 +196,12 @@
             - not rhel7stig_machine_uses_uefi
 
       - name: "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
-        lineinfile:
+        ansible.builtin.lineinfile:
             path: "{{ rhel7stig_bootloader_path }}/user.cfg"
-            create: true
-            mode: '0644'
             regexp: ^GRUB2_PASSWORD=
             line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+            create: true
+            mode: '0644'
         no_log: true
         notify:
             - confirm grub2 user cfg
@@ -269,7 +228,7 @@
       - bootloader
 
 - name: "HIGH | RHEL-07-020000 | PATCH | The Red Hat Enterprise Linux operating system must not have the rsh-server package installed."
-  package:
+  ansible.builtin.package:
       name: rsh-server
       state: absent
   vars:
@@ -287,7 +246,7 @@
       - rsh
 
 - name: "HIGH | RHEL-07-020010 | PATCH | The Red Hat Enterprise Linux operating system must not have the ypserv package installed."
-  package:
+  ansible.builtin.package:
       name: ypserv
       state: absent
   vars:
@@ -305,8 +264,8 @@
       - ypserv
 
 - name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
-  lineinfile:
-      dest: /etc/yum.conf
+  ansible.builtin.lineinfile:
+      path: /etc/yum.conf
       regexp: ^gpgcheck
       line: gpgcheck=1
       insertafter: '\[main\]'
@@ -322,8 +281,8 @@
       - yum
 
 - name: "HIGH | RHEL-07-020060 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
-  lineinfile:
-      dest: /etc/yum.conf
+  ansible.builtin.lineinfile:
+      path: /etc/yum.conf
       regexp: ^localpkg_gpgcheck
       line: localpkg_gpgcheck=1
       insertafter: '\[main\]'
@@ -339,7 +298,7 @@
       - yum
 
 - name: "HIGH | RHEL-07-020230 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled on the command line."
-  systemd:
+  ansible.builtin.systemd:
       name: ctrl-alt-del.target
       masked: true
   when:
@@ -354,7 +313,7 @@
       - systemctl
 
 - name: "HIGH | RHEL-07-020231 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the x86 Ctrl-Alt-Delete key sequence is disabled in the Graphical User Interface."
-  copy:
+  ansible.builtin.copy:
       dest: /etc/dconf/db/local.d/00-disable-ctrl-alt-del
       content: |
         [org/gnome/settings-daemon/plugins/media-keys]
@@ -378,7 +337,7 @@
 # EUS RHEL7.7 31st August 2021
 # Maintainance RHEL7.9 30th April 2021
 - name: "HIGH | RHEL-07-020250 | PATCH | The Red Hat Enterprise Linux operating system must be a vendor supported release."
-  debug:
+  ansible.builtin.debug:
       msg: Minimum supported version of {{ ansible_distribution }} is {{ rhel7stig_min_supported_os_ver[ansible_distribution] }}
   changed_when:
       - rhel7stig_audit_complex
@@ -399,14 +358,14 @@
   block:
       # Currently just locks user account
       - name: "HIGH | RHEL-07-020310 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the root account must be the only account having unrestricted access to the system."
-        shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
+        ansible.builtin.shell: "cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
         check_mode: false
         changed_when: false
         failed_when: false
         register: rhel_07_020310_audit
 
       - name: "HIGH | RHEL-07-020310 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the root account must be the only account having unrestricted access to the system."
-        command: "passwd -l {{ item }}"
+        ansible.builtin.shell: "passwd -l {{ item }}"
         with_items: "{{ rhel_07_020310_audit.stdout_lines }}"
         when: rhel_07_020310_audit.rc
   when:
@@ -423,7 +382,7 @@
 - name: "HIGH | RHEL-07-021350 | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
   block:
       - name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
-        package:
+        ansible.builtin.package:
             name: dracut-fips
             state: present
         vars:
@@ -433,8 +392,8 @@
             - "'dracut-fips' not in ansible_facts.packages"
 
       - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
-        lineinfile:
-            dest: /etc/sysconfig/prelink
+        ansible.builtin.lineinfile:
+            path: /etc/sysconfig/prelink
             regexp: ^#?PRELINKING
             line: PRELINKING=no
         notify: undo existing prelinking
@@ -442,21 +401,21 @@
             - "'prelink' in ansible_facts.packages"
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Check /etc/default/grub exists"
-        stat:
+        ansible.builtin.stat:
             path: /etc/default/grub
         register: rhel7_stig_default_grub
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
         block:
             - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
-              command: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
+              ansible.builtin.shell: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
               check_mode: false
               changed_when: false
               failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
               register: rhel_07_021350_grub_cmdline_linux_audit
 
             - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
-              template:
+              ansible.builtin.template:
                   src: etc_default_grub.j2
                   dest: /etc/default/grub
                   owner: root
@@ -468,7 +427,7 @@
         when: not rhel7_stig_default_grub.stat.exists
 
       - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
-        replace:
+        ansible.builtin.replace:
             path: /etc/default/grub
             regexp: "{{ rhel7stig_regexp_quoted_params }}"
             replace: "{{ rhel7stig_replace_quoted_params }}"
@@ -485,7 +444,7 @@
       - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
         block:
             - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
-              replace:
+              ansible.builtin.replace:
                   path: /etc/default/grub
                   regexp: "{{ rhel7stig_regexp_quoted_params }}"
                   replace: "{{ rhel7stig_replace_quoted_params }}"
@@ -505,7 +464,7 @@
               register: result
 
             - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
-              command: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
+              ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
               check_mode: false
               with_items:
                   - "fips={{ fips_value }}"
@@ -541,7 +500,7 @@
       - fips
 
 - name: "HIGH | RHEL-07-021710 | PATCH | The Red Hat Enterprise Linux operating system must not have the telnet-server package installed."
-  package:
+  ansible.builtin.package:
       name: telnet-server
       state: absent
   vars:
@@ -561,14 +520,14 @@
 - name: "HIGH | RHEL-07-032000 | The Red Hat Enterprise Linux operating system must use a virus scan program."
   block:
       - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
-        package:
+        ansible.builtin.package:
             name: "{{ rhel7stig_av_package.package }}"
             state: present
         vars:
             ansible_python_interpreter: "{{ python2_bin }}"
 
       - name: "HIGH | RHEL-07-032000 | PATCH | The Red Hat Enterprise Linux operating system must use a virus scan program."
-        service:
+        ansible.builtin.service:
             name: "{{ rhel7stig_av_package.service }}"
             state: "{{ rhel7stig_service_started }}"
             enabled: true
@@ -586,8 +545,8 @@
       - antivirus
 
 - name: "HIGH | RHEL-07-040390 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon is configured to only use the SSHv2 protocol."
-  lineinfile:
-      dest: /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?Protocol"
       line: Protocol 2
       validate: /usr/sbin/sshd -t -f %s
@@ -609,13 +568,13 @@
 - name: "HIGH | RHEL-07-040540 | The Red Hat Enterprise Linux operating system must not contain .shosts files."
   block:
       - name: "HIGH | RHEL-07-040540 | AUDIT | The Red Hat Enterprise Linux operating system must not contain .shosts files."
-        command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name '.shosts'
+        ansible.builtin.shell: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name '.shosts'
         check_mode: false
         changed_when: false
         register: rhel_07_040540_audit
 
       - name: "HIGH | RHEL-07-040540 | PATCH | The Red Hat Enterprise Linux operating system must not contain .shosts files."
-        file:
+        ansible.builtin.file:
             path: "{{ item }}"
             state: absent
         with_items:
@@ -634,13 +593,13 @@
 - name: "HIGH | RHEL-07-040550 | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
   block:
       - name: "HIGH | RHEL-07-040550 | AUDIT | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
-        command: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name 'shosts.equiv'
+        ansible.builtin.shell: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name 'shosts.equiv'
         check_mode: false
         changed_when: false
         register: rhel_07_040550_audit
 
       - name: "HIGH | RHEL-07-040550 | PATCH | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
-        file:
+        ansible.builtin.file:
             path: "{{ item }}"
             state: absent
         with_items:
@@ -657,7 +616,7 @@
       - shosts
 
 - name: "HIGH | RHEL-07-040690 | PATCH | The Red Hat Enterprise Linux operating system must not have a File Transfer Protocol (FTP) server package installed unless needed."
-  package:
+  ansible.builtin.package:
       name: vsftpd
       state: absent
   vars:
@@ -676,7 +635,7 @@
       - ftp
 
 - name: "HIGH | RHEL-07-040700 | PATCH | The Red Hat Enterprise Linux operating system must not have the Trivial File Transfer Protocol (TFTP) server package installed if not required for operational support."
-  package:
+  ansible.builtin.package:
       name:
           - tftp
           - tftp-server
@@ -703,7 +662,7 @@
 - name: "HIGH | RHEL-07-040800 | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
   block:
       - name: "HIGH | RHEL-07-040800 | AUDIT | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
-        command: grep {{ item }} /etc/snmp/snmpd.conf
+        ansible.builtin.shell: grep {{ item }} /etc/snmp/snmpd.conf
         check_mode: false
         failed_when: false
         changed_when: false
@@ -713,7 +672,7 @@
             - private
 
       - name: "HIGH | RHEL-07-040800 | PATCH | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
-        replace:
+        ansible.builtin.replace:
             dest: /etc/snmp/snmpd.conf
             regexp: (^com2sec.*default\s+)(public|private)
             replace: \1{{ rhel7stig_snmp_community }}

@@ -1,5 +1,70 @@
 # Changelog
 
+## Release 2.0.0
+
+Lint work
+FQCN
+Testing
+workflow updates
+audit version alignment
+README
+
+### Issues
+
+- Thanks to @Joseph Hoffman
+  - [#405](https://github.com/ansible-lockdown/RHEL7-STIG/issues/405)
+- Thanks to @Bordenit
+  - [#412](https://github.com/ansible-lockdown/RHEL7-STIG/issues/412)
+  - #415
+
+- Update to V3R10 - Jan 2023
+  All controls have rules updated
+  - cat_1
+    - 010010
+    - 010290
+
+  - cat 2
+    - 010060
+    - 010062
+    - 010070
+    - 010081
+    - 010082
+    - 010090 Added back in for screen pkgs to be installed
+    - 010100
+    - 010101
+    - 010110
+    - 010199 - new control
+    - 010200
+    - 010270
+    - 010320
+    - 010330
+    - 010342 - updated grep command to grep -E
+    - 020029 - added notify and updated rule
+    - 020030 - updated mail path in cron job
+    - 020040
+    - 020650
+    - 021620
+    - 040201
+    - 040420
+    - 040470 - conditional added only pre 7.4
+    - 040610
+    - 040611
+    - 040612
+    - 040620
+    - 040630
+    - 040640
+    - 040641
+    - 040650
+    - 040660
+    - 040712 - new control ssh KEX
+    - 040740
+    - 040830
+
+- cat 3
+  - 010375 - new control
+  - 021600
+  - 021610
+
 ## Release 1.9.0
 
 - RHEL-07-010271 - New Control Added 
