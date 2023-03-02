@@ -34,7 +34,7 @@
 
 - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
   ansible.builtin.debug:
-      msg: "WARNING! We could pull no configured rules for {{ rhel7stig_firewall_service }} on {{ ansible_hostname }}! This is a finding per RHEL-07-040810 - The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
+      msg: "Warning!! We could pull no configured rules for {{ rhel7stig_firewall_service }} on {{ ansible_hostname }}! This is a finding per RHEL-07-040810 - The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
   changed_when: true
   when:
       - rhel_07_040810_iptables_audit.stdout_lines is not defined
