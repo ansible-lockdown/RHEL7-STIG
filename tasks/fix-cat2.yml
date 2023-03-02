@@ -1819,14 +1819,6 @@
         changed_when: false
         register: rhel_07_020730_perms_results
 
-      # Now let's see if those come up in any interactive users' home directory ini files.
-      - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-        ansible.builtin.debug:
-            msg: "Good news! We have not found any world-writable exeutable programs on your system."
-        failed_when: false
-        changed_when: false
-        when: rhel_07_020730_perms_results.stdout_lines | length == 0
-
       - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
         include_tasks: audit_homedirinifiles.yml
         loop:
@@ -4424,13 +4416,6 @@
                 - "{{ rhel_07_021031_world_writable_files_flat }}"
         when:
             - rhel_07_021031_world_writable_files_flat != []
-
-      - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Alert on no world-writable files"
-        ansible.builtin.debug:
-            msg:
-                - "Good News! No world-writable files detected"
-        when:
-            - rhel_07_021031_world_writable_files_flat == []
 
       - name: "MEDIUM | RHEL-07-021031 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are owned by root, sys, bin, or an application user. | Adjust world-writable files"
         ansible.builtin.file:
