@@ -457,7 +457,7 @@
 
 - name: "MEDIUM | RHEL-07-010210 | PATCH | The Red Hat Enterprise Linux operating system must be configured to use the shadow file to store only encrypted representations of passwords."
   ansible.builtin.lineinfile:
-      dest: /etc/login.defs
+      path: /etc/login.defs
       regexp: ^#?ENCRYPT_METHOD
       line: "ENCRYPT_METHOD {{ rhel7stig_login_defaults.encrypt_method | default('SHA512') }}"
   when:
@@ -473,7 +473,7 @@
 
 - name: "MEDIUM | RHEL-07-010220 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that user and group account administration utilities are configured to store only encrypted representations of passwords."
   ansible.builtin.lineinfile:
-      dest: /etc/libuser.conf
+      path: /etc/libuser.conf
       regexp: ^#?crypt_style
       line: crypt_style = sha512
   when:
@@ -667,7 +667,7 @@
 
 - name: "MEDIUM | RHEL-07-010310 | PATCH | The Red Hat Enterprise Linux operating system must disable account identifiers (individuals, groups, roles, and devices) if the password expires."
   ansible.builtin.lineinfile:
-      dest: /etc/default/useradd
+      path: /etc/default/useradd
       regexp: ^#?INACTIVE
       line: INACTIVE=35
   when:
@@ -874,7 +874,7 @@
 
 - name: "MEDIUM | RHEL-07-010430 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the delay between logon prompts following a failed console logon attempt is at least four seconds."
   ansible.builtin.lineinfile:
-      dest: /etc/login.defs
+      path: /etc/login.defs
       regexp: ^#?FAIL_DELAY
       line: "FAIL_DELAY {{ rhel7stig_login_defaults.fail_delay_secs | default('4') }}"
   when:
@@ -890,7 +890,7 @@
 
 - name: "MEDIUM | RHEL-07-010460 | PATCH | The Red Hat Enterprise Linux operating system must not allow users to override SSH environment variables."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?PermitUserEnvironment"
       line: PermitUserEnvironment no
       validate: /usr/sbin/sshd -t -f %s
@@ -909,7 +909,7 @@
 
 - name: "MEDIUM | RHEL-07-010470 | PATCH | The Red Hat Enterprise Linux operating system must not allow a non-certificate trusted host SSH logon to the system."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?HostbasedAuthentication"
       line: HostbasedAuthentication no
       validate: /usr/sbin/sshd -t -f %s
@@ -1170,10 +1170,10 @@
 
 - name: "MEDIUM | RHEL-07-020100 | PATCH | The Red Hat Enterprise Linux operating system must be configured to disable USB mass storage."
   ansible.builtin.lineinfile:
-      dest: "{{ item.file }}"
-      insertafter: "{{ item.insertafter }}"
+      path: "{{ item.file }}"
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
+      insertafter: "{{ item.insertafter }}"
       create: true
       owner: root
       group: root
@@ -1202,10 +1202,10 @@
 
 - name: "MEDIUM | RHEL-07-020101 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the Datagram Congestion Control Protocol (DCCP) kernel module is disabled unless required."
   ansible.builtin.lineinfile:
-      dest: "{{ item.file }}"
-      insertafter: "{{ item.insertafter }}"
+      path: "{{ item.file }}"
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
+      insertafter: "{{ item.insertafter }}"
       create: true
       owner: root
       group: root
@@ -1286,7 +1286,7 @@
 
 - name: "MEDIUM | RHEL-07-020240 | PATCH | The Red Hat Enterprise Linux operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
   ansible.builtin.lineinfile:
-      dest: /etc/login.defs
+      path: /etc/login.defs
       regexp: ^#?UMASK
       line: "UMASK {{ rhel7stig_login_defaults.umask | default('077') }}"
   when:
@@ -1422,7 +1422,7 @@
 
 - name: "MEDIUM | RHEL-07-020610 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user accounts, upon creation, are assigned a home directory."
   ansible.builtin.lineinfile:
-      dest: /etc/login.defs
+      path: /etc/login.defs
       regexp: ^#?CREATE_HOME
       line: "CREATE_HOME {{ rhel7stig_login_defaults.create_home | default('yes') }}"
   when:
@@ -2065,10 +2065,10 @@
 - name: "MEDIUM | RHEL-07-021100 | PATCH | The Red Hat Enterprise Linux operating system must have cron logging implemented."
   ansible.builtin.lineinfile:
       path: /etc/rsyslog.conf
-      state: present
       regexp: '^cron\.\*[ \t]+/var/log/cron$'
       line: 'cron.*                                                  /var/log/cron'
       insertafter: '#### RULES ####'
+      state: present
   failed_when:
       - result is failed
       - result.rc != 257
@@ -3167,7 +3167,7 @@
 
 - name: "MEDIUM | RHEL-07-040110 | PATCH | The Red Hat Enterprise Linux 7 operating system must implement DoD-approved encryption to protect the confidentiality of SSH connections."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?Ciphers"
       line: "Ciphers {{ rhel7stig_ssh_ciphers }}"
       validate: /usr/sbin/sshd -t -f %s
@@ -3217,7 +3217,7 @@
 
 - name: "MEDIUM | RHEL-07-040170 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner immediately prior to, or as part of, remote access logon prompts."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?Banner"
       line: Banner /etc/issue
       validate: /usr/sbin/sshd -tf %s
@@ -3385,7 +3385,7 @@
 
 - name: "MEDIUM | RHEL-07-040330 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using RSA rhosts authentication."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?RhostsRSAAuthentication"
       line: RhostsRSAAuthentication no
       validate: /usr/sbin/sshd -t -f %s
@@ -3427,7 +3427,7 @@
 
 - name: "MEDIUM | RHEL-07-040350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using rhosts authentication."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: '(?i)^#?\s*IgnoreRhosts'
       line: IgnoreRhosts yes
       validate: /usr/sbin/sshd -t -f %s
@@ -3446,7 +3446,7 @@
 
 - name: "MEDIUM | RHEL-07-040360 | PATCH | The Red Hat Enterprise Linux operating system must display the date and time of the last successful account logon upon an SSH logon."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?PrintLastLog"
       line: PrintLastLog yes
       validate: /usr/sbin/sshd -t -f %s
@@ -3616,7 +3616,7 @@
 
 - name: "MEDIUM | RHEL-07-040440 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not permit Kerberos authentication unless needed."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?KerberosAuthentication"
       line: KerberosAuthentication no
       validate: /usr/sbin/sshd -t -f %s
@@ -3639,7 +3639,7 @@
 
 - name: "MEDIUM | RHEL-07-040450 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon performs strict mode checking of home directory configuration files."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?StrictModes"
       line: StrictModes yes
       validate: /usr/sbin/sshd -t -f %s
@@ -3658,7 +3658,7 @@
 
 - name: "MEDIUM | RHEL-07-040460 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon uses privilege separation."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?UsePrivilegeSeparation"
       line: UsePrivilegeSeparation sandbox
       validate: /usr/sbin/sshd -t -f %s
@@ -3677,7 +3677,7 @@
 
 - name: "MEDIUM | RHEL-07-040470 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow compression or only allows compression after successful authentication."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?Compression"
       line: Compression no
       validate: /usr/sbin/sshd -t -f %s
