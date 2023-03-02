@@ -124,11 +124,11 @@
 
 - name: "HIGH | RHEL-07-010300 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon does not allow authentication using an empty password."
   ansible.builtin.lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?PermitEmptyPasswords"
       line: PermitEmptyPasswords no
       validate: /usr/sbin/sshd -tf %s
+      state: present
   notify: restart sshd
   when:
       - rhel_07_010300
@@ -144,7 +144,7 @@
 
 - name: "HIGH | RHEL-07-010440 | PATCH | The Red Hat Enterprise Linux operating system must not allow an unattended or automatic logon to the system via a graphical user interface."
   ansible.builtin.lineinfile:
-      dest: /etc/gdm/custom.conf
+      path: /etc/gdm/custom.conf
       regexp: (?i)automaticloginenable
       line: AutomaticLoginEnable=false
       insertafter: '\[daemon\]'
@@ -162,7 +162,7 @@
 
 - name: "HIGH | RHEL-07-010450 | PATCH | The Red Hat Enterprise Linux operating system must not allow an unrestricted logon to the system."
   ansible.builtin.lineinfile:
-      dest: /etc/gdm/custom.conf
+      path: /etc/gdm/custom.conf
       regexp: (?i)timedloginenable
       line: TimedLoginEnable=false
       insertafter: '\[daemon\]'
@@ -184,10 +184,10 @@
       - name: "HIGH | RHEL-07-010482 | Red Hat Enterprise Linux operating systems version 7.2 or newer with a Basic Input/Output System (BIOS) must require authentication upon booting into single-user and maintenance modes."
         ansible.builtin.lineinfile:
             path: /boot/grub2/user.cfg
-            create: true
-            mode: '0644'
             regexp: ^GRUB2_PASSWORD=
             line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+            create: true
+            mode: '0644'
         notify:
             - confirm grub2 user cfg
             - make grub2 config
@@ -198,10 +198,10 @@
       - name: "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
         ansible.builtin.lineinfile:
             path: "{{ rhel7stig_bootloader_path }}/user.cfg"
-            create: true
-            mode: '0644'
             regexp: ^GRUB2_PASSWORD=
             line: GRUB2_PASSWORD={{ rhel7stig_bootloader_password_hash }}
+            create: true
+            mode: '0644'
         no_log: true
         notify:
             - confirm grub2 user cfg
@@ -265,7 +265,7 @@
 
 - name: "HIGH | RHEL-07-020050 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components from a repository without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   ansible.builtin.lineinfile:
-      dest: /etc/yum.conf
+      path: /etc/yum.conf
       regexp: ^gpgcheck
       line: gpgcheck=1
       insertafter: '\[main\]'
@@ -282,7 +282,7 @@
 
 - name: "HIGH | RHEL-07-020060 | PATCH | The Red Hat Enterprise Linux operating system must prevent the installation of software, patches, service packs, device drivers, or operating system components of local packages without verification they have been digitally signed using a certificate that is issued by a Certificate Authority (CA) that is recognized and approved by the organization."
   ansible.builtin.lineinfile:
-      dest: /etc/yum.conf
+      path: /etc/yum.conf
       regexp: ^localpkg_gpgcheck
       line: localpkg_gpgcheck=1
       insertafter: '\[main\]'
@@ -393,7 +393,7 @@
 
       - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
         ansible.builtin.lineinfile:
-            dest: /etc/sysconfig/prelink
+            path: /etc/sysconfig/prelink
             regexp: ^#?PRELINKING
             line: PRELINKING=no
         notify: undo existing prelinking
@@ -546,7 +546,7 @@
 
 - name: "HIGH | RHEL-07-040390 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the SSH daemon is configured to only use the SSHv2 protocol."
   ansible.builtin.lineinfile:
-      dest: /etc/ssh/sshd_config
+      path: /etc/ssh/sshd_config
       regexp: "(?i)^#?Protocol"
       line: Protocol 2
       validate: /usr/sbin/sshd -t -f %s
