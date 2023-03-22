@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1
+
+update lint inline with galaxy requirements
+lint
+goss version
+goss url
+
 ## Release 2.0.0
 
 Lint work
