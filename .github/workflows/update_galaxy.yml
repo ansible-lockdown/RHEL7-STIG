@@ -6,7 +6,7 @@ name: update galaxy
 
 # Controls when the action will run.
 # Triggers the workflow on merge request events to the main branch
-on:
+on:  # yamllint disable-line rule:truthy
     push:
         branches:
             - main
