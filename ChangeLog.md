@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+update lint inline with galaxy requirements
+
 ## Release 2.0.0
 
 Lint work
