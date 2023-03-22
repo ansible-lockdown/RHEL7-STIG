@@ -12,6 +12,8 @@ python2_bin: /bin/python2.7
 ## Benchmark name used by auditing control role
 # audit variable found at the base
 benchmark: RHEL7-STIG
+## metadata for Audit benchmark
+benchmark_version: 'v3r10'
 
 # Whether to skip the reboot
 rhel7stig_skip_reboot: true
@@ -129,6 +131,7 @@ rhel_07_010160: true
 rhel_07_010170: true
 rhel_07_010180: true
 rhel_07_010190: true
+rhel_07_010199: true
 rhel_07_010200: true
 rhel_07_010210: true
 rhel_07_010220: true
@@ -137,6 +140,7 @@ rhel_07_010240: true
 rhel_07_010250: true
 rhel_07_010260: true
 rhel_07_010270: true
+rhel_07_010271: true
 rhel_07_010280: true
 rhel_07_010310: true
 rhel_07_010320: true
@@ -301,6 +305,7 @@ rhel_07_040670: true
 rhel_07_040680: true
 rhel_07_040710: true
 rhel_07_040711: true
+rhel_07_040712: true
 rhel_07_040720: true
 rhel_07_040730: true
 rhel_07_040740: true
@@ -315,6 +320,7 @@ rhel_07_041010: true
 rhel_07_910055: true
 
 # CAT 3 rules
+rhel_07_010375: true
 rhel_07_020200: true
 rhel_07_020300: true
 rhel_07_021024: true
@@ -369,7 +375,7 @@ rhel_07_020730_WWP_Change: true
 # (Red Hat has support for older versions if you pay extra for it.)
 rhel7stig_min_supported_os_ver:
     RedHat: "7.9"
-    CentOS: "7.9.2009"
+    CentOS: "7.9"
     OracleLinux: "7.9"
 
 # RHEL-07-040740
@@ -388,9 +394,9 @@ rhel7stig_antivirus_required: false
 rhel7stig_av_package:
     package:
         - clamav
-        - clamav-scanner
-        - clamav-server
-    service: clamav-daemon
+        - clamav-update
+        - clamd
+    service: clamd
 
 rhel7stig_time_service: chronyd
 rhel7stig_time_service_configs:
@@ -412,6 +418,11 @@ rhel7stig_firewall_service: firewalld
 # The toggle to start the firewall service. Set to true the role will start the service for you where needed
 rhel7stig_start_firewall_service: true
 
+# allowed firewall ports and protocols as found in the command used to discover
+rhel7stig_firewall_ports_protocols:
+    - '22/tcp'
+    - '546/udp'
+
 # RHEL-07-031010
 rhel7stig_system_is_log_aggregator: false
 
@@ -419,12 +430,14 @@ rhel7stig_use_fips: true
 fips_value: '0'
 rhel7stig_FIPS_ciphers: aes256-ctr,aes192-ctr,aes128-ctr
 rhel7stig_FIPS_MACs: hmac-sha2-512,hmac-sha2-256
+rhel7stig_FIPS_KEX: ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256
 # RHEL-07-040300
 # RHEL-07-040310
 # Install and enable ssh on networked systems
 rhel7stig_ssh_required: true
 rhel7stig_ssh_ciphers: "{{ rhel7stig_FIPS_ciphers }}"
 rhel7stig_ssh_macs: "{{ rhel7stig_FIPS_MACs }}"
+rhel7stig_ssh_kex: "{{ rhel7stig_FIPS_KEX }}"
 
 # RHEL-07-040490
 # If not required, remove vsftpd.
@@ -454,7 +467,8 @@ rhel7stig_bootloader_password_hash: 'grub.pbkdf2.sha512.changethispassword'
 rhel7stig_boot_superuser: root
 
 # RHEL-07-021700 set the value for correctly configured grub bootloader sequence
-rhel7stig_grub_bootloader_validorder: " set root='hd0,msdos1'"
+# note this is different for bios and EFI boot types. so can be changed via the inventory or alternate vars
+rhel7stig_grub_bootloader_validorder: "set root='hd0,1'"
 
 # RHEL-07-040200 Path for cacrt bundle that holds LDAP certs for tls transport
 rhel_07_040200_cabundle_path: etc/pki/tls/certs/ca-bundle.crt
@@ -483,7 +497,7 @@ rhel7stig_aide_cron:
     special_time: daily
     # Disable the notification check rule to disable mailing notifications
     notify_by_mail: "{{ rhel_07_020040 }}"
-    notify_cmd: ' | /bin/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
+    notify_cmd: ' | /var/spool/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
 
 rhel7stig_cron_special_disable: "{{
         rhel7stig_workaround_for_disa_benchmark or
@@ -521,7 +535,7 @@ rhel7stig_logon_banner_nice: |
     -This IS includes security measures (e.g., authentication and access controls)
     to protect USG interests--not for your personal benefit or privacy.
 
-    -notwithstanding the above, using this IS does not constitute consent to PM, LE
+    -Notwithstanding the above, using this IS does not constitute consent to PM, LE
     or CI investigative searching or monitoring of the content of privileged
     communications, or work product, related to personal representation or services
     by attorneys, psychotherapists, or clergy, and their assistants. Such
@@ -541,7 +555,7 @@ rhel7stig_password_complexity:
     minlen: 15
 
 # RHEL-07-020022
-# rhel7stig_ssh_sysadm_login_state is the state for the ssh_sysadmin_login boolean. 
+# rhel7stig_ssh_sysadm_login_state is the state for the ssh_sysadmin_login boolean.
 # The value False will set the value to off, which does not allow privileged accounts to utilize SSH
 # The value True will set the value to on, which allows privileged accounts to utilize SSH
 # To confrom to STIG requirements use the value of false
@@ -550,7 +564,7 @@ rhel7stig_ssh_sysadm_login_state: false
 
 # RHEL-07-040160
 # Session timeout setting file (TMOUT setting can be set in multiple files)
-# Timeout value is in seconds. (60 seconds * 15 = 600)
+# Timeout value is in seconds. (60 seconds * 15 = 900)
 rhel7stig_shell_session_timeout:
     file: /etc/profile.d/tmout.sh
     timeout: 900
@@ -628,6 +642,9 @@ rhel7stig_login_defaults:
     umask: '077'
     create_home: 'yes'
 
+# Default value - if control is enabled this will run for the valid controls.
+update_audit_template: false
+
 # RHEL-07-030300 uncomment and set the value to a remote IP address that can receive audit logs
 # rhel7stig_audisp_remote_server: 10.10.10.10
 
@@ -636,6 +653,7 @@ rhel7stig_auditd_space_left: "{{ ( ansible_mounts | json_query(rhel7stig_audit_d
 rhel7stig_audit_disk_size_query: "[?mount=='{{ rhel7stig_audit_part }}'].size_total | [0]"
 
 # RHEL-07-030350
+rhel7stig_audit_daemon: auditd
 rhel7stig_auditd_mail_acct: root
 
 # RHEL-07-020630
@@ -711,17 +729,22 @@ rhel7stig_world_write_files_owner_root: false
 rhel7stig_sudo_timestamp_timeout: 1
 
 #### Audit Configuration Settings ####
+# Set correct env for the run_audit.sh script from https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
+audit_run_script_environment:
+    AUDIT_BIN: "{{ audit_bin }}"
+    AUDIT_FILE: 'goss.yml'
+    AUDIT_CONTENT_LOCATION: "{{ audit_out_dir }}"
 
 ### Audit binary settings ###
 audit_bin_version:
-    release: v0.3.16
-    checksum: 'sha256:827e354b48f93bce933f5efcd1f00dc82569c42a179cf2d384b040d8a80bfbfb'
+    release: v0.3.21
+    checksum: 'sha256:9a9200779603acf0353d2c0e85ae46e083596c10838eaf4ee050c924678e4fe3'
 audit_bin_path: /usr/local/bin/
 audit_bin: "{{ audit_bin_path }}goss"
 audit_format: json
 
 # if get_audit_binary_method == download change accordingly
-audit_bin_url: "https://github.com/aelsabbahy/goss/releases/download/{{ audit_bin_version.release }}/goss-linux-amd64"
+audit_bin_url: "https://github.com/goss-org/goss/releases/download/{{ audit_bin_version.release }}/goss-linux-amd64"
 
 ## if get_audit_binary_method - copy the following needs to be updated for your environment
 ## it is expected that it will be copied from somewhere accessible to the control node
@@ -732,7 +755,7 @@ audit_bin_copy_location: /some/accessible/path
 ## managed by the control audit_content
 # git
 audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
-audit_git_version: main
+audit_git_version: "benchmark_{{ benchmark_version }}_rh7"
 
 # copy:
 audit_local_copy: "some path to copy from"
@@ -742,13 +765,13 @@ audit_files_url: "some url maybe s3?"
 
 ## Goss configuration information
 # Where the goss configs and outputs are stored
-audit_out_dir: '/var/tmp'
+audit_out_dir: '/opt'
 # Where the goss audit configuration will be stored
 audit_conf_dir: "{{ audit_out_dir }}/{{ benchmark }}-Audit/"
 
 # If changed these can affect other products
-pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
-post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
+pre_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}-{{ benchmark }}_pre_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
+post_audit_outfile: "{{ audit_out_dir }}/{{ ansible_hostname }}-{{ benchmark }}_post_scan_{{ ansible_date_time.epoch }}.{{ audit_format }}"
 
 ## The following should not need changing
 audit_control_file: "{{ audit_conf_dir }}goss.yml"

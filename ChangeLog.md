@@ -1,5 +1,109 @@
 # Changelog
 
+## 2.0.1
+
+update lint inline with galaxy requirements
+lint
+goss version
+goss url
+
+## Release 2.0.0
+
+Lint work
+FQCN
+Testing
+workflow updates
+audit version alignment
+README
+
+### Issues
+
+- Thanks to @Joseph Hoffman
+  - [#405](https://github.com/ansible-lockdown/RHEL7-STIG/issues/405)
+- Thanks to @Bordenit
+  - [#412](https://github.com/ansible-lockdown/RHEL7-STIG/issues/412)
+  - #415
+
+- Update to V3R10 - Jan 2023
+  All controls have rules updated
+  - cat_1
+    - 010010
+    - 010290
+
+  - cat 2
+    - 010060
+    - 010062
+    - 010070
+    - 010081
+    - 010082
+    - 010090 Added back in for screen pkgs to be installed
+    - 010100
+    - 010101
+    - 010110
+    - 010199 - new control
+    - 010200
+    - 010270
+    - 010320
+    - 010330
+    - 010342 - updated grep command to grep -E
+    - 020029 - added notify and updated rule
+    - 020030 - updated mail path in cron job
+    - 020040
+    - 020650
+    - 021620
+    - 040201
+    - 040420
+    - 040470 - conditional added only pre 7.4
+    - 040610
+    - 040611
+    - 040612
+    - 040620
+    - 040630
+    - 040640
+    - 040641
+    - 040650
+    - 040660
+    - 040712 - new control ssh KEX
+    - 040740
+    - 040830
+
+- cat 3
+  - 010375 - new control
+  - 021600
+  - 021610
+
+## Release 1.9.0
+
+- RHEL-07-010271 - New Control Added 
+- Update to STIG V3R9 Oct 27th 2022 - Changes Listed Below
+  - RHEL-07-010342, RHEL-07-010343, RHEL- 07-020023, RHEL-07-030201 - Updated fix text.
+  - RHEL-07-021040, RHEL-07-021700 - Updated check text command to eliminate false positives.
+  - RHEL-07-030840 - Updated check and fix text.
+  - RHEL-07-040160 - Updated check text.
+  - RHEL-07-040310 - Corrected typo in the Vulnerability Discussion.
+  - RHEL-07-040360, RHEL-07-040530 - Updated CCI. 
+- Update to README and requirements
+- RHEL-07-010010, RHEL-07-010020, RHEL-07-010291, RHEL-07-021030,RHEL-07-021040 - Updated Tag Information
+
+## Relase 1.7.0
+
+- Update to STIG V3R8 Jul 27th 2022 - rule ID changes
+- update to README and requirements
+- thanks to @dirtyharrycallahan
+  - [ansible-lockdown/RHEL7-STIG#410](https://github.com/ansible-lockdown/RHEL7-STIG/issues/410)
+- thanks to @dtm966
+  - #404 updated clamav packages and service name
+- thanks to @bordentit
+  - [ansible-lockdown/RHEL7-STIG#412](https://github.com/ansible-lockdown/RHEL7-STIG/issues/412) addressed slightly differently
+  - 010340 added disruption is high
+  - updated audit restart control
+  - README jmespath added back in
+
+## Release 1.6.0
+
+- Update to STIG v3r7 Apr 27th 2022
+- Removed unnecessary local.yml
+
 ## Release 1.3.3
 
 - update to STIG v3r6 Jan 27th 2022

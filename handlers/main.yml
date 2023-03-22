@@ -1,31 +1,31 @@
 ---
 - name: restart sshd
-  service:
+  ansible.builtin.service:
       name: sshd
       state: restarted
   when:
       - not rhel7stig_system_is_chroot
 
 - name: reboot system
-  shell: sleep 3; reboot
+  ansible.builtin.shell: sleep 3; reboot
   async: 15
   poll: 0
 
 - name: restart snmpd
-  service:
+  ansible.builtin.service:
       name: snmpd
       state: restarted
   when:
       - not rhel7stig_system_is_chroot
 
 - name: confirm grub2 user cfg
-  stat:
+  ansible.builtin.stat:
       path: /boot/grub2/user.cfg
   register: rhel7stig_grub2_user_cfg
   notify: make grub2 config
 
 - name: make grub2 config
-  command: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
+  ansible.builtin.shell: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
   when:
       - rhel7stig_grub2_user_cfg.stat.exists
       - not rhel7stig_skip_for_travis
@@ -33,10 +33,10 @@
 
 - name: copy grub2 config to BIOS/UEFI to satisfy benchmark
   listen: make grub2 config
-  copy:
+  ansible.builtin.copy:
       src: "{{ rhel7stig_grub_cfg_path | dirname }}/{{ item }}"
       dest: "{{ rhel7stig_grub_cfg_path_invalid | dirname }}/{{ item }}"
-      remote_src: yes
+      remote_src: true
       mode: 0600
   with_items:
       - grub.cfg
@@ -48,7 +48,7 @@
       - not rhel7stig_system_is_container
 
 - name: "restart {{ rhel7stig_time_service }}"
-  service:
+  ansible.builtin.service:
       name: "{{ rhel7stig_time_service }}"
       state: restarted
   when:
@@ -56,36 +56,23 @@
       - not rhel7stig_system_is_chroot
       - not rhel7stig_system_is_container
 
-- name: update auditd
-  template:
-      src: audit/99_auditd.rules.j2
-      dest: /etc/audit/rules.d/99_auditd.rules
-      owner: root
-      group: root
-      mode: 0600
-  notify: restart auditd
-
 - name: restart auditd
-  command: /usr/sbin/service auditd restart
+  ansible.builtin.shell: /usr/sbin/service "{{ rhel7stig_audit_daemon }}" restart
   args:
-      warn: no
-  when:
-      - not rhel7stig_skip_for_travis
-      - not rhel7stig_system_is_chroot
-      - not rhel7stig_system_is_container
+      warn: false
 
 - name: rebuild initramfs
-  command: dracut -f
+  ansible.builtin.shell: dracut -f
 
 - name: undo existing prelinking
-  command: prelink -ua
+  ansible.builtin.shell: prelink -ua
 
 - name: update running audit failure mode
-  command: auditctl -f {{ rhel7stig_auditd_failure_flag }}
-  failed_when: no
+  ansible.builtin.shell: auditctl -f {{ rhel7stig_auditd_failure_flag }}
+  failed_when: false
 
 - name: clean up ssh host key
-  file:
+  ansible.builtin.file:
       path: "{{ item }}"
       state: absent
   with_items:
@@ -93,27 +80,27 @@
       - /etc/ssh/ssh_host_rsa_key.pub
 
 - name: init aide and wait
-  command: /usr/sbin/aide --init -B 'database_out=file:{{ rhel7stig_aide_temp_db_file }}'
+  ansible.builtin.shell: /usr/sbin/aide --init -B 'database_out=file:{{ rhel7stig_aide_temp_db_file }}'
   notify: move aide db
 
 - name: init aide
-  shell: nohup /usr/sbin/aide --init -B 'database_out=file:{{ rhel7stig_aide_temp_db_file }}' > /dev/null &
+  ansible.builtin.shell: nohup /usr/sbin/aide --init -B 'database_out=file:{{ rhel7stig_aide_temp_db_file }}' > /dev/null &
   notify: move aide db
 
 - name: move aide db
-  command: "mv {{ rhel7stig_aide_temp_db_file }} {{ rhel7stig_aide_db_file }}"
+  ansible.builtin.shell: "mv {{ rhel7stig_aide_temp_db_file }} {{ rhel7stig_aide_db_file }}"
   when: not rhel7stig_aide_db_status.stat.exists or rhel7stig_overwrite_aide_db
 
 - name: dconf update
-  command: dconf update
+  ansible.builtin.shell: dconf update
   when: rhel7stig_has_dconf_command
 
 - name: prereport score
-  debug:
+  ansible.builtin.debug:
       msg: "Pre-run OpenSCAP score is {{ rhel7stig_prescanresults.Benchmark.TestResult.score['#text'] }}"
   when: rhel7stig_oscap_scan
 
 - name: postreport score
-  debug:
+  ansible.builtin.debug:
       msg: "Post-run OpenSCAP score is {{ rhel7stig_postscanresults.Benchmark.TestResult.score['#text'] }}"
   when: rhel7stig_oscap_scan

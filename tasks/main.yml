@@ -1,6 +1,6 @@
 ---
 - name: Gather distribution info
-  setup:
+  ansible.builtin.setup:
       gather_subset: distribution,!all,!min
   when:
       - ansible_distribution is not defined
@@ -8,21 +8,42 @@
       - always
 
 - name: Check OS version and family
-  assert:
+  ansible.builtin.assert:
       that: ansible_os_family == 'RedHat' and ansible_distribution_major_version is version_compare('7', '==')
       msg: "This role can only be run against RHEL/CENTOS 7. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   tags:
       - always
 
 - name: Check ansible version
-  assert:
+  ansible.builtin.assert:
       that: ansible_version.full is version_compare(rhel7stig_min_ansible_version, '>=')
       msg: You must use Ansible {{ rhel7stig_min_ansible_version }} or greater
   tags:
       - always
 
+- name: "Check password set for {{ ansible_user }}"
+  block:
+      - name: Capture current password state of "{{ ansible_user }}"
+        ansible.builtin.shell: "grep {{ ansible_user }} /etc/shadow | awk -F: '{print $2}'"
+        changed_when: false
+        failed_when: false
+        check_mode: false
+        register: ansible_user_password_set
+
+      - name: "Assert that password set for {{ ansible_user }} and account not locked"
+        ansible.builtin.assert:
+            that: ansible_user_password_set.stdout | length != 0 and ansible_user_password_set.stdout != "!!"
+            fail_msg: "You have {{ sudo_password_rule }} enabled but the user = {{ ansible_user }} has no password set - It can break access"
+            success_msg: "You a password set for the {{ ansible_user }}"
+        vars:
+            sudo_password_rule: RHEL-07-010340
+  when:
+      - rhel_07_010340
+  tags:
+      - user_passwd
+
 - name: FIPS turned on
-  set_fact:
+  ansible.builtin.set_fact:
       fips_value: '1'
   when:
       - rhel7stig_use_fips
@@ -30,9 +51,9 @@
       - RHEL-07-021350
 
 - name: Check rhel7stig_bootloader_password_hash variable has been changed
-  assert:
+  ansible.builtin.assert:
       that: rhel7stig_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispassword'
-      msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set"
+      msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set. You can create the hash on a RHEL 7.9 system using the command 'grub2-mkpasswd-pbkdf2'"
   when:
       - rhel_07_010481 or
         rhel_07_010482 or
@@ -45,72 +66,75 @@
       - RHEL-07-010491
       - cat1
 
-- import_tasks: prelim.yml
-  become: yes
+- name: include prelim tasks
+  ansible.builtin.import_tasks: prelim.yml
   tags:
       - prelim_tasks
       - run_audit
 
-- import_tasks: pre_remediation_audit.yml
+- name: include pre-remediation audit
+  ansible.builtin.import_tasks: pre_remediation_audit.yml
   when:
       - run_audit
   tags:
       - run_audit
 
 - name: Gather the package facts
-  package_facts:
+  ansible.builtin.package_facts:
       manager: auto
   tags:
       - always
 
 - name: Include CAT I patches
-  import_tasks: fix-cat1.yml
+  ansible.builtin.import_tasks: fix-cat1.yml
   when: rhel7stig_cat1_patch
   tags:
       - cat1
       - high
 
 - name: Include CAT II patches
-  import_tasks: fix-cat2.yml
+  ansible.builtin.import_tasks: fix-cat2.yml
   when: rhel7stig_cat2_patch
   tags:
       - cat2
       - medium
 
 - name: Include CAT III patches
-  import_tasks: fix-cat3.yml
+  ansible.builtin.import_tasks: fix-cat3.yml
   when: rhel7stig_cat3_patch
   tags:
       - cat3
       - low
 
-- name: trigger update auditd
-  shell: /bin/true
-  args:
-      warn: false
-  notify: update auditd
-  changed_when: true
-  check_mode: false
-  tags:
-      - auditd
+- name: update auditd
+  ansible.builtin.template:
+      src: audit/99_auditd.rules.j2
+      dest: /etc/audit/rules.d/99_auditd.rules
+      owner: root
+      group: root
+      mode: 0600
+  register: auditd_file
+  notify: restart auditd
+  when:
+      - update_audit_template
 
 - name: flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Reboot system
-  reboot:
+  ansible.builtin.reboot:
   when:
       - not rhel7stig_skip_reboot
 
-- import_tasks: post_remediation_audit.yml
+- name: include post-remediation audit
+  ansible.builtin.import_tasks: post_remediation_audit.yml
   when:
       - run_audit
 
 - name: Show Audit Summary
-  debug:
+  ansible.builtin.debug:
       msg: "{{ audit_results.split('\n') }}"
   when:
       - run_audit
   tags:
       - run_audit
-
