@@ -19,7 +19,10 @@ rules:
      indent-sequences: consistent
   key-duplicates: enable
   line-length: disable
-  new-line-at-end-of-file: disable
-  new-lines: {type: unix}
-  trailing-spaces: disable
-  truthy: disable
+  new-line-at-end-of-file: enable
+  new-lines: 
+    type: unix
+  trailing-spaces: enable
+  truthy:
+    allowed-values: ['true', 'false']
+    check-keys: true
