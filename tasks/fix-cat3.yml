@@ -64,7 +64,7 @@
       - passwd
 
 - name: "LOW | RHEL-07-021024 | PATCH | The Red Hat Enterprise Linux operating system must mount /dev/shm with secure options."
-  ansible.builtin.mount:
+  ansible.posix.mount:
       path: /dev/shm
       state: mounted
       src: "{{ dev_shm_mount.device | default('tmpfs') }}"

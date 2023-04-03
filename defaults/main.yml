@@ -40,7 +40,6 @@ audit_cmd_timeout: 60000
 ### End Audit enablements ####
 #### Detailed settings found at the end of this document ####
 
-
 # We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation
 # may fail in some cases.
@@ -458,7 +457,6 @@ rhel7stig_snmp_community: Endgam3Ladyb0g
 # whether to force role-specified packages to be installed regardless of the
 # presence of another compliant equivalent
 rhel7stig_force_exact_packages: "{{ rhel7stig_disruption_high }}"
-
 
 # RHEL-07-010480 and RHEL-07-010490
 # Password protect the boot loader

@@ -1283,7 +1283,6 @@
       - V-204454
       - selinux
 
-
 - name: "MEDIUM | RHEL-07-020240 | PATCH | The Red Hat Enterprise Linux operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files."
   ansible.builtin.lineinfile:
       path: /etc/login.defs
@@ -1902,7 +1901,7 @@
       - complexity-high
 
 - name: "MEDIUM | RHEL-07-021000 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that file systems containing user home directories are mounted to prevent files with the setuid and setgid bit set from being executed."
-  ansible.builtin.mount:
+  ansible.posix.mount:
       path: /home
       state: mounted
       src: "{{ home_mount.device }}"
@@ -1925,7 +1924,7 @@
 - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
   block:
       - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
-        ansible.builtin.mount:
+        ansible.posix.mount:
             path: /media
             state: mounted
             src: "{{ removable_mount.device }}"
@@ -1938,7 +1937,7 @@
             - "'nosuid' not in home_mount.options"
 
       - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
-        ansible.builtin.mount:
+        ansible.posix.mount:
             path: /mnt
             state: mounted
             src: "{{ removable_mount2.device }}"
@@ -1961,7 +1960,7 @@
       - V-204481
 
 - name: "MEDIUM | RHEL-07-021020 | PATCH | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are being imported via Network File System (NFS)."
-  ansible.builtin.mount:
+  ansible.posix.mount:
       path: "{{ item }}"
       src: "{{ ansible_mounts | json_query(device_query) }}"
       fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
@@ -1986,7 +1985,7 @@
       - mounts
 
 - name: "MEDIUM | RHEL-07-021021 | PATCH | The Red Hat Enterprise Linux operating system must prevent binary files from being executed on file systems that are being imported via Network File System (NFS)."
-  ansible.builtin.mount:
+  ansible.posix.mount:
       path: "{{ item }}"
       src: "{{ ansible_mounts | json_query(device_query) }}"
       fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
