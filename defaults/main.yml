@@ -29,7 +29,7 @@ get_audit_binary_method: download
 # options are git/copy/get_url other e.g. if you wish to run from already downloaded conf
 audit_content: git
 
-# enable audits to run - this  runs the audit and get the latest content
+# enable audits to run - this runs the audit and get the latest content
 run_audit: false
 
 # Run heavy tests - some tests can have more impact on a system enabling these can have greater impact on a system
