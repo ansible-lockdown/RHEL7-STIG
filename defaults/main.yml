@@ -29,7 +29,7 @@ get_audit_binary_method: download
 # options are git/copy/get_url other e.g. if you wish to run from already downloaded conf
 audit_content: git
 
-# enable audits to run - this  runs the audit and get the latest content
+# enable audits to run - this runs the audit and get the latest content
 run_audit: false
 
 # Run heavy tests - some tests can have more impact on a system enabling these can have greater impact on a system
@@ -39,7 +39,6 @@ audit_cmd_timeout: 60000
 
 ### End Audit enablements ####
 #### Detailed settings found at the end of this document ####
-
 
 # We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation
@@ -458,7 +457,6 @@ rhel7stig_snmp_community: Endgam3Ladyb0g
 # whether to force role-specified packages to be installed regardless of the
 # presence of another compliant equivalent
 rhel7stig_force_exact_packages: "{{ rhel7stig_disruption_high }}"
-
 
 # RHEL-07-010480 and RHEL-07-010490
 # Password protect the boot loader

@@ -1,16 +1,51 @@
 # RHEL 7 DISA STIG
 
-![Build Status](https://img.shields.io/github/workflow/status/ansible-lockdown/RHEL7-STIG/CommunityToDevel?label=Devel%20Build%20Status&style=plastic)
-![Build Status](https://img.shields.io/github/workflow/status/ansible-lockdown/RHEL7-STIG/DevelToMain?label=Main%20Build%20Status&style=plastic)
-![Release](https://img.shields.io/github/v/release/ansible-lockdown/RHEL7-STIG?style=plastic)
+## Configure a RHEL7 based system to be complaint with Disa STIG
 
-Configure a RHEL 7 system to be DISA STIG compliant. All findings will be audited by default. Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default. Disruptive finding remediation can be enabled by setting `rhel7stig_disruption_high` to `yes`.
+This role is based on RHEL 7 DISA STIG: [ Version 3, Rel 10 released on Jan 26, 2023 ](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R10_STIG.zip).
 
-This role is based on RHEL 7 DISA STIG: [Version 3, Rel 10 released on Jan 26, 2023](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R10_STIG.zip).
+---
 
-## Join us
+![Org Stars](https://img.shields.io/github/stars/ansible-lockdown?label=Org%20Stars&style=social)
+![Stars](https://img.shields.io/github/stars/ansible-lockdown/RHEL7-STIG?label=Repo%20Stars&style=social)
+![Forks](https://img.shields.io/github/forks/ansible-lockdown/RHEL7-STIG?style=social)
+![followers](https://img.shields.io/github/followers/ansible-lockdown?style=social)
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/AnsibleLockdown.svg?style=social&label=Follow%20%40AnsibleLockdown)](https://twitter.com/AnsibleLockdown)
+
+![Ansible Galaxy Quality](https://img.shields.io/ansible/quality/61792?label=Quality&&logo=ansible)
+![Discord Badge](https://img.shields.io/discord/925818806838919229?logo=discord)
+
+![Devel Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel8-stig/linux_benchmark_testing.yml?label=Devel%20Build%20Status)
+![Devel Commits](https://img.shields.io/github/commit-activity/m/ansible-lockdown/RHEL7-STIG/devel?color=dark%20green&label=Devel%20Branch%20commits)
+
+![Release Branch](https://img.shields.io/badge/Release%20Branch-Main-brightgreen) 
+![Main Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel8-stig/linux_benchmark_testing.yml?label=Build%20Status)
+![Main Release Date](https://img.shields.io/github/release-date/ansible-lockdown/RHEL7-STIG?label=Release%20Date)
+![Release Tag](https://img.shields.io/github/v/tag/ansible-lockdown/RHEL7-STIG?label=Release%20Tag&&color=success)
+
+![Issues Open](https://img.shields.io/github/issues-raw/ansible-lockdown/RHEL7-STIG?label=Open%20Issues)
+![Issues Closed](https://img.shields.io/github/issues-closed-raw/ansible-lockdown/RHEL7-STIG?label=Closed%20Issues&&color=success)
+![Pull Requests](https://img.shields.io/github/issues-pr/ansible-lockdown/RHEL7-STIG?label=Pull%20Requests)
+
+![License](https://img.shields.io/github/license/ansible-lockdown/RHEL7-STIG?label=License)
+
+---
+
+## Looking for support?
+
+[Lockdown Enterprise](https://www.lockdownenterprise.com#GH_AL_RH7_stig)
+
+[Ansible support](https://www.mindpointgroup.com/cybersecurity-products/ansible-counselor#GH_AL_RH7_stig)
+
+### Community
 
 On our [Discord Server](https://discord.io/ansible-lockdown) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
+
+---
+
+Configure a RHEL 7 system to be DISA STIG compliant.
+Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default.
+Disruptive finding remediation can be enabled by setting `rhel7stig_disruption_high` to `true`.
 
 ## Updating
 
@@ -27,7 +62,7 @@ More information can be found in the [ChangeLog](./ChangeLog.md)
 
 ## Auditing (new)
 
-This can be turned on or off within the defaults/main.yml file with the variable rhel7stig_run_audit. The value is false by default, please refer to the wiki for more details.
+This can be turned on or off within the defaults/main.yml file with the variable run_audit. The value is false by default, please refer to the wiki for more details.
 
 This is a much quicker, very lightweight, checking (where possible) config compliance and live/running settings.
 
@@ -38,63 +73,51 @@ Refer to
 
 - [RHEL7-STIG-Audit](https://github.com/ansible-lockdown/RHEL7-STIG-Audit).
 
+## Documentation
+
+- [Read The Docs](https://ansible-lockdown.readthedocs.io/en/latest/)
+- [Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown#GH_AL_RH7_stig)
+- [Customizing Roles](https://www.lockdownenterprise.com/docs/customizing-lockdown-enterprise#GH_AL_RH7_stig)
+- [Per-Host Configuration](https://www.lockdownenterprise.com/docs/per-host-lockdown-enterprise-configuration#GH_AL_RH7_stig)
+- [Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise#GH_AL_RH7_stig)
+
 ## Requirements
 
 RHEL 7 or CentOS 7 - Other versions are not supported.
 Access to download or add the goss binary and content to the system if using auditing. options are available on how to get the content to the system.
 
-**General:**
-
-- Basic knowledge of Ansible, below are some links to the Ansible documentation to help get started if you are unfamiliar with Ansible
-
-  - [Main Ansible documentation page](https://docs.ansible.com)
-  - [Ansible Getting Started](https://docs.ansible.com/ansible/latest/user_guide/intro_getting_started.html)
-  - [Tower User Guide](https://docs.ansible.com/ansible-tower/latest/html/userguide/index.html)
-  - [Ansible Community Info](https://docs.ansible.com/ansible/latest/community/index.html)
-- Functioning Ansible and/or Tower Installed, configured, and running. This includes all of the base Ansible/Tower configurations, needed packages installed, and infrastructure setup.
-- Please read through the tasks in this role to gain an understanding of what each control is doing. Some of the tasks are disruptive and can have unintended consiquences in a live production system. Also familiarize yourself with the variables in the defaults/main.yml file or the [Main Variables Wiki Page](https://github.com/ansible-lockdown/RHEL7-STIG/wiki/Main-Variables).
-- While check_mode may work, This is not supported.
-
-### Please be aware
-
-- This does set the single user password for grub this does need to be defined - You can create the hash on a RHEL 7.9 system using the command 'grub2-mkpasswd-pbkdf2'
-- Some controls make changes to sudo, please ensure a sudo password is set for the user and it is added to the way to run your playbook.
-
-## Documentation
-
-- [Repo GitHub Page](https://ansible-lockdown.github.io/RHEL7-STIG/)
-- [Getting Started](https://www.lockdownenterprise.com/docs/getting-started-with-lockdown)
-- [Customizing Roles](https://www.lockdownenterprise.com/docs/customizing-lockdown-enterprise)
-- [Per-Host Configuration](https://www.lockdownenterprise.com/docs/per-host-lockdown-enterprise-configuration)
-- [Getting the Most Out of the Role](https://www.lockdownenterprise.com/docs/get-the-most-out-of-lockdown-enterprise)
-- [Wiki](https://github.com/ansible-lockdown/RHEL7-STIG/wiki)
-
 ## Dependencies
+
+The following packages must be installed on the controlling host/host where ansible is executed:
 
 - Python3 (preferred)
 - Ansible 2.9+
-- jmespath
+- python2-passlib (or just passlib, if using python3)
+- python-lxml
+- python-xmltodict
+- python-jmespath
 
-Ansible is set to run in a python3 environment.
-
-Dependencies required for the playbook are installed on the endpoint if required.
+Package 'python-xmltodict' is required if you enable the OpenSCAP tool installation and run a report. Packages python(2)-passlib and python-jmespath are required for tasks with custom filters or modules. These are all required on the controller host that executes Ansible.
 
 ## Role Variables
 
-This role is designed that the end user should not have to edit the tasks themselves. All customizing should be done via the defaults/main.yml file or with extra vars within the project, job, workflow, etc. These variables can be found [here](https://github.com/ansible-lockdown/RHEL7-STIG/wiki/Main-Variables) in the Main Variables Wiki page. All variables are listed there along with descriptions.
+This role is designed that the end user should not have to edit the tasks themselves. All customizing should be done via the defaults/main.yml file or with extra vars within the project, job, workflow, etc.
 
-## Tags
+### Tags
 
 There are many tags available for added control precision. Each control has it's own set of tags noting the control number as well as what parts of the system that control addresses.
 
-Below is an example of the tag section from a control within this role. Using this example if you set your run to skip all controls with the tag ssh, this task will be skipped. The
-opposite can also happen where you run only controls tagged with ssh.
+Below is an example of the tag section from a control within this role. Using this example if you set your run to skip all controls with the tag dconf, this task will be skipped. The opposite can also happen where you run only controls tagged with dconf.
 
 ```sh
 tags:
-    - RHEL-07-010050
-    - ssh
-    - dod_logon_banner
+      - RHEL-07-010060
+      - CAT2
+      - CCI-000056
+      - SRG-OS-000028-GPOS-00009
+      - SV-204396r880746_rule
+      - V-204396
+      - dconf
 ```
 
 ## Example Audit Summary
@@ -126,6 +149,25 @@ rhel7test         : ok=369  changed=192  unreachable=0  failed=0  skipped=125  r
 - **gh_pages** - github pages
 - **all other branches** - Individual community member branches
 
+## Containers - Testing
+
+- system_is_container
+
+This is set to false by defaults/main.yml
+If discovered it is a container type or ansible_connection == docker it will convert to run to with with true.
+Some controls will skip is this is true as they are not applicable at all. Others runs a subset of controls found in vars/is_container.yml based on a vendor supplied un altered image.
+
+**NON altered vendor image.**
+
+- container_vars_file: is_container.yml
+
+This vars file runs controls are grouped into tags so if the container does later have ssh it could be re-enabled by loading an alternative vars file.
+
+### Please Be Aware
+
+- This does set the single user password for grub this does need to be defined - You can create the hash on a RHEL 7.9 system using the command 'grub2-mkpasswd-pbkdf2'
+- Some controls make changes to sudo, please ensure a sudo password is set for the user and it is added to the way to run your playbook.
+
 ## Community Contribution
 
 We encourage you (the community) to contribute to this role. Please read the rules below.
@@ -139,10 +181,14 @@ We encourage you (the community) to contribute to this role. Please read the rul
 
 uses:
 
-- Ansible-core 2.12
-- Ansible collections - pulls in the latest version based on requirements file
-- Runs the audit using the devel branch
+- ansible-core 2.12
+- ansible collections - pulls in the latest version based on requirements file
+- runs the audit using the devel branch
 - This is an automated test that occurs on pull requests into devel
+
+## Known Issues
+
+None
 
 ## Support
 
