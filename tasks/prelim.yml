@@ -18,8 +18,6 @@
         failed_when: ( python36_rpm_present.rc not in [ 0, 1 ] )
         changed_when: false
         register: python36_rpm_present
-        args:
-            warn: false
 
       - name: "PRELIM | Add the EPEL repository required for the python36-rpm pkg"
         ansible.builtin.package:

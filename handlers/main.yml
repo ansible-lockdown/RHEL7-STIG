@@ -58,8 +58,6 @@
 
 - name: restart auditd
   ansible.builtin.shell: /usr/sbin/service "{{ rhel7stig_audit_daemon }}" restart
-  args:
-      warn: false
 
 - name: rebuild initramfs
   ansible.builtin.shell: dracut -f
