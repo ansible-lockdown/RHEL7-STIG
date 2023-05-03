@@ -1,5 +1,38 @@
 ---
 
+- name: "MEDIUM | RHEL-07-010019 | PATCH | RHEL 7 must ensure cryptographic verification of vendor software packages."
+  block:
+      - name: "MEDIUM | RHEL-07-010019 | PATCH | RHEL 7 must ensure cryptographic verification of vendor software packages. | package installed"
+        ansible.builtin.package:
+            name: "{{ gpg_package }}"
+            state: present
+        when: "gpg_package not in ansible_facts.packages"
+
+      - name: "MEDIUM | RHEL-07-010019 | AUDIT | RHEL 7 must ensure cryptographic verification of vendor software packages. | Confirm keys"
+        ansible.builtin.shell: "gpg -q --keyid-format short --with-fingerprint {{ rpm_gpg_key }} | grep -A1 '{{ item.name }}' | grep '{{ item.fingerprint }}'"
+        changed_when: false
+        failed_when: rhel_07_010019_gpg_info.rc not in [ 0, 1]
+        register: rhel_07_010019_gpg_info
+        loop: "{{ gpg_keys }}"
+        loop_control:
+            label: item.name
+
+      - name: "MEDIUM | RHEL-07-010019 | AUDIT | RHEL 7 must ensure cryptographic verification of vendor software packages. | warn"
+        ansible.builtin.debug:
+            msg:
+                - "WARNING!! Please investigate the vendor gpgkeys match expected values"
+        loop: "{{ rhel_07_010019_gpg_info.results }}"
+        when: item.rc != 0
+  when:
+      - rhel_07_010019
+  tags:
+      - RHEL-07-010019
+      - CAT2
+      - CCI-001749
+      - SRG-OS-000366-GPOS-00153
+      - SV-256968r902687_rule
+      - V-256968
+
 ### RHEL-07-010030 | RHEL-07-010040 combined as related tasks in regards to a config file no other content will be in.
 - name: "MEDIUM | RHEL-07-010030 | RHEL-07-010040 | PATCH | The Red Hat Enterprise Linux operating system must display the Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon."
   ansible.builtin.copy:  # noqa: template-instead-of-copy
@@ -91,6 +124,61 @@
       - SRG-OS-000375-GPOS-00160
       - SV-204397r603261_rule
       - V-204397
+      - dconf
+
+- name: "MEDIUM | RHEL-07-010062 | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-enabled setting for the graphical user interface."
+  ansible.builtin.copy:
+      dest: /etc/dconf/db/local.d/locks/session_rhel_07_010062
+      content: |
+        /org/gnome/desktop/screensaver/lock-enabled
+      mode: '0644'
+  notify: dconf update
+  when:
+      - rhel7stig_dconf_available
+      - rhel_07_010062
+  tags:
+      - RHEL-07-010062
+      - CAT2
+      - CCI-000057
+      - SRG-OS-000029-GPOS-00010
+      - SV-214937r880767_rule
+      - V-214937
+      - dconf
+
+- name: "MEDIUM | RHEL-07-010063 | PATCH | The Red Hat Enterprise Linux operating system must disable the login screen user list for graphical user interfaces."
+  block:
+      - name: "MEDIUM | RHEL-07-010063 | PATCH | The Red Hat Enterprise Linux operating system must disable the login screen user list for graphical user interfaces. | login_screen"
+        ansible.builtin.lineinfile:
+            path: /etc/dconf/db/local.d/00-login-screen
+            line: "{{ item }}"
+            mode: '0644'
+            create": true
+        loop:
+            - [org/gnome/login-screen]
+            - disable-user-list=true
+        notify: dconf update
+
+      - name: "MEDIUM | RHEL-07-010063 | PATCH | The Red Hat Enterprise Linux operating system must disable the login screen user list for graphical user interfaces. | gdm profile"
+        ansible.builtin.lineinfile:
+            path: /etc/dconf/profile/gdm
+            line: "{{ item }}"
+            mode: '0644'
+            create": true
+        loop:
+            - user-db:user
+            - system-db:gdm
+            - file-db:/usr/share/gdm/greeter-dconf-defaults
+        notify: dconf update
+  when:
+      - rhel7stig_dconf_available
+      - rhel_07_010063
+  tags:
+      - RHEL-07-010063
+      - CAT2
+      - CCI-000366
+      - SRG-OS-000480-GPOS-00227
+      - SV-256969r902690_rule
+      - V-256969
       - dconf
 
 - name: "MEDIUM | RHEL-07-010070 | PATCH | The Red Hat Enterprise Linux operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces."
@@ -248,8 +336,8 @@
   ansible.builtin.lineinfile:
       create: true
       dest: /etc/pam.d/system-auth
-      regexp: '^#?password\s+required pam_pwquality.so retry'
-      line: password required pam_pwquality.so retry=3
+      regexp: '^#?password\s+(required|requisite) pam_pwquality.so retry'
+      line: password requisite pam_pwquality.so retry=3
       mode: 0644
   when:
       - rhel_07_010119
@@ -258,7 +346,7 @@
       - CAT2
       - CCI-000192
       - SRG-OS-000069-GPOS-00037
-      - SV-204406r603261_rule
+      - SV-204406r902704_rule
       - V-204406
       - pamd
 
@@ -420,7 +508,7 @@
       - CAT2
       - CCI-000196
       - SRG-OS-000072-GPOS-00040
-      - SV-255928r880830_rule
+      - SV-255928r902706_rule
       - V-255928
       - pamd
 
@@ -633,7 +721,7 @@
       - V-204422
       - pamd
 
-- name: "MEDIUM | AUDIT | RHEL-07-010271 | The Red Hat Enterprise Linux operating system emergency accounts must be automatically removed or disabled after the crisis is resolved or within 72 hours."
+- name: "MEDIUM | AUDIT | RHEL-07-010271 | The Red Hat Enterprise Linux operating system must automatically expire temporary accounts within 72 hours."
   ansible.builtin.debug:
       msg:
           - "Warning!! Verify every existing emergency account and make sure it has an expiration date set within 72 hours."
@@ -644,7 +732,7 @@
       - CAT2
       - CCI-001682
       - SRG-OS-000123-GPOS-00064
-      - SV-254523r858501_rule
+      - SV-254523r903130_rule
       - V-254523
 
 - name: "MEDIUM | RHEL-07-010280 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are a minimum of 15 characters in length."
@@ -800,7 +888,7 @@
       - V-204428
       - pamd
 
-- name: "MEDIUM | RHEL-08-010339 | PATCH | The Red Hat Enterprise Linux operating system must specify the default 'include' directory for the /etc/sudoers file."
+- name: "MEDIUM | RHEL-07-010339 | PATCH | The Red Hat Enterprise Linux operating system must specify the default 'include' directory for the /etc/sudoers file."
   ansible.builtin.lineinfile:
       path: /etc/sudoers
       regex: '^#includedir'
@@ -1112,6 +1200,23 @@
       - SV-204444r754744_rule
       - V-204444
 
+- name: "MEDIUM | RHEL-07-020028 | PATCH | The Red Hat Enterprise Linux operating system must be configured to allow sending email notifications of configuration changes and adverse events to designated personnel."
+  ansible.builtin.package:
+      name: mailx
+      state: present
+  notify: "{{ rhel7stig_aide_handler }}"
+  when:
+      - rhel_07_020028
+      - "'mailx' not in ansible_facts.packages"
+  tags:
+      - RHEL-07-020028
+      - CAT2
+      - CCI-001744
+      - SRG-OS-000363-GPOS-00150
+      - SV-256970r902696_rule
+      - V-256970
+      - mailx
+
 - name: "MEDIUM | RHEL-07-020029 | PATCH | The Red Hat Enterprise Linux operating system must use a file integrity tool to verify correct operation of all security functions."
   ansible.builtin.package:
       name: aide
@@ -1153,6 +1258,7 @@
                     rhel7stig_aide_cron.special_time in ['hourly', 'daily', 'weekly', 'monthly']) |
                     ternary(omit, rhel7stig_aide_cron.special_time) }}"
   when:
+      - rhel_07_020028  ## Required as per benchmark
       - rhel_07_020030 or
         rhel_07_020040
   tags:
@@ -4350,25 +4456,6 @@
       - SV-214800r603261_rule
       - V-214800
       - antivirus
-
-- name: "MEDIUM | RHEL-07-010062 | The Red Hat Enterprise Linux operating system must prevent a user from overriding the screensaver lock-enabled setting for the graphical user interface."
-  ansible.builtin.copy:
-      dest: /etc/dconf/db/local.d/locks/session_rhel_07_010062
-      content: |
-        /org/gnome/desktop/screensaver/lock-enabled
-      mode: '0644'
-  notify: dconf update
-  when:
-      - rhel7stig_dconf_available
-      - rhel_07_010062
-  tags:
-      - RHEL-07-010062
-      - CAT2
-      - CCI-000057
-      - SRG-OS-000029-GPOS-00010
-      - SV-214937r880767_rule
-      - V-214937
-      - dconf
 
 - name: "MEDIUM | RHEL-07-020111 | PATCH | The Red Hat Enterprise Linux operating system must disable the graphical user interface automounter unless required."
   ansible.builtin.copy:

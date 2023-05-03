@@ -13,7 +13,7 @@ python2_bin: /bin/python2.7
 # audit variable found at the base
 benchmark: RHEL7-STIG
 ## metadata for Audit benchmark
-benchmark_version: 'v3r10'
+benchmark_version: 'v3r11'
 
 # Whether to skip the reboot
 rhel7stig_skip_reboot: true
@@ -107,12 +107,14 @@ rhel_07_040690: true
 rhel_07_040700: true
 rhel_07_040800: true
 # CAT 2 rules
+rhel_07_010019: true
 rhel_07_010030: "{{ rhel7stig_gui }}"
 rhel_07_010040: "{{ rhel7stig_gui }}"
 rhel_07_010050: true
 rhel_07_010060: "{{ rhel7stig_gui }}"
 rhel_07_010061: "{{ rhel7stig_gui }}"
 rhel_07_010062: "{{ rhel7stig_gui }}"
+rhel_07_010063: "{{ rhel7stig_gui }}"
 rhel_07_010070: "{{ rhel7stig_gui }}"
 rhel_07_010081: "{{ rhel7stig_gui }}"
 rhel_07_010082: "{{ rhel7stig_gui }}"
@@ -163,6 +165,7 @@ rhel_07_020020: true
 rhel_07_020021: true
 rhel_07_020022: true
 rhel_07_020023: true
+rhel_07_020028: true  # Is required for 20030 &20040
 rhel_07_020029: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
@@ -486,6 +489,7 @@ rhel7stig_aide_db_file: /var/lib/aide/aide.db.gz
 # RHEL-07-010483 & RHEL-07-010492
 rhel7stig_grub_superusers: su_mode_superuser
 
+# RHEL-07-020030 & RHEL-07-020040
 rhel7stig_aide_cron:
     user: root
     cron_file: aide
@@ -495,7 +499,7 @@ rhel7stig_aide_cron:
     special_time: daily
     # Disable the notification check rule to disable mailing notifications
     notify_by_mail: "{{ rhel_07_020040 }}"
-    notify_cmd: ' | /var/spool/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
+    notify_cmd: ' | /bin/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
 
 rhel7stig_cron_special_disable: "{{
         rhel7stig_workaround_for_disa_benchmark or
