@@ -21,20 +21,20 @@
   tags:
       - always
 
-- name: "Check password set for {{ ansible_user }}"
+- name: "Check password set for connecting user"
   block:
-      - name: Capture current password state of "{{ ansible_user }}"
-        ansible.builtin.shell: "grep {{ ansible_user }} /etc/shadow | awk -F: '{print $2}'"
+      - name: Capture current password state of connecting user"
+        ansible.builtin.shell: "grep {{ ansible_env.SUDO_USER }} /etc/shadow | awk -F: '{print $2}'"
         changed_when: false
         failed_when: false
         check_mode: false
         register: ansible_user_password_set
 
-      - name: "Assert that password set for {{ ansible_user }} and account not locked"
+      - name: "Assert that password set for {{ ansible_env.SUDO_USER }} and account not locked"
         ansible.builtin.assert:
             that: ansible_user_password_set.stdout | length != 0 and ansible_user_password_set.stdout != "!!"
-            fail_msg: "You have {{ sudo_password_rule }} enabled but the user = {{ ansible_user }} has no password set - It can break access"
-            success_msg: "You a password set for the {{ ansible_user }}"
+            fail_msg: "You have {{ sudo_password_rule }} enabled but the user = {{ ansible_env.SUDO_USER }} has no password set - It can break access"
+            success_msg: "You a password set for the {{ ansible_env.SUDO_USER }}"
         vars:
             sudo_password_rule: RHEL-07-010340
   when:
@@ -65,6 +65,11 @@
       - RHEL-07-010483
       - RHEL-07-010491
       - cat1
+
+- name: Include OS specific variables
+  ansible.builtin.include_vars: "{{ ansible_distribution }}.yml"
+  tags:
+      - always
 
 - name: include prelim tasks
   ansible.builtin.import_tasks: prelim.yml
