@@ -8,6 +8,13 @@ is_redhat_os: {% if ansible_distribution == "RedHat" %}true{% else %}false{% end
 run_heavy_tests: {{ audit_run_heavy_tests }}
 timeout_ms: {{ audit_cmd_timeout }}
 
+gpg_keys:
+{% for info in gpg_keys %}
+  - name: {{ info.name }}
+    fingerprint: {{ info.fingerprint }}
+{% endfor %}
+gpg_package: /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ gpg_package }}
+
 # If running on RHEL7 <= 7.2
 rhel7stig_legacyOS: {% if ansible_distribution_version > '7.2' %} false {% else %} true {% endif %}
 
@@ -51,12 +58,14 @@ RHEL_07_040800: {{ rhel_07_040800 }}
 
 
 ## Cat II
+RHEL_07_010019: {{ rhel_07_010019 }}
 RHEL_07_010030: {{ rhel_07_010030 }}
 RHEL_07_010040: {{ rhel_07_010040 }}
 RHEL_07_010050: {{ rhel_07_010050 }}
 RHEL_07_010060: {{ rhel_07_010060 }}
 RHEL_07_010061: {{ rhel_07_010061 }}
 RHEL_07_010062: {{ rhel_07_010062 }}
+RHEL_07_010063: {{ rhel_07_010063 }}
 RHEL_07_010070: {{ rhel_07_010070 }}
 RHEL_07_010081: {{ rhel_07_010081 }}
 RHEL_07_010082: {{ rhel_07_010082 }}
@@ -107,6 +116,7 @@ RHEL_07_020020: {{ rhel_07_020020 }}
 RHEL_07_020021: {{ rhel_07_020021 }}
 RHEL_07_020022: {{ rhel_07_020022 }}
 RHEL_07_020023: {{ rhel_07_020023 }}
+RHEL_07_020028: {{ rhel_07_020028 }}
 RHEL_07_020029: {{ rhel_07_020029 }}
 RHEL_07_020030: {{ rhel_07_020030 }}
 RHEL_07_020040: {{ rhel_07_020040 }} # see rhel7stig_notify_command
