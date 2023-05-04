@@ -25,7 +25,7 @@
   notify: make grub2 config
 
 - name: make grub2 config
-  ansible.builtin.shell: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_grub_cfg_path }}
+  ansible.builtin.shell: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_bootloader_path }}grub.cfg
   when:
       - rhel7stig_grub2_user_cfg.stat.exists
       - not rhel7stig_skip_for_travis
@@ -34,8 +34,8 @@
 - name: copy grub2 config to BIOS/UEFI to satisfy benchmark
   listen: make grub2 config
   ansible.builtin.copy:
-      src: "{{ rhel7stig_grub_cfg_path | dirname }}/{{ item }}"
-      dest: "{{ rhel7stig_grub_cfg_path_invalid | dirname }}/{{ item }}"
+      src: "{{ rhel7stig_bootloader_path }}/{{ item }}"
+      dest: "{{ rhel7stig_not_boot_path }}/{{ item }}"
       remote_src: true
       mode: 0600
   with_items:

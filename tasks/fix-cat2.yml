@@ -1057,7 +1057,7 @@
             - { regexp: '^\s*set superusers=', line: '    set superusers="{{ rhel7stig_grub_superusers }}"' }
             - { regexp: '^\s*export superusers', line: '    export superusers'}
             - { regexp: '^\s*password_pbkdf2', line: '    password_pbkdf2 {{ rhel7stig_grub_superusers }} \${GRUB2_PASSWORD}' }
-        when: not rhel7stig_machine_uses_uefi
+        when: rhel7stig_legacy_boot 
 
       - name: "MEDIUM | RHEL-07-010492 | PATCH | Red Hat Enterprise Linux operating systems version 7.2 or newer booted with Unified Extensible Firmware Interface (UEFI) must have a unique name for the grub superusers account when booting into single-user mode and maintenance. | Set grub unique name UEFI"
         ansible.builtin.lineinfile:
@@ -1070,7 +1070,7 @@
             - { regexp: '^\s*set superusers=', line: '    set superusers="{{ rhel7stig_grub_superusers }}"' }
             - { regexp: '^\s*export superusers', line: '    export superusers' }
             - { regexp: '^\s*password_pbkdf2', line: '    password_pbkdf2 {{ rhel7stig_grub_superusers }} \${GRUB2_PASSWORD}' }
-        when: rhel7stig_machine_uses_uefi
+        when: not rhel7stig_legacy_boot
   when:
       - rhel_07_010483 or
         rhel_07_010492
@@ -2279,7 +2279,7 @@
   block:
       # Let's see what is configured in grub.
       - name: "MEDIUM | RHEL-07-021700 | AUDIT | The Red Hat Enterprise Linux operating system must not allow removable media to be used as the boot loader unless approved."
-        ansible.builtin.shell: grep -o "set root=.*" "{{ rhel7stig_grub_cfg_path }}" | grep -v "{{ rhel7stig_grub_bootloader_validorder }}" | uniq
+        ansible.builtin.shell: grep -o "set root=.*" "{{ rhel7stig_bootloader_path }}" | grep -v "{{ rhel7stig_grub_bootloader_validorder }}" | uniq
         register: rhel7stig_grub_cfg_mediacheck
         changed_when: false
         failed_when: false
