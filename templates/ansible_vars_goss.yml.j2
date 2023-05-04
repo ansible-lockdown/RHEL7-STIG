@@ -13,7 +13,7 @@ gpg_keys:
   - name: {{ info.name }}
     fingerprint: {{ info.fingerprint }}
 {% endfor %}
-gpg_package: /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ gpg_package }}
+rpm_gpg_key: {{ rpm_gpg_key }}
 
 # If running on RHEL7 <= 7.2
 rhel7stig_legacyOS: {% if ansible_distribution_version > '7.2' %} false {% else %} true {% endif %}
