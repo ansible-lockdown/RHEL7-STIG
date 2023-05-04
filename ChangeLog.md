@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.1 Stig V3r11 27th April 2023
+
+Consistent on ansible version
+Improvement in checking ansible user has password 010340
+tidy of boootloader discovery and paths
+
+- New controls
+  - RHEL-07-010019
+  - RHEL-07-010063
+  - RHEL-07-020028
+
+- rule id updates and changes
+  - RHEL-07-010119
+  - RHEL-07-010199
+  - RHEL-07-010271
+  - RHEL-07-020028
+  - RHEL-07-020030
+
 ## 2.0.1
 
 update lint inline with galaxy requirements

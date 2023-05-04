@@ -432,7 +432,8 @@
   block:
       - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
         ansible.builtin.set_fact:
-            rhel7stig_bootloader_path: /boot/efi/EFI/redhat
+            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}redhat"
+            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
             rhel7stig_legacy_boot: false
         when:
             - rhel7_efi_boot.stat.exists
@@ -440,7 +441,8 @@
 
       - name: "PRELIM | set fact if UEFI boot | CentOS "
         ansible.builtin.set_fact:
-            rhel7stig_bootloader_path: /boot/efi/EFI/centos
+            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}centos"
+            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
             rhel7stig_legacy_boot: false
         when:
             - rhel7_efi_boot.stat.exists
@@ -448,7 +450,8 @@
 
       - name: "PRELIM | set if not UEFI boot"
         ansible.builtin.set_fact:
-            rhel7stig_bootloader_path: /boot/grub2/
+            rhel7stig_bootloader_path: "{{ rhel7stig_legacy_boot_path }}"
+            rhel7stig_not_boot_path: "{{ rhel7stig_efi_boot_path }}"
             rhel7stig_legacy_boot: true
         when: not rhel7_efi_boot.stat.exists
 

@@ -191,7 +191,7 @@
             - make grub2 config
         no_log: true
         when:
-            - not rhel7stig_machine_uses_uefi
+            - rhel7stig_legacy_boot
 
       - name: "HIGH | RHEL-07-010491 | Red Hat Enterprise Linux operating systems version 7.2 or newer using Unified Extensible Firmware Interface (UEFI) must require authentication upon booting into single-user and maintenance modes."
         ansible.builtin.lineinfile:
@@ -205,7 +205,7 @@
             - confirm grub2 user cfg
             - make grub2 config
         when:
-            - rhel7stig_machine_uses_uefi
+            - not rhel7stig_legacy_boot
   when:
       - rhel_07_010482 or
         rhel_07_010491

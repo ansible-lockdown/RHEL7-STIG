@@ -13,7 +13,7 @@ python2_bin: /bin/python2.7
 # audit variable found at the base
 benchmark: RHEL7-STIG
 ## metadata for Audit benchmark
-benchmark_version: 'v3r10'
+benchmark_version: 'v3r11'
 
 # Whether to skip the reboot
 rhel7stig_skip_reboot: true
@@ -107,12 +107,14 @@ rhel_07_040690: true
 rhel_07_040700: true
 rhel_07_040800: true
 # CAT 2 rules
+rhel_07_010019: true
 rhel_07_010030: "{{ rhel7stig_gui }}"
 rhel_07_010040: "{{ rhel7stig_gui }}"
 rhel_07_010050: true
 rhel_07_010060: "{{ rhel7stig_gui }}"
 rhel_07_010061: "{{ rhel7stig_gui }}"
 rhel_07_010062: "{{ rhel7stig_gui }}"
+rhel_07_010063: "{{ rhel7stig_gui }}"
 rhel_07_010070: "{{ rhel7stig_gui }}"
 rhel_07_010081: "{{ rhel7stig_gui }}"
 rhel_07_010082: "{{ rhel7stig_gui }}"
@@ -163,6 +165,7 @@ rhel_07_020020: true
 rhel_07_020021: true
 rhel_07_020022: true
 rhel_07_020023: true
+rhel_07_020028: true  # Is required for 20030 &20040
 rhel_07_020029: true
 rhel_07_020030: true
 # Send AIDE reports as mail notifications - Disabled by default as this is a non-ideal way to do notifications
@@ -486,6 +489,7 @@ rhel7stig_aide_db_file: /var/lib/aide/aide.db.gz
 # RHEL-07-010483 & RHEL-07-010492
 rhel7stig_grub_superusers: su_mode_superuser
 
+# RHEL-07-020030 & RHEL-07-020040
 rhel7stig_aide_cron:
     user: root
     cron_file: aide
@@ -495,7 +499,7 @@ rhel7stig_aide_cron:
     special_time: daily
     # Disable the notification check rule to disable mailing notifications
     notify_by_mail: "{{ rhel_07_020040 }}"
-    notify_cmd: ' | /var/spool/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
+    notify_cmd: ' | /bin/mail -s "$(hostname) - AIDE Integrity Check" root@localhost'
 
 rhel7stig_cron_special_disable: "{{
         rhel7stig_workaround_for_disa_benchmark or
@@ -676,25 +680,28 @@ rhel7stig_ipsec_required: false
 rhel7stig_using_password_auth: true
 
 rhel7stig_availability_override: false
-# auditd_failure_flag
-# 2    Tells your system to perform an immediate shutdown without
-#      flushing any pending data to disk when the limits of your
-#      audit system are exceeded. Because this shutdown is not a clean shutdown.
-#      restrict the use of -f 2 to only the most security conscious environments
-# 1    System continues to run, issues a warning and audit stops.
-#      Use this for any other setup to avoid loss of data or data corruption.
+# # auditd_failure_flag
+# # 2    Tells your system to perform an immediate shutdown without
+# #      flushing any pending data to disk when the limits of your
+# #      audit system are exceeded. Because this shutdown is not a clean shutdown.
+# #      restrict the use of -f 2 to only the most security conscious environments
+# # 1    System continues to run, issues a warning and audit stops.
+# #      Use this for any other setup to avoid loss of data or data corruption.
 rhel7stig_auditd_failure_flag: "{{ rhel7stig_availability_override | ternary(1, 2) }}"
 
 rhel7stig_audit_part: "{{ rhel_07_audit_part.stdout }}"
 
 rhel7stig_boot_part: "{{ rhel_07_boot_part.stdout }}"
 
-rhel7stig_machine_uses_uefi: "{{ rhel_07_sys_firmware_efi.stat.exists }}"
-rhel7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
-rhel7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
+rhel7stig_legacy_boot_path: '/boot/grub2/'
+rhel7stig_efi_boot_path: '/boot/efi/EFI/'
 
-oracle7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
-oracle7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
+# rhel7stig_machine_uses_uefi: "{{ rhel_07_sys_firmware_efi.stat.exists }}"
+# rhel7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary(rhel7stig_bootloader_path'/grub.cfg', '/boot/grub2/grub.cfg') }}"
+# rhel7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/' ~ (ansible_distribution | lower) ~ '/grub.cfg', '/boot/grub2/grub.cfg') }}"
+
+# oracle7stig_grub_cfg_path: "{{ rhel7stig_machine_uses_uefi | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
+# oracle7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
 
 rhel7stig_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
 
