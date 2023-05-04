@@ -3,7 +3,8 @@
 ## 2.1 Stig V3r11 27th April 2023
 
 Consistent on ansible version
-Improvemnet checking ansible user has password 010340
+Improvement in checking ansible user has password 010340
+tidy of boootloader discovery and paths
 
 - New controls
   - RHEL-07-010019
