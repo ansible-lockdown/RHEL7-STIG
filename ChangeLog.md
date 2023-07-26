@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1 Stig V3r11 27th April 2023
+
+- #428 improvement in test for sudo user has a passwd set
+
 ## 2.1 Stig V3r11 27th April 2023
 
 Consistent on ansible version
