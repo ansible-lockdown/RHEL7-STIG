@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.0 Stig V3R12 26th July 2023
+
+- RHEL-07-010199 - pamd password and system auth rewrite and ruleid updated
+- RHEL-07-010200 - ruleid update
+- RHEL_07-010270 - rewritten to align to new settings and ruleid updated
+- RHEL_07_020700 - ruleid updated
+- RHEL_07_020710 - ruleid updated fixed rule
+- RHEL_07_031000 - added new var for log aggretaion port default to '@@' =TCP and ruleid updated
+- RHEL_07_040300 - ruleid updated
+- RHEL_07_040310 - ruleid updated
+- RHEL_07_040320 - ruleid updated
+- RHEL_07_040340 - ruleid updated
+
 ## 2.1.1 Stig V3r11 27th April 2023
 
 - #428 improvement in test for sudo user has a passwd set
