@@ -663,6 +663,8 @@ rhel7stig_homedir_mode: g-w,o-rwx
 
 # RHEL-07-031000
 # rhel7stig_log_aggregation_server: logagg.example.com
+# Log aggregation port can be set the following '@'=UDP and '@@'=TCP
+# rhel7stig_log_aggregation_port: '@@'
 
 # RHEL-07-040180
 # Whether the system should be using LDAP for authentication
