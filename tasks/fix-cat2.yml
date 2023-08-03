@@ -152,7 +152,7 @@
             path: /etc/dconf/db/local.d/00-login-screen
             line: "{{ item }}"
             mode: '0644'
-            create": true
+            create: true
         loop:
             - [org/gnome/login-screen]
             - disable-user-list=true
@@ -163,7 +163,7 @@
             path: /etc/dconf/profile/gdm
             line: "{{ item }}"
             mode: '0644'
-            create": true
+            create: true
         loop:
             - user-db:user
             - system-db:gdm
