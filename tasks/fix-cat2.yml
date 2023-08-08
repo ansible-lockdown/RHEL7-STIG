@@ -709,6 +709,7 @@
                 - remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}
                 - retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}
   when:
+      - not rhel_07_010199  # 010199 uses template that is compliant already
       - rhel_07_010270
   tags:
       - RHEL-07-010270
@@ -868,6 +869,7 @@
             - "system-auth"
             - "password-auth"
   when:
+      - not rhel_07_010199  # 010199 uses template that is compliant already
       - rhel_07_010320 or
         rhel_07_010330
   tags:
