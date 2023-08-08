@@ -503,8 +503,8 @@
             group: root
             mode: 0644
         loop:
-        - etc/pam.d/password-auth-local
-        - etc/pam.d/system-auth-local
+            - etc/pam.d/password-auth-local
+            - etc/pam.d/system-auth-local
 
       - name: "MEDIUM | RHEL-07-010199 | PATCH |  The Red Hat Enterprise Linux operating system must be configured to prevent overwriting of custom authentication configuration settings by the authconfig utility. | copy and symlink"
         ansible.builtin.shell: "if [[ -f {{ item }} && ! -L {{ item }} ]]; then cp -p {{ item }} {{ item }}-ac; ln -sf {{ item }}-local {{ item }} && (exit 99); else (exit 98); fi"
@@ -512,8 +512,8 @@
         failed_when: rhel_07_010199_changed.rc not in [ 98, 99 ]
         register: rhel_07_010199_changed
         loop:
-        - /etc/pam.d/password-auth
-        - /etc/pam.d/system-auth
+            - /etc/pam.d/password-auth
+            - /etc/pam.d/system-auth
   when:
       - rhel_07_010199
   tags:

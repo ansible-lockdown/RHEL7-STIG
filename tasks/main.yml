@@ -37,7 +37,7 @@
             success_msg: "You a password set for the {{ ansible_env.SUDO_USER }}"
         vars:
             sudo_password_rule: RHEL-07-010340
-            
+
   when:
       - rhel_07_010340
       - ansible_env.SUDO_USER is defined
