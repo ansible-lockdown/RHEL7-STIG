@@ -4,16 +4,18 @@
 
 - RHEL-07-010199 - pamd password and system auth rewrite and ruleid updated
 - RHEL-07-010200 - ruleid update
-- RHEL_07-010270 - rewritten to align to new settings and ruleid updated
+- RHEL_07-010270 - rewritten to align to new settings and ruleid updated - will now skip if 010199
 - RHEL_07_020700 - ruleid updated
 - RHEL_07_020710 - ruleid updated fixed rule
-- RHEL_07_031000 - added new var for log aggretaion port default to '@@' =TCP and ruleid updated
+- RHEL_07_031000 - added new var for log aggregation port default to '@@' =TCP and ruleid updated
 - RHEL_07_040300 - ruleid updated
 - RHEL_07_040310 - ruleid updated
 - RHEL_07_040320 - ruleid updated
 - RHEL_07_040340 - ruleid updated
 
-- [#431](https://github.com/ansible-lockdown/RHEL7-STIG/issues/431) added thansk to @whitehat237
+- RHEL-07-010320 & RHEL-07-010330 will now skip if 010199 as this now uses compliant template
+
+- [#431](https://github.com/ansible-lockdown/RHEL7-STIG/issues/431) added thanks to @whitehat237
 
 ## 2.1.1 Stig V3r11 27th April 2023
 
