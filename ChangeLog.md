@@ -13,6 +13,8 @@
 - RHEL_07_040320 - ruleid updated
 - RHEL_07_040340 - ruleid updated
 
+- [#431](https://github.com/ansible-lockdown/RHEL7-STIG/issues/431) added thansk to @whitehat237
+
 ## 2.1.1 Stig V3r11 27th April 2023
 
 - #428 improvement in test for sudo user has a passwd set
