@@ -17,6 +17,8 @@
 
 - [#431](https://github.com/ansible-lockdown/RHEL7-STIG/issues/431) added thanks to @whitehat237
 
+- ansible lint config update and new lint applied
+
 ## 2.1.1 Stig V3r11 27th April 2023
 
 - #428 improvement in test for sudo user has a passwd set
