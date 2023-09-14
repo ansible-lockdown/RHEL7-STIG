@@ -419,7 +419,7 @@
         notify: clean up ssh host key
         when: not rhel7stig_ssh_host_rsa_key_stat.stat.exists
   when:
-      -rhel7stig_ssh_required
+      - rhel7stig_ssh_required
 
 - name: "PRELIM | Check whether machine is UEFI-based"
   ansible.builtin.stat:
@@ -427,6 +427,7 @@
   register: rhel7_efi_boot
   tags:
       - goss_template
+      - always
 
 - name: set bootloader type
   block:
@@ -460,6 +461,8 @@
             msg:
                 - "bootloader path set to {{ rhel7stig_bootloader_path }}"
                 - "legacy boot equals {{ rhel7stig_legacy_boot }}"
+  tags:
+      - always
 
 - name: "PRELIM | Gather interactive user ID min"
   block:
