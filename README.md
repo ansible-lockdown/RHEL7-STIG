@@ -212,6 +212,12 @@ If you would are interested in dedicated support to assist or provide bespoke se
 - [Ansible Counselor](https://www.mindpointgroup.com/products/ansible-counselor-on-demand-ansible-services-and-consulting/)
 - [Try us out](https://engage.mindpointgroup.com/try-ansible-counselor)
 
+## Added Extras
+
+```sh
+pre-commit run
+```
+
 ## Credits
 
 This repo originated from work done by [Sam Doran](https://github.com/samdoran/ansible-role-stig)
