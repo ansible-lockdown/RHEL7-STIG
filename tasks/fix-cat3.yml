@@ -71,8 +71,8 @@
       fstype: "{{ dev_shm_mount.fstype | default('tmpfs') }}"
       opts: "{{ dev_shm_mount_opts }}"
   vars:
-      dev_shm_mount: "{{ ansible_mounts | json_query('[?mount == `/dev/shm`] | [0]') }}"
-      dev_shm_mount_opts: "{{ dev_shm_mount.options | default('defaults') }},nodev,nosuid{{ (rhel_07_021024) | ternary(',noexec', '') }}"
+      dev_shm_mount: "{{ ansible_mounts | json_query('[?mount == `/dev/shm`] | [0]') }}"  # noqa: jinja[invalid]
+      dev_shm_mount_opts: "{{ dev_shm_mount.options | default('defaults') }},nodev,nosuid{{ (rhel_07_021024) | ternary(',noexec', '') }}"  # noqa: jinja[invalid]
   when:
       - rhel_07_021024
   tags:

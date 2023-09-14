@@ -23,7 +23,8 @@
       - firewall
 
 - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-  ansible.builtin.debug: var=rhel_07_040810_iptables_audit.stdout_lines
+  ansible.builtin.debug:
+      var: rhel_07_040810_iptables_audit.stdout_lines
   changed_when: false
   when:
       - rhel_07_040810_iptables_audit.stdout_lines is defined

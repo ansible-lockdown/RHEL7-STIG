@@ -449,7 +449,7 @@
               with_items:
                   - "{{ ansible_mounts | json_query(query) }}"
               vars:
-                  query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"
+                  query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"  # noqa: jinja[invalid]
                   key: GRUB_CMDLINE_LINUX
                   param: boot
                   value: UUID={{ item.uuid }}
@@ -468,7 +468,7 @@
                   - "fips={{ fips_value }}"
                   - boot=UUID={{ ansible_mounts | json_query(query) }}
               vars:
-                  query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"
+                  query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"  # noqa: jinja[invalid]
               register: rhel_07_021350_audit
               changed_when:
                   - ansible_check_mode

@@ -2,7 +2,7 @@
 
 ## Configure a RHEL7 based system to be complaint with Disa STIG
 
-This role is based on RHEL 7 DISA STIG: [ Version 3, Rel 11 released on April 27, 2023 ](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R11_STIG.zip).
+This role is based on RHEL 7 DISA STIG: [ Version 3, Rel 11 released on  July 23, 2023 ](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R12_STIG.zip).
 
 ---
 
@@ -15,13 +15,14 @@ This role is based on RHEL 7 DISA STIG: [ Version 3, Rel 11 released on April 27
 ![Ansible Galaxy Quality](https://img.shields.io/ansible/quality/61792?label=Quality&&logo=ansible)
 ![Discord Badge](https://img.shields.io/discord/925818806838919229?logo=discord)
 
-![Devel Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel8-stig/linux_benchmark_testing.yml?label=Devel%20Build%20Status)
-![Devel Commits](https://img.shields.io/github/commit-activity/m/ansible-lockdown/RHEL7-STIG/devel?color=dark%20green&label=Devel%20Branch%20commits)
+![Release Branch](https://img.shields.io/badge/Release%20Branch-Main-brightgreen)
+![Release Tag](https://img.shields.io/github/v/release/ansible-lockdown/RHEL7-STIG)
+![Release Date](https://img.shields.io/github/release-date/ansible-lockdown/RHEL7-STIG)
 
-![Release Branch](https://img.shields.io/badge/Release%20Branch-Main-brightgreen) 
-![Main Build Status](https://img.shields.io/github/actions/workflow/status/ansible-lockdown/rhel8-stig/linux_benchmark_testing.yml?label=Build%20Status)
-![Main Release Date](https://img.shields.io/github/release-date/ansible-lockdown/RHEL7-STIG?label=Release%20Date)
-![Release Tag](https://img.shields.io/github/v/tag/ansible-lockdown/RHEL7-STIG?label=Release%20Tag&&color=success)
+[![Main Pipeline Status](https://github.com/ansible-lockdown/RHEL7-STIG/actions/workflows/main_pipeline_validation.yml/badge.svg?)](https://github.com/ansible-lockdown/RHEL7-STIG/actions/workflows/main_pipeline_validation.yml)
+
+[![Devel Pipeline Status](https://github.com/ansible-lockdown/RHEL7-STIG/actions/workflows/devel_pipeline_validation.yml/badge.svg?)](https://github.com/ansible-lockdown/RHEL7-STIG/actions/workflows/devel_pipeline_validation.yml)
+![Devel Commits](https://img.shields.io/github/commit-activity/m/ansible-lockdown/RHEL7-STIG/devel?color=dark%20green&label=Devel%20Branch%20Commits)
 
 ![Issues Open](https://img.shields.io/github/issues-raw/ansible-lockdown/RHEL7-STIG?label=Open%20Issues)
 ![Issues Closed](https://img.shields.io/github/issues-closed-raw/ansible-lockdown/RHEL7-STIG?label=Closed%20Issues&&color=success)
@@ -39,13 +40,25 @@ This role is based on RHEL 7 DISA STIG: [ Version 3, Rel 11 released on April 27
 
 ### Community
 
-On our [Discord Server](https://discord.io/ansible-lockdown) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
+On our [Discord Server](https://www.lockdownenterprise.com/discord) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
 
 ---
 
 Configure a RHEL 7 system to be DISA STIG compliant.
 Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default.
 Disruptive finding remediation can be enabled by setting `rhel7stig_disruption_high` to `true`.
+
+# Caution(s)
+
+This role **will make changes to the system** which may have unintended consequences. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
+
+Check Mode is not supported! The role will complete in check mode without errors, but it is not supported and should be used with caution. The RHEL7-STIG-Audit role or a compliance scanner should be used for compliance checking over check mode.
+
+This role was developed against a clean install of the Operating System. If you are implementing to an existing system please review this role for any site specific changes that are needed.
+
+To use release version please point to main branch and relevant release for the cis benchmark you wish to work with.
+
+---
 
 ## Updating
 
@@ -138,7 +151,7 @@ ok: [cent7_bios] => {
   ]
 }
 PLAY RECAP ****************************************************************************************************************
-rhel7test         : ok=369  changed=192  unreachable=0  failed=0  skipped=125  rescued=0  ignored=0  
+rhel7test         : ok=369  changed=192  unreachable=0  failed=0  skipped=125  rescued=0  ignored=0
 ```
 
 ## Branches
@@ -198,6 +211,12 @@ If you would are interested in dedicated support to assist or provide bespoke se
 
 - [Ansible Counselor](https://www.mindpointgroup.com/products/ansible-counselor-on-demand-ansible-services-and-consulting/)
 - [Try us out](https://engage.mindpointgroup.com/try-ansible-counselor)
+
+## Added Extras
+
+```sh
+pre-commit run
+```
 
 ## Credits
 

@@ -152,7 +152,7 @@
             path: /etc/dconf/db/local.d/00-login-screen
             line: "{{ item }}"
             mode: '0644'
-            create": true
+            create: true
         loop:
             - [org/gnome/login-screen]
             - disable-user-list=true
@@ -163,7 +163,7 @@
             path: /etc/dconf/profile/gdm
             line: "{{ item }}"
             mode: '0644'
-            create": true
+            create: true
         loop:
             - user-db:user
             - system-db:gdm
@@ -493,14 +493,27 @@
       - V-204414
       - pwquality
 
-- name: "MEDIUM | RHEL-07-010199 | PATCH |  The Red Hat Enterprise Linux operating system must be configured to prevent overwriting of custom authentication configuration settings by the authconfig utility. | symlink"
-  ansible.builtin.file:
-      src: "{{ item.src }}"
-      dest: "{{ item.dest }}"
-      state: link
-  loop:
-      - { 'src': '/etc/pam.d/password-auth', 'dest': '/etc/pam.d/password-auth-local' }
-      - { 'src': '/etc/pam.d/system-auth', 'dest': '/etc/pam.d/system-auth-local' }
+- name: "MEDIUM | RHEL-07-010199 | PATCH |  The Red Hat Enterprise Linux operating system must be configured to prevent overwriting of custom authentication configuration settings by the authconfig utility."
+  block:
+      - name: "MEDIUM | RHEL-07-010199 | PATCH |  The Red Hat Enterprise Linux operating system must be configured to prevent overwriting of custom authentication configuration settings by the authconfig utility. | local file"
+        ansible.builtin.template:
+            src: "{{ item }}.j2"
+            dest: "/{{ item }}"
+            owner: root
+            group: root
+            mode: 0644
+        loop:
+            - etc/pam.d/password-auth-local
+            - etc/pam.d/system-auth-local
+
+      - name: "MEDIUM | RHEL-07-010199 | PATCH |  The Red Hat Enterprise Linux operating system must be configured to prevent overwriting of custom authentication configuration settings by the authconfig utility. | copy and symlink"
+        ansible.builtin.shell: "if [[ -f {{ item }} && ! -L {{ item }} ]]; then cp -p {{ item }} {{ item }}-ac; ln -sf {{ item }}-local {{ item }} && (exit 99); else (exit 98); fi"
+        changed_when: rhel_07_010199_changed.rc == 99
+        failed_when: rhel_07_010199_changed.rc not in [ 98, 99 ]
+        register: rhel_07_010199_changed
+        loop:
+            - /etc/pam.d/password-auth
+            - /etc/pam.d/system-auth
   when:
       - rhel_07_010199
   tags:
@@ -508,7 +521,7 @@
       - CAT2
       - CCI-000196
       - SRG-OS-000072-GPOS-00040
-      - SV-255928r902706_rule
+      - SV-255928r917838_rule
       - V-255928
       - pamd
 
@@ -539,7 +552,7 @@
       - CAT2
       - CCI-000196
       - SRG-OS-000073-GPOS-00041
-      - SV-204415r880833_rule
+      - SV-204415r917816_rule
       - V-204415
       - pamd
 
@@ -670,35 +683,23 @@
 
 - name: "MEDIUM | RHEL-07-010270 | The Red Hat Enterprise Linux operating system must be configured so that passwords are prohibited from reuse for a minimum of five generations."
   block:
-      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory rule exists"
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory rule exists | system-auth"
         community.general.pamd:
-            name: "{{ item }}"
+            name: system-auth
             state: before
             type: password
-            control: sufficient
-            module_path: pam_unix.so
+            control: requisite
+            module_path: pam_pwquality.so
             new_type: password
             new_control: requisite
             new_module_path: pam_pwhistory.so
-        with_items:
-            - "system-auth"
-            - "password-auth"
+            module_arguments:
+                - remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}
+                - retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}
 
-      # TODO: Remove temporary audit check to determine if the following pamd module task needs to be run since the module is not idempotent
-      - name: "MEDIUM | RHEL-07-010270 | AUDIT | Check for existing password history reuse settings"
-        ansible.builtin.shell: "grep -iE '^password\\s+requisite\\s+pam_pwhistory.so\\s+use_authtok\\s+remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}\\s+retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}$' /etc/pam.d/{{ item }}"
-        check_mode: false
-        changed_when: false
-        failed_when: rhel_07_010270_audit.rc > 1
-        register: rhel_07_010270_audit
-        with_items:
-            - "system-auth"
-            - "password-auth"
-
-      # TODO: Once the pamd module is fixed (either args_present or updated) then remove the previous grep task and update the following.
-      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory module arguments are set"
+      - name: "MEDIUM | RHEL-07-010270 | PATCH | Ensure pam_pwhistory module arguments are set | password-auth"
         community.general.pamd:
-            name: "{{ item.item }}"
+            name: password-auth
             state: updated
             type: password
             control: requisite
@@ -707,17 +708,15 @@
                 - use_authtok
                 - remember={{ rhel7stig_pam_pwhistory.remember | default(5) }}
                 - retry={{ rhel7stig_pam_pwhistory.retries | default(3) }}
-        with_items:
-            - "{{ rhel_07_010270_audit.results }}"
-        when: item.rc == 1
   when:
+      - not rhel_07_010199  # 010199 uses template that is compliant already
       - rhel_07_010270
   tags:
       - RHEL-07-010270
       - CAT2
       - CCI-000200
       - SRG-OS-000077-GPOS-00045
-      - SV-204422r880836_rule
+      - SV-204422r917818_rule
       - V-204422
       - pamd
 
@@ -870,6 +869,7 @@
             - "system-auth"
             - "password-auth"
   when:
+      - not rhel_07_010199  # 010199 uses template that is compliant already
       - rhel_07_010320 or
         rhel_07_010330
   tags:
@@ -1141,7 +1141,7 @@
       # This remediates the pam_pkcs11.conf file to enforce the cackey usage for smartcard authentication
       ### NOTE:  If you have custom rules for /etc/pam_pkcs11/pam_pkcs11.conf then change the template pam_pkcs11.conf.j2
       - name: MEDIUM | RHEL-07-010500 | PATCH | The Red Hat Enterprise Linux operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multifactor authentication.
-        ansible.builtin.template:
+        ansible.builtin.template:  # noqa: no-handler
             src: pam_pkcs11.conf.j2
             dest: /etc/pam_pkcs11/pam_pkcs11.conf
             owner: root
@@ -1350,7 +1350,7 @@
             enabled: false
             state: stopped
         when:
-            - rhel_07_020110_autofs_service_status == "loaded"
+            - rhel_07_020110_autofs_service_status.stdout == "loaded"
             - not rhel7stig_autofs_required
   when:
       - rhel_07_020110
@@ -1444,7 +1444,7 @@
             - "{{ rhel7stig_unnecessary_accounts }}"
 
       - name: "MEDIUM | RHEL-07-020270 | AUDIT | Re-parse /etc/passwd since it changed."
-        include_tasks: parse_etc_passwd.yml
+        include_tasks: parse_etc_passwd.yml  # noqa: no-handler
         vars:
             rhel7stig_passwd_tasks: "RHEL-07-020270"
         when: rhel_07_020270_patch is changed
@@ -1647,7 +1647,7 @@
         with_items: "{{ rhel_07_020660_audit.results }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: item is changed
+        when: item is changed  # noqa: no-handler
         vars:
             this_item: "{{ item.item }}"
   vars:
@@ -1696,7 +1696,7 @@
         with_items: "{{ rhel_07_020670_audit.results }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: item is changed
+        when: item is changed  # noqa: no-handler
         vars:
             this_item: "{{ item.item.item }}"
             this_result: "{{ item.item }}"
@@ -1801,7 +1801,7 @@
         with_items: "{{ rhel_07_020690_audit.results }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: item is changed
+        when: item is changed  # noqa: no-handler
         vars:
             this_item: "{{ item.item }}"
   vars:
@@ -1815,7 +1815,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204474r603834_rule
+      - SV-204474r917821_rule
       - V-204474
       - permissions
 
@@ -1839,7 +1839,7 @@
         with_items: "{{ rhel_07_020700_audit.results }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: item is changed
+        when: item is changed  # noqa: no-handler
         vars:
             this_item: "{{ item.item }}"
   vars:
@@ -1853,14 +1853,14 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204475r603836_rule
+      - SV-204475r917824_rule
       - V-204475
       - permissions
 
 - name: "MEDIUM | RHEL-07-020710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files must have mode 0740 or less permissive."
   ansible.builtin.file:
       path: "{{ item }}"
-      mode: '0640'
+      mode: '0740'
       state: touch
   with_items:
       - "{{ rhel_07_stig_interactive_homedir_inifiles }}"
@@ -1872,7 +1872,7 @@
       - RHEL-07-020710
       - CAT2
       - CCI-000366
-      - SV-204476r603261_rule
+      - SV-204476r917827_rule
       - V-204476
       - complexity-high
 
@@ -1941,7 +1941,7 @@
             - "{{ rhel_07_020730_perms_results.stdout_lines }}"
         when:
             - rhel_07_020730_perms_results.stdout_lines is defined
-            - rhel_07_020730_WWP_Change
+            - rhel_07_020730_wwp_change
   when:
       - rhel_07_020730
       - rhel7stig_disruption_high
@@ -2014,7 +2014,7 @@
       fstype: "{{ home_mount.fstype }}"
       opts: "{{ home_mount.options }},nosuid"
   vars:
-      home_mount: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0]') }}"
+      home_mount: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0]') }}"  # noqa: jinja[invalid]
   when:
       - rhel_07_021000
       - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
@@ -2037,7 +2037,7 @@
             fstype: "{{ removable_mount.fstype }}"
             opts: "{{ removable_mount.options }},nosuid"
         vars:
-            removable_mount: "{{ ansible_mounts | json_query('[?mount == `/media`] | [0]') }}"
+            removable_mount: "{{ ansible_mounts | json_query('[?mount == `/media`] | [0]') }}"  # noqa: jinja[invalid]
         when:
             - ansible_mounts | selectattr('mount', 'match', '^/media$') | list | length != 0
             - "'nosuid' not in home_mount.options"
@@ -2050,7 +2050,7 @@
             fstype: "{{ removable_mount2.fstype }}"
             opts: "{{ removable_mount2.options }},nosuid"
         vars:
-            removable_mount2: "{{ ansible_mounts | json_query('[?mount == `/mnt`] | [0]') }}"
+            removable_mount2: "{{ ansible_mounts | json_query('[?mount == `/mnt`] | [0]') }}"  # noqa: jinja[invalid]
         when:
             - ansible_mounts | selectattr('mount', 'match', '^/mnt$') | list | length != 0
             - "'nosuid' not in home_mount.options"
@@ -2073,9 +2073,9 @@
       opts: "{{ ansible_mounts | json_query(options_query) }},nosuid"
       state: mounted
   vars:
-      device_query: '[?mount == `{{ item }}`] | [0].device'
-      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
-      options_query: '[?mount == `{{ item }}`] | [0].options'
+      device_query: '[?mount == `{{ item }}`] | [0].device'  # noqa: jinja[invalid]
+      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'  # noqa: jinja[invalid]
+      options_query: '[?mount == `{{ item }}`] | [0].options'  # noqa: jinja[invalid]
   with_items:
       - "{{ rhel7stig_nfs_mounts }}"
   when:
@@ -2098,9 +2098,9 @@
       opts: "{{ ansible_mounts | json_query(options_query) }},noexec"
       state: mounted
   vars:
-      device_query: '[?mount == `{{ item }}`] | [0].device'
-      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
-      options_query: '[?mount == `{{ item }}`] | [0].options'
+      device_query: '[?mount == `{{ item }}`] | [0].device'  # noqa: jinja[invalid]
+      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'  # noqa: jinja[invalid]
+      options_query: '[?mount == `{{ item }}`] | [0].options'  # noqa: jinja[invalid]
   with_items:
       - "{{ rhel7stig_nfs_mounts }}"
   when:
@@ -3149,7 +3149,7 @@
           $ActionQueueType LinkedList    # run asynchronously
           $ActionResumeRetryCount -1     # infinite retries if host is down
           # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
-          *.* @@{{ rhel7stig_log_aggregation_server }}
+          *.* {{ rhel7stig_log_aggregation_port }}{{ rhel7stig_log_aggregation_server }}
       insertafter: EOF
   failed_when:
       - result is failed
@@ -3163,7 +3163,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204574r603261_rule
+      - SV-204574r917830_rule
       - V-204574
       - rsyslog
 
@@ -3211,17 +3211,17 @@
               changed_when: false
               failed_when: false
               check_mode: false
-              register: rhel7stig_PPSM_CLSA_check_firewalld
+              register: rhel7stig_ppsm_clsa_check_firewalld
               when: rhel7stig_firewall_ports_protocols is defined
 
             - name: "MEDIUM | RHEL-07-040100 | AUDIT | The Red Hat Enterprise Linux operating system must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
               ansible.builtin.debug:
                   msg: "Warning!! Firewalld is accepting the following port/protocols that are not in the accepted list: {{ item }}."
               changed_when: false
-              with_items: "{{ rhel7stig_PPSM_CLSA_check_firewalld.stdout }}"
+              with_items: "{{ rhel7stig_ppsm_clsa_check_firewalld.stdout }}"
               when:
-                  - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines is defined
-                  - rhel7stig_PPSM_CLSA_check_firewalld.stdout_lines | length > 0
+                  - rhel7stig_ppsm_clsa_check_firewalld.stdout_lines is defined
+                  - rhel7stig_ppsm_clsa_check_firewalld.stdout_lines | length > 0
         when:
             - rhel7stig_firewall_service == "firewalld"
             - rhel7stig_start_firewall_service
@@ -3442,7 +3442,7 @@
       - CCI-002420
       - CCI-002421
       - SRG-OS-000423-GPOS-00187
-      - SV-204585r603261_rule
+      - SV-204585r916422_rule
       - V-204585
       - ssh
 
@@ -3462,7 +3462,7 @@
       - CCI-002421
       - CCI-002422
       - SRG-OS-000423-GPOS-00187
-      - SV-204586r861071_rule
+      - SV-204585r916422_rule
       - V-204586
       - ssh
 
@@ -3484,7 +3484,7 @@
       - CCI-001133
       - CCI-002361
       - SRG-OS-000163-GPOS-00072
-      - SV-204587r603261_rule
+      - SV-204587r917833_rule
       - V-204587
       - ssh
 
@@ -3526,7 +3526,7 @@
       - CCI-001133
       - CCI-002361
       - SRG-OS-000163-GPOS-00072
-      - SV-204589r603261_rule
+      - SV-204589r917836_rule
       - V-204589
       - ssh
 
