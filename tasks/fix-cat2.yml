@@ -2014,7 +2014,7 @@
       fstype: "{{ home_mount.fstype }}"
       opts: "{{ home_mount.options }},nosuid"
   vars:
-      home_mount: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0]') }}"
+      home_mount: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0]') }}"  # noqa: jinja[invalid]
   when:
       - rhel_07_021000
       - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
@@ -2037,7 +2037,7 @@
             fstype: "{{ removable_mount.fstype }}"
             opts: "{{ removable_mount.options }},nosuid"
         vars:
-            removable_mount: "{{ ansible_mounts | json_query('[?mount == `/media`] | [0]') }}"
+            removable_mount: "{{ ansible_mounts | json_query('[?mount == `/media`] | [0]') }}"  # noqa: jinja[invalid]
         when:
             - ansible_mounts | selectattr('mount', 'match', '^/media$') | list | length != 0
             - "'nosuid' not in home_mount.options"
@@ -2050,7 +2050,7 @@
             fstype: "{{ removable_mount2.fstype }}"
             opts: "{{ removable_mount2.options }},nosuid"
         vars:
-            removable_mount2: "{{ ansible_mounts | json_query('[?mount == `/mnt`] | [0]') }}"
+            removable_mount2: "{{ ansible_mounts | json_query('[?mount == `/mnt`] | [0]') }}"  # noqa: jinja[invalid]
         when:
             - ansible_mounts | selectattr('mount', 'match', '^/mnt$') | list | length != 0
             - "'nosuid' not in home_mount.options"
@@ -2073,9 +2073,9 @@
       opts: "{{ ansible_mounts | json_query(options_query) }},nosuid"
       state: mounted
   vars:
-      device_query: '[?mount == `{{ item }}`] | [0].device'
-      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
-      options_query: '[?mount == `{{ item }}`] | [0].options'
+      device_query: '[?mount == `{{ item }}`] | [0].device'  # noqa: jinja[invalid]
+      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'  # noqa: jinja[invalid]
+      options_query: '[?mount == `{{ item }}`] | [0].options'  # noqa: jinja[invalid]
   with_items:
       - "{{ rhel7stig_nfs_mounts }}"
   when:
@@ -2098,9 +2098,9 @@
       opts: "{{ ansible_mounts | json_query(options_query) }},noexec"
       state: mounted
   vars:
-      device_query: '[?mount == `{{ item }}`] | [0].device'
-      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'
-      options_query: '[?mount == `{{ item }}`] | [0].options'
+      device_query: '[?mount == `{{ item }}`] | [0].device'  # noqa: jinja[invalid]
+      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'  # noqa: jinja[invalid]
+      options_query: '[?mount == `{{ item }}`] | [0].options'  # noqa: jinja[invalid]
   with_items:
       - "{{ rhel7stig_nfs_mounts }}"
   when:
