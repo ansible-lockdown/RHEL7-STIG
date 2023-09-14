@@ -40,7 +40,7 @@ This role is based on RHEL 7 DISA STIG: [ Version 3, Rel 11 released on  July 23
 
 ### Community
 
-On our [Discord Server](https://discord.io/ansible-lockdown) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
+On our [Discord Server](https://www.lockdownenterprise.com/discord) to ask questions, discuss features, or just chat with other Ansible-Lockdown users
 
 ---
 
