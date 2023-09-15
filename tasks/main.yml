@@ -74,14 +74,14 @@
 
 - name: include prelim tasks
   ansible.builtin.import_tasks:
-    file: prelim.yml
+      file: prelim.yml
   tags:
       - prelim_tasks
       - run_audit
 
 - name: include pre-remediation audit
   ansible.builtin.import_tasks:
-    file: pre_remediation_audit.yml
+      file: pre_remediation_audit.yml
   when:
       - run_audit
   tags:
@@ -95,7 +95,7 @@
 
 - name: Include CAT I patches
   ansible.builtin.import_tasks:
-    file: fix-cat1.yml
+      file: fix-cat1.yml
   when: rhel7stig_cat1_patch
   tags:
       - cat1
@@ -103,7 +103,7 @@
 
 - name: Include CAT II patches
   ansible.builtin.import_tasks:
-    file: fix-cat2.yml
+      file: fix-cat2.yml
   when: rhel7stig_cat2_patch
   tags:
       - cat2
@@ -111,7 +111,7 @@
 
 - name: Include CAT III patches
   ansible.builtin.import_tasks:
-    file: fix-cat3.yml
+      file: fix-cat3.yml
   when: rhel7stig_cat3_patch
   tags:
       - cat3
@@ -139,7 +139,7 @@
 
 - name: include post-remediation audit
   ansible.builtin.import_tasks:
-    file: post_remediation_audit.yml
+      file: post_remediation_audit.yml
   when:
       - run_audit
 
