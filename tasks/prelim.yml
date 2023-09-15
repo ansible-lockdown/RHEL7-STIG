@@ -55,6 +55,7 @@
       - name: "PRELIM | Install dconf"
         ansible.builtin.package:
             name: dconf
+            state: present
         vars:
             ansible_python_interpreter: "{{ python2_bin }}"
         when:
@@ -148,6 +149,7 @@
 - name: "PRELIM | RHEL-07-010480 | RHEL-07-010490 | RHEL-07-021350 | Install grub2-tools."
   ansible.builtin.package:
       name: grub2-tools
+      state: present
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
@@ -210,6 +212,7 @@
 - name: "PRELIM | ensure cronie is available"
   ansible.builtin.package:
       name: cronie
+      state: present
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
@@ -223,7 +226,8 @@
       - RHEL-07-020040
 
 - name: "PRELIM | RHEL-07-020600 | RHEL-07-020620 | RHEL-07-020630 | RHEL-07-020640 | RHEL-07-020650 | RHEL-07-020660 | RHEL-07-020690 | Parse /etc/passwd"
-  ansible.builtin.include_tasks: parse_etc_passwd.yml
+  ansible.builtin.include_tasks:
+    file: parse_etc_passwd.yml
   vars:
       rhel7stig_passwd_tasks: "RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690"
   when:
@@ -282,6 +286,7 @@
 - name: "PRELIM | RHEL-07-021100 | RHEL-07-031000 | RHEL-07-031010 | Ensure rsyslog is installed when required."
   ansible.builtin.package:
       name: rsyslog
+      state: present
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
@@ -310,6 +315,7 @@
 - name: "PRELIM | RHEL-07-030300 | RHEL-07-030310 | RHEL-07-030320 | RHEL-07-030321 | Install audit remote plugin."
   ansible.builtin.package:
       name: audispd-plugins
+      state: present
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
@@ -387,6 +393,7 @@
           - libselinux-python
           - policycoreutils-python
           - selinux-policy-targeted
+      state: present
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
@@ -399,6 +406,7 @@
       - name: "PRELIM | Install SSH"
         ansible.builtin.package:
             name: openssh-server
+            state: present
         vars:
             ansible_python_interpreter: "{{ python2_bin }}"
 

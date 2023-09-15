@@ -1109,9 +1109,9 @@
         ansible.builtin.package:
             name: "{{ item }}"
             state: present
-            with_items:
-                - pam_pkcs11
-                - pcsc-lite-libs
+        with_items:
+            - pam_pkcs11
+            - pcsc-lite-libs
         vars:
             ansible_python_interpreter: "{{ python2_bin }}"
         register: rhel_07_010500pkcs11install
@@ -1368,7 +1368,7 @@
 - name: |
     "MEDIUM | RHEL-07-020210 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux."
     "MEDIUM | RHEL-07-020220 | PATCH | The Red Hat Enterprise Linux operating system must enable SELinux targeted policy."
-  selinux:
+  ansible.posix.selinux:
       state: enforcing
       policy: targeted
   check_mode: "{{ ansible_check_mode or rhel7stig_system_is_chroot }}"
@@ -1444,7 +1444,8 @@
             - "{{ rhel7stig_unnecessary_accounts }}"
 
       - name: "MEDIUM | RHEL-07-020270 | AUDIT | Re-parse /etc/passwd since it changed."
-        include_tasks: parse_etc_passwd.yml  # noqa: no-handler
+        ansible.builtin.include_tasks:
+          file: parse_etc_passwd.yml
         vars:
             rhel7stig_passwd_tasks: "RHEL-07-020270"
         when: rhel_07_020270_patch is changed
@@ -1754,7 +1755,7 @@
 
       # set default ACLs so the homedir has an effective umask of 0027
       - name: "MEDIUM | RHEL-07-020680 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories contained in local interactive user home directories have a mode of 0750 or less permissive."
-        acl:
+        ansible.posix.acl:
             path: "{{ item.0 }}"
             default: true
             state: present
@@ -1925,7 +1926,8 @@
         register: rhel_07_020730_perms_results
 
       - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-        include_tasks: audit_homedirinifiles.yml
+        ansible.builtin.include_tasks:
+          file: audit_homedirinifiles.yml
         loop:
             - "{{ rhel_07_stig_interactive_homedir_inifiles }}"
         loop_control:
@@ -3405,7 +3407,7 @@
       - ldap
 
 - name: "MEDIUM | RHEL-07-040201 | PATCH | The Red Hat Enterprise Linux operating system must implement virtual address space randomization."
-  sysctl:
+  ansible.posix.sysctl:
       name: kernel.randomize_va_space
       value: '2'
       state: present
@@ -3918,7 +3920,7 @@
       - firewall
 
 - name: "MEDIUM | RHEL-07-040610 | PATCH | The Red Hat Enterprise Linux operating system must not forward Internet Protocol version 4 (IPv4) source-routed packets."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.conf.all.accept_source_route
       state: present
       value: '0'
@@ -3936,7 +3938,7 @@
       - ipv4
 
 - name: "MEDIUM | RHEL-07-040611 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible on all interfaces."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.conf.all.rp_filter
       value: '1'
       state: present
@@ -3954,7 +3956,7 @@
       - ipv4
 
 - name: "MEDIUM | RHEL-07-040612 | PATCH | The Red Hat Enterprise Linux operating system must use a reverse-path filter for IPv4 network traffic when possible by default."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.conf.default.rp_filter
       state: present
       value: '1'
@@ -3972,7 +3974,7 @@
       - ipv4
 
 - name: "MEDIUM | RHEL-07-040620 | PATCH | The Red Hat Enterprise Linux operating system must not forward Internet Protocol version 4 (IPv4) source-routed packets by default."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.conf.default.accept_source_route
       state: present
       value: '0'
@@ -3990,7 +3992,7 @@
       - ipv4
 
 - name: "MEDIUM | RHEL-07-040630 | PATCH | The Red Hat Enterprise Linux operating system must not respond to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) echoes sent to a broadcast address."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.icmp_echo_ignore_broadcasts
       state: present
       value: '1'
@@ -4009,7 +4011,7 @@
       - ipv4
 
 - name: "MEDIUM | RHEL-07-040640 | PATCH | The Red Hat Enterprise Linux operating system must prevent Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages from being accepted."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.conf.default.accept_redirects
       state: present
       value: '0'
@@ -4027,7 +4029,7 @@
       - ipv4
 
 - name: "MEDIUM | RHEL-07-040641 | PATCH | The Red Hat Enterprise Linux operating system must ignore Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages"
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.conf.all.accept_redirects
       state: present
       value: '0'
@@ -4045,7 +4047,7 @@
       - ipv4
 
 - name: "MEDIUM | RHEL-07-040650 | PATCH |  The Red Hat Enterprise Linux operating system must not allow interfaces to perform Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects by default."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.conf.default.send_redirects
       state: present
       value: '0'
@@ -4063,7 +4065,7 @@
       - ipv4
 
 - name: "MEDIUM | RHEL-07-040660 | PATCH | The Red Hat Enterprise Linux operating system must not send Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.conf.all.send_redirects
       state: present
       value: '0'
@@ -4215,7 +4217,7 @@
       - x11
 
 - name: "MEDIUM | RHEL-07-040740 | PATCH | The Red Hat Enterprise Linux operating system must not be performing packet forwarding unless the system is a router."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv4.ip_forward
       state: present
       value: '0'
@@ -4268,11 +4270,13 @@
 - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
   block:
       - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-        include_tasks: audit_firewalld.yml
+        ansible.builtin.include_tasks:
+          file: audit_firewalld.yml
         when: rhel7stig_firewall_service == "firewalld"
 
       - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
-        include_tasks: audit_iptables.yml
+        ansible.builtin.include_tasks:
+          file: audit_iptables.yml
         when: rhel7stig_firewall_service != "firewalld"
 
       - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
@@ -4311,7 +4315,7 @@
       - V-204629
 
 - name: "MEDIUM | RHEL-07-040830 | PATCH | The Red Hat Enterprise Linux operating system must not forward IPv6 source-routed packets."
-  sysctl:
+  ansible.posix.sysctl:
       name: net.ipv6.conf.all.accept_source_route
       state: present
       value: '0'
@@ -4742,7 +4746,7 @@
       - V-250312
 
 - name: "MEDIUM | RHEL-07-020022 | PATCH | The Red Hat Enterprise Linux operating system must not allow privileged accounts to utilize SSH."
-  seboolean:
+  ansible.posix.seboolean:
       name: ssh_sysadm_login
       persistent: true
       state: "{{ rhel7stig_ssh_sysadm_login_state }}"
