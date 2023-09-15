@@ -227,7 +227,7 @@
 
 - name: "PRELIM | RHEL-07-020600 | RHEL-07-020620 | RHEL-07-020630 | RHEL-07-020640 | RHEL-07-020650 | RHEL-07-020660 | RHEL-07-020690 | Parse /etc/passwd"
   ansible.builtin.include_tasks:
-    file: parse_etc_passwd.yml
+      file: parse_etc_passwd.yml
   vars:
       rhel7stig_passwd_tasks: "RHEL-07-020620 RHEL-07-020630 RHEL-07-020640 RHEL-07-020650 RHEL-07-020660 RHEL-07-020690"
   when:

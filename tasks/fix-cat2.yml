@@ -1445,9 +1445,9 @@
 
       - name: "MEDIUM | RHEL-07-020270 | AUDIT | Re-parse /etc/passwd since it changed."
         ansible.builtin.include_tasks:
-          file: parse_etc_passwd.yml
+            file: parse_etc_passwd.yml
         vars:
-            rhel7stig_passwd_tasks: "RHEL-07-020270"
+            rhel7stig_passwd_tasks: "RHEL-07-020270"  # noqa: no-handler
         when: rhel_07_020270_patch is changed
   when:
       - rhel_07_020270
@@ -1927,7 +1927,7 @@
 
       - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
         ansible.builtin.include_tasks:
-          file: audit_homedirinifiles.yml
+            file: audit_homedirinifiles.yml
         loop:
             - "{{ rhel_07_stig_interactive_homedir_inifiles }}"
         loop_control:
@@ -4271,12 +4271,12 @@
   block:
       - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
         ansible.builtin.include_tasks:
-          file: audit_firewalld.yml
+            file: audit_firewalld.yml
         when: rhel7stig_firewall_service == "firewalld"
 
       - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
         ansible.builtin.include_tasks:
-          file: audit_iptables.yml
+            file: audit_iptables.yml
         when: rhel7stig_firewall_service != "firewalld"
 
       - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
