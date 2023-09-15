@@ -1109,9 +1109,9 @@
         ansible.builtin.package:
             name: "{{ item }}"
             state: present
-            with_items:
-                - pam_pkcs11
-                - pcsc-lite-libs
+        with_items:
+            - pam_pkcs11
+            - pcsc-lite-libs
         vars:
             ansible_python_interpreter: "{{ python2_bin }}"
         register: rhel_07_010500pkcs11install
