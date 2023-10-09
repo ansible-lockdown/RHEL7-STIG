@@ -5,4 +5,3 @@ To generate the documentation on a RHEL/CentOS 7 system, take the following step
    * `sudo pip3 install -r requirements.txt`
 3. Generate the documentation:
    * `make singlehtml`
-
