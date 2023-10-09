@@ -170,7 +170,7 @@ pam_pkcs11 {
   # DN to bind with. Must have read-access for user entries under "base"
         binddn = "cn=pam,o=example,c=com";
   # Password for above DN
-        passwd = "test";
+        passwd = "test";  # pragma: allowlist secret
   # Searchbase for user entries
         base = "ou=People,o=example,c=com";
   # Attribute of user entry which contains the certificate
