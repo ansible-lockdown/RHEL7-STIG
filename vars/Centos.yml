@@ -1,9 +1,0 @@
----
-
-gpg_keys:
-    - name: 'CentOS 7 Official Signing Key'
-      packager: "security@centos.org"
-      fingerprint: "6341 AB27 53D7 8A78 A7C2  7BB1 24C6 A8A7 F4A8 0EB5"
-
-gpg_package: centos-release
-rpm_gpg_key: /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
