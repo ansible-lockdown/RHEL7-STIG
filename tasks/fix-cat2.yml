@@ -1447,7 +1447,7 @@
         ansible.builtin.include_tasks:
             file: parse_etc_passwd.yml
         vars:
-            rhel7stig_passwd_tasks: "RHEL-07-020270"  # noqa: no-handler
+            rhel7stig_passwd_tasks: "RHEL-07-020270"  # noqa: no-handler  # pragma: allowlist secret
         when: rhel_07_020270_patch is changed
   when:
       - rhel_07_020270

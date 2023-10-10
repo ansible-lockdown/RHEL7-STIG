@@ -9,7 +9,7 @@ pam_pkcs11 {
   nullok = true;
 
   # Enable debugging support.
-  debug = false; 
+  debug = false;
 
   # If the smart card is inserted, only use it
   card_only = true;
@@ -32,7 +32,7 @@ pam_pkcs11 {
   screen_savers = gnome-screensaver,xscreensaver,kscreensaver
 
   pkcs11_module {{ rhel07stig_smartcarddriver }} {
-    {% if rhel07stig_smartcarddriver == 'cackey' %}module = /usr/lib64/libcackey.so;{% elif rhel07stig_smartcarddriver == 'coolkey' %}module = libcoolkeypk11.so;{% endif %} 
+    {% if rhel07stig_smartcarddriver == 'cackey' %}module = /usr/lib64/libcackey.so;{% elif rhel07stig_smartcarddriver == 'coolkey' %}module = libcoolkeypk11.so;{% endif %}
     module = /usr/lib64/libcackey.so;
     description = "{{ rhel07stig_smartcarddriver }}";
     slot_num = 0;
@@ -54,7 +54,7 @@ pam_pkcs11 {
     # you can mange the certs in this database with the certutil command in
     # the package nss-tools
     nss_dir = /etc/pki/nssdb;
-  
+
     # Sets the Certificate Policy, (see above)
     cert_policy = ca, signature;
   }
@@ -96,10 +96,10 @@ pam_pkcs11 {
   # When no absolute path or module info is provided, use this
   # value as module search path
   # TODO:
-  # This is not still functional: use absolute pathnames or LD_LIBRARY_PATH 
+  # This is not still functional: use absolute pathnames or LD_LIBRARY_PATH
   mapper_search_path = /usr/$LIB/pam_pkcs11;
 
-  # 
+  #
   # Generic certificate contents mapper
   mapper generic {
         debug = true;
@@ -170,7 +170,7 @@ pam_pkcs11 {
   # DN to bind with. Must have read-access for user entries under "base"
         binddn = "cn=pam,o=example,c=com";
   # Password for above DN
-        passwd = "test";
+        passwd = "test";  # pragma: allowlist secret
   # Searchbase for user entries
         base = "ou=People,o=example,c=com";
   # Attribute of user entry which contains the certificate
@@ -194,7 +194,7 @@ pam_pkcs11 {
   module = internal;
   # module = /usr/$LIB/pam_pkcs11/mail_mapper.so;
   # Declare mapfile or
-  # leave empty "" or "none" to use no map 
+  # leave empty "" or "none" to use no map
   mapfile = file:///etc/pam_pkcs11/mail_mapping;
   # Some certs store email in uppercase. take care on this
   ignorecase = true;
