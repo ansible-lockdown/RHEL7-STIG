@@ -13,7 +13,7 @@ python2_bin: /bin/python2.7
 # audit variable found at the base
 benchmark: RHEL7-STIG
 ## metadata for Audit benchmark
-benchmark_version: 'v3r12'
+benchmark_version: 'v3r13'
 
 # Whether to skip the reboot
 rhel7stig_skip_reboot: true
@@ -348,6 +348,10 @@ rhel7stig_smartcard: false
 # Configure your smartcard driver
 rhel7stig_smartcarddriver: cackey
 
+
+# RHEL_07_010310
+# Must be 35 or less but not 0 or -1
+rhel_07_010310_inactive: 35
 # RHEL_07_020020
 # Set "selinux_change_users" false to disable this control's actions and just report results.
 # You will need to adjust the paths for installed HIPS/HBSS for this control.

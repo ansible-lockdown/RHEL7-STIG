@@ -2,7 +2,7 @@
 
 ## Configure a RHEL7 based system to be complaint with Disa STIG
 
-This role is based on RHEL 7 DISA STIG: [ Version 3, Rel 11 released on  July 23, 2023 ](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R12_STIG.zip).
+This role is based on RHEL 7 DISA STIG: [ Version 3, Rel 13 released on  October 23, 2023 ](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R13_STIG.zip).
 
 ---
 
@@ -47,7 +47,7 @@ Configure a RHEL 7 system to be DISA STIG compliant.
 Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default.
 Disruptive finding remediation can be enabled by setting `rhel7stig_disruption_high` to `true`.
 
-# Caution(s)
+## Caution(s)
 
 This role **will make changes to the system** which may have unintended consequences. This is not an auditing tool but rather a remediation tool to be used after an audit has been conducted.
 
