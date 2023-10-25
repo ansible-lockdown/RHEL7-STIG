@@ -1,4 +1,5 @@
 ---
+
 - name: "HIGH | RHEL-07-010010 | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
   block:
       - name: "HIGH | RHEL-07-010010 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the file permissions, ownership, and group membership of system files and commands match the vendor values."
@@ -306,7 +307,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204455r833106_rule
+      - SV-204455r928574_rule
       - V-204455
       - systemctl
 
