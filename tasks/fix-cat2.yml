@@ -756,7 +756,7 @@
   ansible.builtin.lineinfile:
       path: /etc/default/useradd
       regexp: ^#?INACTIVE
-      line: INACTIVE=35
+      line: "INACTIVE={{ rhel_07_010310_inactive }}"
   when:
       - rhel_07_010310
   tags:
@@ -1167,15 +1167,15 @@
 # ##############################
 
 # This control should be manually implemented
-- name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
+- name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent nonprivileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures."
   block:
-      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Get SELinux authorized users"
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent nonprivileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Get SELinux authorized users"
         ansible.builtin.shell: semanage login -l
         changed_when: false
         failed_when: false
         register: rhel_07_020020_sel_auth_users
 
-      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Show SELinux authorized users"
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent nonprivileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Show SELinux authorized users"
         ansible.builtin.debug:
             msg:
                 - "Warning!! Below is your SELinux user/group list. Please review and make sure all of the following are met:"
@@ -1184,7 +1184,7 @@
                 - "{{ rhel_07_020020_sel_auth_users.stdout_lines }}"
         when: rhel_07_020020_sel_auth_users.stdout | length > 0
 
-      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent non-privileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Warn that semanage is not installed"
+      - name: "MEDIUM | RHEL-07-020020 | AUDIT | The Red Hat Enterprise Linux operating system must prevent nonprivileged users from executing privileged functions to include disabling, circumventing, or altering implemented security safeguards/countermeasures. | Warn that semanage is not installed"
         ansible.builtin.debug:
             msg:
                 - "Warning!! You do not have semanage installed! Please installed the needed packages"
@@ -1197,7 +1197,7 @@
       - CCI-002235
       - CCI-002165
       - SRG-OS-000324-GPOS-00125
-      - SV-204444r754744_rule
+      - SV-204444r928571_rule
       - V-204444
 
 - name: "MEDIUM | RHEL-07-020028 | PATCH | The Red Hat Enterprise Linux operating system must be configured to allow sending email notifications of configuration changes and adverse events to designated personnel."
@@ -2307,7 +2307,7 @@
       - CCI-001813
       - CCI-000318
       - SRG-OS-000364-GPOS-00151
-      - SV-204501r603261_rule
+      - SV-204501r928576_rule
       - V-204501
       - grub
       - bootloader
@@ -4742,7 +4742,7 @@
       - CCI-002165
       - CCI-002235
       - SRG-OS-000324-GPOS-00125
-      - SV-250312r792843_rule
+      - SV-250312r928579_rule
       - V-250312
 
 - name: "MEDIUM | RHEL-07-020022 | PATCH | The Red Hat Enterprise Linux operating system must not allow privileged accounts to utilize SSH."
@@ -4791,5 +4791,5 @@
       - CCI-002165
       - CCI-002235
       - SRG-OS-000324-GPOS-00125
-      - SV-250314r861076_rule
+      - SV-250314r877392_rule
       - V-250314
