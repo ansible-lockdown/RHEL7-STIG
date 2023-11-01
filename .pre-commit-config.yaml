@@ -35,7 +35,6 @@ repos:
   - id: detect-secrets
     args: [ '--baseline', '.config/.secrets.baseline' ]
 
-
 - repo: https://github.com/gitleaks/gitleaks
   rev: v8.18.0
   hooks:
