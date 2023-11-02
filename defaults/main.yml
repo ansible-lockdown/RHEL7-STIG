@@ -348,7 +348,6 @@ rhel7stig_smartcard: false
 # Configure your smartcard driver
 rhel7stig_smartcarddriver: cackey
 
-
 # RHEL_07_010310
 # Must be 35 or less but not 0 or -1
 rhel_07_010310_inactive: 35
