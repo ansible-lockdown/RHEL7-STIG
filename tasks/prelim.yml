@@ -300,18 +300,6 @@
       - RHEL-07-031000
       - RHEL-07-031010
 
-- name: "PRELIM | RHEL-07-021350 | Check if /boot or /boot/efi reside on separate partitions"
-  ansible.builtin.shell: df --output=target /boot | tail -n 1
-  changed_when: false
-  check_mode: false
-  register: rhel_07_boot_part
-  when:
-      - rhel_07_021350
-  tags:
-      - cat1
-      - high
-      - RHEL-07-021350
-
 - name: "PRELIM | RHEL-07-030300 | RHEL-07-030310 | RHEL-07-030320 | RHEL-07-030321 | Install audit remote plugin."
   ansible.builtin.package:
       name: audispd-plugins
@@ -443,6 +431,7 @@
             rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}redhat"
             rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
             rhel7stig_legacy_boot: false
+            rhel7stig_boot_part: /boot/efi
         when:
             - rhel7_efi_boot.stat.exists
             - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
@@ -452,6 +441,7 @@
             rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}centos"
             rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
             rhel7stig_legacy_boot: false
+            rhel7stig_boot_part: /boot/efi
         when:
             - rhel7_efi_boot.stat.exists
             - ansible_distribution == 'CentOS'
@@ -461,6 +451,7 @@
             rhel7stig_bootloader_path: "{{ rhel7stig_legacy_boot_path }}"
             rhel7stig_not_boot_path: "{{ rhel7stig_efi_boot_path }}"
             rhel7stig_legacy_boot: true
+            rhel7stig_boot_part: /boot
         when: not rhel7_efi_boot.stat.exists
 
       - name: PRELIM | output bootloader and efi state
