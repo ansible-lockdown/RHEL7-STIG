@@ -441,6 +441,7 @@
 
       - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
         block:
+
             - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
               ansible.builtin.replace:
                   path: /etc/default/grub
@@ -456,6 +457,7 @@
                   insert: true
               when:
                   - rhel7stig_boot_part not in ['/', '']
+                  - item.uuid is defined
                   - not ansible_check_mode or
                     rhel7_stig_grub_template is not changed
               notify: confirm grub2 user cfg
@@ -474,9 +476,9 @@
                   - ansible_check_mode
                   - rhel_07_021350_audit is failed
               failed_when:
-                  - rhel_07_021350_audit is failed
-                  - not ansible_check_mode or
-                    rhel_07_021350_audit.rc > 1
+                  - rhel_07_021350_audit.rc not in [ 0, 1 ]
+                  - not ansible_check_mode
+
               when:
                   - not ansible_check_mode or
                     rhel7_stig_grub_template is not changed
