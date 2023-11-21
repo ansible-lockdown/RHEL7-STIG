@@ -693,7 +693,7 @@ rhel7stig_auditd_failure_flag: "{{ rhel7stig_availability_override | ternary(1, 
 
 rhel7stig_audit_part: "{{ rhel_07_audit_part.stdout }}"
 
-rhel7stig_boot_part: "{{ rhel_07_boot_part.stdout }}"
+rhel7stig_boot_part: /boot
 
 rhel7stig_legacy_boot_path: '/boot/grub2/'
 rhel7stig_efi_boot_path: '/boot/efi/EFI/'

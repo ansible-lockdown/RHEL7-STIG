@@ -1554,7 +1554,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020620
-      - rhel7stig_interactive_uid_start | int <= item.uid
+      - item.uid >= rhel7stig_interactive_uid_start | int
   tags:
       - RHEL-07-020620
       - CAT2
