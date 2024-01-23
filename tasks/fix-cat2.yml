@@ -1639,7 +1639,9 @@
         with_items: "{{ rhel7stig_passwd }}"
         loop_control:
             label: "{{ rhel7stig_passwd_label }}"
-        when: rhel7stig_interactive_uid_start | int <= this_item.uid
+        when:
+            - rhel7stig_interactive_uid_start | int <= this_item.uid
+            - "this_item.id not in rhel7stig_no_home_skip_list"
         vars:
             this_item: "{{ item }}"
 
