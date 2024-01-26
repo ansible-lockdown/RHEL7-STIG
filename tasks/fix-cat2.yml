@@ -1554,7 +1554,7 @@
       label: "{{ rhel7stig_passwd_label }}"
   when:
       - rhel_07_020620
-      - rhel7stig_interactive_uid_start | int <= item.uid
+      - item.uid >= rhel7stig_interactive_uid_start | int
   tags:
       - RHEL-07-020620
       - CAT2
@@ -2042,7 +2042,7 @@
             removable_mount: "{{ ansible_mounts | json_query('[?mount == `/media`] | [0]') }}"  # noqa: jinja[invalid]
         when:
             - ansible_mounts | selectattr('mount', 'match', '^/media$') | list | length != 0
-            - "'nosuid' not in home_mount.options"
+            - "'nosuid' not in removable_mount.options"
 
       - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
         ansible.posix.mount:
@@ -2055,7 +2055,7 @@
             removable_mount2: "{{ ansible_mounts | json_query('[?mount == `/mnt`] | [0]') }}"  # noqa: jinja[invalid]
         when:
             - ansible_mounts | selectattr('mount', 'match', '^/mnt$') | list | length != 0
-            - "'nosuid' not in home_mount.options"
+            - "'nosuid' not in removable_mount2.options"
   when:
       - rhel_07_021010
       - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
