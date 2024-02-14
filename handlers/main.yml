@@ -27,7 +27,7 @@
 - name: make grub2 config
   ansible.builtin.shell: /usr/sbin/grub2-mkconfig --output={{ rhel7stig_bootloader_path }}grub.cfg
   when:
-      - rhel7stig_grub2_user_cfg.stat.exists
+      - (rhel7stig_grub2_user_cfg is defined) and (rhel7stig_grub2_user_cfg.stat.exists)
       - not rhel7stig_skip_for_travis
       - not rhel7stig_system_is_container
 
@@ -42,7 +42,7 @@
       - grub.cfg
       - user.cfg
   when:
-      - rhel7stig_grub2_user_cfg.stat.exists
+      - (rhel7stig_grub2_user_cfg is defined) and (rhel7stig_grub2_user_cfg.stat.exists)
       - rhel7stig_workaround_for_disa_benchmark
       - not rhel7stig_skip_for_travis
       - not rhel7stig_system_is_container

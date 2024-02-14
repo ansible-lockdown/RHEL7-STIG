@@ -36,7 +36,7 @@
             fail_msg: "You have {{ sudo_password_rule }} enabled but the user = {{ ansible_env.SUDO_USER }} has no password set - It can break access"
             success_msg: "You a password set for the {{ ansible_env.SUDO_USER }}"
         vars:
-            sudo_password_rule: RHEL-07-010340
+            sudo_password_rule: RHEL-07-010340  # pragma: allowlist secret
   when:
       - rhel_07_010340
       - ansible_env.SUDO_USER is defined
@@ -53,8 +53,8 @@
 
 - name: Check rhel7stig_bootloader_password_hash variable has been changed
   ansible.builtin.assert:
-      that: rhel7stig_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispassword'
-      msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set. You can create the hash on a RHEL 7.9 system using the command 'grub2-mkpasswd-pbkdf2'"
+      that: rhel7stig_bootloader_password_hash != 'grub.pbkdf2.sha512.changethispassword'  # pragma: allowlist secret
+      msg: "This role will not be able to run single user password commands as rhel7stig_bootloader_password_hash variable has not been set. You can create the hash on a RHEL 7.9 system using the command 'grub2-mkpasswd-pbkdf2'"  # pragma: allowlist secret
   when:
       - rhel_07_010481 or
         rhel_07_010482 or
@@ -73,13 +73,15 @@
       - always
 
 - name: include prelim tasks
-  ansible.builtin.import_tasks: prelim.yml
+  ansible.builtin.import_tasks:
+      file: prelim.yml
   tags:
       - prelim_tasks
       - run_audit
 
 - name: include pre-remediation audit
-  ansible.builtin.import_tasks: pre_remediation_audit.yml
+  ansible.builtin.import_tasks:
+      file: pre_remediation_audit.yml
   when:
       - run_audit
   tags:
@@ -92,21 +94,24 @@
       - always
 
 - name: Include CAT I patches
-  ansible.builtin.import_tasks: fix-cat1.yml
+  ansible.builtin.import_tasks:
+      file: fix-cat1.yml
   when: rhel7stig_cat1_patch
   tags:
       - cat1
       - high
 
 - name: Include CAT II patches
-  ansible.builtin.import_tasks: fix-cat2.yml
+  ansible.builtin.import_tasks:
+      file: fix-cat2.yml
   when: rhel7stig_cat2_patch
   tags:
       - cat2
       - medium
 
 - name: Include CAT III patches
-  ansible.builtin.import_tasks: fix-cat3.yml
+  ansible.builtin.import_tasks:
+      file: fix-cat3.yml
   when: rhel7stig_cat3_patch
   tags:
       - cat3
@@ -133,7 +138,8 @@
       - not rhel7stig_skip_reboot
 
 - name: include post-remediation audit
-  ansible.builtin.import_tasks: post_remediation_audit.yml
+  ansible.builtin.import_tasks:
+      file: post_remediation_audit.yml
   when:
       - run_audit
 
