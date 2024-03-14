@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.1 STIG V3R13 25th Oct 2023
+
+- RHEL_07_010310 - ruleid updated and INACTIVE var created
+- RHEL_07_020020 - ruleid
+- RHEL_07_020021 - ruleid
+- RHEL_07_020023 - ruleid
+- RHEL_07_020230 - ruleid
+- RHEL_07_021700 - ruleid
+
 ## 3.0 Stig V3R12 26th July 2023
 
 - RHEL-07-010199 - pamd password and system auth rewrite and ruleid updated
