@@ -1292,7 +1292,7 @@
       - file: /etc/modprobe.d/usb-storage.conf
         insertafter: "^#install usb-storage"
         regexp: "^install usb-storage"
-        line: install usb-storage /bin/true
+        line: install usb-storage /bin/false
   when:
       - rhel_07_020100
   tags:
@@ -1302,7 +1302,7 @@
       - CCI-000778
       - CCI-000366
       - SRG-OS-000114-GPOS-00059
-      - SV-204449r603261_rule
+      - SV-204449r942894_rule
       - V-204449
       - usb_devices
 
@@ -1324,7 +1324,7 @@
       - file: /etc/modprobe.d/dccp.conf
         insertafter: ^#install dccp
         regexp: "^install dccp "
-        line: install dccp /bin/true
+        line: install dccp /bin/false
   when:
       - rhel_07_020101
   tags:
@@ -1332,7 +1332,7 @@
       - CAT2
       - CCI-001958
       - SRG-OS-000378-GPOS-00163
-      - SV-204450r603261_rule
+      - SV-204450r942897_rule
       - V-204450
       - dccp
 
@@ -1382,7 +1382,7 @@
       - CCI-002696
       - CCI-002165
       - SRG-OS-000445-GPOS-00199
-      - SV-204453r754746_rule
+      - SV-204453r942900_rule
       - V-204453
       - RHEL-07-020220
       - SV-204454r754748_rule
@@ -3399,10 +3399,10 @@
       - SV-204581r603261_rule
       - V-204581
       - RHEL-07-040190
-      - SV-204582r603261_rule
+      - SV-204582r942909_rule
       - V-204582
       - RHEL-07-040200
-      - SV-204583r603261_rule
+      - SV-204583r942912_rule
       - V-204583
       - ldap
 
@@ -4444,11 +4444,11 @@
       - wifi
       - networking
 
-- name: "MEDIUM | RHEL-07-020019 | AUDIT | The Red Hat Enterprise Linux operating system must have a host-based intrusion detection tool installed."
+- name: "MEDIUM | RHEL-07-020019 | AUDIT | The Red Hat Enterprise Linux operating system must implement the Endpoint Security for Linux Threat Prevention tool."
   ansible.builtin.debug:
       msg:
-          - "Please install and enable the latest McAfee HIPS package, available from USCYBERCOM."
-          - "If the system does not support the McAfee HIPS package, install and enable a supported intrusion detection system application and document its use with the Authorizing Official."
+          - "Please Install and enable the latest Trellix ENSLTP package."
+          - "If the system does not support the Trellix ENSLTP package, install and enable a supported intrusion detection system application and document its use with the Authorizing Official."
   when:
       - rhel_07_020019
   tags:
@@ -4457,7 +4457,7 @@
       - CAT2
       - CCI-001263
       - SRG-OS-000480-GPOS-00227
-      - SV-214800r603261_rule
+      - SV-214800r942888_rule
       - V-214800
       - antivirus
 
@@ -4758,7 +4758,7 @@
       - CCI-002165
       - CI-002235
       - SRG-OS-000324-GPOS-00125
-      - SV-250313r792846_rule
+      - SV-250313r942891_rule
       - V-250313
 
 - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
