@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.2 STIG v3R14 24th Jan 2024
+
+- RHEL-07-020019 - title and ruleid update
+- RHEL-07-020022 - ruleid update
+- RHEL-07-020210 - ruleid update
+- RHEL-07-020220 - ruleid update
+- RHEL-07-020100 - ruleid update and bin/false
+- RHEL-07-020101 - ruleid update and bin/false
+- RHEL-07-040180 - ruleid update and bin/false
+- RHEL-07-040190 - ruleid update and bin/false
+
 ## 3.1 STIG V3R13 25th Oct 2023
 
 - RHEL_07_010310 - ruleid updated and INACTIVE var created
