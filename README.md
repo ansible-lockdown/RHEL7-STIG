@@ -220,3 +220,9 @@ pre-commit run
 ## Credits
 
 This repo originated from work done by [Sam Doran](https://github.com/samdoran/ansible-role-stig)
+
+Massive thanks to the fantastic community and all its members.
+
+This includes a huge thanks and credit to the original authors and maintainers.
+
+- Josh Springer, Daniel Shepherd, Bas Meijeri, James Cassell, Mike Renfro, DFed, George Nalen, Mark Bolwell
