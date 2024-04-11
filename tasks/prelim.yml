@@ -211,8 +211,7 @@
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
       - rhel_07_020030 or
-        rhel_07_020040 or
-        false
+        rhel_07_020040
   tags:
       - cat2
       - medium
@@ -234,8 +233,7 @@
         rhel_07_020670 or
         rhel_07_020680 or
         rhel_07_020690 or
-        rhel_07_020700 or
-        false
+        rhel_07_020700
   tags:
       - cat2
       - medium
