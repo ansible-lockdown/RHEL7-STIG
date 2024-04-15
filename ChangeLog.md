@@ -2,6 +2,10 @@
 
 ## 3.2 STIG v3R14 24th Jan 2024
 
+- Audit updated
+  - moved audit into prelim
+  - updates to audit logic for copy and archive options
+
 - RHEL-07-020019 - title and ruleid update
 - RHEL-07-020022 - ruleid update
 - RHEL-07-020210 - ruleid update

@@ -1,5 +1,84 @@
 ---
 
+- name: set bootloader type
+  block:
+      - name: "PRELIM | Check whether machine is UEFI-based"
+        ansible.builtin.stat:
+            path: /sys/firmware/efi
+        register: rhel7_efi_boot
+
+      - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
+        ansible.builtin.set_fact:
+            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}redhat"
+            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
+            rhel7stig_legacy_boot: false
+        when:
+            - rhel7_efi_boot.stat.exists
+            - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
+
+      - name: "PRELIM | set fact if UEFI boot | CentOS "
+        ansible.builtin.set_fact:
+            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}centos"
+            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
+            rhel7stig_legacy_boot: false
+        when:
+            - rhel7_efi_boot.stat.exists
+            - ansible_distribution == 'CentOS'
+
+      - name: "PRELIM | set if not UEFI boot"
+        ansible.builtin.set_fact:
+            rhel7stig_bootloader_path: "{{ rhel7stig_legacy_boot_path }}"
+            rhel7stig_not_boot_path: "{{ rhel7stig_efi_boot_path }}"
+            rhel7stig_legacy_boot: true
+        when: not rhel7_efi_boot.stat.exists
+
+      - name: PRELIM | output bootloader and efi state
+        ansible.builtin.debug:
+            msg:
+                - "bootloader path set to {{ rhel7stig_bootloader_path }}"
+                - "legacy boot equals {{ rhel7stig_legacy_boot }}"
+  tags:
+      - always
+
+- name: "PRELIM | Gather interactive user ID min"
+  block:
+      - name: "PRELIM | Gather interactive user ID min"
+        ansible.builtin.shell: grep ^UID_MIN /etc/login.defs | awk '{print $2}'
+        changed_when: false
+        failed_when: false
+        register: rhel7stig_min_uid
+
+      - name: "PRELIM | Gather interactive user ID max"
+        ansible.builtin.shell: grep ^UID_MAX /etc/login.defs | awk '{print $2}'
+        changed_when: false
+        failed_when: false
+        register: rhel7stig_max_uid
+
+      - name: "PRELIM | Setting the fact"
+        ansible.builtin.set_fact:
+            rhel7stig_interactive_uid_start: "{{ rhel7stig_min_uid.stdout }}"
+            rhel7stig_interactive_uid_stop: "{{ rhel7stig_max_uid.stdout }}"
+  tags:
+      - always
+      - auditd
+
+- name: Include audit specific variables
+  ansible.builtin.include_vars: audit.yml
+  when:
+      - run_audit or audit_only
+      - setup_audit
+  tags:
+      - setup_audit
+      - run_audit
+
+- name: Include pre-remediation audit tasks
+  ansible.builtin.import_tasks: pre_remediation_audit.yml
+  when:
+      - run_audit or audit_only
+      - setup_audit
+  tags:
+      - run_audit
+
 - name: "PRELIM | Check required packages installed | Python2"
   ansible.builtin.package:
       name:
@@ -409,68 +488,3 @@
         when: not rhel7stig_ssh_host_rsa_key_stat.stat.exists
   when:
       - rhel7stig_ssh_required
-
-- name: "PRELIM | Check whether machine is UEFI-based"
-  ansible.builtin.stat:
-      path: /sys/firmware/efi
-  register: rhel7_efi_boot
-  tags:
-      - goss_template
-      - always
-
-- name: set bootloader type
-  block:
-      - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
-        ansible.builtin.set_fact:
-            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}redhat"
-            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
-            rhel7stig_legacy_boot: false
-        when:
-            - rhel7_efi_boot.stat.exists
-            - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
-
-      - name: "PRELIM | set fact if UEFI boot | CentOS "
-        ansible.builtin.set_fact:
-            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}centos"
-            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
-            rhel7stig_legacy_boot: false
-        when:
-            - rhel7_efi_boot.stat.exists
-            - ansible_distribution == 'CentOS'
-
-      - name: "PRELIM | set if not UEFI boot"
-        ansible.builtin.set_fact:
-            rhel7stig_bootloader_path: "{{ rhel7stig_legacy_boot_path }}"
-            rhel7stig_not_boot_path: "{{ rhel7stig_efi_boot_path }}"
-            rhel7stig_legacy_boot: true
-        when: not rhel7_efi_boot.stat.exists
-
-      - name: PRELIM | output bootloader and efi state
-        ansible.builtin.debug:
-            msg:
-                - "bootloader path set to {{ rhel7stig_bootloader_path }}"
-                - "legacy boot equals {{ rhel7stig_legacy_boot }}"
-  tags:
-      - always
-
-- name: "PRELIM | Gather interactive user ID min"
-  block:
-      - name: "PRELIM | Gather interactive user ID min"
-        ansible.builtin.shell: grep ^UID_MIN /etc/login.defs | awk '{print $2}'
-        changed_when: false
-        failed_when: false
-        register: rhel7stig_min_uid
-
-      - name: "PRELIM | Gather interactive user ID max"
-        ansible.builtin.shell: grep ^UID_MAX /etc/login.defs | awk '{print $2}'
-        changed_when: false
-        failed_when: false
-        register: rhel7stig_max_uid
-
-      - name: "PRELIM | Setting the fact"
-        ansible.builtin.set_fact:
-            rhel7stig_interactive_uid_start: "{{ rhel7stig_min_uid.stdout }}"
-            rhel7stig_interactive_uid_stop: "{{ rhel7stig_max_uid.stdout }}"
-  tags:
-      - always
-      - auditd
