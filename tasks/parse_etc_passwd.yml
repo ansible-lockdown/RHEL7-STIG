@@ -2,7 +2,7 @@
 - name: "PRELIM | {{ rhel7stig_passwd_tasks }} | Parse /etc/passwd"
   block:
       - name: "PRELIM | {{ rhel7stig_passwd_tasks }} | Parse /etc/passwd"
-        ansible.builtin.shell: cat /etc/passwd
+        ansible.builtin.shell: cat /etc/passwd | grep -v '/sbin/nologin\|/usr/sbin/nologin'
         changed_when: false
         check_mode: false
         register: rhel7stig_passwd_file_audit
