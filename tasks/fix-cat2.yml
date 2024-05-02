@@ -4205,7 +4205,6 @@
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
-      - not rhel7stig_gui
       - rhel_07_040730
   tags:
       - RHEL-07-040730
