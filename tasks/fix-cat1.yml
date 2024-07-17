@@ -43,31 +43,31 @@
       - V-204392
       - permissions
 
-- name: "HIGH | RHEL-07-010020 | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+- name: "HIGH | RHEL-07-021350 | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
   block:
-      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+      - name: "HIGH | RHEL-07-021350 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
         ansible.builtin.shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
         check_mode: false
         failed_when: false
-        changed_when: rhel_07_010020_audit.stdout| length > 0
-        register: rhel_07_010020_audit
+        changed_when: rhel_07_021350_audit.stdout| length > 0
+        register: rhel_07_021350_audit
 
-      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+      - name: "HIGH | RHEL-07-021350 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
         ansible.builtin.debug:
-            msg: "{{ rhel_07_010020_audit.stderr_lines }}"
+            msg: "{{ rhel_07_021350_audit.stderr_lines }}"
         changed_when: true
-        when: rhel_07_010020_audit.stdout | length > 0
+        when: rhel_07_021350_audit.stdout | length > 0
 
-      - name: "HIGH | RHEL-07-010020 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+      - name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
         ansible.builtin.shell: yum reinstall -y {{ item }}
         failed_when: false
         with_items:
-            - "{{ rhel_07_010020_audit.stdout_lines }}"
-        when: rhel_07_010020_audit.stdout_lines | length > 0
+            - "{{ rhel_07_021350_audit.stdout_lines }}"
+        when: rhel_07_021350_audit.stdout_lines | length > 0
   when:
-      - rhel_07_010020
+      - rhel_07_021350
   tags:
-      - RHEL-07-010020
+      - RHEL-07-021350
       - CAT1
       - CCI-001749
       - SRG-OS-000480-GPOS-00227
@@ -378,52 +378,59 @@
       - V-204462
       - accounts
 
-- name: "HIGH | RHEL-07-021350 | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+- name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
   block:
-      - name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards."
+      - name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must implement NIST FIPS-validated cryptography for the following: to provision digital signatures, to generate cryptographic hashes, and to protect data requiring data-at-rest protections in accordance with applicable federal laws, Executive Orders, directives, policies, regulations, and standards. | install FIPS"
         ansible.builtin.package:
             name: dracut-fips
             state: present
         vars:
             ansible_python_interpreter: "{{ python2_bin }}"
-        notify: rebuild initramfs
-        when:
-            - "'dracut-fips' not in ansible_facts.packages"
+        notify:
+            - rebuild initramfs
+            - change_requires_reboot
+        when: "'dracut-fips' not in ansible_facts.packages"
 
       - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
         ansible.builtin.lineinfile:
-            path: /etc/sysconfig/prelink
+            dest: /etc/sysconfig/prelink
             regexp: ^#?PRELINKING
             line: PRELINKING=no
+        when: "'prelink' in ansible_facts.packages"
         notify: undo existing prelinking
-        when:
-            - "'prelink' in ansible_facts.packages"
 
-      - name: "HIGH | RHEL-07-021350 | AUDIT | Check /etc/default/grub exists"
-        ansible.builtin.stat:
-            path: /etc/default/grub
-        register: rhel7_stig_default_grub
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Check for GRUB_CMDLINE_LINUX in /etc/default/grub"
+        ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*"$' /etc/default/grub
+        check_mode: false
+        failed_when: false
+        changed_when: rhel_07_021350_default_grub_missing_audit.rc > 0
+        register: rhel_07_021350_default_grub_missing_audit
 
-      - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
-        block:
-            - name: "HIGH | RHEL-07-021350 | AUDIT | Capture GRUB_CMDLINE_LINUX from /proc/cmdline"
-              ansible.builtin.shell: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
-              check_mode: false
-              changed_when: false
-              failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
-              register: rhel_07_021350_grub_cmdline_linux_audit
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Parse sane GRUB_CMDLINE_LINUX from /proc/cmdline"
+        ansible.builtin.shell: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
+        check_mode: false
+        changed_when: false
+        failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
+        when: rhel_07_021350_default_grub_missing_audit is changed  # noqa no-handler
+        register: rhel_07_021350_grub_cmdline_linux_audit
 
-            - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
-              ansible.builtin.template:
-                  src: etc_default_grub.j2
-                  dest: /etc/default/grub
-                  owner: root
-                  group: root
-                  mode: 0644
-              register: rhel7_stig_grub_template
-              vars:
-                  grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
-        when: not rhel7_stig_default_grub.stat.exists
+      - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
+        ansible.builtin.template:
+            src: etc_default_grub.j2
+            dest: /etc/default/grub
+            owner: root
+            group: root
+            mode: '0644'
+        vars:
+            grub_cmdline_linux: "{{ rhel_07_021350_grub_cmdline_linux_audit.stdout }}"
+        when: rhel_07_021350_default_grub_missing_audit is changed  # noqa no-handler
+
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Verify fips kernel parameters in /etc/default/grub"
+        ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ])fips=1(?=[" ]).*"$' /etc/default/grub
+        check_mode: false
+        changed_when: false
+        failed_when: rhel_07_021350_fips_kernel_set.rc not in [ 0, 1 ]
+        register: rhel_07_021350_fips_kernel_set
 
       - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
         ansible.builtin.replace:
@@ -433,71 +440,72 @@
         vars:
             key: GRUB_CMDLINE_LINUX
             param: fips
-            value: "{{ fips_value }}"
+            value: 1
             append: true  # this is the default
-        notify: confirm grub2 user cfg
         when:
             - not ansible_check_mode or
-              rhel7_stig_grub_template is not changed
+              rhel_07_021350_default_grub_missing_audit is not changed
+            - rhel_07_021350_fips_kernel_set.stdout | length == 0
+        notify:
+            - confirm grub2 user cfg
+            - change_requires_reboot
+
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Verify boot kernel parameters in /etc/default/grub"
+        ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ])boot=UUID={{ rhel7stig_boot_uuid.stdout }}(?=[" ]).*"$' /etc/default/grub
+        check_mode: false
+        changed_when: false
+        failed_when: rhel_07_021350_boot_kernel_set.rc not in [ 0, 1 ]
+        register: rhel_07_021350_boot_kernel_set
 
       - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
-        block:
-            - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
-              ansible.builtin.replace:
-                  path: /etc/default/grub
-                  regexp: "{{ rhel7stig_regexp_quoted_params }}"
-                  replace: "{{ rhel7stig_replace_quoted_params }}"
-              with_items:
-                  - "{{ ansible_mounts | json_query(query) }}"
-              vars:
-                  query: "[?mount=='{{ rhel7stig_boot_part }}'] | [0]"  # noqa: jinja[invalid]
-                  key: GRUB_CMDLINE_LINUX
-                  param: boot
-                  value: UUID={{ item.uuid }}
-                  insert: true
-              when:
-                  - rhel7stig_boot_part not in ['/', '']
-                  - item.uuid is defined
-                  - not ansible_check_mode or
-                    rhel7_stig_grub_template is not changed
-              notify: confirm grub2 user cfg
-              register: result
+        ansible.builtin.replace:
+            path: /etc/default/grub
+            regexp: "{{ rhel7stig_regexp_quoted_params }}"
+            replace: "{{ rhel7stig_replace_quoted_params }}"
+        vars:
+            query: "{{ rhel7stig_boot_part.stdout }}"
+            key: GRUB_CMDLINE_LINUX
+            param: boot
+            value: UUID={{ rhel7stig_boot_uuid.stdout }}
+            insert: true
+        when:
+            - rhel7stig_boot_part.stdout not in ['/', '']
+            - rhel_07_021350_boot_kernel_set.stdout | length == 0
+            - not ansible_check_mode or
+              rhel_07_021350_default_grub_missing_audit is not changed
 
-            - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
-              ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
-              check_mode: false
-              with_items:
-                  - "fips={{ fips_value }}"
-                  - boot=UUID={{ ansible_mounts | json_query(query) }}
-              vars:
-                  query: "[?mount=='{{ rhel7stig_boot_part }}'].uuid | [0]"  # noqa: jinja[invalid]
-              register: rhel_07_021350_audit
-              changed_when:
-                  - ansible_check_mode
-                  - rhel_07_021350_audit is failed
-              failed_when:
-                  - rhel_07_021350_audit.rc not in [ 0, 1 ]
-                  - not ansible_check_mode
+        notify: confirm grub2 user cfg
+        register: result
 
-              when:
-                  - not ansible_check_mode or
-                    rhel7_stig_grub_template is not changed
-                  - rhel7stig_boot_part not in ['/', ''] or
-                    'boot=' not in item
+      - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
+        ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
+        check_mode: false
+        with_items:
+            - fips=1
+            - boot=UUID={{ rhel7stig_boot_uuid.stdout }}
+        register: rhel_07_021350_audit
+        when:
+            - not ansible_check_mode or
+              rhel_07_021350_default_grub_missing_audit is not changed
+            - "rhel7stig_boot_part.stdout not in ['/', ''] or
+              'boot=' not in item"
+        changed_when:
+            - ansible_check_mode
+            - rhel_07_021350_audit is failed
+        failed_when:
+            - rhel_07_021350_audit is failed
+            - not ansible_check_mode or
+              rhel_07_021350_audit.rc > 1
   when:
       - rhel_07_021350
       - rhel7stig_use_fips
   tags:
       - RHEL-07-021350
       - CAT1
-      - CCI-001199
       - CCI-000068
-      - CCI-002450
-      - CCI-002476
       - SRG-OS-000033-GPOS-00014
-      - SV-204497r603261_rule
-      - V-204497
-      - fips
+      - SV-230223r928585_rule
+      - V-230223
 
 - name: "HIGH | RHEL-07-021710 | PATCH | The Red Hat Enterprise Linux operating system must not have the telnet-server package installed."
   ansible.builtin.package:
