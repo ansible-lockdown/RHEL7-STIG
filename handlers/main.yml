@@ -37,7 +37,7 @@
       src: "{{ rhel7stig_bootloader_path }}/{{ item }}"
       dest: "{{ rhel7stig_not_boot_path }}/{{ item }}"
       remote_src: true
-      mode: 0600
+      mode: '0600'
   with_items:
       - grub.cfg
       - user.cfg

@@ -109,7 +109,7 @@
       dest: /etc/audit/rules.d/99_auditd.rules
       owner: root
       group: root
-      mode: 0600
+      mode: '0600'
   register: auditd_file
   notify: restart auditd
   when:
