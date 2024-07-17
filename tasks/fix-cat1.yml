@@ -393,7 +393,7 @@
 
       - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
         ansible.builtin.lineinfile:
-            dest: /etc/sysconfig/prelink
+            path: /etc/sysconfig/prelink
             regexp: ^#?PRELINKING
             line: PRELINKING=no
         when: "'prelink' in ansible_facts.packages"
@@ -401,16 +401,16 @@
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Check for GRUB_CMDLINE_LINUX in /etc/default/grub"
         ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*"$' /etc/default/grub
-        check_mode: false
         failed_when: false
         changed_when: rhel_07_021350_default_grub_missing_audit.rc > 0
+        check_mode: false
         register: rhel_07_021350_default_grub_missing_audit
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Parse sane GRUB_CMDLINE_LINUX from /proc/cmdline"
         ansible.builtin.shell: grep -oP ' ro \K.*?(?= ?LANG=)' /proc/cmdline
-        check_mode: false
         changed_when: false
         failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
+        check_mode: false
         when: rhel_07_021350_default_grub_missing_audit is changed  # noqa no-handler
         register: rhel_07_021350_grub_cmdline_linux_audit
 
@@ -427,9 +427,9 @@
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Verify fips kernel parameters in /etc/default/grub"
         ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ])fips=1(?=[" ]).*"$' /etc/default/grub
-        check_mode: false
         changed_when: false
         failed_when: rhel_07_021350_fips_kernel_set.rc not in [ 0, 1 ]
+        check_mode: false
         register: rhel_07_021350_fips_kernel_set
 
       - name: "HIGH | RHEL-07-021350 | PATCH | fips=1 must be in /etc/default/grub"
@@ -452,9 +452,9 @@
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Verify boot kernel parameters in /etc/default/grub"
         ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ])boot=UUID={{ rhel7stig_boot_uuid.stdout }}(?=[" ]).*"$' /etc/default/grub
-        check_mode: false
         changed_when: false
         failed_when: rhel_07_021350_boot_kernel_set.rc not in [ 0, 1 ]
+        check_mode: false
         register: rhel_07_021350_boot_kernel_set
 
       - name: "HIGH | RHEL-07-021350 | PATCH | If /boot or /boot/efi reside on separate partitions, the kernel parameter boot=<partition> must be added to the kernel command line."
@@ -479,16 +479,6 @@
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
         ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
-        check_mode: false
-        with_items:
-            - fips=1
-            - boot=UUID={{ rhel7stig_boot_uuid.stdout }}
-        register: rhel_07_021350_audit
-        when:
-            - not ansible_check_mode or
-              rhel_07_021350_default_grub_missing_audit is not changed
-            - "rhel7stig_boot_part.stdout not in ['/', ''] or
-              'boot=' not in item"
         changed_when:
             - ansible_check_mode
             - rhel_07_021350_audit is failed
@@ -496,6 +486,16 @@
             - rhel_07_021350_audit is failed
             - not ansible_check_mode or
               rhel_07_021350_audit.rc > 1
+        check_mode: false
+        register: rhel_07_021350_audit
+        with_items:
+            - fips=1
+            - boot=UUID={{ rhel7stig_boot_uuid.stdout }}
+        when:
+            - not ansible_check_mode or
+              rhel_07_021350_default_grub_missing_audit is not changed
+            - "rhel7stig_boot_part.stdout not in ['/', ''] or
+              'boot=' not in item"
   when:
       - rhel_07_021350
       - rhel7stig_use_fips

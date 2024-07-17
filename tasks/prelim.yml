@@ -44,23 +44,23 @@
       - always
 
 - name: Include audit specific variables
-  when:
-      - run_audit or audit_only
-      - setup_audit
-  tags:
-      - setup_audit
-      - run_audit
   ansible.builtin.include_vars:
       file: audit.yml
+  when:
+      - run_audit or audit_only
+      - setup_audit
+  tags:
+      - setup_audit
+      - run_audit
 
 - name: Include pre-remediation audit tasks
+  ansible.builtin.import_tasks:
+      file: pre_remediation_audit.yml
   when:
       - run_audit or audit_only
       - setup_audit
   tags:
       - run_audit
-  ansible.builtin.import_tasks:
-      file: pre_remediation_audit.yml
 
 - name: "PRELIM | Check required packages installed | Python2"
   ansible.builtin.package:
