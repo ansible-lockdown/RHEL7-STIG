@@ -79,20 +79,6 @@
       - prelim_tasks
       - run_audit
 
-- name: include pre-remediation audit
-  ansible.builtin.import_tasks:
-      file: pre_remediation_audit.yml
-  when:
-      - run_audit
-  tags:
-      - run_audit
-
-- name: Gather the package facts
-  ansible.builtin.package_facts:
-      manager: auto
-  tags:
-      - always
-
 - name: Include CAT I patches
   ansible.builtin.import_tasks:
       file: fix-cat1.yml
