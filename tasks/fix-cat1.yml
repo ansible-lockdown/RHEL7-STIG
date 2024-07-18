@@ -388,7 +388,6 @@
             ansible_python_interpreter: "{{ python2_bin }}"
         notify:
             - rebuild initramfs
-            - change_requires_reboot
         when: "'dracut-fips' not in ansible_facts.packages"
 
       - name: "HIGH | RHEL-07-021350 | PATCH | Disable prelinking."
@@ -448,7 +447,6 @@
             - rhel_07_021350_fips_kernel_set.stdout | length == 0
         notify:
             - confirm grub2 user cfg
-            - change_requires_reboot
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Verify boot kernel parameters in /etc/default/grub"
         ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ])boot=UUID={{ rhel7stig_boot_uuid.stdout }}(?=[" ]).*"$' /etc/default/grub
