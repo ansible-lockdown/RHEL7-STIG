@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.2 STIG V3R13 25th Oct 2023
+
+- updated workflow to use new methods
+  - new ami being used as old obsolete
+- Updated the audit layout
+- New options if using CentOS to update repo files to vaulted.repo
+  - rhel7stig_add_updated_repo
+
 ## 3.1 STIG V3R13 25th Oct 2023
 
 - RHEL_07_010310 - ruleid updated and INACTIVE var created
