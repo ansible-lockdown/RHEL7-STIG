@@ -18,6 +18,11 @@ benchmark_version: 'v3r13'
 # Whether to skip the reboot
 rhel7stig_skip_reboot: true
 
+# With CentOS being EoL many mirrors no longer exist and fail for updates
+# setting to true will replace the default /etc/yum.repos.d/CentOS-Base.repo
+# It will add the new vaulted location where it is possible to get updates and package
+rhel7stig_add_updated_repo: false
+
 ###
 ### Settings for associated Audit role using Goss
 ###

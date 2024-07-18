@@ -72,7 +72,19 @@
   tags:
       - always
 
-- name: include prelim tasks
+- name: Update CentOS repo for packages - Use vaulted/archive URL - backup original
+  ansible.builtin.template:
+      src: etc/yum.repos.d/CentOS-Base.repo.j2
+      dest: /etc/yum.repos.d/CentOS-Base.repo
+      owner: root
+      group: root
+      mode: '0644'
+      backup: true
+  when:
+      - rhel7stig_add_updated_repo
+      - ansible_distribution == "CentOS"
+
+- name: Include prelim tasks
   ansible.builtin.import_tasks:
       file: prelim.yml
   tags:
@@ -103,7 +115,7 @@
       - cat3
       - low
 
-- name: update auditd
+- name: Update auditd
   ansible.builtin.template:
       src: audit/99_auditd.rules.j2
       dest: /etc/audit/rules.d/99_auditd.rules
