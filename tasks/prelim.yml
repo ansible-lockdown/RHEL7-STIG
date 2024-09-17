@@ -132,6 +132,20 @@
       - V-204497
       - fips
 
+- name: PRELIM | Gnome Desktop Environment Discovery
+  tags:
+      - always
+  block:
+      - name: PRELIM | Gnome Desktop Environment Discovery
+        ansible.builtin.stat:
+            path: /usr/share/gnome/gnome-version.xml
+        register: prelim_gnome_present
+
+      - name: PRELIM | Gnome Desktop Environment Discovery | add packages if x11 not required
+        when: rhel_07_040710
+        ansible.builtin.set_fact:
+            rhel7stig_gui_pkgs: "{{ rhel7stig_gui_pkgs + [ '@X11', 'xorg-x11-*' ] }}"
+
 - name: "PRELIM | dconf"
   block:
       - name: "PRELIM | Check for dconf availability"

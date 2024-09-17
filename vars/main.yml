@@ -43,3 +43,10 @@ rhel7stig_re_qp_key_end: (?:" *)
 
 # insert the parameter at the beginning or append to the end, default append
 rhel7stig_re_qp_insert: "{{ insert | default(not (append | default(true))) }}"
+
+# List of default packages for 040730 x windows removal
+# More are added if X11 is not used relating to 040710
+rhel7stig_gui_pkgs:
+    - xorg-x11-server-common
+    - '@^gnome-desktop'
+    - 'gnome*'

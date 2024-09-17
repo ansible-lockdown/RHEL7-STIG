@@ -375,8 +375,8 @@ rhel_07_040000: true
 rhel_07_040530: true
 rhel_07_040600: true
 
-# Whether or not to run tasks related to auditing/patching the desktop environment
-rhel7stig_gui: false
+# Whether or not to run tasks related to auditing/patching the desktop environment - is discovered if using gnome
+rhel7stig_gui: "{{ prelim_gnome_present.stat.exists | default(false) }}"
 
 # Whether to configure dconf rules unconditionally (ignoring presence of dconf
 # or rhel7stig_gui)

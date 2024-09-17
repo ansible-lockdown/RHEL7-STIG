@@ -4198,9 +4198,7 @@
 
 - name: "MEDIUM | RHEL-07-040730 | PATCH | The Red Hat Enterprise Linux operating system must not have an X Windows display manager installed unless approved."
   ansible.builtin.package:
-      name:
-          - "@x11"
-          - xorg-x11-server-common
+      name: "{{ rhel7stig_gui_pkgs }}"
       state: absent
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
