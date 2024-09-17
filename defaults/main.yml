@@ -23,10 +23,6 @@ rhel7stig_skip_reboot: true
 # It will add the new vaulted location where it is possible to get updates and package
 rhel7stig_add_updated_repo: false
 
-###
-### Settings for associated Audit role using Goss
-###
-
 ###########################################
 ### Goss is required on the remote host ###
 ### vars/auditd.yml for other settings  ###
@@ -77,6 +73,7 @@ audit_log_dir: '/opt'
 
 ### Goss Settings ##
 ####### END ########
+
 #### Detailed settings found at the end of this document ####
 
 # We've defined complexity-high to mean that we cannot automatically remediate
