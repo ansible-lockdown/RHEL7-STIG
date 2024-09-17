@@ -132,6 +132,20 @@
       - V-204497
       - fips
 
+- name: PRELIM | Gnome Desktop Environment Discovery
+  tags:
+      - always
+  block:
+      - name: PRELIM | Gnome Desktop Environment Discovery
+        ansible.builtin.stat:
+            path: /usr/share/gnome/gnome-version.xml
+        register: prelim_gnome_present
+
+      - name: PRELIM | Gnome Desktop Environment Discovery | add packages if x11 not required
+        when: rhel_07_040710
+        ansible.builtin.set_fact:
+            rhel7stig_gui_pkgs: "{{ rhel7stig_gui_pkgs + [ '@X11', 'xorg-x11-*' ] }}"
+
 - name: "PRELIM | dconf"
   block:
       - name: "PRELIM | Check for dconf availability"
@@ -292,7 +306,7 @@
   tags:
       - always
 
-- name: "PRELIM | ensure cronie is available"
+- name: "PRELIM | Ensure cronie is available"
   ansible.builtin.package:
       name: cronie
       state: present
@@ -324,18 +338,7 @@
         rhel_07_020690 or
         rhel_07_020700
   tags:
-      - cat2
-      - medium
-      - RHEL-07-020600
-      - RHEL-07-020620
-      - RHEL-07-020630
-      - RHEL-07-020640
-      - RHEL-07-020650
-      - RHEL-07-020660
-      - RHEL-07-020670
-      - RHEL-07-020680
-      - RHEL-07-020690
-      - RHEL-07-020700
+      - always
 
 # NOTE: You will need to adjust the UID range in parenthases below.
 # ALSO NOTE: We weed out any user with a home dir not in standard locations because interactive users shouldn't have those paths as a home dir. Add or removed directory paths as needed below.
