@@ -67,7 +67,7 @@
       dest: "{{ item }}"
       owner: root
       group: root
-      mode: 0644
+      mode: '0644'
   with_items:
       - /etc/issue
       - /etc/issue.net
@@ -338,7 +338,7 @@
       dest: /etc/pam.d/system-auth
       regexp: '^#?password\s+(required|requisite) pam_pwquality.so retry'
       line: password requisite pam_pwquality.so retry=3
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010119
   tags:
@@ -356,7 +356,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ucredit'
       line: "ucredit = {{ rhel7stig_password_complexity.ucredit | default('-1') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010120
   tags:
@@ -374,7 +374,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*lcredit'
       line: "lcredit = {{ rhel7stig_password_complexity.lcredit | default('-1') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010130
   tags:
@@ -392,7 +392,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*dcredit'
       line: "dcredit = {{ rhel7stig_password_complexity.dcredit | default('-1') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010140
   tags:
@@ -409,7 +409,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*ocredit'
       line: "ocredit = {{ rhel7stig_password_complexity.ocredit | default('-1') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010150
   tags:
@@ -427,7 +427,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*difok'
       line: "difok = {{ rhel7stig_password_complexity.difok | default('8') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010160
   tags:
@@ -445,7 +445,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minclass'
       line: "minclass = {{ rhel7stig_password_complexity.minclass | default('4') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010170
   tags:
@@ -463,7 +463,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxrepeat'
       line: "maxrepeat = {{ rhel7stig_password_complexity.maxrepeat | default('3') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010180
   tags:
@@ -481,7 +481,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*maxclassrepeat'
       line: "maxclassrepeat = {{ rhel7stig_password_complexity.maxclassrepeat | default('4') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010190
   tags:
@@ -501,7 +501,7 @@
             dest: "/{{ item }}"
             owner: root
             group: root
-            mode: 0644
+            mode: '0644'
         loop:
             - etc/pam.d/password-auth-local
             - etc/pam.d/system-auth-local
@@ -594,7 +594,7 @@
       dest: /etc/login.defs
       regexp: ^#?PASS_MIN_DAYS
       line: "PASS_MIN_DAYS {{ rhel7stig_login_defaults.pass_min_days | default('1') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010230
   tags:
@@ -637,7 +637,7 @@
       dest: /etc/login.defs
       regexp: ^#?PASS_MAX_DAYS
       line: "PASS_MAX_DAYS {{ rhel7stig_login_defaults.pass_max_days | default('60') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010250
   tags:
@@ -740,7 +740,7 @@
       dest: /etc/security/pwquality.conf
       regexp: '^#?\s*minlen'
       line: "minlen = {{ rhel7stig_password_complexity.minlen | default('15') }}"
-      mode: 0644
+      mode: '0644'
   when:
       - rhel_07_010280
   tags:
@@ -1136,7 +1136,7 @@
             dest: /etc/pam_pkcs11/pkcs11_eventmgr.conf
             regexp: '^#?/usr/X11R6/bin/xscreensaver-command -lock'
             line: "/usr/X11R6/bin/xscreensaver-command -lock"
-            mode: 0644
+            mode: '0644'
 
       # This remediates the pam_pkcs11.conf file to enforce the cackey usage for smartcard authentication
       ### NOTE:  If you have custom rules for /etc/pam_pkcs11/pam_pkcs11.conf then change the template pam_pkcs11.conf.j2
@@ -1146,7 +1146,7 @@
             dest: /etc/pam_pkcs11/pam_pkcs11.conf
             owner: root
             group: root
-            mode: 0644
+            mode: '0644'
         when:
             - rhel_07_010500pkcs11install is changed
   when:
@@ -1283,7 +1283,7 @@
       create: true
       owner: root
       group: root
-      mode: "0644"
+      mode: '0644'
   with_items:
       - file: /etc/modprobe.d/blacklist.conf
         insertafter: "^#blacklist usb-storage(\\s+|$)"
@@ -1315,7 +1315,7 @@
       create: true
       owner: root
       group: root
-      mode: "0644"
+      mode: '0644'
   with_items:
       - file: /etc/modprobe.d/blacklist.conf
         insertafter: ^#blacklist dccp
@@ -1547,7 +1547,7 @@
   ansible.builtin.file:
       path: "{{ item.dir }}"
       state: directory
-      mode: 0700
+      mode: '0700'
   with_items:
       - "{{ rhel7stig_passwd }}"
   loop_control:
@@ -1589,7 +1589,7 @@
   ansible.builtin.file:
       path: "{{ item.dir }}"
       owner: "{{ item.id }}"
-      mode: 0700
+      mode: '0700'
       state: directory
   with_items:
       - "{{ rhel7stig_passwd }}"
@@ -1612,7 +1612,7 @@
       path: "{{ item.dir }}"
       group: "{{ item.gid }}"  # noqa risky-file-permissions
       state: directory
-      mode: 0700
+      mode: '0700'
   with_items:
       - "{{ rhel7stig_passwd }}"
   loop_control:
@@ -2206,7 +2206,7 @@
             state: file
             owner: root
             group: root
-            mode: 0600
+            mode: '0600'
         when: cron_allow_file_check.stat.exists
   when:
       - rhel_07_021110
@@ -2371,7 +2371,7 @@
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
       create: true
-      mode: 0640
+      mode: '0640'
   notify: restart auditd
   with_items:
       - { regexp: '^active =', line: 'active = yes'}
@@ -3296,7 +3296,7 @@
 - name: "MEDIUM | RHEL-07-040160 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all network connections associated with a communication session are terminated at the end of the session or after 15 minutes of inactivity from the user at a command prompt, except to fulfill documented and validated mission requirements."
   ansible.builtin.blockinfile:
       create: true
-      mode: 0644
+      mode: '0644'
       dest: "{{ item.dest }}"
       state: "{{ item.state }}"
       marker: "# {mark} ANSIBLE MANAGED"
@@ -3385,7 +3385,7 @@
             path: /etc/sssd/sssd.conf
             insertafter: "^ldap_search_base*"
             create: true
-            mode: 0600
+            mode: '0600'
         when: rhel_07_040180_audit.stdout == "Active"
   when:
       - rhel_07_040180 or
@@ -3475,7 +3475,7 @@
       regexp: "(?i)^#?ClientAliveInterval"
       line: ClientAliveInterval {{ rhel7stig_ssh_session_timeout }}
       validate: /usr/sbin/sshd -t -f %s
-      mode: 0600
+      mode: '0600'
   notify: restart sshd
   when:
       - rhel_07_040320
@@ -3517,7 +3517,7 @@
       regexp: "(?i)^#?ClientAliveCountMax"
       line: ClientAliveCountMax 0
       validate: /usr/sbin/sshd -t -f %s
-      mode: 0600
+      mode: '0600'
   notify: restart sshd
   when:
       - rhel_07_040340
@@ -3578,7 +3578,7 @@
       line: PermitRootLogin no
       insertafter: '(?i)^#?authentication'
       validate: /usr/sbin/sshd -t -f %s
-      mode: 0600
+      mode: '0600'
   notify: restart sshd
   when:
       - rhel_07_040370
@@ -3598,7 +3598,7 @@
       regexp: "(?i)^#?IgnoreUserKnownHosts"
       line: IgnoreUserKnownHosts yes
       validate: /usr/sbin/sshd -t -f %s
-      mode: 0600
+      mode: '0600'
   notify: restart sshd
   when:
       - rhel_07_040380
@@ -3619,7 +3619,7 @@
       regexp: "(?i)^#?MACs"
       line: "MACs {{ rhel7stig_ssh_macs }}"
       validate: /usr/sbin/sshd -t -f %s
-      mode: 0600
+      mode: '0600'
   notify: restart sshd
   when:
       - rhel_07_040400
@@ -3703,7 +3703,7 @@
       regexp: "(?i)^#?GSSAPIAuthentication"
       line: GSSAPIAuthentication no
       validate: /usr/sbin/sshd -t -f %s
-      mode: 0600
+      mode: '0600'
   notify: restart sshd
   when:
       - rhel_07_040430
@@ -3826,7 +3826,7 @@
             dest: "{{ rhel7stig_time_service_configs[rhel7stig_time_service].conf }}"
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
-            mode: 0600
+            mode: '0600'
         notify: restart {{ rhel7stig_time_service }}
         with_items:
             - "{{ rhel7stig_time_service_configs[rhel7stig_time_service].lines }}"
@@ -4138,7 +4138,7 @@
       regexp: "(?i)^#?X11Forwarding"
       line: X11Forwarding no
       validate: /usr/sbin/sshd -t -f %s
-      mode: 0600
+      mode: '0600'
   notify: restart sshd
   when:
       - rhel_07_040710
@@ -4159,7 +4159,7 @@
       regexp: "(?i)^#?KexAlgorithms"
       line: KexAlgorithms "{{ rhel7stig_ssh_kex }}"
       validate: /usr/sbin/sshd -t -f %s
-      mode: 0600
+      mode: '0600'
   notify: restart sshd
   when:
       - rhel_07_040712
@@ -4540,7 +4540,7 @@
             path: "{{ item.path }}"
             owner: root
             group: root
-            mode: 0600
+            mode: '0600'
         with_items:
             - "{{ rhel_07_910055_audit_log_files.files }}"
         when: item.mode is not search '(0[4,6]00)'
@@ -4565,7 +4565,7 @@
       regexp: "(?i)^#?X11UseLocalhost"
       line: X11UseLocalhost yes
       validate: /usr/sbin/sshd -t -f %s
-      mode: 0600
+      mode: '0600'
   notify: restart sshd
   when:
       - rhel_07_040711
