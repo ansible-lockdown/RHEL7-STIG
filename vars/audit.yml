@@ -12,7 +12,7 @@ audit_bin_url: "https://github.com/goss-org/goss/releases/download/{{ audit_bin_
 ## managed by the control audit_content
 # git
 audit_file_git: "https://github.com/ansible-lockdown/{{ benchmark }}-Audit.git"
-audit_git_version: "benchmark_{{ benchmark_version }}_rh7"
+audit_git_version: "benchmark_{{ benchmark_version }}"
 
 ## Goss configuration information
 # Where the goss audit configuration will be stored - NOTE benchmark-audit is expected
