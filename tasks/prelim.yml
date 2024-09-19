@@ -314,6 +314,13 @@
   tags:
       - always
 
+- name: "PRELIM | AUDIT | Create list of mount points"
+  ansible.builtin.set_fact:
+      prelim_local_mount_names: "{{ ansible_facts.mounts | map(attribute='mount') | list }}"
+      prelim_nfs_mount_names: "{{ ansible_facts.mounts | selectattr('fstype', 'equalto', 'nfs') | map(attribute='mount') | list | default([]) }}"
+  tags:
+      - always
+
 - name: "PRELIM | Gather mount information"
   ansible.builtin.setup:
       gather_subset: hardware,!all,!min

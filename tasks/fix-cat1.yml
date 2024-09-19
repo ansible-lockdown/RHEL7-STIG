@@ -574,7 +574,7 @@
 - name: "HIGH | RHEL-07-040540 | The Red Hat Enterprise Linux operating system must not contain .shosts files."
   block:
       - name: "HIGH | RHEL-07-040540 | AUDIT | The Red Hat Enterprise Linux operating system must not contain .shosts files."
-        ansible.builtin.shell: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name '.shosts'
+        ansible.builtin.shell: find / -xdev -not -fstype nfs -name '.shosts'
         check_mode: false
         changed_when: false
         register: rhel_07_040540_audit
@@ -599,7 +599,7 @@
 - name: "HIGH | RHEL-07-040550 | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
   block:
       - name: "HIGH | RHEL-07-040550 | AUDIT | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
-        ansible.builtin.shell: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -name 'shosts.equiv'
+        ansible.builtin.shell: find / -xdev -not -fstype nfs -name 'shosts.equiv'
         check_mode: false
         changed_when: false
         register: rhel_07_040550_audit

@@ -689,10 +689,6 @@ update_audit_template: false
 # RHEL-07-030300 uncomment and set the value to a remote IP address that can receive audit logs
 # rhel7stig_audisp_remote_server: 10.10.10.10
 
-# RHEL-07-030330: set this to 25% of the free space in /var/log/audit (measured in megabytes)
-rhel7stig_auditd_space_left: "{{ ( ansible_mounts | json_query(rhel7stig_audit_disk_size_query) | int / 4 / 1024 / 1024 ) | int + 1 }}"
-rhel7stig_audit_disk_size_query: "[?mount=='{{ rhel7stig_audit_part }}'].size_total | [0]"
-
 # RHEL-07-030350
 rhel7stig_audit_daemon: auditd
 rhel7stig_auditd_mail_acct: root
@@ -745,12 +741,6 @@ rhel7stig_efi_boot_path: '/boot/efi/EFI/'
 # oracle7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
 
 rhel7stig_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
-
-rhel7stig_local_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_local_mounts_query) }}"
-rhel7stig_local_mounts_query: "[?starts_with(device, '/dev/')].mount"
-
-rhel7stig_nfs_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_nfs_mounts_query) }}"
-rhel7stig_nfs_mounts_query: "[?starts_with(fstype, 'nfs')].mount"
 
 # DNS Servers to configure, you need two to conform to STIG standards
 rhel_07_040600_dns_servers:
