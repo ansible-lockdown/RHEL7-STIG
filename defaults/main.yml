@@ -76,6 +76,7 @@ audit_log_dir: '/opt'
 
 #### Detailed settings found at the end of this document ####
 
+
 # We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation
 # may fail in some cases.
