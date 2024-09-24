@@ -19,9 +19,12 @@
       - audit_content == 'git'
   block:
       - name: Pre Audit Setup | Install git
+        when: ansible_distribution_major_version == '7'
         ansible.builtin.package:
             name: git
             state: present
+        vars:
+            ansible_python_interpreter: "{{ python2_bin }}"
 
       - name: Pre Audit Setup | Retrieve audit content files from git
         ansible.builtin.git:

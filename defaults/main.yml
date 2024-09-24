@@ -13,7 +13,7 @@ python2_bin: /bin/python2.7
 # audit variable found at the base
 benchmark: RHEL7-STIG
 ## metadata for Audit benchmark
-benchmark_version: 'v3r13'
+benchmark_version: 'v3r14'
 
 # Whether to skip the reboot
 rhel7stig_skip_reboot: true
@@ -22,10 +22,6 @@ rhel7stig_skip_reboot: true
 # setting to true will replace the default /etc/yum.repos.d/CentOS-Base.repo
 # It will add the new vaulted location where it is possible to get updates and package
 rhel7stig_add_updated_repo: false
-
-###
-### Settings for associated Audit role using Goss
-###
 
 ###########################################
 ### Goss is required on the remote host ###
@@ -77,6 +73,7 @@ audit_log_dir: '/opt'
 
 ### Goss Settings ##
 ####### END ########
+
 #### Detailed settings found at the end of this document ####
 
 # We've defined complexity-high to mean that we cannot automatically remediate
@@ -375,8 +372,8 @@ rhel_07_040000: true
 rhel_07_040530: true
 rhel_07_040600: true
 
-# Whether or not to run tasks related to auditing/patching the desktop environment
-rhel7stig_gui: false
+# Whether or not to run tasks related to auditing/patching the desktop environment - is discovered if using gnome
+rhel7stig_gui: "{{ prelim_gnome_present.stat.exists | default(false) }}"
 
 # Whether to configure dconf rules unconditionally (ignoring presence of dconf
 # or rhel7stig_gui)
@@ -692,10 +689,6 @@ update_audit_template: false
 # RHEL-07-030300 uncomment and set the value to a remote IP address that can receive audit logs
 # rhel7stig_audisp_remote_server: 10.10.10.10
 
-# RHEL-07-030330: set this to 25% of the free space in /var/log/audit (measured in megabytes)
-rhel7stig_auditd_space_left: "{{ ( ansible_mounts | json_query(rhel7stig_audit_disk_size_query) | int / 4 / 1024 / 1024 ) | int + 1 }}"
-rhel7stig_audit_disk_size_query: "[?mount=='{{ rhel7stig_audit_part }}'].size_total | [0]"
-
 # RHEL-07-030350
 rhel7stig_audit_daemon: auditd
 rhel7stig_auditd_mail_acct: root
@@ -748,12 +741,6 @@ rhel7stig_efi_boot_path: '/boot/efi/EFI/'
 # oracle7stig_grub_cfg_path_invalid: "{{ (not rhel7stig_machine_uses_uefi) | ternary('/boot/efi/EFI/redhat/grub.cfg', '/boot/grub2/grub.cfg') }}"
 
 rhel7stig_passwd_label: "{{ (this_item | default(item)).id }}: {{ (this_item | default(item)).dir }}"
-
-rhel7stig_local_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_local_mounts_query) }}"
-rhel7stig_local_mounts_query: "[?starts_with(device, '/dev/')].mount"
-
-rhel7stig_nfs_mounts: "{{ ansible_mounts | to_json | from_json | json_query(rhel7stig_nfs_mounts_query) }}"
-rhel7stig_nfs_mounts_query: "[?starts_with(fstype, 'nfs')].mount"
 
 # DNS Servers to configure, you need two to conform to STIG standards
 rhel_07_040600_dns_servers:

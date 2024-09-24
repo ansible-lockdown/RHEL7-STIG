@@ -1051,6 +1051,7 @@
             path: /etc/grub.d/01_users
             regexp: "{{ item.regexp }}"
             line: "{{ item.line }}"
+            create: true
         notify:
             - make grub2 config
         with_items:
@@ -1292,7 +1293,7 @@
       - file: /etc/modprobe.d/usb-storage.conf
         insertafter: "^#install usb-storage"
         regexp: "^install usb-storage"
-        line: install usb-storage /bin/true
+        line: install usb-storage /bin/false
   when:
       - rhel_07_020100
   tags:
@@ -1302,7 +1303,7 @@
       - CCI-000778
       - CCI-000366
       - SRG-OS-000114-GPOS-00059
-      - SV-204449r603261_rule
+      - SV-204449r942894_rule
       - V-204449
       - usb_devices
 
@@ -1324,7 +1325,7 @@
       - file: /etc/modprobe.d/dccp.conf
         insertafter: ^#install dccp
         regexp: "^install dccp "
-        line: install dccp /bin/true
+        line: install dccp /bin/false
   when:
       - rhel_07_020101
   tags:
@@ -1332,7 +1333,7 @@
       - CAT2
       - CCI-001958
       - SRG-OS-000378-GPOS-00163
-      - SV-204450r603261_rule
+      - SV-204450r942897_rule
       - V-204450
       - dccp
 
@@ -1382,7 +1383,7 @@
       - CCI-002696
       - CCI-002165
       - SRG-OS-000445-GPOS-00199
-      - SV-204453r754746_rule
+      - SV-204453r942900_rule
       - V-204453
       - RHEL-07-020220
       - SV-204454r754748_rule
@@ -1463,18 +1464,17 @@
 - name: "MEDIUM | RHEL-07-020320 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner."
   block:
       - name: "MEDIUM | RHEL-07-020320 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner."
-        ansible.builtin.shell: find "{{ item.mount }}" -xdev -nouser
+        ansible.builtin.shell: find "{{ item }}" -xdev -nouser
         check_mode: false
         failed_when: false
         changed_when: false
         register: rhel_07_020320_audit
         with_items:
-            - "{{ ansible_mounts }}"
-        when: item['device'].startswith('/dev') and not 'bind' in item['options']
+            - "{{ prelim_local_mount_names }}"
 
       - name: "MEDIUM | RHEL-07-020320 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid owner."
         ansible.builtin.debug:
-            msg: "Warning!! Manual intervention is required -- missing owner on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+            msg: "Warning!! Manual intervention is required -- missing owner on items in {{ item.stdout_lines }}"
         changed_when: rhel7stig_audit_complex
         with_items:
             - "{{ rhel_07_020320_audit.results }}"
@@ -1496,18 +1496,17 @@
 - name: "MEDIUM | RHEL-07-020330 | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner."
   block:
       - name: "MEDIUM | RHEL-07-020330 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner."
-        ansible.builtin.shell: find "{{ item.mount }}" -xdev -nogroup
+        ansible.builtin.shell: find "{{ item }}" -xdev -nogroup
         check_mode: false
         failed_when: false
         changed_when: false
         register: rhel_07_020330_audit
         with_items:
-            - "{{ ansible_mounts }}"
-        when: item['device'].startswith('/dev') and not 'bind' in item['options']
+            - "{{ prelim_local_mount_names }}"
 
       - name: "MEDIUM | RHEL-07-020330 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all files and directories have a valid group owner."
         ansible.builtin.debug:
-            msg: "Warning!! Manual intervention is required -- missing group on items in {{ item.item.mount }}: {{ item.stdout_lines | join(', ') }}"
+            msg: "Warning!! Manual intervention is required -- missing group on items in {{ item.stdout_lines }}"
         changed_when: rhel7stig_audit_complex
         with_items:
             - "{{ rhel_07_020330_audit.results }}"
@@ -1880,7 +1879,7 @@
 - name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
   block:
       - name: "MEDIUM | RHEL-07-020720 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all local interactive user initialization files executable search paths contain only paths that resolve to the users home directory."
-        ansible.builtin.shell: find "{{ item }}" -maxdepth 1 -type f | xargs grep "PATH=" | cut -d':' -f1 | xargs realpath
+        ansible.builtin.shell: find "{{ item }}" -maxdepth 1 -type f  | xargs grep "PATH=" | cut -d':' -f1 | xargs realpath
         with_items: "{{ rhel_07_stig_interactive_homedir_results }}"
         changed_when: false
         failed_when: false
@@ -1920,7 +1919,7 @@
   block:
       # Let's find any progerams with world-writable permissions.
       - name: "MEDIUM | RHEL-07-020730 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that local initialization files do not execute world-writable programs."
-        ansible.builtin.shell: find / -xdev -perm -002 -type f -exec ls -ld {} \; | awk '{print $9}'
+        ansible.builtin.shell: find / -xdev -not -fstype nfs -perm -002 -type f -exec ls -ld {} \; | awk '{print $9}'
         failed_when: false
         changed_when: false
         register: rhel_07_020730_perms_results
@@ -1981,7 +1980,7 @@
 - name: "MEDIUM | RHEL-07-020900 | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
   block:
       - name: "MEDIUM | RHEL-07-020900 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all system device files are correctly labeled to prevent unauthorized modification."
-        ansible.builtin.shell: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -context *:device_t:* -o -context *:unlabeled_t:* -type c -o -type b -printf '%p %Z\n'
+        ansible.builtin.shell: find / -xdev -not -fstype nfs -context *:device_t:* -o -context *:unlabeled_t:* -type c -o -type b -printf '%p %Z\n'
         changed_when: false
         check_mode: false
         register: rhel_07_020900_audit
@@ -2012,15 +2011,16 @@
   ansible.posix.mount:
       path: /home
       state: mounted
-      src: "{{ home_mount.device }}"
-      fstype: "{{ home_mount.fstype }}"
-      opts: "{{ home_mount.options }},nosuid"
-  vars:
-      home_mount: "{{ ansible_mounts | json_query('[?mount == `/home`] | [0]') }}"  # noqa: jinja[invalid]
+      src: "{{ item.device }}"
+      fstype: "{{ item.fstype }}"
+      opts: "{{ item.options }},nosuid"
+  loop: "{{ ansible_facts.mounts }}"
+  loop_control:
+      label: "{{ item.device }}"
   when:
       - rhel_07_021000
-      - ansible_mounts | selectattr('mount', 'match', '^/home$') | list | length != 0
-      - "'nosuid' not in home_mount.options"
+      - item.mount == "/home"
+      - "'nosuid' not in item.options"
   tags:
       - RHEL-07-021000
       - CAT2
@@ -2035,27 +2035,29 @@
         ansible.posix.mount:
             path: /media
             state: mounted
-            src: "{{ removable_mount.device }}"
-            fstype: "{{ removable_mount.fstype }}"
-            opts: "{{ removable_mount.options }},nosuid"
-        vars:
-            removable_mount: "{{ ansible_mounts | json_query('[?mount == `/media`] | [0]') }}"  # noqa: jinja[invalid]
+            src: "{{ item.device }}"
+            fstype: "{{ item.fstype }}"
+            opts: "{{ item.options }},nosuid"
+        loop: "{{ ansible_facts.mounts }}"
+        loop_control:
+            label: "{{ item.device }}"
         when:
-            - ansible_mounts | selectattr('mount', 'match', '^/media$') | list | length != 0
-            - "'nosuid' not in removable_mount.options"
+            - item.mount == "/media"
+            - "'nosuid' not in item.options"
 
       - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
         ansible.posix.mount:
             path: /mnt
             state: mounted
-            src: "{{ removable_mount2.device }}"
-            fstype: "{{ removable_mount2.fstype }}"
-            opts: "{{ removable_mount2.options }},nosuid"
-        vars:
-            removable_mount2: "{{ ansible_mounts | json_query('[?mount == `/mnt`] | [0]') }}"  # noqa: jinja[invalid]
+            src: "{{ item.device }}"
+            fstype: "{{ item.fstype }}"
+            opts: "{{ item.options }},nosuid"
+        loop: "{{ ansible_facts.mounts }}"
+        loop_control:
+            label: "{{ item.device }}"
         when:
-            - ansible_mounts | selectattr('mount', 'match', '^/mnt$') | list | length != 0
-            - "'nosuid' not in removable_mount2.options"
+            - item.mount == "/mnt"
+            - "'nosuid' not in item.options"
   when:
       - rhel_07_021010
       - not (rhel7stig_system_is_chroot and rhel7stig_system_is_container)
@@ -2070,19 +2072,15 @@
 - name: "MEDIUM | RHEL-07-021020 | PATCH | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are being imported via Network File System (NFS)."
   ansible.posix.mount:
       path: "{{ item }}"
-      src: "{{ ansible_mounts | json_query(device_query) }}"
-      fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
-      opts: "{{ ansible_mounts | json_query(options_query) }},nosuid"
+      src: "{{ item.src }}"
+      fstype: "{{ aitem.fstype }}"
+      opts: "{{ item.opts,nosuid }}"
       state: mounted
-  vars:
-      device_query: '[?mount == `{{ item }}`] | [0].device'  # noqa: jinja[invalid]
-      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'  # noqa: jinja[invalid]
-      options_query: '[?mount == `{{ item }}`] | [0].options'  # noqa: jinja[invalid]
   with_items:
-      - "{{ rhel7stig_nfs_mounts }}"
+      - "{{ prelim_nfs_mount_names }}"
   when:
       - rhel_07_021020
-      - "'nosuid' not in (ansible_mounts | json_query(options_query))"
+      - "'nosuid' not in item"
   tags:
       - RHEL-07-021020
       - CAT2
@@ -2095,19 +2093,15 @@
 - name: "MEDIUM | RHEL-07-021021 | PATCH | The Red Hat Enterprise Linux operating system must prevent binary files from being executed on file systems that are being imported via Network File System (NFS)."
   ansible.posix.mount:
       path: "{{ item }}"
-      src: "{{ ansible_mounts | json_query(device_query) }}"
-      fstype: "{{ ansible_mounts | json_query(fstype_query) }}"
-      opts: "{{ ansible_mounts | json_query(options_query) }},noexec"
+      src: "{{ item.src }}"
+      fstype: "{{ aitem.fstype }}"
+      opts: "{{ item.opts,noexec }}"
       state: mounted
-  vars:
-      device_query: '[?mount == `{{ item }}`] | [0].device'  # noqa: jinja[invalid]
-      fstype_query: '[?mount == `{{ item }}`] | [0].fstype'  # noqa: jinja[invalid]
-      options_query: '[?mount == `{{ item }}`] | [0].options'  # noqa: jinja[invalid]
   with_items:
-      - "{{ rhel7stig_nfs_mounts }}"
+      - "{{ prelim_nfs_mount_names }}"
   when:
       - rhel_07_021021
-      - "'noexec' not in (ansible_mounts | json_query(options_query))"
+      - "'noexec' not in item"
   tags:
       - RHEL-07-021021
       - CAT2
@@ -2120,7 +2114,7 @@
 - name: "MEDIUM | RHEL-07-021030 | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are group-owned by root, sys, bin, or an application group."
   block:
       - name: "MEDIUM | RHEL-07-021030 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that all world-writable directories are group-owned by root, sys, bin, or an application group."
-        ansible.builtin.shell: find {{ rhel7stig_local_mounts | join(' ') }} -xdev -type d -perm -002 -gid +999
+        ansible.builtin.shell: find / -xdev -not -fstype nfs -type d -perm -002 -gid +999
         changed_when: rhel_07_021030_audit.stdout != ""
         check_mode: false
         register: rhel_07_021030_audit
@@ -2498,7 +2492,7 @@
   ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       regexp: ^space_left +=
-      line: "space_left = {{ [rhel7stig_auditd_space_left | int, 51] | max }}"
+      line: "space_left = 25%"
   when:
       - rhel_07_030330
   tags:
@@ -3399,10 +3393,10 @@
       - SV-204581r603261_rule
       - V-204581
       - RHEL-07-040190
-      - SV-204582r603261_rule
+      - SV-204582r942909_rule
       - V-204582
       - RHEL-07-040200
-      - SV-204583r603261_rule
+      - SV-204583r942912_rule
       - V-204583
       - ldap
 
@@ -4198,9 +4192,7 @@
 
 - name: "MEDIUM | RHEL-07-040730 | PATCH | The Red Hat Enterprise Linux operating system must not have an X Windows display manager installed unless approved."
   ansible.builtin.package:
-      name:
-          - "@x11"
-          - xorg-x11-server-common
+      name: "{{ rhel7stig_gui_pkgs }}"
       state: absent
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
@@ -4419,16 +4411,35 @@
 
 - name: "MEDIUM | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
   block:
+      - name: "MEDIUM | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled. | Discover if wirelss adapter on system"
+        ansible.builtin.shell: find /sys/class/net/*/ -type d -name wireless
+        changed_when: false
+        failed_when: discovered_wireless_adapters.rc not in [ 0, 1 ]
+        register: discovered_wireless_adapters
+
+      - name: "MEDIUM | RHEL-07-041010 | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled. | if wireless adapter present"
+        ansible.builtin.package:
+            name: NetworkManager
+            state: present
+        when:
+            - discovered_wireless_adapters.rc == 0
+            - "'NetworkManager' not in ansible_facts.packages"
+
       - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if wifi is enabled"
         ansible.builtin.shell: nmcli radio wifi
         changed_when: false
         check_mode: false
+        failed_when: rhel_07_wifi_enabled.rc not in [ 0, 1 ]
         register: rhel_07_wifi_enabled
+        when:
+            - discovered_wireless_adapters.rc == 0
 
       - name: "MEDIUM | RHEL-07-041010 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that all wireless network adapters are disabled."
         ansible.builtin.shell: nmcli radio wifi off
         when:
+            - discovered_wireless_adapters.rc == 0
             - "'enabled' in rhel_07_wifi_enabled.stdout"
+            - rhel_07_wifi_enabled.rc == 0
   when:
       - rhel_07_041010
       - "'NetworkManager' in ansible_facts.packages"
@@ -4444,11 +4455,11 @@
       - wifi
       - networking
 
-- name: "MEDIUM | RHEL-07-020019 | AUDIT | The Red Hat Enterprise Linux operating system must have a host-based intrusion detection tool installed."
+- name: "MEDIUM | RHEL-07-020019 | AUDIT | The Red Hat Enterprise Linux operating system must implement the Endpoint Security for Linux Threat Prevention tool."
   ansible.builtin.debug:
       msg:
-          - "Please install and enable the latest McAfee HIPS package, available from USCYBERCOM."
-          - "If the system does not support the McAfee HIPS package, install and enable a supported intrusion detection system application and document its use with the Authorizing Official."
+          - "Please Install and enable the latest Trellix ENSLTP package."
+          - "If the system does not support the Trellix ENSLTP package, install and enable a supported intrusion detection system application and document its use with the Authorizing Official."
   when:
       - rhel_07_020019
   tags:
@@ -4457,7 +4468,7 @@
       - CAT2
       - CCI-001263
       - SRG-OS-000480-GPOS-00227
-      - SV-214800r603261_rule
+      - SV-214800r942888_rule
       - V-214800
       - antivirus
 
@@ -4758,7 +4769,7 @@
       - CCI-002165
       - CI-002235
       - SRG-OS-000324-GPOS-00125
-      - SV-250313r792846_rule
+      - SV-250313r942891_rule
       - V-250313
 
 - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
