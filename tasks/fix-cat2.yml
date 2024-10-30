@@ -4427,8 +4427,8 @@
 
       - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if wifi is enabled"
         ansible.builtin.shell: nmcli radio wifi
-        changed_when: false
         check_mode: false
+        changed_when: false
         failed_when: rhel_07_wifi_enabled.rc not in [ 0, 1 ]
         register: rhel_07_wifi_enabled
         when:
@@ -4458,7 +4458,7 @@
 - name: "MEDIUM | RHEL-07-020019 | AUDIT | The Red Hat Enterprise Linux operating system must implement the Endpoint Security for Linux Threat Prevention tool."
   ansible.builtin.debug:
       msg:
-          - "Please Install and enable the latest Trellix ENSLTP package."
+          - "Please install and enable the latest Trellix ENSLTP package."
           - "If the system does not support the Trellix ENSLTP package, install and enable a supported intrusion detection system application and document its use with the Authorizing Official."
   when:
       - rhel_07_020019
