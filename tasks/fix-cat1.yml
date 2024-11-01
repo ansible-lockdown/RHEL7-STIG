@@ -43,31 +43,31 @@
       - V-204392
       - permissions
 
-- name: "HIGH | RHEL-07-021350 | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+- name: "HIGH | RHEL-07-010020 | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
   block:
-      - name: "HIGH | RHEL-07-021350 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
         ansible.builtin.shell: 'rpm -Va --noconfig --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nodigest --nosignature | grep ''^..5'' | tee /dev/stderr | cut -c13- | sed ''s/^ //'' | xargs rpm -qf --qf=''%{name}\n'' | sort -u'
         check_mode: false
         failed_when: false
-        changed_when: rhel_07_021350_audit.stdout| length > 0
-        register: rhel_07_021350_audit
+        changed_when: rhel_07_010020_audit.stdout| length > 0
+        register: rhel_07_010020_audit
 
-      - name: "HIGH | RHEL-07-021350 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+      - name: "HIGH | RHEL-07-010020 | AUDIT | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
         ansible.builtin.debug:
-            msg: "{{ rhel_07_021350_audit.stderr_lines }}"
+            msg: "{{ rhel_07_010020_audit.stderr_lines }}"
         changed_when: true
-        when: rhel_07_021350_audit.stdout | length > 0
+        when: rhel_07_010020_audit.stdout | length > 0
 
-      - name: "HIGH | RHEL-07-021350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
+      - name: "HIGH | RHEL-07-010020 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that the cryptographic hash of system files and commands matches vendor values."
         ansible.builtin.shell: yum reinstall -y {{ item }}
         failed_when: false
         with_items:
-            - "{{ rhel_07_021350_audit.stdout_lines }}"
-        when: rhel_07_021350_audit.stdout_lines | length > 0
+            - "{{ rhel_07_010020_audit.stdout_lines }}"
+        when: rhel_07_010020_audit.stdout_lines | length > 0
   when:
-      - rhel_07_021350
+      - rhel_07_010020
   tags:
-      - RHEL-07-021350
+      - RHEL-07-010020
       - CAT1
       - CCI-001749
       - SRG-OS-000480-GPOS-00227
@@ -471,9 +471,7 @@
             - rhel_07_021350_boot_kernel_set.stdout | length == 0
             - not ansible_check_mode or
               rhel_07_021350_default_grub_missing_audit is not changed
-
         notify: confirm grub2 user cfg
-        register: result
 
       - name: "HIGH | RHEL-07-021350 | AUDIT | Verify kernel parameters in /etc/default/grub"
         ansible.builtin.shell: grep -P '^\s*GRUB_CMDLINE_LINUX=".*(?<=[" ]){{ item | regex_escape }}(?=[" ]).*"$' /etc/default/grub
@@ -575,8 +573,8 @@
   block:
       - name: "HIGH | RHEL-07-040540 | AUDIT | The Red Hat Enterprise Linux operating system must not contain .shosts files."
         ansible.builtin.shell: find / -xdev -not -fstype nfs -name '.shosts'
-        check_mode: false
         changed_when: false
+        check_mode: false
         register: rhel_07_040540_audit
 
       - name: "HIGH | RHEL-07-040540 | PATCH | The Red Hat Enterprise Linux operating system must not contain .shosts files."
@@ -600,8 +598,8 @@
   block:
       - name: "HIGH | RHEL-07-040550 | AUDIT | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
         ansible.builtin.shell: find / -xdev -not -fstype nfs -name 'shosts.equiv'
-        check_mode: false
         changed_when: false
+        check_mode: false
         register: rhel_07_040550_audit
 
       - name: "HIGH | RHEL-07-040550 | PATCH | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
@@ -669,9 +667,9 @@
   block:
       - name: "HIGH | RHEL-07-040800 | AUDIT | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
         ansible.builtin.shell: grep {{ item }} /etc/snmp/snmpd.conf
-        check_mode: false
         failed_when: false
         changed_when: false
+        check_mode: false
         register: rhel_07_040800_audit
         with_items:
             - public
