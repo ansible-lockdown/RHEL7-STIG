@@ -4427,9 +4427,9 @@
 
       - name: "MEDIUM | RHEL-07-041010 | AUDIT | check if wifi is enabled"
         ansible.builtin.shell: nmcli radio wifi
-        check_mode: false
         changed_when: false
         failed_when: rhel_07_wifi_enabled.rc not in [ 0, 1 ]
+        check_mode: false
         register: rhel_07_wifi_enabled
         when:
             - discovered_wireless_adapters.rc == 0
