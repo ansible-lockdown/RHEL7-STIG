@@ -573,8 +573,8 @@
   block:
       - name: "HIGH | RHEL-07-040540 | AUDIT | The Red Hat Enterprise Linux operating system must not contain .shosts files."
         ansible.builtin.shell: find / -xdev -not -fstype nfs -name '.shosts'
-        check_mode: false
         changed_when: false
+        check_mode: false
         register: rhel_07_040540_audit
 
       - name: "HIGH | RHEL-07-040540 | PATCH | The Red Hat Enterprise Linux operating system must not contain .shosts files."
@@ -598,8 +598,8 @@
   block:
       - name: "HIGH | RHEL-07-040550 | AUDIT | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
         ansible.builtin.shell: find / -xdev -not -fstype nfs -name 'shosts.equiv'
-        check_mode: false
         changed_when: false
+        check_mode: false
         register: rhel_07_040550_audit
 
       - name: "HIGH | RHEL-07-040550 | PATCH | The Red Hat Enterprise Linux operating system must not contain shosts.equiv files."
@@ -667,9 +667,9 @@
   block:
       - name: "HIGH | RHEL-07-040800 | AUDIT | SNMP community strings on the Red Hat Enterprise Linux operating system must be changed from the default."
         ansible.builtin.shell: grep {{ item }} /etc/snmp/snmpd.conf
-        check_mode: false
         failed_when: false
         changed_when: false
+        check_mode: false
         register: rhel_07_040800_audit
         with_items:
             - public
