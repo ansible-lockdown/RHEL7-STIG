@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.3 STIG V3R15 24th July 2024
+
+Product has now been sunset by STIG officiall last release
+All Rule IDs updated
+
+- RHEL-07-020250 - updated statement to show now EOL
+
 ## 3.2 STIG v3R14 24th Jan 2024
 
 - Audit updated
