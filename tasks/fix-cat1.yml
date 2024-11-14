@@ -39,7 +39,7 @@
       - CCI-002165
       - CCI-002235
       - SRG-OS-000257-GPOS-00098
-      - SV-204392r880752_rule
+      - SV-204392r991558_rule
       - V-204392
       - permissions
 
@@ -71,7 +71,7 @@
       - CAT1
       - CCI-001749
       - SRG-OS-000480-GPOS-00227
-      - SSV-214799r854001_rule
+      - SSV-214799r991589_rule
       - V-214799
       - packages
 
@@ -89,7 +89,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204424r880839_rule
+      - SV-204424r991589_rule
       - V-204424
       - accounts
 
@@ -117,7 +117,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-251702r809220_rule
+      - SV-251702r991589_rule
       - V-251702
       - accounts
 
@@ -137,7 +137,7 @@
       - CAT1
       - CCI-000766
       - SRG-OS-000106-GPOS-00053
-      - SV-204425r603261_rule
+      - SV-204425r958486_rule
       - V-204425
       - ssh
 
@@ -155,7 +155,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00229
-      - SV-204432r603261_rule
+      - SV-204432r991591_rule
       - V-204432
       - gui
 
@@ -173,7 +173,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00229
-      - SV-204433r603261_rule
+      - SV-204433r991591_rule
       - V-204433
 
 - name: |
@@ -216,12 +216,10 @@
       - RHEL-07-010482
       - CCI-000213
       - SRG-OS-000080-GPOS-00048
-      - SV-204438r744095_rule
+      - SV-204438r958472_rule
       - V-204438
       - RHEL-07-010491
-      - CCI-000213
-      - SRG-OS-000080-GPOS-00048
-      - SV-204440r744098_rule
+      - SV-204440r958472_rule
       - V-204440
       - grub
       - bootloader
@@ -240,7 +238,7 @@
       - CAT1
       - CCI-000381
       - SRG-OS-000095-GPOS-00049
-      - SV-204442r603261_rule
+      - SV-204442r958478_rule
       - V-204442
       - rsh
 
@@ -258,7 +256,7 @@
       - CAT1
       - CCI-000381
       - SRG-OS-000095-GPOS-00049
-      - SV-204443r603261_rule
+      - SV-204443r958478_rule
       - V-204443
       - ypserv
 
@@ -275,7 +273,7 @@
       - CAT1
       - CCI-001749
       - SRG-OS-000366-GPOS-00153
-      - SV-204447r603261_rule
+      - SV-204447r982212_rule
       - V-204447
       - yum
 
@@ -292,7 +290,7 @@
       - CAT1
       - CCI-001749
       - SRG-OS-000366-GPOS-00153
-      - SV-204448r603261_rule
+      - SV-204448r982212_rule
       - V-204448
       - yum
 
@@ -307,7 +305,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204455r928574_rule
+      - SV-204455r991589_rule
       - V-204455
       - systemctl
 
@@ -327,7 +325,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204456r603261_rule
+      - SV-204456r991589_rule
       - V-204456
       - gui
 
@@ -337,10 +335,9 @@
 # Maintainance RHEL7.9 30th April 2021
 - name: "HIGH | RHEL-07-020250 | PATCH | The Red Hat Enterprise Linux operating system must be a vendor supported release."
   ansible.builtin.debug:
-      msg: Minimum supported version of {{ ansible_distribution }} is {{ rhel7stig_min_supported_os_ver[ansible_distribution] }}
+      msg: This Product is now end of Maintenance Support {{ ansible_distribution }} is {{ rhel7stig_min_supported_os_ver[ansible_distribution] }}
   changed_when:
       - rhel7stig_audit_complex
-      - ansible_distribution_version is not version_compare(rhel7stig_min_supported_os_ver[ansible_distribution], '>=')
   when:
       - rhel_07_020250
       - rhel7stig_complex
@@ -349,7 +346,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204458r744100_rule
+      - SV-204458r991589_rule
       - V-204458
       - complexity-high
 
@@ -374,7 +371,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204462r603261_rule
+      - SV-204462r991589_rule
       - V-204462
       - accounts
 
@@ -500,7 +497,7 @@
       - CAT1
       - CCI-000068
       - SRG-OS-000033-GPOS-00014
-      - SV-230223r928585_rule
+      - SV-204497r958408_rule
       - V-230223
 
 - name: "HIGH | RHEL-07-021710 | PATCH | The Red Hat Enterprise Linux operating system must not have the telnet-server package installed."
@@ -517,7 +514,7 @@
       - CAT1
       - CCI-000381
       - SRG-OS-000095-GPOS-00049
-      - SV-204502r603261_rule
+      - SV-204502r958478_rule
       - V-204502
       - telnet
 
@@ -544,7 +541,7 @@
       - CAT1
       - CCI-001668
       - SRG-OS-000480-GPOS-00227
-      - SV-214801r603261_rule
+      - SV-214801r991589_rule
       - V-214801
       - antivirus
 
@@ -565,7 +562,7 @@
       - CCI-000366
       - CCI-000197
       - SRG-OS-000074-GPOS-00042
-      - SV-204594r603261_rule
+      - SV-204594r987796_rule
       - V-204594
       - ssh
 
@@ -590,7 +587,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204606r603261_rule
+      - SV-204606r991589_rule
       - V-204606
       - shosts
 
@@ -615,7 +612,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204607r603261_rule
+      - SV-204607r991589_rule
       - V-204607
       - shosts
 
@@ -634,7 +631,7 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204620r603261_rule
+      - SV-204620r991589_rule
       - V-204620
       - ftp
 
@@ -659,7 +656,7 @@
       - CCI-001812
       - CCI-000318
       - SRG-OS-000480-GPOS-00227
-      - SV-204621r603261_rule
+      - SV-204621r991589_rule
       - V-204621
       - tftp
 
@@ -691,6 +688,6 @@
       - CAT1
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204627r603261_rule
+      - SV-204627r991589_rule
       - V-204627
       - snmp
