@@ -1,5 +1,84 @@
 ---
 
+- name: Set bootloader type
+  block:
+      - name: "PRELIM | Check whether machine is UEFI-based"
+        ansible.builtin.stat:
+            path: /sys/firmware/efi
+        register: rhel7_efi_boot
+
+      - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
+        ansible.builtin.set_fact:
+            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}redhat"
+            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
+            rhel7stig_legacy_boot: false
+        when:
+            - rhel7_efi_boot.stat.exists
+            - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
+
+      - name: "PRELIM | set fact if UEFI boot | CentOS "
+        ansible.builtin.set_fact:
+            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}centos"
+            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
+            rhel7stig_legacy_boot: false
+        when:
+            - rhel7_efi_boot.stat.exists
+            - ansible_distribution == 'CentOS'
+
+      - name: "PRELIM | set if not UEFI boot"
+        ansible.builtin.set_fact:
+            rhel7stig_bootloader_path: "{{ rhel7stig_legacy_boot_path }}"
+            rhel7stig_not_boot_path: "{{ rhel7stig_efi_boot_path }}"
+            rhel7stig_legacy_boot: true
+        when: not rhel7_efi_boot.stat.exists
+
+      - name: PRELIM | output bootloader and efi state
+        ansible.builtin.debug:
+            msg:
+                - "bootloader path set to {{ rhel7stig_bootloader_path }}"
+                - "legacy boot equals {{ rhel7stig_legacy_boot }}"
+  tags:
+      - always
+
+- name: "PRELIM | Gather interactive user ID min"
+  block:
+      - name: "PRELIM | Gather interactive user ID min"
+        ansible.builtin.shell: grep ^UID_MIN /etc/login.defs | awk '{print $2}'
+        changed_when: false
+        failed_when: false
+        register: rhel7stig_min_uid
+
+      - name: "PRELIM | Gather interactive user ID max"
+        ansible.builtin.shell: grep ^UID_MAX /etc/login.defs | awk '{print $2}'
+        changed_when: false
+        failed_when: false
+        register: rhel7stig_max_uid
+
+      - name: "PRELIM | Setting the fact"
+        ansible.builtin.set_fact:
+            rhel7stig_interactive_uid_start: "{{ rhel7stig_min_uid.stdout }}"
+            rhel7stig_interactive_uid_stop: "{{ rhel7stig_max_uid.stdout }}"
+  tags:
+      - always
+      - auditd
+
+- name: "PRELIM | Include audit specific variables"
+  ansible.builtin.include_vars: audit.yml
+  when:
+      - run_audit or audit_only
+      - setup_audit
+  tags:
+      - setup_audit
+      - run_audit
+
+- name: "PRELIM | Include pre-remediation audit tasks"
+  ansible.builtin.import_tasks: pre_remediation_audit.yml
+  when:
+      - run_audit or audit_only
+      - setup_audit
+  tags:
+      - run_audit
+
 - name: "PRELIM | Check required packages installed | Python2"
   ansible.builtin.package:
       name:
@@ -42,6 +121,47 @@
       - ( ansible_python.version.major == 3  and ansible_python.version.minor == 6 )
   vars:
       ansible_python_interpreter: "{{ python2_bin }}"
+
+- name: "PRELIM | RHEL-07-021350"
+  block:
+      - name: "PRELIM | RHEL-07-021350 | Check if /boot or /boot/efi reside on separate partitions"
+        ansible.builtin.shell: df --output=target /boot | tail -n 1
+        changed_when: false
+        check_mode: false
+        register: rhel7stig_boot_part
+
+      - name: "PRELIM | RHEL-07-021350 | Check if /boot or /boot/efi reside on separate partitions | get UUID"
+        ansible.builtin.shell: lsblk -f | grep -E "{{ rhel7stig_boot_part.stdout }}$" | awk '{ print $3 }'
+        changed_when: false
+        check_mode: false
+        register: rhel7stig_boot_uuid
+  when:
+      - rhel_07_021350
+  tags:
+      - RHEL-07-021350
+      - CAT1
+      - CCI-001199
+      - CCI-000068
+      - CCI-002450
+      - CCI-002476
+      - SRG-OS-000033-GPOS-00014
+      - SV-204497r603261_rule
+      - V-204497
+      - fips
+
+- name: PRELIM | Gnome Desktop Environment Discovery
+  tags:
+      - always
+  block:
+      - name: PRELIM | Gnome Desktop Environment Discovery
+        ansible.builtin.stat:
+            path: /usr/share/gnome/gnome-version.xml
+        register: prelim_gnome_present
+
+      - name: PRELIM | Gnome Desktop Environment Discovery | add packages if x11 not required
+        when: rhel_07_040710
+        ansible.builtin.set_fact:
+            rhel7stig_gui_pkgs: "{{ rhel7stig_gui_pkgs + [ '@X11', 'xorg-x11-*' ] }}"
 
 - name: "PRELIM | dconf"
   block:
@@ -194,6 +314,13 @@
   tags:
       - always
 
+- name: "PRELIM | AUDIT | Create list of mount points"
+  ansible.builtin.set_fact:
+      prelim_local_mount_names: "{{ ansible_facts.mounts | map(attribute='mount') | list }}"
+      prelim_nfs_mount_names: "{{ ansible_facts.mounts | selectattr('fstype', 'equalto', 'nfs') | map(attribute='mount') | list | default([]) }}"
+  tags:
+      - always
+
 - name: "PRELIM | Gather mount information"
   ansible.builtin.setup:
       gather_subset: hardware,!all,!min
@@ -203,7 +330,7 @@
   tags:
       - always
 
-- name: "PRELIM | ensure cronie is available"
+- name: "PRELIM | Ensure cronie is available"
   ansible.builtin.package:
       name: cronie
       state: present
@@ -211,8 +338,7 @@
       ansible_python_interpreter: "{{ python2_bin }}"
   when:
       - rhel_07_020030 or
-        rhel_07_020040 or
-        false
+        rhel_07_020040
   tags:
       - cat2
       - medium
@@ -234,21 +360,9 @@
         rhel_07_020670 or
         rhel_07_020680 or
         rhel_07_020690 or
-        rhel_07_020700 or
-        false
+        rhel_07_020700
   tags:
-      - cat2
-      - medium
-      - RHEL-07-020600
-      - RHEL-07-020620
-      - RHEL-07-020630
-      - RHEL-07-020640
-      - RHEL-07-020650
-      - RHEL-07-020660
-      - RHEL-07-020670
-      - RHEL-07-020680
-      - RHEL-07-020690
-      - RHEL-07-020700
+      - always
 
 # NOTE: You will need to adjust the UID range in parenthases below.
 # ALSO NOTE: We weed out any user with a home dir not in standard locations because interactive users shouldn't have those paths as a home dir. Add or removed directory paths as needed below.
@@ -410,49 +524,6 @@
   when:
       - rhel7stig_ssh_required
 
-- name: "PRELIM | Check whether machine is UEFI-based"
-  ansible.builtin.stat:
-      path: /sys/firmware/efi
-  register: rhel7_efi_boot
-  tags:
-      - goss_template
-      - always
-
-- name: set bootloader type
-  block:
-      - name: "PRELIM | set fact if UEFI boot | RHEL or OEL"
-        ansible.builtin.set_fact:
-            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}redhat"
-            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
-            rhel7stig_legacy_boot: false
-        when:
-            - rhel7_efi_boot.stat.exists
-            - ansible_distribution != 'CentOS'  # Note: rhel & OEL both use redhat path
-
-      - name: "PRELIM | set fact if UEFI boot | CentOS "
-        ansible.builtin.set_fact:
-            rhel7stig_bootloader_path: "{{ rhel7stig_efi_boot_path }}centos"
-            rhel7stig_not_boot_path: "{{ rhel7stig_legacy_boot_path }}"
-            rhel7stig_legacy_boot: false
-        when:
-            - rhel7_efi_boot.stat.exists
-            - ansible_distribution == 'CentOS'
-
-      - name: "PRELIM | set if not UEFI boot"
-        ansible.builtin.set_fact:
-            rhel7stig_bootloader_path: "{{ rhel7stig_legacy_boot_path }}"
-            rhel7stig_not_boot_path: "{{ rhel7stig_efi_boot_path }}"
-            rhel7stig_legacy_boot: true
-        when: not rhel7_efi_boot.stat.exists
-
-      - name: PRELIM | output bootloader and efi state
-        ansible.builtin.debug:
-            msg:
-                - "bootloader path set to {{ rhel7stig_bootloader_path }}"
-                - "legacy boot equals {{ rhel7stig_legacy_boot }}"
-  tags:
-      - always
-
 - name: "PRELIM | Gather interactive user ID min"
   block:
       - name: "PRELIM | Gather interactive user ID min"
@@ -474,3 +545,9 @@
   tags:
       - always
       - auditd
+
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+      manager: auto
+  tags:
+      - always
