@@ -410,8 +410,8 @@
         changed_when: false
         failed_when: rhel_07_021350_grub_cmdline_linux_audit.rc > 1
         check_mode: false
-        when: rhel_07_021350_default_grub_missing_audit is changed  # noqa no-handler
         register: rhel_07_021350_grub_cmdline_linux_audit
+        when: rhel_07_021350_default_grub_missing_audit is changed  # noqa no-handler
 
       - name: "HIGH | RHEL-07-021350 | PATCH | Copy over a sane /etc/default/grub"
         ansible.builtin.template:
