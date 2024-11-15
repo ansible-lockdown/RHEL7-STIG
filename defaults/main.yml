@@ -213,7 +213,7 @@ rhel_07_020111: true
 rhel_07_020210: true
 rhel_07_020220: true
 rhel_07_020240: true
-rhel_07_020260: true
+rhel_07_020260: false  # OS patching - AS EoL this can cause serious issues
 rhel_07_020270: true
 rhel_07_020320: true
 rhel_07_020330: true

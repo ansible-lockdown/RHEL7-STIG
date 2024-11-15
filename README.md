@@ -2,7 +2,11 @@
 
 ## Configure a RHEL7 based system to be complaint with Disa STIG
 
-### This has now been sunset by DISA STIG
+### RHEL7 is End-Of-Life
+
+This has now been archived by DISA STIG
+
+#### This may require further testing if run a clean system
 
 This role is based on RHEL 7 DISA STIG: [Version 3, Rel 15 released on  July 24, 2024](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_RHEL_7_V3R15_STIG.zip).
 
