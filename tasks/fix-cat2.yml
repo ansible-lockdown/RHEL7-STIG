@@ -30,7 +30,7 @@
       - CAT2
       - CCI-001749
       - SRG-OS-000366-GPOS-00153
-      - SV-256968r902687_rule
+      - SV-256968r982212_rule
       - V-256968
 
 ### RHEL-07-010030 | RHEL-07-010040 combined as related tasks in regards to a config file no other content will be in.
@@ -54,10 +54,10 @@
       - RHEL-07-010030
       - CCI-000048
       - SRG-OS-000023-GPOS-00006
-      - SV-204393r603261_rule
+      - SV-204393r958390_rule
       - V-204393
       - RHEL_07_010040
-      - SV-204394r603261_rule
+      - SV-204394r958390_rule
       - V-204394
       - dod_logon_banner
 
@@ -79,7 +79,7 @@
       - CAT2
       - CCI-000048
       - SRG-OS-000023-GPOS-00006
-      - SV-204395r603261_rule
+      - SV-204395r958390_rule
       - V-204395
       - ssh
       - dod_logon_banner
@@ -100,7 +100,7 @@
       - CAT2
       - CCI-000056
       - SRG-OS-000028-GPOS-00009
-      - SV-204396r880746_rule
+      - SV-204396r958400_rule
       - V-204396
       - dconf
 
@@ -122,7 +122,7 @@
       - CCI-001953
       - CCI-001954
       - SRG-OS-000375-GPOS-00160
-      - SV-204397r603261_rule
+      - SV-204397r982216_rule
       - V-204397
       - dconf
 
@@ -141,7 +141,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-214937r880767_rule
+      - SV-214937r958402_rule
       - V-214937
       - dconf
 
@@ -177,7 +177,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-256969r902690_rule
+      - SV-256969r991589_rule
       - V-256969
       - dconf
 
@@ -197,7 +197,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204398r880770_rule
+      - SV-204398r958402_rule
       - V-204398
       - dconf
 
@@ -216,7 +216,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204399r880773_rule
+      - SV-204399r958402_rule
       - V-204399
       - dconf
 
@@ -235,7 +235,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204400r880776_rule
+      - SV-204400r958402_rule
       - V-204400
       - dconf
 
@@ -252,7 +252,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-255926r880779_rule
+      - SV-255926r958402_rule
       - V-255926
       - screen
 
@@ -272,7 +272,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204402r880782_rule
+      - SV-204402r958402_rule
       - V-204402
       - dconf
 
@@ -291,7 +291,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204403r880785_rule
+      - SV-204403r958402_rule
       - V-204403
       - dconf
 
@@ -312,7 +312,7 @@
       - CAT2
       - CCI-000057
       - SRG-OS-000029-GPOS-00010
-      - SV-204404r880788_rule
+      - SV-204404r958402_rule
       - V-204404
       - dconf
 
@@ -328,7 +328,7 @@
       - CAT2
       - CCI-000192
       - SRG-OS-000069-GPOS-00037
-      - SV-204405r603261_rule
+      - SV-204405r982195_rule
       - V-204405
       - pamd
 
@@ -346,7 +346,7 @@
       - CAT2
       - CCI-000192
       - SRG-OS-000069-GPOS-00037
-      - SV-204406r902704_rule
+      - SV-204406r982195_rule
       - V-204406
       - pamd
 
@@ -364,7 +364,7 @@
       - CAT2
       - CCI-000192
       - SRG-OS-000069-GPOS-00037
-      - SV-204407r603261_rule
+      - SV-204407r982195_rule
       - V-204407
       - pwquality
 
@@ -382,7 +382,7 @@
       - CAT2
       - CCI-000193
       - SRG-OS-000070-GPOS-00038
-      - SV-204408r603261_rule
+      - SV-204408r982196_rule
       - V-204408
       - pwquality
 
@@ -399,7 +399,7 @@
       - RHEL-07-010140
       - CAT2
       - CCI-000194
-      - SV-204409r603261_rule
+      - SV-204409r982197_rule
       - V-204409
       - RHELsality
 
@@ -417,7 +417,7 @@
       - CAT2
       - CCI-001619
       - SRG-OS-000266-GPOS-00101
-      - SV-204410r603261_rule
+      - SV-204410r991561_rule
       - V-204410
       - pwquality
 
@@ -435,7 +435,7 @@
       - CAT2
       - CCI-000195
       - SRG-OS-000072-GPOS-00040
-      - SV-204411r603261_rule
+      - SV-204411r982198_rule
       - V-204411
       - pwquality
 
@@ -453,7 +453,7 @@
       - CAT2
       - CCI-000195
       - SRG-OS-000072-GPOS-00040
-      - SV-204412r603261_rule
+      - SV-204412r982198_rule
       - V-204412
       - pwquality
 
@@ -471,7 +471,7 @@
       - CAT2
       - CCI-000195
       - SRG-OS-000072-GPOS-00040
-      - SV-204413r603261_rule
+      - SV-204413r982198_rule
       - V-204413
       - pwquality
 
@@ -489,7 +489,7 @@
       - CAT2
       - CCI-000195
       - SRG-OS-000072-GPOS-00040
-      - SV-204414r809186_rule
+      - SV-204414r982198_rule
       - V-204414
       - pwquality
 
@@ -521,7 +521,7 @@
       - CAT2
       - CCI-000196
       - SRG-OS-000072-GPOS-00040
-      - SV-255928r917838_rule
+      - SV-255928r982199_rule
       - V-255928
       - pamd
 
@@ -552,7 +552,7 @@
       - CAT2
       - CCI-000196
       - SRG-OS-000073-GPOS-00041
-      - SV-204415r917816_rule
+      - SV-204415r982199_rule
       - V-204415
       - pamd
 
@@ -568,7 +568,7 @@
       - CAT2
       - CCI-000196
       - SRG-OS-000073-GPOS-00041
-      - SV-204416r603261_rule
+      - SV-204416r982199_rule
       - V-204416
       - login
 
@@ -584,7 +584,7 @@
       - CAT2
       - CCI-000196
       - SRG-OS-000073-GPOS-00041
-      - SV-204417r603261_rule
+      - SV-204417r982199_rule
       - V-204417
       - login
 
@@ -602,7 +602,7 @@
       - CAT2
       - CCI-000198
       - SRG-OS-000075-GPOS-00043
-      - SV-204418r603261_rule
+      - SV-204418r982188_rule
       - V-204418
       - login
 
@@ -627,7 +627,7 @@
       - CAT2
       - CCI-000198
       - SRG-OS-000075-GPOS-00043
-      - SV-204419r603261_rule
+      - SV-204419r982188_rule
       - V-204419
       - password
 
@@ -645,7 +645,7 @@
       - CAT2
       - CCI-000199
       - SRG-OS-000076-GPOS-00044
-      - SV-204420r603261_rule
+      - SV-204420r982200_rule
       - V-204420
       - login
 
@@ -676,7 +676,7 @@
       - CAT2
       - CCI-000199
       - SRG-OS-000076-GPOS-00044
-      - SV-204421r603261_rule
+      - SV-204421r982200_rule
       - V-204421
       - disruption-high
       - password
@@ -716,7 +716,7 @@
       - CAT2
       - CCI-000200
       - SRG-OS-000077-GPOS-00045
-      - SV-204422r917818_rule
+      - SV-204422r982201_rule
       - V-204422
       - pamd
 
@@ -731,7 +731,7 @@
       - CAT2
       - CCI-001682
       - SRG-OS-000123-GPOS-00064
-      - SV-254523r903130_rule
+      - SV-254523r958508_rule
       - V-254523
 
 - name: "MEDIUM | RHEL-07-010280 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that passwords are a minimum of 15 characters in length."
@@ -748,7 +748,7 @@
       - CAT2
       - CCI-000205
       - SRG-OS-000078-GPOS-00046
-      - SV-204423r603261_rule
+      - SV-204423r982202_rule
       - V-204423
       - pwquality
 
@@ -764,7 +764,7 @@
       - CAT2
       - CCI-000795
       - SRG-OS-000118-GPOS-00060
-      - SV-204426r809190_rule
+      - SV-204426r982189_rule
       - V-204426
       - accounts
 
@@ -880,11 +880,11 @@
       - CCI-002237
       - CCI-002238
       - SRG-OS-000329-GPOS-00128
-      - SV-204427r880842_rule
+      - SV-204427r958736_rule
       - V-204427
       - RHEL-07-010330
       - CCI-002238
-      - SV-204428r880845_rule
+      - SV-204428r958736_rule
       - V-204428
       - pamd
 
@@ -901,7 +901,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-251703r833183_rule
+      - SV-251703r991589_rule
       - V-251703
       - sudoers
 
@@ -922,7 +922,7 @@
       - CAT2
       - CCI-002038
       - SRG-OS-000373-GPOS-00156
-      - SV-204429r833190_rule
+      - SV-204429r987879_rule
       - V-204429
       - sudoers
 
@@ -938,7 +938,7 @@
       - CAT2
       - CCI-002038
       - SRG-OS-000373-GPOS-00156
-      - SV-251704r809568_rule
+      - SV-251704r987879_rule
       - V-251704
 
 - name: "MEDIUM | RHEL-07-010350 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that users must re-authenticate for privilege escalation."
@@ -956,7 +956,7 @@
       - CAT2
       - CCI-002038
       - SRG-OS-000373-GPOS-00156
-      - SV-204430r603261_rule
+      - SV-204430r987879_rule
       - V-204430
       - sudoers
 
@@ -972,7 +972,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00226
-      - SV-204431r603261_rule
+      - SV-204431r991588_rule
       - V-204431
       - login
 
@@ -991,7 +991,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00229
-      - SV-204434r603261_rule
+      - SV-204434r991591_rule
       - V-204434
       - ssh
 
@@ -1009,7 +1009,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00229
-      - SV-204435r603261_rule
+      - SV-204435r991591_rule
       - V-204435
       - ssh
 
@@ -1038,7 +1038,7 @@
       - CAT2
       - CCI-000213
       - SRG-OS-000080-GPOS-00048
-      - SV-204437r603261_rule
+      - SV-204437r958472_rule
       - V-204437
       - rescue
 
@@ -1080,10 +1080,10 @@
       - CAT2
       - CCI-000213
       - SRG-OS-000080-GPOS-00048
-      - SV-244557r833185_rule
+      - SV-244557r958472_rule
       - V-244557
       - RHEL-07-010492
-      - SV-244558r833187_rule
+      - SV-244558r958472_rule
       - V-244558
       - grub
       - bootloader
@@ -1159,7 +1159,7 @@
       - CAT2
       - CCI-000766
       - SRG-OS-000104-GPOS-00051
-      - SV-204441r818813_rule
+      - SV-204441r958482_rule
       - V-204441
       - authentication
 
@@ -1198,7 +1198,7 @@
       - CCI-002235
       - CCI-002165
       - SRG-OS-000324-GPOS-00125
-      - SV-204444r928571_rule
+      - SV-204444r958726_rule
       - V-204444
 
 - name: "MEDIUM | RHEL-07-020028 | PATCH | The Red Hat Enterprise Linux operating system must be configured to allow sending email notifications of configuration changes and adverse events to designated personnel."
@@ -1231,7 +1231,7 @@
       - CAT2
       - CCI-002696
       - SRG-OS-000445-GPOS-00199
-      - SV-251705r880854_rule
+      - SV-251705r958944_rule
       - V-251705
       - aide
 
@@ -1267,11 +1267,11 @@
       - RHEL-07-020030
       - CCI-001744
       - SRG-OS-000363-GPOS-00150
-      - SV-204445r880848_rule
+      - SV-204445r958794_rule
       - V-204445
       - RHEL-07-020040
       - SRG-OS-000363-GPOS-00150
-      - SV-204446r880851_rule
+      - SV-204446r958794_rule
       - V-204446
       - aide
 
@@ -1303,7 +1303,7 @@
       - CCI-000778
       - CCI-000366
       - SRG-OS-000114-GPOS-00059
-      - SV-204449r942894_rule
+      - SV-204449r958498_rule
       - V-204449
       - usb_devices
 
@@ -1333,7 +1333,7 @@
       - CAT2
       - CCI-001958
       - SRG-OS-000378-GPOS-00163
-      - SV-204450r942897_rule
+      - SV-204450r958820_rule
       - V-204450
       - dccp
 
@@ -1362,7 +1362,7 @@
       - CCI-000366
       - CCI-000778
       - SRG-OS-000114-GPOS-00059
-      - SV-204451r603261_rule
+      - SV-204451r958498_rule
       - V-204451
       - mount
 
@@ -1383,10 +1383,10 @@
       - CCI-002696
       - CCI-002165
       - SRG-OS-000445-GPOS-00199
-      - SV-204453r942900_rule
+      - SV-204453r958944_rule
       - V-204453
       - RHEL-07-020220
-      - SV-204454r754748_rule
+      - SV-204454r958944_rule
       - V-204454
       - selinux
 
@@ -1402,7 +1402,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00228
-      - SV-204457r603261_rule
+      - SV-204457r991590_rule
       - V-204457
       - login
       - umask
@@ -1420,7 +1420,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204459r603261_rule
+      - SV-204459r991589_rule
       - V-204459
       - packaging
 
@@ -1457,7 +1457,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204460r603261_rule
+      - SV-204460r991589_rule
       - V-204460
       - accounts
 
@@ -1489,7 +1489,7 @@
       - CAT2
       - CCI-002165
       - SRG-OS-000480-GPOS-00227
-      - SV-204463r603261_rule
+      - SV-204463r991589_rule
       - V-204463
       - complexity-high
 
@@ -1521,7 +1521,7 @@
       - CAT2
       - CCI-002165
       - SRG-OS-000480-GPOS-00227
-      - SV-204464r603261_rule
+      - SV-204464r991589_rule
       - V-204464
       - complexity-high
 
@@ -1537,7 +1537,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204466r603261_rule
+      - SV-204466r991589_rule
       - V-204466
       - login
       - home
@@ -1559,7 +1559,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204467r603826_rule
+      - SV-204467r991589_rule
       - V-204467
       - users
 
@@ -1580,7 +1580,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204468r603828_rule
+      - SV-204468r991589_rule
       - V-204468
       - users
 
@@ -1602,7 +1602,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204469r603830_rule
+      - SV-204469r991589_rule
       - V-204469
       - users
 
@@ -1624,7 +1624,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204470r880764_rule
+      - SV-204470r991589_rule
       - V-204470
       - users
 
@@ -1661,7 +1661,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204471r603261_rule
+      - SV-204471r991589_rule
       - V-204471
       - users
 
@@ -1711,7 +1711,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204472r603261_rule
+      - SV-204472r991589_rule
       - V-204472
       - users
 
@@ -1777,7 +1777,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204473r603261_rule
+      - SV-204473r991589_rule
       - V-204473
       - permissions
 
@@ -1815,7 +1815,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204474r917821_rule
+      - SV-204474r991589_rule
       - V-204474
       - permissions
 
@@ -1853,7 +1853,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204475r917824_rule
+      - SV-204475r991589_rule
       - V-204475
       - permissions
 
@@ -1872,7 +1872,7 @@
       - RHEL-07-020710
       - CAT2
       - CCI-000366
-      - SV-204476r917827_rule
+      - SV-204476r991589_rule
       - V-204476
       - complexity-high
 
@@ -1911,7 +1911,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204477r603261_rule
+      - SV-204477r991589_rule
       - V-204477
       - complexity-high
 
@@ -1952,7 +1952,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204478r603261_rule
+      - SV-204478r991589_rule
       - V-204478
       - complexity-high
 
@@ -1973,7 +1973,7 @@
       - CCI-001812
       - CCI-000318
       - SRG-OS-000480-GPOS-00227
-      - SV-204479r603261_rule
+      - SV-204479r991589_rule
       - V-204479
       - complexity-high
 
@@ -2003,7 +2003,7 @@
       - CCI-001812
       - CCI-000318
       - SRG-OS-000480-GPOS-00227
-      - SV-204479r603261_rule
+      - SV-204479r991589_rule
       - V-204479
       - complexity-high
 
@@ -2026,7 +2026,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204480r603838_rule
+      - SV-204480r991589_rule
       - V-204480
 
 - name: "MEDIUM | RHEL-07-021010 | AUDIT | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are used with removable media."
@@ -2066,7 +2066,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204481r603261_rule
+      - SV-204481r991589_rule
       - V-204481
 
 - name: "MEDIUM | RHEL-07-021020 | PATCH | The Red Hat Enterprise Linux operating system must prevent files with the setuid and setgid bit set from being executed on file systems that are being imported via Network File System (NFS)."
@@ -2086,7 +2086,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204482r603261_rule
+      - SV-204482r991589_rule
       - V-204482
       - mounts
 
@@ -2107,7 +2107,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204483r603261_rule
+      - SV-204483r991589_rule
       - V-204483
       - mounts
 
@@ -2134,7 +2134,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204487r744106_rule
+      - SV-204487r991589_rule
       - V-204487
       - disruption-high
 
@@ -2158,7 +2158,7 @@
       - CCI-001814
       - CCI-001812
       - SRG-OS-000480-GPOS-00227
-      - SV-204488r861006_rule
+      - SV-204488r991589_rule
       - V-204488
       - permissions
       - accounts
@@ -2181,7 +2181,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204489r603261_rule
+      - SV-204489r991589_rule
       - V-204489
       - cron
 
@@ -2209,10 +2209,10 @@
       - CAT2
       - RHEL-07-021110
       - CCI-000366
-      - SV-204490r603261_rule
+      - SV-204490r991589_rule
       - V-204490
       - RHEL-07-021120
-      - SV-204491r603261_rule
+      - SV-204491r991589_rule
       - V-204491
       - cron
 
@@ -2239,7 +2239,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204492r603261_rule
+      - SV-204492r991589_rule
       - V-204492
       - logging
 
@@ -2267,7 +2267,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204500r880860_rule
+      - SV-204500r991589_rule
       - V-204500
       - aide
 
@@ -2301,7 +2301,7 @@
       - CCI-001813
       - CCI-000318
       - SRG-OS-000364-GPOS-00151
-      - SV-204501r928576_rule
+      - SV-204501r958796_rule
       - V-204501
       - grub
       - bootloader
@@ -2336,7 +2336,7 @@
       - CCI-000126
       - CCI-000131
       - SRG-OS-000038-GPOS-00016
-      - SV-204503r603261_rule
+      - SV-204503r958414_rule
       - V-204503
       - auditd
       - logging
@@ -2354,7 +2354,7 @@
       - CAT2
       - CCI-000139
       - SRG-OS-000046-GPOS-00022
-      - SV-204504r880761_rule
+      - SV-204504r958424_rule
       - V-204504
       - auditd
       - logging
@@ -2380,7 +2380,7 @@
       - CAT2
       - CCI-001851
       - SRG-OS-000342-GPOS-00133
-      - SV-204506r603261_rule
+      - SV-204506r958754_rule
       - V-204506
       - auditd
       - logging
@@ -2397,7 +2397,7 @@
       - RHEL-07-030210
       - CAT2
       - CCI-001851
-      - SV-204507r603261_rule
+      - SV-204507r958754_rule
       - V-204507
       - auditd
       - logging
@@ -2415,7 +2415,7 @@
       - CAT2
       - CCI-001851
       - SRG-OS-000342-GPOS-00133
-      - SV-204508r603261_rule
+      - SV-204508r958754_rule
       - V-204508
       - auditd
       - logging
@@ -2432,7 +2432,7 @@
       - RHEL-07-030300
       - CAT2
       - CCI-001851
-      - SV-204509r603261_rule
+      - SV-204509r958754_rule
       - V-204509
       - auditd
       - logging
@@ -2449,7 +2449,7 @@
       - CAT2
       - CCI-001851
       - SRG-OS-000342-GPOS-00133
-      - SV-204510r603261_rule
+      - SV-204510r958754_rule
       - V-204510
       - auditd
       - logging
@@ -2466,7 +2466,7 @@
       - CAT2
       - CCI-001851
       - SRG-OS-000342-GPOS-00133
-      - SV-204511r603261_rule
+      - SV-204511r958754_rule
       - V-204511
       - auditd
       - logging
@@ -2483,7 +2483,7 @@
       - CAT2
       - CCI-001851
       - SRG-OS-000342-GPOS-00133
-      - SV-204512r603261_rule
+      - SV-204512r958754_rule
       - V-204512
       - auditd
       - logging
@@ -2500,7 +2500,7 @@
       - CAT2
       - CCI-001855
       - SRG-OS-000343-GPOS-00134
-      - SV-204513r603261_rule
+      - SV-204513r971542_rule
       - V-204513
       - auditd
       - logging
@@ -2521,7 +2521,7 @@
       - CAT2
       - CCI-001855
       - SRG-OS-000343-GPOS-00134
-      - SV-204513r744112_rule
+      - SV-204514r971542_rule
       - V-204514
       - auditd
       - logging
@@ -2542,7 +2542,7 @@
       - CAT2
       - CCI-001855
       - SRG-OS-000343-GPOS-00134
-      - SV-204515r603261_rule
+      - SV-204515r971542_rule
       - V-204515
       - auditd
       - logging
@@ -2557,7 +2557,7 @@
       - CAT2
       - CCI-002234
       - SRG-OS-000327-GPOS-00127
-      - SV-204516r603261_rule
+      - SV-204516r958732_rule
       - V-204516
       - auditd
 
@@ -2571,7 +2571,7 @@
       - CAT2
       - CCI-000126
       - SRG-OS-000064-GPOS-00033
-      - SV-204517r809570_rule
+      - SV-204517r958446_rule
       - V-204517
       - auditd
 
@@ -2585,7 +2585,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000458-GPOS-00203
-      - SV-204521r809772_rule
+      - SV-204521r991570_rule
       - V-204521
       - auditd
 
@@ -2599,7 +2599,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000458-GPOS-00203
-      - SV-204524r809775_rule
+      - SV-204524r991570_rule
       - V-204524
       - auditd
 
@@ -2613,7 +2613,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000064-GPOS-00033
-      - SV-204531r809815_rule
+      - SV-204531r958446_rule
       - V-204531
       - auditd
 
@@ -2627,7 +2627,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000392-GPOS-00172
-      - SV-204536r833109_rule
+      - SV-204536r958846_rule
       - V-204536
       - auditd
 
@@ -2641,7 +2641,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000392-GPOS-00172
-      - SV-204537r833112_rule
+      - SV-204537r958846_rule
       - V-204537
       - auditd
 
@@ -2655,7 +2655,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000392-GPOS-00172
-      - SV-204538r833115_rule
+      - SV-204538r958846_rule
       - V-204538
       - auditd
 
@@ -2669,7 +2669,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000392-GPOS-00172
-      - SV-204539r833118_rule
+      - SV-204539r958846_rule
       - V-204539
       - auditd
 
@@ -2685,7 +2685,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000392-GPOS-00172
-      - SV-204540r603261_rule
+      - SV-204540r958846_rule
       - V-204540
       - auditd
 
@@ -2701,7 +2701,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000392-GPOS-00172
-      - SV-204541r603261_rule
+      - SV-204541r958846_rule
       - V-204541
       - auditd
 
@@ -2717,7 +2717,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204542r833121_rule
+      - SV-204542r958422_rule
       - V-204542
       - auditd
 
@@ -2733,7 +2733,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204543r833124_rule
+      - SV-204543r958422_rule
       - V-204543
       - auditd
 
@@ -2749,7 +2749,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204544r833127_rule
+      - SV-204544r958422_rule
       - V-204544
       - auditd
 
@@ -2765,7 +2765,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204545r833130_rule
+      - SV-204545r958422_rule
       - V-204545
       - auditd
 
@@ -2781,7 +2781,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204546r833133_rule
+      - SV-204546r958422_rule
       - V-204546
       - auditd
 
@@ -2798,7 +2798,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000037-GPOS-00015
-      - SV-204547r833136_rule
+      - SV-204547r958412_rule
       - V-204547
       - auditd
 
@@ -2815,7 +2815,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000037-GPOS-00015
-      - SV-204548r833139_rule
+      - SV-204548r958412_rule
       - V-204548
       - auditd
 
@@ -2832,7 +2832,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000037-GPOS-00015
-      - SV-204549r603261_rule
+      - SV-204549r958412_rule
       - V-204549
       - auditd
 
@@ -2849,7 +2849,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000037-GPOS-00015
-      - SV-204550r833142_rule
+      - SV-204550r958412_rule
       - V-204550
       - auditd
 
@@ -2866,7 +2866,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000037-GPOS-00015
-      - SV-204551r833145_rule
+      - SV-204551r958412_rule
       - V-204551
       - auditd
 
@@ -2881,7 +2881,7 @@
       - CCI-000135
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204552r833148_rule
+      - SV-204552r958422_rule
       - V-204552
       - auditd
 
@@ -2896,7 +2896,7 @@
       - CCI-000135
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204553r833151_rule
+      - SV-204553r958422_rule
       - V-204553
       - auditd
 
@@ -2911,7 +2911,7 @@
       - CCI-000135
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204554r833154_rule
+      - SV-204554r958422_rule
       - V-204554
       - auditd
 
@@ -2926,7 +2926,7 @@
       - CCI-000135
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204555r833157_rule
+      - SV-204555r958422_rule
       - V-204555
       - auditd
 
@@ -2942,7 +2942,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204556r833160_rule
+      - SV-204556r958422_rule
       - V-204556
       - auditd
 
@@ -2958,7 +2958,7 @@
       - CCI-000172
       - CCI-002884
       - SRG-OS-000042-GPOS-00020
-      - SV-204557r833163_rule
+      - SV-204557r958422_rule
       - V-204557
       - auditd
 
@@ -2972,7 +2972,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00215
-      - SV-204558r833166_rule
+      - SV-204558r991579_rule
       - V-204558
       - auditd
 
@@ -2986,7 +2986,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00216
-      - SV-204559r833169_rule
+      - SV-204559r991580_rule
       - V-204559
       - auditd
 
@@ -3000,7 +3000,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00216
-      - SV-204560r833172_rule
+      - SV-204560r991580_rule
       - V-204560
       - auditd
 
@@ -3014,7 +3014,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00216
-      - SV-204562r833175_rule
+      - SV-204562r991580_rule
       - V-204562
       - auditd
 
@@ -3028,7 +3028,7 @@
       - CAT2
       - CCI-000172
       - SRG-OS-000471-GPOS-00216
-      - SV-204563r858498_rule
+      - SV-204563r991580_rule
       - V-204563
       - auditd
 
@@ -3045,7 +3045,7 @@
       - CCI-001403
       - CCI-002130
       - SRG-OS-000004-GPOS-00004
-      - SV-204564r603261_rule
+      - SV-204564r958368_rule
       - V-204564
       - auditd
 
@@ -3062,7 +3062,7 @@
       - CCI-001403
       - CCI-002130
       - SRG-OS-000004-GPOS-00004
-      - SV-204565r603261_rule
+      - SV-204565r958368_rule
       - V-204565
       - auditd
 
@@ -3079,7 +3079,7 @@
       - CCI-001403
       - CCI-002130
       - SRG-OS-000004-GPOS-00004
-      - SV-204566r603261_rule
+      - SV-204566r958368_rule
       - V-204566
       - auditd
 
@@ -3096,7 +3096,7 @@
       - CCI-001403
       - CCI-002130
       - SRG-OS-000004-GPOS-00004
-      - SV-204567r603261_rule
+      - SV-204567r958368_rule
       - V-204567
       - auditd
 
@@ -3113,7 +3113,7 @@
       - CCI-001403
       - CCI-002130
       - SRG-OS-000004-GPOS-00004
-      - SV-204568r603261_rule
+      - SV-204568r958368_rule
       - V-204568
       - auditd
 
@@ -3130,7 +3130,7 @@
       - CCI-001403
       - CCI-002130
       - SRG-OS-000466-GPOS-00210
-      - SV-204572r809825_rule
+      - SV-204572r991575_rule
       - V-204572
       - auditd
 
@@ -3159,7 +3159,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204574r917830_rule
+      - SV-204574r991589_rule
       - V-204574
       - rsyslog
 
@@ -3190,7 +3190,7 @@
       - CCI-001813
       - CCI-000368
       - SRG-OS-000480-GPOS-00227
-      - SV-204575r603261_rule
+      - SV-204575r991589_rule
       - V-204575
       - rsyslog
 
@@ -3261,7 +3261,7 @@
       - CAT2
       - CCI-000382
       - SRG-OS-000096-GPOS-00050
-      - SV-204577r603261_rule
+      - SV-204577r958480_rule
       - V-204577
       - firewall
       - disruption-high
@@ -3283,7 +3283,7 @@
       - CCI-000803
       - CCI-000068
       - SRG-OS-000033-GPOS-00014
-      - SV-204578r744116_rule
+      - SV-204578r958408_rule
       - V-204578
       - ssh
 
@@ -3312,7 +3312,7 @@
       - CCI-001133
       - CCI-002361
       - SRG-OS-000163-GPOS-00072
-      - SV-204579r861070_rule
+      - SV-204579r970703_rule
       - V-204579
       - profile
 
@@ -3337,7 +3337,7 @@
       - CCI-000048
       - CCI-000050
       - SRG-OS-000023-GPOS-00006
-      - SV-204580r603261_rule
+      - SV-204580r958390_rule
       - V-204580
       - ssh
       - dod_logon_banner
@@ -3390,13 +3390,13 @@
       - RHEL-07-040180
       - CCI-001453
       - SRG-OS-000250-GPOS-00093
-      - SV-204581r603261_rule
+      - SV-204581r991554_rule
       - V-204581
       - RHEL-07-040190
-      - SV-204582r942909_rule
+      - SV-204582r991554_rule
       - V-204582
       - RHEL-07-040200
-      - SV-204583r942912_rule
+      - SV-204583r991554_rule
       - V-204583
       - ldap
 
@@ -3415,7 +3415,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204584r880794_rule
+      - SV-204584r991589_rule
       - V-204584
       - sysctl
 
@@ -3438,7 +3438,7 @@
       - CCI-002420
       - CCI-002421
       - SRG-OS-000423-GPOS-00187
-      - SV-204585r916422_rule
+      - SV-204585r958908_rule
       - V-204585
       - ssh
 
@@ -3458,7 +3458,7 @@
       - CCI-002421
       - CCI-002422
       - SRG-OS-000423-GPOS-00187
-      - SV-204585r916422_rule
+      - SV-204586r958908_rule
       - V-204586
       - ssh
 
@@ -3480,7 +3480,7 @@
       - CCI-001133
       - CCI-002361
       - SRG-OS-000163-GPOS-00072
-      - SV-204587r917833_rule
+      - SV-204587r970703_rule
       - V-204587
       - ssh
 
@@ -3500,7 +3500,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204588r603261_rule
+      - SV-204588r991589_rule
       - V-204588
       - ssh
 
@@ -3522,7 +3522,7 @@
       - CCI-001133
       - CCI-002361
       - SRG-OS-000163-GPOS-00072
-      - SV-204589r917836_rule
+      - SV-204589r970703_rule
       - V-204589
       - ssh
 
@@ -3541,7 +3541,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204590r603261_rule
+      - SV-204590r991589_rule
       - V-204590
       - ssh
 
@@ -3560,7 +3560,7 @@
       - CAT2
       - CCI-000052
       - SRG-OS-000480-GPOS-00227
-      - SV-204591r858477_rule
+      - SV-204591r991589_rule
       - V-204591
       - ssh
 
@@ -3581,7 +3581,7 @@
       - RHEL-07-040370
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204592r603261_rule
+      - SV-204592r991589_rule
       - V-204592
       - ssh
 
@@ -3602,7 +3602,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204593r603261_rule
+      - SV-204593r991589_rule
       - V-204593
       - ssh
 
@@ -3623,7 +3623,7 @@
       - CAT2
       - CCI-001453
       - SRG-OS-000250-GPOS-00093
-      - SV-204595r744117_rule
+      - SV-204595r991554_rule
       - V-204595
       - ssh
 
@@ -3654,7 +3654,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204596r603261_rule
+      - SV-204596r991589_rule
       - V-204596
       - ssh
 
@@ -3686,7 +3686,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204597r880743_rule
+      - SV-204597r991589_rule
       - V-204597
       - ssh
 
@@ -3711,7 +3711,7 @@
       - CCI-000368
       - CCI-001814
       - SRG-OS-000364-GPOS-00151
-      - SV-204598r603261_rule
+      - SV-204598r958796_rule
       - V-204598
       - ssh
 
@@ -3734,7 +3734,7 @@
       - CCI-001814
       - CCI-000318
       - SRG-OS-000364-GPOS-00151
-      - SV-204599r603261_rule
+      - SV-204599r958796_rule
       - V-204599
       - ssh
 
@@ -3753,7 +3753,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204600r603261_rule
+      - SV-204600r991589_rule
       - V-204600
       - ssh
 
@@ -3772,7 +3772,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204601r603261_rule
+      - SV-204601r991589_rule
       - V-204601
       - ssh
 
@@ -3792,7 +3792,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204602r880758_rule
+      - SV-204602r991589_rule
       - V-204602
       - ssh
 
@@ -3833,7 +3833,7 @@
       - CCI-001891
       - CCI-002046
       - SRG-OS-000355-GPOS-00143
-      - SV-204603r603261_rule
+      - SV-204603r982208_rule
       - V-204603
       - ntp
       - ntpd
@@ -3866,6 +3866,12 @@
       - rhel_07_040500
   tags:
       - RHEL-07-040500
+      - CAT2
+      - CCI-001891
+      - CCI-002046
+      - SRG-OS-000355-GPOS-00143
+      - SV-204603r982208_rule
+      - V-204603
       - chronyd
 
 - name: "MEDIUM | RHEL-07-040500 | PATCH | The Red Hat Enterprise Linux operating system must, for networked systems, synchronize clocks with a server that is synchronized to one of the redundant United States Naval Observatory (USNO) time servers, a time server designated for the appropriate DoD network (NIPRNet/SIPRNet), and/or the Global Positioning System (GPS)."
@@ -3884,7 +3890,7 @@
       - CCI-001891
       - CCI-002046
       - SRG-OS-000355-GPOS-00143
-      - SV-204603r603261_rule
+      - SV-204603r982208_rule
       - V-204603
       - chronyd
 
@@ -3909,7 +3915,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204604r603261_rule
+      - SV-204604r991589_rule
       - V-204604
       - firewall
 
@@ -3927,7 +3933,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204609r880797_rule
+      - SV-204609r991589_rule
       - V-204609
       - ipv4
 
@@ -3944,7 +3950,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204610r880800_rule
+      - SV-204610r991589_rule
       - V-204610
       - sysctl
       - ipv4
@@ -3962,7 +3968,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204611r880803_rule
+      - SV-204611r991589_rule
       - V-204611
       - sysctl
       - ipv4
@@ -3981,7 +3987,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204612r880806_rule
+      - SV-204612r991589_rule
       - V-204612
       - ipv4
 
@@ -4000,7 +4006,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204613r880809_rule
+      - SV-204613r991589_rule
       - V-204613
       - ipv4
 
@@ -4018,7 +4024,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204614r880812_rule
+      - SV-204614r991589_rule
       - V-204614
       - ipv4
 
@@ -4036,7 +4042,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204615r880815_rule
+      - SV-204615r991589_rule
       - V-204615
       - ipv4
 
@@ -4054,7 +4060,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204616r880818_rule
+      - SV-204616r991589_rule
       - V-204616
       - ipv4
 
@@ -4072,7 +4078,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204617r880821_rule
+      - SV-204617r991589_rule
       - V-204617
       - ipv4
 
@@ -4098,7 +4104,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204618r603261_rule
+      - SV-204618r991589_rule
       - V-204618
 
 - name: "MEDIUM | RHEL-07-040680 | The Red Hat Enterprise Linux operating system must be configured to prevent unrestricted mail relaying."
@@ -4122,7 +4128,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204619r603261_rule
+      - SV-204619r991589_rule
       - V-204619
 
 - name: "MEDIUM | RHEL-07-040710 | PATCH | The Red Hat Enterprise Linux operating system must be configured so that remote X connections are disabled except to fulfill documented and validated mission requiremen"
@@ -4142,7 +4148,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204622r603849_rule
+      - SV-204622r991589_rule
       - V-204622
       - ssh
 
@@ -4163,7 +4169,7 @@
       - CAT2
       - CCI-001453
       - SRG-OS-000033-GPOS-00014
-      - SV-255925r880749_rule
+      - SV-255925r958408_rule
       - V-255925
       - ssh
 
@@ -4186,7 +4192,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204623r603261_rule
+      - SV-204623r991589_rule
       - V-204623
       - tftp
 
@@ -4204,7 +4210,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204624r646847_rule
+      - SV-204624r991589_rule
       - V-204624
       - x11
 
@@ -4223,7 +4229,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204625r880824_rule
+      - SV-204625r991589_rule
       - V-204625
       - ipv4
 
@@ -4256,7 +4262,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204626r603261_rule
+      - SV-204626r991589_rule
       - V-204626
 
 - name: "MEDIUM | RHEL-07-040810 | AUDIT | The Red Hat Enterprise Linux operating system access control program must be configured to grant or deny system access to specific hosts and services."
@@ -4284,7 +4290,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204628r603261_rule
+      - SV-204628r991589_rule
       - V-204628
       - firewall
       - disruption-high
@@ -4303,7 +4309,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204629r603261_rule
+      - SV-204629r991589_rule
       - V-204629
 
 - name: "MEDIUM | RHEL-07-040830 | PATCH | The Red Hat Enterprise Linux operating system must not forward IPv6 source-routed packets."
@@ -4320,7 +4326,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-204630r880827_rule
+      - SV-204630r991589_rule
       - V-204630
       - ipv6
 
@@ -4353,7 +4359,7 @@
       - CCI-001954
       - CCI-001948
       - SRG-OS-000375-GPOS-00160
-      - SV-204631r603261_rule
+      - SV-204631r982216_rule
       - V-204631
       - multifactor
 
@@ -4386,7 +4392,7 @@
       - CCI-001954
       - CCI-001953
       - SRG-OS-000375-GPOS-00160
-      - SV-204632r603261_rule
+      - SV-204632r982216_rule
       - V-204632
       - complexity-high
       - sssd
@@ -4405,7 +4411,7 @@
       - CCI-001953
       - CCI-001948
       - SRG-OS-000375-GPOS-00160
-      - SV-204633r603261_rule
+      - SV-204633r982216_rule
       - V-204633
       - certificates
 
@@ -4450,7 +4456,7 @@
       - CCI-001444
       - CCI-002418
       - SRG-OS-000424-GPOS-00188
-      - SV-204634r603261_rule
+      - SV-204634r971547_rule
       - V-204634
       - wifi
       - networking
@@ -4468,7 +4474,7 @@
       - CAT2
       - CCI-001263
       - SRG-OS-000480-GPOS-00227
-      - SV-214800r942888_rule
+      - SV-214800r991589_rule
       - V-214800
       - antivirus
 
@@ -4492,7 +4498,7 @@
       - CCI-000778
       - CCI-000366
       - SRG-OS-000114-GPOS-00059
-      - SV-219059r603261_rule
+      - SV-219059r958498_rule
       - V-219059
       - dconf
 
@@ -4534,7 +4540,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-228563r606406_rule
+      - SV-228563r991589_rule
       - V-228563
       - fileperms
       - permissions
@@ -4565,7 +4571,7 @@
       - CCI-000163
       - CCI-000164
       - SRG-OS-000057-GPOS-00027
-      - SV-228564r606407_rule
+      - SV-228564r958434_rule
       - V-228564
       - logs
 
@@ -4585,7 +4591,7 @@
       - RHEL-07-040711
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-233307r603301_rule
+      - SV-233307r991589_rule
       - V-233307
       - ssh
 
@@ -4624,7 +4630,7 @@
       - CAT2
       - CCI-000366
       - SRG-OS-000480-GPOS-00227
-      - SV-237633r646850_rule
+      - SV-237633r991589_rule
       - V-237633
       - sudo
 
@@ -4687,7 +4693,7 @@
       - CAT2
       - CCI-002227
       - SRG-OS-000480-GPOS-00227
-      - SV-237634r880755_rule
+      - SV-237634r991589_rule
       - V-237634
       - sudo
 
@@ -4724,7 +4730,7 @@
       - CAT2
       - CCI-002038
       - SRG-OS-000373-GPOS-00156
-      - SV-237635r833179_rule
+      - SV-237635r987879_rule
       - V-237635
       - sudo
 
@@ -4753,7 +4759,7 @@
       - CCI-002165
       - CCI-002235
       - SRG-OS-000324-GPOS-00125
-      - SV-250312r928579_rule
+      - SV-250312r958726_rule
       - V-250312
 
 - name: "MEDIUM | RHEL-07-020022 | PATCH | The Red Hat Enterprise Linux operating system must not allow privileged accounts to utilize SSH."
@@ -4769,7 +4775,7 @@
       - CCI-002165
       - CI-002235
       - SRG-OS-000324-GPOS-00125
-      - SV-250313r942891_rule
+      - SV-250313r958726_rule
       - V-250313
 
 - name: "MEDIUM | RHEL-07-020023 | AUDIT | The Red Hat Enterprise Linux operating system must elevate the SELinux context when an administrator calls the sudo command"
@@ -4802,5 +4808,5 @@
       - CCI-002165
       - CCI-002235
       - SRG-OS-000324-GPOS-00125
-      - SV-250314r877392_rule
+      - SV-250314r958726_rule
       - V-250314

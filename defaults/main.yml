@@ -13,7 +13,7 @@ python2_bin: /bin/python2.7
 # audit variable found at the base
 benchmark: RHEL7-STIG
 ## metadata for Audit benchmark
-benchmark_version: 'v3r14'
+benchmark_version: 'v3r15'
 
 # Whether to skip the reboot
 rhel7stig_skip_reboot: true
@@ -213,7 +213,7 @@ rhel_07_020111: true
 rhel_07_020210: true
 rhel_07_020220: true
 rhel_07_020240: true
-rhel_07_020260: true
+rhel_07_020260: false  # OS patching - AS EoL this can cause serious issues
 rhel_07_020270: true
 rhel_07_020320: true
 rhel_07_020330: true
