@@ -36,7 +36,7 @@ repos:
     args: [ '--baseline', '.config/.secrets.baseline' ]
 
 - repo: https://github.com/gitleaks/gitleaks
-  rev: v8.24.0
+  rev: v8.24.2
   hooks:
   - id: gitleaks
     args: ['--baseline-path', '.config/.gitleaks-report.json']
@@ -61,6 +61,6 @@ repos:
     - ansible-core>=2.10.1
 
 - repo: https://github.com/adrienverge/yamllint.git
-  rev: v1.36.2  # or higher tag
+  rev: v1.37.0  # or higher tag
   hooks:
   - id: yamllint
