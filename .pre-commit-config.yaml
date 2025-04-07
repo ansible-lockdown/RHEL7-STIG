@@ -42,7 +42,7 @@ repos:
     args: ['--baseline-path', '.config/.gitleaks-report.json']
 
 - repo: https://github.com/ansible-community/ansible-lint
-  rev: v25.1.3
+  rev: v25.2.1
   hooks:
   - id: ansible-lint
     name: Ansible-lint
