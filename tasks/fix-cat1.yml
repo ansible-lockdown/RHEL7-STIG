@@ -460,7 +460,7 @@
             replace: "{{ rhel7stig_replace_quoted_params }}"
         vars:
             query: "{{ rhel7stig_boot_part.stdout }}"
-            key: GRUB_CMDLINE_LINUX
+            key: GRUB_CMDLINE_LINUX  # noqa: var-naming[no-reserved]
             param: boot
             value: UUID={{ rhel7stig_boot_uuid.stdout }}
             insert: true
