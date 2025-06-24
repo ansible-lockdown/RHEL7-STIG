@@ -1,6 +1,7 @@
 .env
 *.log
 *.retry
+.cache
 .vagrant
 tests/*redhat-subscription
 tests/Dockerfile
@@ -9,10 +10,12 @@ tests/Dockerfile
 packer_cache
 delete*
 ignore*
-.cache
+test_inv
+# temp remove doc while this is built up
+doc/
 # VSCode
 .vscode
-.github/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -40,11 +43,9 @@ travis.env
 benchparse/
 *xccdf.xml
 *.retry
-test_inv
 
-# refactr workflow gitignore
-.github/workflow/
+# GitHub Action/Workflow files
+.github/
 
-# GitHub Issue and PR Templates
-.github/ISSUE_TEMPLATE
-.github/pull_request_template.md
+# Precommit exclusions
+.ansible/
